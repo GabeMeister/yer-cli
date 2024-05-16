@@ -1,10 +1,12 @@
 package main
 
 import (
+	"bytes"
+	"embed"
 	"flag"
 	"fmt"
+	"html/template"
 	"net/http"
-	"os"
 
 	"github.com/labstack/echo/v4"
 )
@@ -26,10 +28,43 @@ func printHelp() {
 	flag.PrintDefaults()
 }
 
+//go:embed views/*
+var f embed.FS
+
+type Greeting struct {
+	Name string
+}
+type Repo struct {
+	RepoName string
+}
+
+func runTest() {
+	indexOutput := renderTemplate("views/index.html", Greeting{Name: "Zach"})
+	fmt.Println(indexOutput)
+	repoOutput := renderTemplate("views/repo.html", Repo{RepoName: "Next.js"})
+	fmt.Println(repoOutput)
+}
+
+func renderTemplate(path string, data interface{}) string {
+	htmlStr, _ := f.ReadFile(path)
+	t := template.Must(template.New(path).Parse(string(htmlStr)))
+
+	var buf bytes.Buffer
+	err := t.Execute(&buf, data)
+	if err != nil {
+		panic(err)
+	}
+
+	return buf.String()
+}
+
 func runLocalServer() {
 	e := echo.New()
 	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello World! 4")
+		return c.HTML(http.StatusOK, renderTemplate("views/index.html", Greeting{Name: "Josh"}))
+	})
+	e.GET("/repo", func(c echo.Context) error {
+		return c.HTML(http.StatusOK, renderTemplate("views/repo.html", Repo{RepoName: "RB Frontend"}))
 	})
 	e.Logger.Fatal(e.Start(":4000"))
 }
@@ -49,12 +84,7 @@ func main() {
 	} else if *upload {
 		fmt.Println("Uploading stats to the cloud...")
 	} else if *test {
-		data, err := os.ReadFile("views/index.html")
-		if err != nil {
-			panic(err)
-		}
-
-		fmt.Println(string(data))
+		runTest()
 	} else {
 		printHelp()
 	}
