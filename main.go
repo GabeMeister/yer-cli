@@ -29,9 +29,9 @@ func printHelp() {
 func runLocalServer() {
 	e := echo.New()
 	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello World!")
+		return c.String(http.StatusOK, "Hello World! 4")
 	})
-	e.Logger.Fatal(e.Start(":1323"))
+	e.Logger.Fatal(e.Start(":4000"))
 }
 
 func main() {
