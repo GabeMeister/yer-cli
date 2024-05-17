@@ -1,12 +1,10 @@
 #!/bin/bash
 
 echo "Building for Linux..."
-GOOS=linux GOARCH=amd64 go build -o ./builds/yer_linux_amd64
-GOOS=linux GOARCH=arm64 go build -o ./builds/yer_linux_arm64
+GOOS=linux GOARCH=amd64 go build -o ~/dev/yer_app/public/scripts/yer_linux_amd64
+GOOS=linux GOARCH=arm64 go build -o ~/dev/yer_app/public/scripts/yer_linux_arm64
 echo "Building for Mac..."
-GOOS=darwin GOARCH=amd64 go build -o ./builds/yer_darwin_amd64
-GOOS=darwin GOARCH=arm64 go build -o ./builds/yer_darwin_arm64
+GOOS=darwin GOARCH=amd64 go build -o ~/dev/yer_app/public/scripts/yer_darwin_amd64
+GOOS=darwin GOARCH=arm64 go build -o ~/dev/yer_app/public/scripts/yer_darwin_arm64
 echo "Building for Windows..."
-GOOS=windows GOARCH=amd64 go build -o ./builds/yer_windows_amd64.exe
-
-cp ./builds/yer* ~/dev/yer_app/public/scripts
+GOOS=windows GOARCH=amd64 go build -o ~/dev/yer_app/public/scripts/yer_windows_amd64.exe

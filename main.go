@@ -1,14 +1,9 @@
 package main
 
 import (
-	"bytes"
-	"embed"
+	"GabeMeister/yer-cli/presentation"
 	"flag"
 	"fmt"
-	"html/template"
-	"net/http"
-
-	"github.com/labstack/echo/v4"
 )
 
 var help = flag.Bool("h", false, "Print help menu")
@@ -28,70 +23,12 @@ func printHelp() {
 	flag.PrintDefaults()
 }
 
-//go:embed views/*
-var views embed.FS
-
-//go:embed static/*
-var static embed.FS
-
-type Greeting struct {
-	Name string
-}
-type Repo struct {
-	RepoName string
-}
-
 func runTest() {
-	indexOutput := renderTemplate("views/index.html", Greeting{Name: "Zach"})
-	fmt.Println(indexOutput)
-	repoOutput := renderTemplate("views/repo.html", Repo{RepoName: "Next.js"})
-	fmt.Println(repoOutput)
-}
-
-func renderTemplate(path string, data interface{}) string {
-	htmlStr, _ := views.ReadFile(path)
-	t := template.Must(template.New(path).Parse(string(htmlStr)))
-
-	var buf bytes.Buffer
-	err := t.Execute(&buf, data)
-	if err != nil {
-		panic(err)
-	}
-
-	return buf.String()
-}
-
-func runLocalServer() {
-	e := echo.New()
-
-	e.GET("/", func(c echo.Context) error {
-		return c.HTML(http.StatusOK, renderTemplate("views/index.html", Greeting{Name: "Josh"}))
-	})
-	e.GET("/repo", func(c echo.Context) error {
-		name := c.QueryParam("name")
-		return c.HTML(http.StatusOK, renderTemplate("views/repo.html", Repo{RepoName: name}))
-	})
-	e.GET("/repo/:name", func(c echo.Context) error {
-		name := c.Param("name")
-		return c.HTML(http.StatusOK, renderTemplate("views/repo.html", Repo{RepoName: name}))
-	})
-	e.GET("/favicon.ico", func(c echo.Context) error {
-		data, _ := static.ReadFile("static/images/favicon.ico")
-		return c.Blob(200, "image/x-icon", data)
-	})
-	e.GET("/css/styles.css", func(c echo.Context) error {
-		data, _ := static.ReadFile("static/css/styles.css")
-		return c.Blob(200, "text/css; charset=utf-8", data)
-	})
-	e.GET("/images/:name", func(c echo.Context) error {
-		data, _ := static.ReadFile(fmt.Sprintf("static/images/%s", c.Param("name")))
-		return c.Blob(200, "image/jpeg", data)
-	})
-
-	e.Logger.Fatal(e.Start(":4000"))
+	fmt.Println("This is a test")
 }
 
 func main() {
+
 	if *help {
 		printHelp()
 	} else if *analyze {
@@ -102,7 +39,7 @@ func main() {
 		}
 	} else if *view {
 		fmt.Println("Viewing stats...")
-		runLocalServer()
+		presentation.RunLocalServer()
 	} else if *upload {
 		fmt.Println("Uploading stats to the cloud...")
 	} else if *test {
