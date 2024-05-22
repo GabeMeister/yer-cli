@@ -1,6 +1,7 @@
 package main
 
 import (
+	"GabeMeister/yer-cli/analyzer"
 	"GabeMeister/yer-cli/presentation"
 	"flag"
 	"fmt"
@@ -34,6 +35,8 @@ func main() {
 	} else if *analyze {
 		if *config == "" {
 			fmt.Println("Analyzing with manual prompts...")
+			logs := analyzer.GetGitLogs()
+			fmt.Println(logs)
 		} else {
 			fmt.Println("Analyzing using config:", *config)
 		}
