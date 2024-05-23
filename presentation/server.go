@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"net/http"
 
+	"GabeMeister/yer-cli/analyzer"
+
 	"github.com/labstack/echo/v4"
 )
 
@@ -14,8 +16,8 @@ var views embed.FS
 //go:embed static/*
 var static embed.FS
 
-type Greeting struct {
-	Name string
+type Commits struct {
+	Count int
 }
 type Repo struct {
 	RepoName string
@@ -23,9 +25,14 @@ type Repo struct {
 
 func RunLocalServer() {
 	e := echo.New()
+	e.HideBanner = true
+	e.HidePort = true
 
 	e.GET("/", func(c echo.Context) error {
-		return c.HTML(http.StatusOK, renderTemplate("views/index.html", Greeting{Name: "Josh"}))
+		commits := analyzer.GetGitCommits()
+		fmt.Println(len(commits))
+
+		return c.HTML(http.StatusOK, renderTemplate("views/index.html", Commits{Count: len(commits)}))
 	})
 	e.GET("/repo", func(c echo.Context) error {
 		name := c.QueryParam("name")
@@ -48,5 +55,6 @@ func RunLocalServer() {
 		return c.Blob(200, "image/jpeg", data)
 	})
 
+	fmt.Println("\nSuccess! Browse to http://localhost:4000/")
 	e.Logger.Fatal(e.Start(":4000"))
 }

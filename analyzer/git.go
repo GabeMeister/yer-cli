@@ -146,7 +146,7 @@ func getGitLogs(path string) []GitCommit {
 	return commits
 }
 
-func GetGitLogsManually() []GitCommit {
+func AnalyzeManually() []GitCommit {
 	fmt.Println()
 	fmt.Println("What directory is your repo is in?")
 	fmt.Print("> ")
@@ -157,7 +157,7 @@ func GetGitLogsManually() []GitCommit {
 	return getGitLogs(path)
 }
 
-func GetGitLogsWithConfig(configPath string) []GitCommit {
+func AnalyzeWithConfig(configPath string) []GitCommit {
 	fmt.Println()
 	config := getConfig(configPath)
 	utils.PrintStruct(config)

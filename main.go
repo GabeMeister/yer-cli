@@ -9,7 +9,7 @@ import (
 
 var help = flag.Bool("h", false, "Print help menu")
 var analyze = flag.Bool("a", false, "Analyze repo and gather stats")
-var config = flag.String("c", "", "Specify path to config file. (see https://yearendrecap.com/help#config)")
+var config = flag.Bool("c", false, "Analyze using config file. (see https://yearendrecap.com/help#config)")
 var view = flag.Bool("v", false, "View stats in a local presentation")
 var upload = flag.Bool("u", false, "Upload stats to the cloud, to be viewed anywhere")
 var test = flag.Bool("t", false, "Test something out")
@@ -33,17 +33,18 @@ func main() {
 	if *help {
 		printHelp()
 	} else if *analyze {
-		if *config == "" {
-			fmt.Println("Analyzing with manual prompts...")
-			logs := analyzer.GetGitLogsManually()
+		if *config {
+			fmt.Println("Analyzing using config...")
+			logs := analyzer.AnalyzeWithConfig("./config.json")
 			fmt.Println(logs)
 		} else {
-			fmt.Println("Analyzing using config:", *config)
-			logs := analyzer.GetGitLogsWithConfig(*config)
+			fmt.Println("Analyzing with manual prompts...")
+			logs := analyzer.AnalyzeManually()
 			fmt.Println(logs)
+
 		}
 	} else if *view {
-		fmt.Println("Viewing stats...")
+		fmt.Println("Setting up local web server...")
 		presentation.RunLocalServer()
 	} else if *upload {
 		fmt.Println("Uploading stats to the cloud...")
