@@ -1,6 +1,7 @@
 package analyzer
 
 import (
+	"GabeMeister/yer-cli/utils"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -46,9 +47,13 @@ func parseCommits() []GitCommit {
 	return nil
 }
 
-func GetGitLogs() string {
-	cmd := exec.Command("git", "log", "--no-merges", "--format=-- Begin --%n-- Commit --%n%H%n-- Author --%n%aN%n-- Email --%n%aE%n-- Date --%n%ad%n-- Message --%n%B%n-- End --")
-	cmd.Dir = "/home/gabe/dev/rb-frontend"
+func getGitLogs(path string) []GitCommit {
+	cmd := exec.Command(
+		"git",
+		"log",
+		"--no-merges",
+		"--format=-- Begin --%n-- Commit --%n%H%n-- Author --%n%aN%n-- Email --%n%aE%n-- Date --%n%ad%n-- Message --%n%B%n-- End --")
+	cmd.Dir = path
 
 	rawOutput, err := cmd.Output()
 	if err != nil {
@@ -133,10 +138,48 @@ func GetGitLogs() string {
 		panic(err)
 	}
 
-	fileErr := os.WriteFile("commits.json", commitsJsonRaw, 0644)
+	fileErr := os.WriteFile("./tmp/commits.json", commitsJsonRaw, 0644)
 	if fileErr != nil {
 		panic(fileErr)
 	}
 
-	return "Done."
+	return commits
+}
+
+func GetGitLogsManually() []GitCommit {
+	fmt.Println()
+	fmt.Println("What directory is your repo is in?")
+	fmt.Print("> ")
+
+	var path string
+	fmt.Scanln(&path)
+
+	return getGitLogs(path)
+}
+
+func GetGitLogsWithConfig(configPath string) []GitCommit {
+	fmt.Println()
+	config := getConfig(configPath)
+	utils.PrintStruct(config)
+
+	return getGitLogs(config.Path)
+}
+
+type Config struct {
+	Path string `json:"path"`
+}
+
+func getConfig(path string) Config {
+	bytes, err := os.ReadFile(path)
+	if err != nil {
+		panic(err)
+	}
+
+	var data Config
+	jsonErr := json.Unmarshal(bytes, &data)
+	if jsonErr != nil {
+		panic(jsonErr)
+	}
+
+	return data
 }

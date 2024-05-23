@@ -35,10 +35,12 @@ func main() {
 	} else if *analyze {
 		if *config == "" {
 			fmt.Println("Analyzing with manual prompts...")
-			logs := analyzer.GetGitLogs()
+			logs := analyzer.GetGitLogsManually()
 			fmt.Println(logs)
 		} else {
 			fmt.Println("Analyzing using config:", *config)
+			logs := analyzer.GetGitLogsWithConfig(*config)
+			fmt.Println(logs)
 		}
 	} else if *view {
 		fmt.Println("Viewing stats...")
