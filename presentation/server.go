@@ -55,6 +55,6 @@ func RunLocalServer() {
 		return c.Blob(200, "image/jpeg", data)
 	})
 
-	fmt.Println("\nSuccess! Browse to http://localhost:4000/")
+	fmt.Println("\nDone! Browse to http://localhost:4000/")
 	e.Logger.Fatal(e.Start(":4000"))
 }

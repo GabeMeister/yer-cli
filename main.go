@@ -5,6 +5,7 @@ import (
 	"GabeMeister/yer-cli/presentation"
 	"flag"
 	"fmt"
+	"os"
 )
 
 var help = flag.Bool("h", false, "Print help menu")
@@ -29,18 +30,19 @@ func runTest() {
 }
 
 func main() {
+	os.Mkdir("tmp", 0755)
 
 	if *help {
 		printHelp()
 	} else if *analyze {
 		if *config {
 			fmt.Println("Analyzing using config...")
-			logs := analyzer.AnalyzeWithConfig("./config.json")
-			fmt.Println(logs)
+			analyzer.AnalyzeWithConfig("./config.json")
+			fmt.Printf("\nDone! View stats by running the following command:\n\n./year-end-recap -v\n\n")
 		} else {
 			fmt.Println("Analyzing with manual prompts...")
-			logs := analyzer.AnalyzeManually()
-			fmt.Println(logs)
+			analyzer.AnalyzeManually()
+			fmt.Printf("\nDone! View stats by running the following command:\n\n./year-end-recap -v\n\n")
 
 		}
 	} else if *view {

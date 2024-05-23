@@ -1,7 +1,6 @@
 package analyzer
 
 import (
-	"GabeMeister/yer-cli/utils"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -160,7 +159,6 @@ func AnalyzeManually() []GitCommit {
 func AnalyzeWithConfig(configPath string) []GitCommit {
 	fmt.Println()
 	config := getConfig(configPath)
-	utils.PrintStruct(config)
 
 	return getGitLogs(config.Path)
 }
