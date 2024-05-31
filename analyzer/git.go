@@ -20,6 +20,11 @@ import (
 
 //     Added mobile styling and video embeds
 
+type RepoMeta struct {
+	Name      string `json:"name"`
+	Directory string `json:"directory"`
+}
+
 type GitCommit struct {
 	Commit  string `json:"commit"`
 	Author  string `json:"author"`
@@ -132,39 +137,51 @@ func getGitLogs(path string) []GitCommit {
 		}
 	}
 
-	commitsJsonRaw, err := json.MarshalIndent(commits, "", "  ")
-	if err != nil {
-		panic(err)
-	}
-
-	fileErr := os.WriteFile("./tmp/commits.json", commitsJsonRaw, 0644)
-	if fileErr != nil {
-		panic(fileErr)
-	}
-
 	return commits
 }
 
-func AnalyzeManually() []GitCommit {
+func getRepoMetaData(path string) RepoMeta {
+	return RepoMeta{Name: "blah", Directory: path}
+}
+
+func analyzeRepo(config Config) {
+	metaData := getRepoMetaData(config.Path)
+	fmt.Println(metaData)
+	SaveDataToFile(metaData, "./tmp/meta.json")
+	commits := getGitLogs(config.Path)
+	SaveDataToFile(commits, "./tmp/commits.json")
+}
+
+func initConfig(repoPath string) Config {
+	// TODO
+}
+
+func AnalyzeManually() {
 	fmt.Println()
 	fmt.Println("What directory is your repo is in?")
 	fmt.Print("> ")
 
-	var path string
-	fmt.Scanln(&path)
+	var repoPath string
+	fmt.Scanln(&repoPath)
 
-	return getGitLogs(path)
+	initConfig(repoPath)
+	config := getConfig("./config.json")
+
+	analyzeRepo(config)
 }
 
-func AnalyzeWithConfig(configPath string) []GitCommit {
+func AnalyzeWithConfig(configPath string) {
 	fmt.Println()
 	config := getConfig(configPath)
-
-	return getGitLogs(config.Path)
+	analyzeRepo(config)
 }
 
 type Config struct {
-	Path string `json:"path"`
+	Path                  string   `json:"path"`
+	IncludeFileExtensions []string `json:"include_file_extensions"`
+	ExcludeDirectories    []string `json:"exclude_directories"`
+	ExcludeFiles          []string `json:"exclude_files"`
+	ExcludeEngineers      []string `json:"exclude_engineers"`
 }
 
 func getConfig(path string) Config {
