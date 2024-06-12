@@ -5,20 +5,23 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
+
+	input_autocomplete "github.com/JoaoDanielRufino/go-input-autocomplete"
 )
 
-// commit 37466879ef473db98830d3695ae4cc8bcf48ac33
-// Author: Gabe Jensen <thegabejensen@gmail.com>
-// Date:   Fri Oct 14 07:45:09 2022 -0700
+/*
+ * TYPES
+ */
 
-//     Styled up the results for easier viewing
-
-// commit 5e1dda9198545d27bc50edb1fcbfbbd85bab0c72
-// Author: Gabe Jensen <thegabejensen@gmail.com>
-// Date:   Wed Oct 12 22:03:42 2022 -0700
-
-//     Added mobile styling and video embeds
+type Config struct {
+	Path                  string   `json:"path"`
+	IncludeFileExtensions []string `json:"include_file_extensions"`
+	ExcludeDirectories    []string `json:"exclude_directories"`
+	ExcludeFiles          []string `json:"exclude_files"`
+	ExcludeEngineers      []string `json:"exclude_engineers"`
+}
 
 type RepoMeta struct {
 	Name      string `json:"name"`
@@ -43,6 +46,13 @@ type GitMergeCommit struct {
 	Date               string
 }
 
+type RepoSummary struct {
+	PastYearNumCommits int
+}
+
+/*
+ * PRIVATE
+ */
 func parseMergeCommits() []GitMergeCommit {
 	return nil
 }
@@ -141,47 +151,46 @@ func getGitLogs(path string) []GitCommit {
 }
 
 func getRepoMetaData(path string) RepoMeta {
-	return RepoMeta{Name: "blah", Directory: path}
+	name := filepath.Base(path)
+
+	return RepoMeta{Name: name, Directory: path}
 }
 
 func analyzeRepo(config Config) {
 	metaData := getRepoMetaData(config.Path)
-	fmt.Println(metaData)
 	SaveDataToFile(metaData, "./tmp/meta.json")
 	commits := getGitLogs(config.Path)
 	SaveDataToFile(commits, "./tmp/commits.json")
+
+	numCommits := GetTotalNumberOfCommits()
+	fmt.Println(numCommits)
+	repoSummary := RepoSummary{
+		PastYearNumCommits: numCommits,
+	}
+	data, err := json.MarshalIndent(repoSummary, "", "  ")
+	if err != nil {
+		panic(err)
+	}
+
+	os.WriteFile("./tmp/summary.json", data, 0644)
 }
 
 func initConfig(repoPath string) Config {
-	// TODO
-}
+	config := Config{
+		Path:                  repoPath,
+		IncludeFileExtensions: []string{},
+		ExcludeDirectories:    []string{},
+		ExcludeFiles:          []string{},
+		ExcludeEngineers:      []string{},
+	}
+	data, err := json.MarshalIndent(config, "", "  ")
+	if err != nil {
+		panic(err)
+	}
 
-func AnalyzeManually() {
-	fmt.Println()
-	fmt.Println("What directory is your repo is in?")
-	fmt.Print("> ")
+	os.WriteFile("./config.json", data, 0644)
 
-	var repoPath string
-	fmt.Scanln(&repoPath)
-
-	initConfig(repoPath)
-	config := getConfig("./config.json")
-
-	analyzeRepo(config)
-}
-
-func AnalyzeWithConfig(configPath string) {
-	fmt.Println()
-	config := getConfig(configPath)
-	analyzeRepo(config)
-}
-
-type Config struct {
-	Path                  string   `json:"path"`
-	IncludeFileExtensions []string `json:"include_file_extensions"`
-	ExcludeDirectories    []string `json:"exclude_directories"`
-	ExcludeFiles          []string `json:"exclude_files"`
-	ExcludeEngineers      []string `json:"exclude_engineers"`
+	return config
 }
 
 func getConfig(path string) Config {
@@ -197,4 +206,27 @@ func getConfig(path string) Config {
 	}
 
 	return data
+}
+
+/*
+ * PUBLIC
+ */
+
+func AnalyzeManually() {
+	fmt.Println()
+	fmt.Println("What directory is your repo is in?")
+	repoPath, err := input_autocomplete.Read("> ")
+	if err != nil {
+		panic(err)
+	}
+
+	config := initConfig(repoPath)
+
+	analyzeRepo(config)
+}
+
+func AnalyzeWithConfig(configPath string) {
+	fmt.Println()
+	config := getConfig(configPath)
+	analyzeRepo(config)
 }

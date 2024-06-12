@@ -19,3 +19,13 @@ func GetGitCommits() []GitCommit {
 
 	return commits
 }
+
+func GetTotalNumberOfCommits() int {
+	commits := GetGitCommits()
+	return len(commits)
+}
+
+// func GetNumberOfCommitsMadePastYear() int {
+// 	commits := GetGitCommits()
+// 	return len(commits)
+// }

@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"GabeMeister/yer-cli/analyzer"
-
 	"github.com/labstack/echo/v4"
 )
 
@@ -28,20 +26,22 @@ func RunLocalServer() {
 	e.HideBanner = true
 	e.HidePort = true
 
-	e.GET("/", func(c echo.Context) error {
-		commits := analyzer.GetGitCommits()
-		fmt.Println(len(commits))
+	summary := getSummary()
 
-		return c.HTML(http.StatusOK, renderTemplate("views/index.html", Commits{Count: len(commits)}))
+	e.GET("/", func(c echo.Context) error {
+		return c.HTML(http.StatusOK, renderTemplate("views/index.html", []any{}))
 	})
-	e.GET("/repo", func(c echo.Context) error {
+	e.GET("/presentation/intro", func(c echo.Context) error {
 		name := c.QueryParam("name")
 		return c.HTML(http.StatusOK, renderTemplate("views/repo.html", Repo{RepoName: name}))
 	})
-	e.GET("/repo/:name", func(c echo.Context) error {
-		name := c.Param("name")
-		return c.HTML(http.StatusOK, renderTemplate("views/repo.html", Repo{RepoName: name}))
+	e.GET("/presentation/commits", func(c echo.Context) error {
+		return c.HTML(http.StatusOK, renderTemplate("views/commits.html", Commits{Count: summary.PastYearNumCommits}))
 	})
+	// e.GET("/repo/:name", func(c echo.Context) error {
+	// 	name := c.Param("name")
+	// 	return c.HTML(http.StatusOK, renderTemplate("views/repo.html", Repo{RepoName: name}))
+	// })
 	e.GET("/favicon.ico", func(c echo.Context) error {
 		data, _ := static.ReadFile("static/images/favicon.ico")
 		return c.Blob(200, "image/x-icon", data)

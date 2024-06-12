@@ -26,7 +26,7 @@ func printHelp() {
 }
 
 func runTest() {
-	fmt.Println("This is a test")
+
 }
 
 func main() {
