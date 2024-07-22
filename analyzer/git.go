@@ -1,65 +1,10 @@
 package analyzer
 
 import (
-	"encoding/json"
 	"fmt"
-	"os"
 	"os/exec"
-	"path/filepath"
 	"strings"
-
-	input_autocomplete "github.com/JoaoDanielRufino/go-input-autocomplete"
 )
-
-/*
- * TYPES
- */
-
-type Config struct {
-	Path                  string   `json:"path"`
-	IncludeFileExtensions []string `json:"include_file_extensions"`
-	ExcludeDirectories    []string `json:"exclude_directories"`
-	ExcludeFiles          []string `json:"exclude_files"`
-	ExcludeEngineers      []string `json:"exclude_engineers"`
-}
-
-type RepoMeta struct {
-	Name      string `json:"name"`
-	Directory string `json:"directory"`
-}
-
-type GitCommit struct {
-	Commit  string `json:"commit"`
-	Author  string `json:"author"`
-	Email   string `json:"email"`
-	Message string `json:"message"`
-	Date    string `json:"date"`
-}
-
-type GitMergeCommit struct {
-	Commit             string
-	FirstParentCommit  string // Typically master when you branched off
-	SecondParentCommit string // Typically the final commit of the MR
-	Message            string
-	Author             string
-	Email              string
-	Date               string
-}
-
-type RepoSummary struct {
-	PastYearNumCommits int
-}
-
-/*
- * PRIVATE
- */
-func parseMergeCommits() []GitMergeCommit {
-	return nil
-}
-
-func parseCommits() []GitCommit {
-	return nil
-}
 
 func getGitLogs(path string) []GitCommit {
 	cmd := exec.Command(
@@ -150,83 +95,12 @@ func getGitLogs(path string) []GitCommit {
 	return commits
 }
 
-func getRepoMetaData(path string) RepoMeta {
-	name := filepath.Base(path)
-
-	return RepoMeta{Name: name, Directory: path}
+// TODO
+func parseMergeCommits() []GitMergeCommit {
+	return nil
 }
 
-func analyzeRepo(config Config) {
-	metaData := getRepoMetaData(config.Path)
-	SaveDataToFile(metaData, "./tmp/meta.json")
-	commits := getGitLogs(config.Path)
-	SaveDataToFile(commits, "./tmp/commits.json")
-
-	numCommits := GetTotalNumberOfCommits()
-	fmt.Println(numCommits)
-	repoSummary := RepoSummary{
-		PastYearNumCommits: numCommits,
-	}
-	data, err := json.MarshalIndent(repoSummary, "", "  ")
-	if err != nil {
-		panic(err)
-	}
-
-	os.WriteFile("./tmp/summary.json", data, 0644)
-}
-
-func initConfig(repoPath string) Config {
-	config := Config{
-		Path:                  repoPath,
-		IncludeFileExtensions: []string{},
-		ExcludeDirectories:    []string{},
-		ExcludeFiles:          []string{},
-		ExcludeEngineers:      []string{},
-	}
-	data, err := json.MarshalIndent(config, "", "  ")
-	if err != nil {
-		panic(err)
-	}
-
-	os.WriteFile("./config.json", data, 0644)
-
-	return config
-}
-
-func getConfig(path string) Config {
-	bytes, err := os.ReadFile(path)
-	if err != nil {
-		panic(err)
-	}
-
-	var data Config
-	jsonErr := json.Unmarshal(bytes, &data)
-	if jsonErr != nil {
-		panic(jsonErr)
-	}
-
-	return data
-}
-
-/*
- * PUBLIC
- */
-
-func AnalyzeManually() {
-	fmt.Println()
-	fmt.Println("What directory is your repo is in?")
-	repoPath, err := input_autocomplete.Read("> ")
-	if err != nil {
-		panic(err)
-	}
-
-	config := initConfig(repoPath)
-
-	analyzeRepo(config)
-}
-
-func AnalyzeWithConfig(configPath string) {
-	fmt.Println()
-	config := getConfig(configPath)
-	analyzeRepo(config)
+// TODO
+func parseCommits() []GitCommit {
+	return nil
 }
