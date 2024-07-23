@@ -27,6 +27,9 @@ type GitMergeCommit struct {
 	Date               string
 }
 
-type RepoSummary struct {
-	PastYearNumCommits int
+type Recap struct {
+	NumCommitsAllTime  int
+	NumCommitsPrevYear int
+	NumCommitsCurrYear int
+	NumCommitsInPast   int
 }

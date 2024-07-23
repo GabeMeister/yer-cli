@@ -8,14 +8,45 @@ import (
 	input_autocomplete "github.com/JoaoDanielRufino/go-input-autocomplete"
 )
 
+func AnalyzeManually() {
+	fmt.Println()
+	fmt.Println("What directory is your repo is in?")
+	repoDir, err := input_autocomplete.Read("> ")
+	if err != nil {
+		panic(err)
+	}
+
+	config := initConfig(repoDir)
+
+	analyzeRepo(config)
+}
+
+func AnalyzeWithConfig(path string) {
+	config := getConfig(path)
+	analyzeRepo(config)
+}
+
 func analyzeRepo(config Config) {
+	gatherMetrics(config)
+	calculateRecap()
+}
+
+func gatherMetrics(config Config) {
 	commits := getGitLogs(config.Path)
 	SaveDataToFile(commits, "./tmp/commits.json")
+}
 
-	numCommits := GetTotalNumberOfCommits()
-	fmt.Println(numCommits)
-	repoSummary := RepoSummary{
-		PastYearNumCommits: numCommits,
+func calculateRecap() {
+	numCommitsAllTime := GetNumCommitsAllTime()
+	numCommitsPrevYear := GetNumCommitsPrevYear()
+	numCommitsCurrYear := GetNumCommitsCurrYear()
+	numCommitsInPast := GetNumCommitsInPast()
+
+	repoSummary := Recap{
+		NumCommitsAllTime:  numCommitsAllTime,
+		NumCommitsPrevYear: numCommitsPrevYear,
+		NumCommitsCurrYear: numCommitsCurrYear,
+		NumCommitsInPast:   numCommitsInPast,
 	}
 	data, err := json.MarshalIndent(repoSummary, "", "  ")
 	if err != nil {
@@ -23,23 +54,4 @@ func analyzeRepo(config Config) {
 	}
 
 	os.WriteFile("./tmp/summary.json", data, 0644)
-}
-
-func AnalyzeManually() {
-	fmt.Println()
-	fmt.Println("What directory is your repo is in?")
-	repoPath, err := input_autocomplete.Read("> ")
-	if err != nil {
-		panic(err)
-	}
-
-	config := initConfig(repoPath)
-
-	analyzeRepo(config)
-}
-
-func AnalyzeWithConfig(configPath string) {
-	fmt.Println()
-	config := getConfig(configPath)
-	analyzeRepo(config)
 }

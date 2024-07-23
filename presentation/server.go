@@ -36,7 +36,7 @@ func RunLocalServer() {
 		return c.HTML(http.StatusOK, renderTemplate("views/repo.html", Repo{RepoName: name}))
 	})
 	e.GET("/presentation/commits", func(c echo.Context) error {
-		return c.HTML(http.StatusOK, renderTemplate("views/commits.html", Commits{Count: summary.PastYearNumCommits}))
+		return c.HTML(http.StatusOK, renderTemplate("views/commits.html", Commits{Count: summary.NumCommitsAllTime}))
 	})
 	// e.GET("/repo/:name", func(c echo.Context) error {
 	// 	name := c.Param("name")

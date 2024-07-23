@@ -6,10 +6,10 @@ import (
 	"path/filepath"
 )
 
-func initConfig(repoPath string) Config {
+func initConfig(repoDir string) Config {
 	config := Config{
-		Path:                  repoPath,
-		Name:                  filepath.Base(repoPath),
+		Path:                  repoDir,
+		Name:                  filepath.Base(repoDir),
 		IncludeFileExtensions: []string{},
 		ExcludeDirectories:    []string{},
 		ExcludeFiles:          []string{},
