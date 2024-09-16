@@ -6,14 +6,14 @@ import (
 	"os"
 )
 
-func getSummary() analyzer.Recap {
-	data, err := os.ReadFile("./tmp/summary.json")
+func getRecap() analyzer.Recap {
+	data, err := os.ReadFile("./tmp/recap.json")
 	if err != nil {
 		panic(err)
 	}
-	var repoSummary analyzer.Recap
+	var repoRecap analyzer.Recap
 
-	json.Unmarshal(data, &repoSummary)
+	json.Unmarshal(data, &repoRecap)
 
-	return repoSummary
+	return repoRecap
 }

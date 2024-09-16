@@ -28,6 +28,7 @@ type GitMergeCommit struct {
 }
 
 type Recap struct {
+	Name               string
 	NumCommitsAllTime  int
 	NumCommitsPrevYear int
 	NumCommitsCurrYear int

@@ -11,11 +11,12 @@ import (
 )
 
 var help = flag.Bool("h", false, "Print help menu")
-var analyzeManually = flag.Bool("a", false, "Analyze repo and gather stats")
-var analyzeWithConfig = flag.Bool("c", false, "Analyze repo and gather stats using config file. (see https://yearendrecap.com/help#config)")
+var analyzeRepo = flag.Bool("a", false, "Analyze repo and gather stats")
+var configFile = flag.String("c", "", "Specify config file to analyze with. (see https://yearendrecap.com/help#config)")
 var view = flag.Bool("v", false, "View stats in a local presentation")
-var upload = flag.Bool("u", false, "Upload stats to the cloud, to be viewed anywhere")
-var test = flag.Bool("t", false, "Test something out")
+
+// var upload = flag.Bool("u", false, "Upload stats to the cloud, to be viewed anywhere")
+var test = flag.Bool("t", false, "pls ignore")
 
 func init() {
 	flag.Parse()
@@ -28,7 +29,12 @@ func printHelp() {
 }
 
 func runTest() {
+	data, err := os.Stat("./config2.json")
+	if errors.Is(err, os.ErrNotExist) {
+		fmt.Println("Nope nope nope")
+	}
 
+	fmt.Println(data)
 }
 
 func main() {
@@ -39,19 +45,21 @@ func main() {
 
 	if *help {
 		printHelp()
-	} else if *analyzeManually {
+	} else if *analyzeRepo {
 		fmt.Println("Analyzing with manual prompts...")
 		analyzer.AnalyzeManually()
 		fmt.Printf("\nDone! View stats by running the following command:\n\n./year-end-recap -v\n\n")
-	} else if *analyzeWithConfig {
+	} else if *configFile != "" {
 		fmt.Println("Analyzing using config...")
-		analyzer.AnalyzeWithConfig("./config.json")
-		fmt.Printf("\nDone! View stats by running the following command:\n\n./year-end-recap -v\n\n")
+		result := analyzer.AnalyzeWithConfig(*configFile)
+		if result {
+			fmt.Printf("\nDone! View stats by running the following command:\n\n./year-end-recap -v\n\n")
+		} else {
+			fmt.Println("Failed to analyze repo. Please try again!")
+		}
 	} else if *view {
 		fmt.Println("Setting up local web server...")
 		presentation.RunLocalServer()
-	} else if *upload {
-		fmt.Println("Uploading stats to the cloud...")
 	} else if *test {
 		runTest()
 	} else {

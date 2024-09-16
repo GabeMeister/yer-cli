@@ -1,1 +1,42 @@
-<div>The repo is: {{.RepoName}}</div>
+{{if .ShowLayout}}
+<!DOCTYPE html>
+<html lang="en">
+{{end}}
+
+
+<head>
+  {{if .ShowLayout}}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {{end}}
+
+  <title>{{.RepoName}}</title>
+
+  {{if .ShowLayout}}
+  <link rel="stylesheet" href="/css/styles.css" />
+  <script src="/scripts/htmx.org@1.9.12.min.js"></script>
+  {{end}}
+</head>
+
+{{if .ShowLayout}}
+
+<body>
+  {{end}}
+
+  <div>
+    <div>The repo you are viewing stats for is: {{.RepoName}}</div>
+    <a hx-get="/presentation/prev-year-commits" hx-push-url="true">Prev Year Commits →</a>
+    {{template "presentation/views/example"}}
+  </div>
+
+  {{if .ShowLayout}}
+  <div>HTML rendered with layout!</div>
+  {{else}}
+  <div>HTML rendered WITHOUT layout!</div>
+  {{end}}
+
+  {{if .ShowLayout}}
+</body>
+
+</html>
+{{end}}
