@@ -5,19 +5,22 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"path/filepath"
 
 	input_autocomplete "github.com/JoaoDanielRufino/go-input-autocomplete"
 )
 
 func AnalyzeManually() {
-	fmt.Println()
-	fmt.Println("What directory is your repo is in?")
-	repoDir, err := input_autocomplete.Read("> ")
-	if err != nil {
-		panic(err)
+
+	var dir string
+
+	for isValid := false; !isValid; isValid = isValidGitRepo(dir) {
+		dir = readDir()
 	}
 
-	config := initConfig(repoDir)
+	fmt.Println("Valid!")
+
+	config := initConfig(dir)
 
 	analyzeRepo(config)
 }
@@ -37,6 +40,19 @@ func AnalyzeWithConfig(path string) bool {
 /*
  * PRIVATE
  */
+
+func readDir() string {
+	fmt.Println()
+	fmt.Println("What directory is your repo is in?")
+
+	dir, err := input_autocomplete.Read("> ")
+	if err != nil {
+		fmt.Println("Error reading manual input. Please try again.")
+		panic(err)
+	}
+
+	return dir
+}
 
 func analyzeRepo(config Config) {
 	gatherMetrics(config)
@@ -67,6 +83,29 @@ func calculateRecap(config Config) {
 	}
 
 	os.WriteFile("./tmp/recap.json", data, 0644)
+}
+
+func isValidGitRepo(dir string) bool {
+	_, fileErr := os.Stat(dir)
+
+	// TODO: check to make sure read privileges are allowed on directory
+
+	if errors.Is(fileErr, os.ErrNotExist) {
+		fmt.Println("Directory not found, please try again.")
+		return false
+	} else if errors.Is(fileErr, os.ErrPermission) {
+		fmt.Println("Unable to access directory, make sure it has proper permissions and try again.")
+		return false
+	} else {
+		gitDirPath := filepath.Join(dir, ".git")
+		_, gitDirErr := os.Stat(gitDirPath)
+		if errors.Is(gitDirErr, os.ErrNotExist) {
+			fmt.Println("No Git repo found in specified directory. Please try again.")
+			return false
+		}
+	}
+
+	return true
 }
 
 func isValidConfig(path string) bool {
