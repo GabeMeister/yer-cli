@@ -14,6 +14,7 @@ func initConfig(repoDir string) Config {
 		ExcludeDirectories:    []string{},
 		ExcludeFiles:          []string{},
 		ExcludeEngineers:      []string{},
+		DuplicateEngineers:    make(map[string]string),
 	}
 	data, err := json.MarshalIndent(config, "", "  ")
 	if err != nil {

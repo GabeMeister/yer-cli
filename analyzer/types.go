@@ -1,12 +1,13 @@
 package analyzer
 
 type Config struct {
-	Name                  string   `json:"name"`
-	Path                  string   `json:"path"`
-	IncludeFileExtensions []string `json:"include_file_extensions"`
-	ExcludeDirectories    []string `json:"exclude_directories"`
-	ExcludeFiles          []string `json:"exclude_files"`
-	ExcludeEngineers      []string `json:"exclude_engineers"`
+	Name                  string            `json:"name"`
+	Path                  string            `json:"path"`
+	IncludeFileExtensions []string          `json:"include_file_extensions"`
+	ExcludeDirectories    []string          `json:"exclude_directories"`
+	ExcludeFiles          []string          `json:"exclude_files"`
+	ExcludeEngineers      []string          `json:"exclude_engineers"`
+	DuplicateEngineers    map[string]string `json:"duplicate_engineers"`
 }
 
 type GitCommit struct {

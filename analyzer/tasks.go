@@ -6,11 +6,12 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
 	input_autocomplete "github.com/JoaoDanielRufino/go-input-autocomplete"
 )
 
-func AnalyzeManually() {
+func AnalyzeManually() bool {
 
 	var dir string
 
@@ -18,16 +19,19 @@ func AnalyzeManually() {
 		dir = readDir()
 	}
 
-	fmt.Println("Valid!")
+	// TODO: Ask about included file extensions
+	// TODO: Ask about excluded directories
 
 	config := initConfig(dir)
 
 	analyzeRepo(config)
+
+	return true
 }
 
 func AnalyzeWithConfig(path string) bool {
-	validConfig := isValidConfig(path)
-	if !validConfig {
+	configValid := isValidConfig(path)
+	if !configValid {
 		return false
 	}
 
@@ -109,15 +113,66 @@ func isValidGitRepo(dir string) bool {
 }
 
 func isValidConfig(path string) bool {
-	_, err := os.Stat(path)
+	_, fileErr := os.Stat(path)
 
-	if errors.Is(err, os.ErrNotExist) {
+	// Does it even exist?
+	if errors.Is(fileErr, os.ErrNotExist) {
 		fmt.Println("Could not find config file. Double check that your config file is found at `" + path + "`")
 		return false
 	}
 
-	// Is the file a json file?
-	// Does it have the correct file permissions?
+	// Is it even a .json file?
+	if !strings.HasSuffix(strings.ToLower(path), ".json") {
+		fmt.Println("File found at " + path + " is not a json file")
+		return false
+	}
+
+	// Can you read the file?
+	if !isFileReadable(path) {
+		fmt.Println("File found at " + path + " does not have read permissions.")
+		return false
+	}
+
+	// Does it have the right schema?
+	content, fileErr := os.ReadFile(path)
+	if fileErr != nil {
+		panic("Could not read file")
+	}
+
+	// Does it even contain json?
+	var configData Config
+	jsonErr := json.Unmarshal(content, &configData)
+	if jsonErr != nil {
+		// TODO: print instructions on making valid config file
+		fmt.Println("Unable to parse json within config file.")
+		return false
+	}
+
+	// Does it have the right stuff in the json?
+	if configData.Path == "" {
+		fmt.Println("Missing `path` in the config file.")
+		return false
+	}
+
+	if configData.Name == "" {
+		fmt.Println("Missing `name` in the config file.")
+		return false
+	}
+
+	if len(configData.IncludeFileExtensions) == 0 {
+		fmt.Println("Missing files to include in the config file.")
+		return false
+	}
+
+	return true
+}
+
+func isFileReadable(path string) bool {
+	file, err := os.OpenFile(path, os.O_RDONLY, 0)
+	if err != nil {
+		return false
+	}
+	file.Close()
 
 	return true
 }

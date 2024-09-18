@@ -47,8 +47,13 @@ func main() {
 		printHelp()
 	} else if *analyzeRepo {
 		fmt.Println("Analyzing with manual prompts...")
-		analyzer.AnalyzeManually()
-		fmt.Printf("\nDone! View stats by running the following command:\n\n./year-end-recap -v\n\n")
+		result := analyzer.AnalyzeManually()
+		if result {
+			fmt.Printf("\nDone! View stats by running the following command:\n\n./year-end-recap -v\n\n")
+		} else {
+			fmt.Println("Failed to analyze repo. Please try again!")
+
+		}
 	} else if *configFile != "" {
 		fmt.Println("Analyzing using config...")
 		result := analyzer.AnalyzeWithConfig(*configFile)
