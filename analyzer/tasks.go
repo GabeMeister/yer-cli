@@ -1,6 +1,8 @@
 package analyzer
 
 import (
+	"GabeMeister/yer-cli/utils"
+	"bufio"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -19,10 +21,18 @@ func AnalyzeManually() bool {
 		dir = readDir()
 	}
 
-	// TODO: Ask about included file extensions
-	// TODO: Ask about excluded directories
+	var fileExtensions []string
 
-	config := initConfig(dir)
+	for isValid := false; !isValid; isValid = areFileExtensionsValid(fileExtensions) {
+		fileExtensions = getFileExtensions()
+	}
+
+	var excludedDirs []string
+	for isValid := false; !isValid; isValid = areExcludedDirsValid(excludedDirs) {
+		excludedDirs = getExcludedDirs()
+	}
+
+	config := initConfig(dir, fileExtensions, excludedDirs)
 
 	analyzeRepo(config)
 
@@ -56,6 +66,49 @@ func readDir() string {
 	}
 
 	return dir
+}
+
+func getFileExtensions() []string {
+	fmt.Println()
+	fmt.Println("What file extensions should be analyzed? \nType them comma separated. (For example, type \"ts,js,py,sh\")")
+	fmt.Print("> ")
+
+	reader := bufio.NewReader(os.Stdin)
+	text, err := reader.ReadString('\n')
+	if err != nil {
+		panic("Couldn't read in user input!")
+	}
+
+	fileExtensions := strings.Split(strings.TrimSpace(text), ",")
+	for i := range fileExtensions {
+		fileExtensions[i] = strings.TrimSpace(fileExtensions[i])
+	}
+
+	return fileExtensions
+}
+
+func getExcludedDirs() []string {
+	fmt.Println()
+	fmt.Println("What directories should not be included? \nType them comma separated. (For example, type \"node_modules,build\")")
+	fmt.Print("> ")
+
+	reader := bufio.NewReader(os.Stdin)
+	text, err := reader.ReadString('\n')
+	if err != nil {
+		panic("Couldn't read in user input when getting excluded directories!")
+	}
+
+	excludedDirs := strings.Split(strings.TrimSpace(text), ",")
+	for i := range excludedDirs {
+		excludedDirs[i] = strings.TrimSpace(excludedDirs[i])
+	}
+
+	excludedDirs = utils.Filter(excludedDirs, func(s string) bool {
+		return s != ""
+	})
+	fmt.Println(excludedDirs)
+
+	return excludedDirs
 }
 
 func analyzeRepo(config Config) {
@@ -92,8 +145,6 @@ func calculateRecap(config Config) {
 func isValidGitRepo(dir string) bool {
 	_, fileErr := os.Stat(dir)
 
-	// TODO: check to make sure read privileges are allowed on directory
-
 	if errors.Is(fileErr, os.ErrNotExist) {
 		fmt.Println("Directory not found, please try again.")
 		return false
@@ -108,6 +159,24 @@ func isValidGitRepo(dir string) bool {
 			return false
 		}
 	}
+
+	return true
+}
+
+func areFileExtensionsValid(fileExtensions []string) bool {
+	for _, ext := range fileExtensions {
+		if ext == "" {
+			fmt.Println("Please enter at least one type of file extension.")
+			return false
+		}
+	}
+
+	return true
+}
+
+func areExcludedDirsValid(_ []string) bool {
+	// Technically it's always gonna be valid for now but I could easily see
+	// something getting added in the future
 
 	return true
 }
