@@ -65,6 +65,15 @@ func readDir() string {
 		panic(err)
 	}
 
+	if strings.Contains(dir, "~") {
+		homeDir, homeErr := os.UserHomeDir()
+		if homeErr != nil {
+			panic("Could not get user home directory.")
+		}
+
+		dir = strings.ReplaceAll(dir, "~", homeDir)
+	}
+
 	return dir
 }
 
