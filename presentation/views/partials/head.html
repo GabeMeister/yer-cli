@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
+{{define "partials/head.html"}}
 
 <head>
   <meta charset="UTF-8">
@@ -9,9 +8,4 @@
   <script src="/scripts/htmx.org@1.9.12.min.js"></script>
 </head>
 
-<body>
-  <div>Welcome to your Year End Recap!</div>
-  <a hx-get="/presentation/intro" hx-target="body" hx-push-url="true">View Stats →</a>
-</body>
-
-</html>
+{{end}}

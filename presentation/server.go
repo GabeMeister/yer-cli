@@ -19,60 +19,95 @@ func RunLocalServer() {
 	e.HideBanner = true
 	e.HidePort = true
 
-	recap := getRecap()
+	// recap := getRecap()
 
 	e.GET("/", func(c echo.Context) error {
-		return c.HTML(http.StatusOK, renderTemplate("views/index.html", []any{}))
+		data := struct {
+			Title    string
+			NumLines int
+		}{
+			Title:    "Intro Slide",
+			NumLines: 23442,
+		}
+
+		hxRequestHeader := c.Request().Header["Hx-Request"]
+		layout := "layout/standard.html"
+		if len(hxRequestHeader) > 0 && hxRequestHeader[0] == "true" {
+			layout = ""
+		}
+
+		content := render(TemplateParams{
+			path:   "pages/intro.html",
+			data:   data,
+			layout: layout,
+		})
+
+		return c.HTML(http.StatusOK, content)
 	})
 
-	e.GET("/presentation/intro", func(c echo.Context) error {
-		fmt.Println()
-		type IntroView struct {
-			RepoName   string
-			ShowLayout bool
+	e.GET("/example", func(c echo.Context) error {
+		hxRequestHeader := c.Request().Header["Hx-Request"]
+		layout := "layout/standard.html"
+		if len(hxRequestHeader) > 0 && hxRequestHeader[0] == "true" {
+			layout = ""
 		}
-		return c.HTML(
-			http.StatusOK,
-			renderTemplate(
-				"views/repo.html",
-				IntroView{RepoName: recap.Name, ShowLayout: c.Request().Header.Get("HX-Request") != "true"}))
+
+		content := render(TemplateParams{
+			path:   "pages/example.html",
+			layout: layout,
+		})
+
+		return c.HTML(http.StatusOK, content)
 	})
 
-	e.GET("/presentation/prev-year-commits", func(c echo.Context) error {
-		type PrevYearCommitsView struct {
-			RepoName string
-			Count    int
-		}
-		return c.HTML(
-			http.StatusOK,
-			renderTemplate(
-				"views/prev-year-commits.html",
-				PrevYearCommitsView{Count: recap.NumCommitsPrevYear, RepoName: recap.Name}))
-	})
+	// e.GET("/presentation/intro", func(c echo.Context) error {
+	// 	fmt.Println("HERE")
+	// 	type IntroView struct {
+	// 		RepoName   string
+	// 		ShowLayout bool
+	// 	}
+	// 	return c.HTML(
+	// 		http.StatusOK,
+	// 		renderTemplate(
+	// 			"views/repo.html",
+	// 			IntroView{RepoName: recap.Name, ShowLayout: c.Request().Header.Get("HX-Request") != "true"}))
+	// })
 
-	e.GET("/presentation/curr-year-commits", func(c echo.Context) error {
-		type CurrYearCommitsView struct {
-			RepoName string
-			Count    int
-		}
-		return c.HTML(
-			http.StatusOK,
-			renderTemplate(
-				"views/curr-year-commits.html",
-				CurrYearCommitsView{Count: recap.NumCommitsCurrYear, RepoName: recap.Name}))
-	})
+	// e.GET("/presentation/prev-year-commits", func(c echo.Context) error {
+	// 	type PrevYearCommitsView struct {
+	// 		RepoName string
+	// 		Count    int
+	// 	}
+	// 	return c.HTML(
+	// 		http.StatusOK,
+	// 		renderTemplate(
+	// 			"views/prev-year-commits.html",
+	// 			PrevYearCommitsView{Count: recap.NumCommitsPrevYear, RepoName: recap.Name}))
+	// })
 
-	e.GET("/presentation/all-time-commits", func(c echo.Context) error {
-		type AllTimeCommitsView struct {
-			RepoName string
-			Count    int
-		}
-		return c.HTML(
-			http.StatusOK,
-			renderTemplate(
-				"views/all-time-commits.html",
-				AllTimeCommitsView{Count: recap.NumCommitsAllTime, RepoName: recap.Name}))
-	})
+	// e.GET("/presentation/curr-year-commits", func(c echo.Context) error {
+	// 	type CurrYearCommitsView struct {
+	// 		RepoName string
+	// 		Count    int
+	// 	}
+	// 	return c.HTML(
+	// 		http.StatusOK,
+	// 		renderTemplate(
+	// 			"views/curr-year-commits.html",
+	// 			CurrYearCommitsView{Count: recap.NumCommitsCurrYear, RepoName: recap.Name}))
+	// })
+
+	// e.GET("/presentation/all-time-commits", func(c echo.Context) error {
+	// 	type AllTimeCommitsView struct {
+	// 		RepoName string
+	// 		Count    int
+	// 	}
+	// 	return c.HTML(
+	// 		http.StatusOK,
+	// 		renderTemplate(
+	// 			"views/all-time-commits.html",
+	// 			AllTimeCommitsView{Count: recap.NumCommitsAllTime, RepoName: recap.Name}))
+	// })
 
 	e.GET("/favicon.ico", func(c echo.Context) error {
 		data, _ := static.ReadFile("static/images/favicon.ico")

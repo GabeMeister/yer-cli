@@ -1,0 +1,9 @@
+{{define "partials/repo.html"}}
+
+<div>
+  <div>The repo you are viewing stats for is: {{.RepoName}}</div>
+  <a hx-get="/presentation/prev-year-commits" hx-push-url="true">Prev Year Commits →</a>
+  <!-- {{template "presentation/views/example"}} -->
+</div>
+
+{{end}}
