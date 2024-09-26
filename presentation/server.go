@@ -23,11 +23,9 @@ func RunLocalServer() {
 
 	e.GET("/", func(c echo.Context) error {
 		data := struct {
-			Title    string
-			NumLines int
+			Title string
 		}{
-			Title:    "Intro Slide",
-			NumLines: 23442,
+			Title: "Intro Slide",
 		}
 
 		content := render(TemplateParams{

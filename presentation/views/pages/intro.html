@@ -1,5 +1,4 @@
 {{define "pages/intro.html"}}
-<div>{{.Title}}</div>
-<div>{{.NumLines}}</div>
-<a hx-get="/example" hx-push-url="true" hx-target="#page-content">Go to Next Slide</a>
+<div class="text-2xl">{{.Title}}</div>
+<a hx-get="/example" hx-push-url="true" hx-target="#page-content" class="cursor-pointer">Go to Next Slide</a>
 {{end}}
