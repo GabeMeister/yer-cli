@@ -30,31 +30,19 @@ func RunLocalServer() {
 			NumLines: 23442,
 		}
 
-		hxRequestHeader := c.Request().Header["Hx-Request"]
-		layout := "layout/standard.html"
-		if len(hxRequestHeader) > 0 && hxRequestHeader[0] == "true" {
-			layout = ""
-		}
-
 		content := render(TemplateParams{
-			path:   "pages/intro.html",
-			data:   data,
-			layout: layout,
+			c:    c,
+			path: "pages/intro.html",
+			data: data,
 		})
 
 		return c.HTML(http.StatusOK, content)
 	})
 
 	e.GET("/example", func(c echo.Context) error {
-		hxRequestHeader := c.Request().Header["Hx-Request"]
-		layout := "layout/standard.html"
-		if len(hxRequestHeader) > 0 && hxRequestHeader[0] == "true" {
-			layout = ""
-		}
-
 		content := render(TemplateParams{
-			path:   "pages/example.html",
-			layout: layout,
+			c:    c,
+			path: "pages/example.html",
 		})
 
 		return c.HTML(http.StatusOK, content)
