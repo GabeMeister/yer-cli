@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# Directory containing files to upload
+BUILD_DIR="./builds"
+
+# Bucket name on Tigris
+BUCKET_NAME="year-end-recap-storage"
+
+# Function to upload a single file
+upload_file() {
+    local file_path="$1"
+    local file_name=$(basename "$file_path")
+    
+    aws s3 cp "$file_path" "s3://$BUCKET_NAME/$file_name" --endpoint-url "$AWS_ENDPOINT_URL_S3"
+    
+    if [ $? -eq 0 ]; then
+        echo "Successfully uploaded: $file_name"
+    else
+        echo "Error uploading: $file_name"
+    fi
+}
+
+# Check if the builds directory exists
+if [ ! -d "$BUILD_DIR" ]; then
+    echo "Error: $BUILD_DIR directory does not exist."
+    exit 1
+fi
+
+# Loop through all files in the builds directory
+for file in "$BUILD_DIR"/*; do
+    if [ -f "$file" ]; then
+        upload_file "$file"
+    fi
+done
+
+echo "Upload process completed."
