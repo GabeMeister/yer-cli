@@ -1,0 +1,8 @@
+#!/bin/bash
+
+#
+# (B)uild (A)nd (P)ublish
+#
+
+./build
+./publish
