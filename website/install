@@ -22,7 +22,8 @@ fi
 
 chmod +x year-end-recap
 echo
-echo "Year End Recap has been installed!"
+echo Year End Recap has been installed!
 echo
-
-./year-end-recap -a
+echo Run it with:
+echo
+echo ./year-end-recap -a

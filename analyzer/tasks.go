@@ -85,7 +85,7 @@ func getFileExtensions() []string {
 	reader := bufio.NewReader(os.Stdin)
 	text, err := reader.ReadString('\n')
 	if err != nil {
-		panic("Couldn't read in user input!")
+		panic(err)
 	}
 
 	fileExtensions := strings.Split(strings.TrimSpace(text), ",")
@@ -98,7 +98,7 @@ func getFileExtensions() []string {
 
 func getExcludedDirs() []string {
 	fmt.Println()
-	fmt.Println("What directories should not be included? \nType them comma separated. (For example, type \"node_modules,build\")")
+	fmt.Println("What directories should be ignored? \nType them comma separated. (For example, type \"node_modules,build\")")
 	fmt.Print("> ")
 
 	reader := bufio.NewReader(os.Stdin)
