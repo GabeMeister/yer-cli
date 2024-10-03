@@ -1,6 +1,7 @@
 package presentation
 
 import (
+	"GabeMeister/yer-cli/utils"
 	"embed"
 	"fmt"
 	"net/http"
@@ -22,10 +23,17 @@ func RunLocalServer() {
 	// recap := getRecap()
 
 	e.GET("/", func(c echo.Context) error {
+		if !utils.HasRepoBeenAnalyzed() {
+			return c.HTML(http.StatusOK, render(TemplateParams{
+				c:    c,
+				path: "pages/repo-not-found.html",
+			}))
+		}
+
 		data := struct {
 			Title string
 		}{
-			Title: "Intro Slide",
+			Title: "Intro Slide!",
 		}
 
 		content := render(TemplateParams{

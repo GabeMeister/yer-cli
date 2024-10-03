@@ -14,7 +14,6 @@ import (
 )
 
 func AnalyzeManually() bool {
-
 	var dir string
 
 	for isValid := false; !isValid; isValid = isValidGitRepo(dir) {
@@ -148,7 +147,7 @@ func calculateRecap(config Config) {
 		panic(err)
 	}
 
-	os.WriteFile("./tmp/recap.json", data, 0644)
+	os.WriteFile(utils.RECAP_FILE, data, 0644)
 }
 
 func isValidGitRepo(dir string) bool {
