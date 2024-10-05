@@ -1,7 +1,7 @@
-{{define "partials/prev-year-commits.html"}}
+{{define "pages/prev-year-commits.html"}}
 
 <div>
-  <div>Dude! The number of commits in the past year: {{.Count}}</div>
+  <div>Number of commits made last year: {{.Count}}</div>
   <a hx-get="/presentation/curr-year-commits" hx-push-url="true">Curr Year Commits →</a>
 </div>
 

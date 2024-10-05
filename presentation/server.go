@@ -20,20 +20,27 @@ func RunLocalServer() {
 	e.HideBanner = true
 	e.HidePort = true
 
-	// recap := getRecap()
+	recap, _ := getRecap()
 
 	e.GET("/", func(c echo.Context) error {
 		if !utils.HasRepoBeenAnalyzed() {
-			return c.HTML(http.StatusOK, render(TemplateParams{
-				c:    c,
-				path: "pages/repo-not-found.html",
-			}))
+			return RepoNotFoundPage(c)
+		}
+
+		type NextButton struct {
+			Href string
+			Text string
 		}
 
 		data := struct {
-			Title string
+			Title      string
+			NextButton NextButton
 		}{
-			Title: "Intro Slide!",
+			Title: recap.Name,
+			NextButton: NextButton{
+				Href: "/prev-year-commits",
+				Text: "Next 3",
+			},
 		}
 
 		content := render(TemplateParams{
@@ -45,39 +52,22 @@ func RunLocalServer() {
 		return c.HTML(http.StatusOK, content)
 	})
 
-	e.GET("/example", func(c echo.Context) error {
+	e.GET("/prev-year-commits", func(c echo.Context) error {
+		type PrevYearCommitsView struct {
+			RepoName string
+			Count    int
+		}
 		content := render(TemplateParams{
 			c:    c,
-			path: "pages/example.html",
+			path: "pages/prev-year-commits.html",
+			data: PrevYearCommitsView{Count: recap.NumCommitsPrevYear, RepoName: recap.Name},
 		})
 
-		return c.HTML(http.StatusOK, content)
+		return c.HTML(
+			http.StatusOK,
+			content,
+		)
 	})
-
-	// e.GET("/presentation/intro", func(c echo.Context) error {
-	// 	fmt.Println("HERE")
-	// 	type IntroView struct {
-	// 		RepoName   string
-	// 		ShowLayout bool
-	// 	}
-	// 	return c.HTML(
-	// 		http.StatusOK,
-	// 		renderTemplate(
-	// 			"views/repo.html",
-	// 			IntroView{RepoName: recap.Name, ShowLayout: c.Request().Header.Get("HX-Request") != "true"}))
-	// })
-
-	// e.GET("/presentation/prev-year-commits", func(c echo.Context) error {
-	// 	type PrevYearCommitsView struct {
-	// 		RepoName string
-	// 		Count    int
-	// 	}
-	// 	return c.HTML(
-	// 		http.StatusOK,
-	// 		renderTemplate(
-	// 			"views/prev-year-commits.html",
-	// 			PrevYearCommitsView{Count: recap.NumCommitsPrevYear, RepoName: recap.Name}))
-	// })
 
 	// e.GET("/presentation/curr-year-commits", func(c echo.Context) error {
 	// 	type CurrYearCommitsView struct {
@@ -103,6 +93,15 @@ func RunLocalServer() {
 	// 			AllTimeCommitsView{Count: recap.NumCommitsAllTime, RepoName: recap.Name}))
 	// })
 
+	e.GET("/example", func(c echo.Context) error {
+		content := render(TemplateParams{
+			c:    c,
+			path: "pages/example.html",
+		})
+
+		return c.HTML(http.StatusOK, content)
+	})
+
 	e.GET("/favicon.ico", func(c echo.Context) error {
 		data, _ := static.ReadFile("static/images/favicon.ico")
 		return c.Blob(200, "image/x-icon", data)
@@ -115,6 +114,7 @@ func RunLocalServer() {
 
 	e.GET("/images/:name", func(c echo.Context) error {
 		data, _ := static.ReadFile(fmt.Sprintf("static/images/%s", c.Param("name")))
+		// TODO: figure out how to return any kind of image
 		return c.Blob(200, "image/jpeg", data)
 	})
 
