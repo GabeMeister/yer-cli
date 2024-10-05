@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io/fs"
 	"os"
+	"time"
 )
 
 var help = flag.Bool("h", false, "Print help menu")
@@ -29,12 +30,9 @@ func printHelp() {
 }
 
 func runTest() {
-	data, err := os.Stat("./config2.json")
-	if errors.Is(err, os.ErrNotExist) {
-		fmt.Println("Nope nope nope")
-	}
-
-	fmt.Println(data)
+	now := time.Now()
+	isoDateString := now.Format(time.RFC3339)
+	fmt.Println(isoDateString)
 }
 
 func main() {

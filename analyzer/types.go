@@ -3,6 +3,7 @@ package analyzer
 type Config struct {
 	Name                  string            `json:"name"`
 	Path                  string            `json:"path"`
+	DateAnalyzed          string            `json:"date_analyzed"`
 	IncludeFileExtensions []string          `json:"include_file_extensions"`
 	ExcludeDirectories    []string          `json:"exclude_directories"`
 	ExcludeFiles          []string          `json:"exclude_files"`
