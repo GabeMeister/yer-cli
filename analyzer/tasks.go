@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	input_autocomplete "github.com/JoaoDanielRufino/go-input-autocomplete"
 )
@@ -114,7 +115,6 @@ func getExcludedDirs() []string {
 	excludedDirs = utils.Filter(excludedDirs, func(s string) bool {
 		return s != ""
 	})
-	fmt.Println(excludedDirs)
 
 	return excludedDirs
 }
@@ -135,8 +135,12 @@ func calculateRecap(config Config) {
 	numCommitsCurrYear := GetNumCommitsCurrYear()
 	numCommitsInPast := GetNumCommitsInPast()
 
+	now := time.Now()
+	isoDateString := now.Format(time.RFC3339)
+
 	repoRecap := Recap{
 		Name:               config.Name,
+		DateAnalyzed:       isoDateString,
 		NumCommitsAllTime:  numCommitsAllTime,
 		NumCommitsPrevYear: numCommitsPrevYear,
 		NumCommitsCurrYear: numCommitsCurrYear,

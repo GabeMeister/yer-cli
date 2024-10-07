@@ -32,14 +32,21 @@ func RunLocalServer() {
 			Text string
 		}
 
+		dateStr, err := utils.FormatISODate(recap.DateAnalyzed)
+		if err != nil {
+			panic(err)
+		}
+
 		data := struct {
-			Title      string
-			NextButton NextButton
+			Title        string
+			DateAnalyzed string
+			NextButton   NextButton
 		}{
-			Title: recap.Name,
+			Title:        recap.Name,
+			DateAnalyzed: dateStr,
 			NextButton: NextButton{
 				Href: "/prev-year-commits",
-				Text: "Next 3",
+				Text: "Next",
 			},
 		}
 

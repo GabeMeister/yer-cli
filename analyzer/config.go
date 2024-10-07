@@ -4,17 +4,12 @@ import (
 	"encoding/json"
 	"os"
 	"path/filepath"
-	"time"
 )
 
 func initConfig(repoDir string, includedFileExtensions []string, excludedDirs []string) Config {
-	now := time.Now()
-	isoDateString := now.Format(time.RFC3339)
-
 	config := Config{
 		Path:                  repoDir,
 		Name:                  filepath.Base(repoDir),
-		DateAnalyzed:          isoDateString,
 		IncludeFileExtensions: includedFileExtensions,
 		ExcludeDirectories:    excludedDirs,
 		ExcludeFiles:          []string{},

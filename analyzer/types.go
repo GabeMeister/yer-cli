@@ -3,7 +3,6 @@ package analyzer
 type Config struct {
 	Name                  string            `json:"name"`
 	Path                  string            `json:"path"`
-	DateAnalyzed          string            `json:"date_analyzed"`
 	IncludeFileExtensions []string          `json:"include_file_extensions"`
 	ExcludeDirectories    []string          `json:"exclude_directories"`
 	ExcludeFiles          []string          `json:"exclude_files"`
@@ -30,9 +29,10 @@ type GitMergeCommit struct {
 }
 
 type Recap struct {
-	Name               string
-	NumCommitsAllTime  int
-	NumCommitsPrevYear int
-	NumCommitsCurrYear int
-	NumCommitsInPast   int
+	Name               string `json:"name"`
+	DateAnalyzed       string `json:"date_analyzed"`
+	NumCommitsAllTime  int    `json:"num_commits_all_time"`
+	NumCommitsPrevYear int    `json:"num_commits_prev_year"`
+	NumCommitsCurrYear int    `json:"num_commits_curr_year"`
+	NumCommitsInPast   int    `json:"num_commits_in_past"`
 }
