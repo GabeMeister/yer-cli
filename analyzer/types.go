@@ -29,10 +29,15 @@ type GitMergeCommit struct {
 }
 
 type Recap struct {
-	Name               string `json:"name"`
-	DateAnalyzed       string `json:"date_analyzed"`
-	NumCommitsAllTime  int    `json:"num_commits_all_time"`
-	NumCommitsPrevYear int    `json:"num_commits_prev_year"`
-	NumCommitsCurrYear int    `json:"num_commits_curr_year"`
-	NumCommitsInPast   int    `json:"num_commits_in_past"`
+	Name         string `json:"name"`
+	DateAnalyzed string `json:"date_analyzed"`
+
+	// Commits
+	NumCommitsAllTime  int `json:"num_commits_all_time"`
+	NumCommitsPrevYear int `json:"num_commits_prev_year"`
+	NumCommitsCurrYear int `json:"num_commits_curr_year"`
+	NumCommitsInPast   int `json:"num_commits_in_past"`
+
+	// Team
+	EngineerCommitCountsAllTime map[string]int `json:"engineer_commit_counts_all_time"`
 }

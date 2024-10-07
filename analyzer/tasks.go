@@ -134,17 +134,19 @@ func calculateRecap(config Config) {
 	numCommitsPrevYear := GetNumCommitsPrevYear()
 	numCommitsCurrYear := GetNumCommitsCurrYear()
 	numCommitsInPast := GetNumCommitsInPast()
+	engineerCommitCountsAllTime := GetEngineerCommitCountAllTime()
 
 	now := time.Now()
 	isoDateString := now.Format(time.RFC3339)
 
 	repoRecap := Recap{
-		Name:               config.Name,
-		DateAnalyzed:       isoDateString,
-		NumCommitsAllTime:  numCommitsAllTime,
-		NumCommitsPrevYear: numCommitsPrevYear,
-		NumCommitsCurrYear: numCommitsCurrYear,
-		NumCommitsInPast:   numCommitsInPast,
+		Name:                        config.Name,
+		DateAnalyzed:                isoDateString,
+		NumCommitsAllTime:           numCommitsAllTime,
+		NumCommitsPrevYear:          numCommitsPrevYear,
+		NumCommitsCurrYear:          numCommitsCurrYear,
+		NumCommitsInPast:            numCommitsInPast,
+		EngineerCommitCountsAllTime: engineerCommitCountsAllTime,
 	}
 	data, err := json.MarshalIndent(repoRecap, "", "  ")
 	if err != nil {
