@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 	"time"
 
@@ -32,7 +33,9 @@ func AnalyzeManually() bool {
 		excludedDirs = getExcludedDirs()
 	}
 
-	config := initConfig(dir, fileExtensions, excludedDirs)
+	duplicateEngineers := getDuplicateUsers(dir)
+
+	config := initConfig(dir, fileExtensions, excludedDirs, duplicateEngineers)
 
 	analyzeRepo(config)
 
@@ -117,6 +120,95 @@ func getExcludedDirs() []string {
 	})
 
 	return excludedDirs
+}
+
+func getDuplicateUsers(path string) map[string]string {
+	commits := getGitLogs(path)
+	// Username -> int
+	userMap := make(map[string]int)
+
+	for _, commit := range commits {
+		userMap[commit.Author] = 1
+	}
+
+	fmt.Println()
+	fmt.Println("The list of git usernames are:")
+	fmt.Println()
+
+	userNames := []string{}
+	for userName := range userMap {
+		userNames = append(userNames, userName)
+	}
+	sort.Strings(userNames)
+
+	for _, userName := range userNames {
+		fmt.Println(userName)
+	}
+
+	fmt.Println()
+	fmt.Print("Are there any duplicates? (Y/n) ")
+
+	reader := bufio.NewReader(os.Stdin)
+	text, err := reader.ReadString('\n')
+	if err != nil {
+		panic(err)
+	}
+	answer := strings.TrimSpace(text)
+
+	if len(answer) == 0 || strings.ToLower(string(answer[0])) == "y" {
+		duplicateEngineerMap := make(map[string]string)
+
+		for i := 0; i < 1000; i++ {
+			fmt.Println()
+
+			fillerWord := "a"
+			if i >= 1 {
+				fillerWord = "another"
+			}
+
+			fmt.Println("Type " + fillerWord + " duplicate username (or type \"exit\" when done):")
+			fmt.Print("> ")
+
+			reader := bufio.NewReader(os.Stdin)
+			text, err := reader.ReadString('\n')
+			if err != nil {
+				panic(err)
+			}
+			duplicateUsername := strings.TrimSpace(text)
+
+			if duplicateUsername == "exit" {
+				break
+			}
+
+			fmt.Println()
+			fmt.Println("Type the real username for " + duplicateUsername + ":")
+			fmt.Print("> ")
+
+			reader = bufio.NewReader(os.Stdin)
+			text, err = reader.ReadString('\n')
+			if err != nil {
+				panic(err)
+			}
+			realUsername := strings.TrimSpace(text)
+
+			duplicateEngineerMap[duplicateUsername] = realUsername
+
+			userNames = utils.Delete(userNames, func(item string) bool { return item == realUsername })
+			userNames = utils.Delete(userNames, func(item string) bool { return item == duplicateUsername })
+
+			fmt.Println()
+			fmt.Println("The remaining git usernames are:")
+			fmt.Println()
+
+			for _, userName := range userNames {
+				fmt.Println(userName)
+			}
+		}
+
+		return duplicateEngineerMap
+	} else {
+		return map[string]string{}
+	}
 }
 
 func analyzeRepo(config Config) {

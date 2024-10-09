@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 )
 
-func initConfig(repoDir string, includedFileExtensions []string, excludedDirs []string) Config {
+func initConfig(repoDir string, includedFileExtensions []string, excludedDirs []string, duplicateEngineers map[string]string) Config {
 	config := Config{
 		Path:                  repoDir,
 		Name:                  filepath.Base(repoDir),
@@ -14,7 +14,7 @@ func initConfig(repoDir string, includedFileExtensions []string, excludedDirs []
 		ExcludeDirectories:    excludedDirs,
 		ExcludeFiles:          []string{},
 		ExcludeEngineers:      []string{},
-		DuplicateEngineers:    make(map[string]string),
+		DuplicateEngineers:    duplicateEngineers,
 	}
 	data, err := json.MarshalIndent(config, "", "  ")
 	if err != nil {
