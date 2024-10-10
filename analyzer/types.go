@@ -39,5 +39,6 @@ type Recap struct {
 	NumCommitsInPast   int `json:"num_commits_in_past"`
 
 	// Team
-	EngineerCommitCountsAllTime map[string]int `json:"engineer_commit_counts_all_time"`
+	EngineerCommitCountsCurrYear map[string]int `json:"engineer_commit_counts_curr_year"`
+	EngineerCommitCountsAllTime  map[string]int `json:"engineer_commit_counts_all_time"`
 }

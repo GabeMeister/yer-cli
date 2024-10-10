@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"io/fs"
 	"os"
-	"time"
 )
 
 var help = flag.Bool("h", false, "Print help menu")
@@ -30,9 +29,9 @@ func printHelp() {
 }
 
 func runTest() {
-	now := time.Now()
-	isoDateString := now.Format(time.RFC3339)
-	fmt.Println(isoDateString)
+	m := make(map[string]string)
+	fmt.Println(m["Gabe"] == "")
+
 }
 
 func main() {

@@ -1,6 +1,8 @@
 package utils
 
-import "time"
+import (
+	"time"
+)
 
 func FormatISODate(isoString string) (string, error) {
 	t, err := time.Parse(time.RFC3339, isoString)
@@ -9,4 +11,20 @@ func FormatISODate(isoString string) (string, error) {
 	}
 
 	return t.Format("January 2, 2006"), nil
+}
+
+// isoString: Thu Mar 21 08:28:07 2024 -0700
+// year: 2023
+func IsDateStrInYear(isoString string, year int) bool {
+	// Parse the ISO string
+	parsed, err := time.Parse("Mon Jan 2 15:04:05 2006 -0700", isoString)
+	if err != nil {
+		return false
+	}
+
+	// Extract the year from the parsed time
+	parsedYear := parsed.Year()
+
+	// Compare the extracted year with the given year
+	return parsedYear == year
 }

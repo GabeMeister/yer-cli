@@ -146,7 +146,7 @@ func getDuplicateUsers(path string) map[string]string {
 	}
 
 	fmt.Println()
-	fmt.Print("Are there any duplicates? (Y/n) ")
+	fmt.Print("Are there any duplicates? (y/N) ")
 
 	reader := bufio.NewReader(os.Stdin)
 	text, err := reader.ReadString('\n')
@@ -155,7 +155,7 @@ func getDuplicateUsers(path string) map[string]string {
 	}
 	answer := strings.TrimSpace(text)
 
-	if len(answer) == 0 || strings.ToLower(string(answer[0])) == "y" {
+	if len(answer) > 0 && strings.ToLower(string(answer[0])) == "y" {
 		duplicateEngineerMap := make(map[string]string)
 
 		for i := 0; i < 1000; i++ {
@@ -226,19 +226,21 @@ func calculateRecap(config Config) {
 	numCommitsPrevYear := GetNumCommitsPrevYear()
 	numCommitsCurrYear := GetNumCommitsCurrYear()
 	numCommitsInPast := GetNumCommitsInPast()
-	engineerCommitCountsAllTime := GetEngineerCommitCountAllTime()
+	engineerCommitCountsCurrYear := GetEngineerCommitCountCurrYear(config)
+	engineerCommitCountsAllTime := GetEngineerCommitCountAllTime(config)
 
 	now := time.Now()
 	isoDateString := now.Format(time.RFC3339)
 
 	repoRecap := Recap{
-		Name:                        config.Name,
-		DateAnalyzed:                isoDateString,
-		NumCommitsAllTime:           numCommitsAllTime,
-		NumCommitsPrevYear:          numCommitsPrevYear,
-		NumCommitsCurrYear:          numCommitsCurrYear,
-		NumCommitsInPast:            numCommitsInPast,
-		EngineerCommitCountsAllTime: engineerCommitCountsAllTime,
+		Name:                         config.Name,
+		DateAnalyzed:                 isoDateString,
+		NumCommitsAllTime:            numCommitsAllTime,
+		NumCommitsPrevYear:           numCommitsPrevYear,
+		NumCommitsCurrYear:           numCommitsCurrYear,
+		NumCommitsInPast:             numCommitsInPast,
+		EngineerCommitCountsCurrYear: engineerCommitCountsCurrYear,
+		EngineerCommitCountsAllTime:  engineerCommitCountsAllTime,
 	}
 	data, err := json.MarshalIndent(repoRecap, "", "  ")
 	if err != nil {

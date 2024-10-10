@@ -1,12 +1,28 @@
 package analyzer
 
-func GetEngineerCommitCountAllTime() map[string]int {
+import "GabeMeister/yer-cli/utils"
+
+func GetEngineerCommitCountCurrYear(config Config) map[string]int {
 	commits := getGitCommits()
 	engineers := make(map[string]int)
 
 	for _, commit := range commits {
-		// TODO: check duplicate authors
-		engineers[commit.Author] += 1
+		if utils.IsDateStrInYear(commit.Date, CURR_YEAR) {
+			userName := getRealUsername(commit.Author, config)
+			engineers[userName] += 1
+		}
+	}
+
+	return engineers
+}
+
+func GetEngineerCommitCountAllTime(config Config) map[string]int {
+	commits := getGitCommits()
+	engineers := make(map[string]int)
+
+	for _, commit := range commits {
+		userName := getRealUsername(commit.Author, config)
+		engineers[userName] += 1
 	}
 
 	return engineers
