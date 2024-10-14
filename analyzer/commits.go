@@ -68,3 +68,43 @@ func getGitCommits() []GitCommit {
 
 	return commits
 }
+
+// Any commit that has come before the current year
+func getPastGitCommits() []GitCommit {
+	commits := getGitCommits()
+
+	final := []GitCommit{}
+	for _, commit := range commits {
+		if utils.IsDateStrBeforeYear(commit.Date, CURR_YEAR) {
+			final = append(final, commit)
+		}
+	}
+
+	return final
+}
+
+func getPrevYearGitCommits() []GitCommit {
+	commits := getGitCommits()
+
+	final := []GitCommit{}
+	for _, commit := range commits {
+		if utils.IsDateStrInYear(commit.Date, CURR_YEAR-1) {
+			final = append(final, commit)
+		}
+	}
+
+	return final
+}
+
+func getCurrYearGitCommits() []GitCommit {
+	commits := getGitCommits()
+
+	final := []GitCommit{}
+	for _, commit := range commits {
+		if utils.IsDateStrInYear(commit.Date, CURR_YEAR) {
+			final = append(final, commit)
+		}
+	}
+
+	return final
+}

@@ -19,6 +19,16 @@ func FindIndex[T any](slice []T, test func(T) bool) int {
 	return -1
 }
 
+func Includes[T any](slice []T, test func(T) bool) bool {
+	for _, s := range slice {
+		if test(s) {
+			return true
+		}
+	}
+
+	return false
+}
+
 func DeleteAtIndex(slice []any, index int) []any {
 	return append(slice[:index], slice[index+1:])
 }

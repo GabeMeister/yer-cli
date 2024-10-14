@@ -11,6 +11,7 @@ func getGitLogs(path string) []GitCommit {
 		"git",
 		"log",
 		"--no-merges",
+		"--reverse",
 		"--format=-- Begin --%n-- Commit --%n%H%n-- Author --%n%aN%n-- Email --%n%aE%n-- Date --%n%ad%n-- Message --%n%B%n-- End --")
 	cmd.Dir = path
 

@@ -226,6 +226,8 @@ func calculateRecap(config Config) {
 	numCommitsPrevYear := GetNumCommitsPrevYear()
 	numCommitsCurrYear := GetNumCommitsCurrYear()
 	numCommitsInPast := GetNumCommitsInPast()
+	newEngineerCommitsCurrYear := GetNewEngineerCommitsCurrYear(config)
+	newEngineerCountCurrYear := len(newEngineerCommitsCurrYear)
 	engineerCommitCountsCurrYear := GetEngineerCommitCountCurrYear(config)
 	engineerCommitCountsAllTime := GetEngineerCommitCountAllTime(config)
 
@@ -239,6 +241,8 @@ func calculateRecap(config Config) {
 		NumCommitsPrevYear:           numCommitsPrevYear,
 		NumCommitsCurrYear:           numCommitsCurrYear,
 		NumCommitsInPast:             numCommitsInPast,
+		NewEngineerCommitsCurrYear:   newEngineerCommitsCurrYear,
+		NewEngineerCountCurrYear:     newEngineerCountCurrYear,
 		EngineerCommitCountsCurrYear: engineerCommitCountsCurrYear,
 		EngineerCommitCountsAllTime:  engineerCommitCountsAllTime,
 	}
