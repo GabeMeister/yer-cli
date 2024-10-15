@@ -230,6 +230,7 @@ func calculateRecap(config Config) {
 	newEngineerCountCurrYear := len(newEngineerCommitsCurrYear)
 	engineerCommitCountsCurrYear := GetEngineerCommitCountCurrYear(config)
 	engineerCommitCountsAllTime := GetEngineerCommitCountAllTime(config)
+	engineerCountCurrYear := GetEngineerCountCurrYear(config)
 
 	now := time.Now()
 	isoDateString := now.Format(time.RFC3339)
@@ -245,6 +246,7 @@ func calculateRecap(config Config) {
 		NewEngineerCountCurrYear:     newEngineerCountCurrYear,
 		EngineerCommitCountsCurrYear: engineerCommitCountsCurrYear,
 		EngineerCommitCountsAllTime:  engineerCommitCountsAllTime,
+		EngineerCountCurrYear:        engineerCountCurrYear,
 	}
 	data, err := json.MarshalIndent(repoRecap, "", "  ")
 	if err != nil {

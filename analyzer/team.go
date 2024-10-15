@@ -66,3 +66,9 @@ func GetEngineerCommitCountAllTime(config Config) map[string]int {
 
 	return engineers
 }
+
+func GetEngineerCountCurrYear(config Config) int {
+	engineers := GetEngineerCommitCountCurrYear(config)
+
+	return len(engineers)
+}
