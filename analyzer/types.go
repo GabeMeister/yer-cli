@@ -36,7 +36,6 @@ type Recap struct {
 	NumCommitsAllTime  int `json:"num_commits_all_time"`
 	NumCommitsPrevYear int `json:"num_commits_prev_year"`
 	NumCommitsCurrYear int `json:"num_commits_curr_year"`
-	NumCommitsInPast   int `json:"num_commits_in_past"`
 
 	// Team
 	NewEngineerCommitsCurrYear   []GitCommit    `json:"new_engineer_commits_curr_year"`
@@ -44,4 +43,5 @@ type Recap struct {
 	EngineerCommitCountsCurrYear map[string]int `json:"engineer_commit_counts_curr_year"`
 	EngineerCommitCountsAllTime  map[string]int `json:"engineer_commit_counts_all_time"`
 	EngineerCountCurrYear        int            `json:"engineer_count_curr_year"`
+	EngineerCountAllTime         int            `json:"engineer_count_all_time"`
 }
