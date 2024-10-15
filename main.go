@@ -29,9 +29,6 @@ func printHelp() {
 }
 
 func runTest() {
-	m := make(map[string]string)
-	fmt.Println(m["Gabe"] == "")
-
 }
 
 func main() {
