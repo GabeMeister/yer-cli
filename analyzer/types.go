@@ -10,12 +10,19 @@ type Config struct {
 	DuplicateEngineers    map[string]string `json:"duplicate_engineers"`
 }
 
+type FileChange struct {
+	Insertions int    `json:"insertions"`
+	Deletions  int    `json:"deletions"`
+	FilePath   string `json:"file_path"`
+}
+
 type GitCommit struct {
-	Commit  string `json:"commit"`
-	Author  string `json:"author"`
-	Email   string `json:"email"`
-	Message string `json:"message"`
-	Date    string `json:"date"`
+	Commit      string       `json:"commit"`
+	Author      string       `json:"author"`
+	Email       string       `json:"email"`
+	Message     string       `json:"message"`
+	Date        string       `json:"date"`
+	FileChanges []FileChange `json:"file_changes"`
 }
 
 type GitMergeCommit struct {

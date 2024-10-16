@@ -3,6 +3,8 @@ package analyzer
 import (
 	"fmt"
 	"os/exec"
+	"regexp"
+	"strconv"
 	"strings"
 )
 
@@ -81,5 +83,76 @@ func getGitLogs(path string) []GitCommit {
 		}
 	}
 
+	fileChangeSummary := getFileChangeSummary(path)
+
+	for i := range commits {
+		commits[i].FileChanges = fileChangeSummary[commits[i].Commit]
+	}
+
 	return commits
+}
+
+func isFileChangeLine(line string) bool {
+	// Regex for matching email addresses
+	var emailRegex = regexp.MustCompile(`^\d+\s+\d+\s+.+$`)
+	return emailRegex.MatchString(line)
+}
+
+func getFileChangeSummary(path string) map[string][]FileChange {
+	cmd := exec.Command(
+		"git",
+		"log",
+		"--no-merges",
+		"--reverse",
+		"--numstat")
+	cmd.Dir = path
+
+	rawOutput, err := cmd.Output()
+	if err != nil {
+		panic(err)
+	}
+
+	output := string(rawOutput)
+	lines := strings.Split(output, "\n")
+	fileChangeMap := make(map[string][]FileChange)
+
+	currHash := ""
+	currFileChanges := []FileChange{}
+
+	for _, line := range lines {
+		if strings.HasPrefix(line, "commit") {
+			// We found a new commit, so we need to add the previous commit in and
+			// reset the temp variables
+			if currHash != "" {
+				fileChangeMap[currHash] = currFileChanges
+				currHash = ""
+				currFileChanges = []FileChange{}
+			}
+
+			// Initialize a "new" commit
+			tokens := strings.Split(line, " ")
+			currHash = tokens[1]
+		} else if isFileChangeLine(line) {
+			// Regex to match any whitespace
+			whitespace := regexp.MustCompile(`\s+`)
+
+			// Split the string by any whitespace
+			parts := whitespace.Split(line, -1)
+			insertions, _ := strconv.Atoi(parts[0])
+			deletions, _ := strconv.Atoi(parts[1])
+			filePath := parts[2]
+
+			currFileChanges = append(currFileChanges, FileChange{
+				Insertions: insertions,
+				Deletions:  deletions,
+				FilePath:   filePath,
+			})
+		}
+	}
+
+	// Add in the final commit
+	fileChangeMap[currHash] = currFileChanges
+
+	return fileChangeMap
+
 }
