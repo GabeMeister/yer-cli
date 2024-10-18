@@ -9,6 +9,12 @@ import (
 )
 
 func getGitLogs(path string) []GitCommit {
+	s := GetSpinner()
+
+	fmt.Println()
+	s.Suffix = " Retrieving git logs..."
+	s.Start()
+
 	cmd := exec.Command(
 		"git",
 		"log",
@@ -23,6 +29,9 @@ func getGitLogs(path string) []GitCommit {
 	}
 
 	output := string(rawOutput)
+
+	s.Suffix = " Analyzing git logs..."
+
 	lines := strings.Split(output, "\n")
 
 	var currentState = "BEGIN"
@@ -83,6 +92,8 @@ func getGitLogs(path string) []GitCommit {
 		}
 	}
 
+	s.Stop()
+
 	fileChangeSummary := getFileChangeSummary(path)
 
 	for i := range commits {
@@ -99,6 +110,10 @@ func isFileChangeLine(line string) bool {
 }
 
 func getFileChangeSummary(path string) map[string][]FileChange {
+	s := GetSpinner()
+	s.Suffix = " Retrieving file changes..."
+	s.Start()
+
 	cmd := exec.Command(
 		"git",
 		"log",
@@ -113,6 +128,9 @@ func getFileChangeSummary(path string) map[string][]FileChange {
 	}
 
 	output := string(rawOutput)
+
+	s.Suffix = " Analyzing file changes..."
+
 	lines := strings.Split(output, "\n")
 	fileChangeMap := make(map[string][]FileChange)
 
@@ -152,6 +170,8 @@ func getFileChangeSummary(path string) map[string][]FileChange {
 
 	// Add in the final commit
 	fileChangeMap[currHash] = currFileChanges
+
+	s.Stop()
 
 	return fileChangeMap
 
