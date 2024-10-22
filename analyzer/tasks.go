@@ -33,11 +33,18 @@ func AnalyzeManually() bool {
 		excludedDirs = getExcludedDirs()
 	}
 
-	duplicateEngineers := getDuplicateUsers(dir)
+	config := initConfig(dir, fileExtensions, excludedDirs, make(map[string]string))
 
-	config := initConfig(dir, fileExtensions, excludedDirs, duplicateEngineers)
+	gatherMetrics(config)
 
-	analyzeRepo(config)
+	duplicateEngineers := getDuplicateUsers()
+
+	err := updateDuplicateEngineers(utils.DEFAULT_CONFIG_FILE, duplicateEngineers)
+	if err != nil {
+		panic(err)
+	}
+
+	calculateRecap(config)
 
 	return true
 }
@@ -49,7 +56,10 @@ func AnalyzeWithConfig(path string) bool {
 	}
 
 	config := getConfig(path)
-	analyzeRepo(config)
+
+	gatherMetrics(config)
+	updateDuplicateEngineers(path, config.DuplicateEngineers)
+	calculateRecap(config)
 
 	return true
 }
@@ -122,8 +132,8 @@ func getExcludedDirs() []string {
 	return excludedDirs
 }
 
-func getDuplicateUsers(path string) map[string]string {
-	commits := getGitLogs(path)
+func getDuplicateUsers() map[string]string {
+	commits := getGitCommits()
 	// Username -> int
 	userMap := make(map[string]int)
 
@@ -211,17 +221,18 @@ func getDuplicateUsers(path string) map[string]string {
 	}
 }
 
-func analyzeRepo(config Config) {
-	gatherMetrics(config)
-	calculateRecap(config)
-}
-
 func gatherMetrics(config Config) {
 	commits := getGitLogs(config.Path)
-	SaveDataToFile(commits, "./tmp/commits.json")
+	SaveDataToFile(commits, utils.COMMITS_FILE)
 }
 
 func calculateRecap(config Config) {
+	s := GetSpinner()
+
+	fmt.Println()
+	s.Suffix = " Calculating repo stats..."
+	s.Start()
+
 	numCommitsAllTime := GetNumCommitsAllTime()
 	numCommitsPrevYear := GetNumCommitsPrevYear()
 	numCommitsCurrYear := GetNumCommitsCurrYear()
@@ -254,6 +265,8 @@ func calculateRecap(config Config) {
 	}
 
 	os.WriteFile(utils.RECAP_FILE, data, 0644)
+
+	s.Stop()
 }
 
 func isValidGitRepo(dir string) bool {

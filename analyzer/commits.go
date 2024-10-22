@@ -55,7 +55,7 @@ func GetNumCommitsInPast() int {
 }
 
 func getGitCommits() []GitCommit {
-	bytes, err := os.ReadFile("./tmp/commits.json")
+	bytes, err := os.ReadFile(utils.COMMITS_FILE)
 	if err != nil {
 		panic(err)
 	}
