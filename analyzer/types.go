@@ -45,10 +45,20 @@ type Recap struct {
 	NumCommitsCurrYear int `json:"num_commits_curr_year"`
 
 	// Team
-	NewEngineerCommitsCurrYear   []GitCommit    `json:"new_engineer_commits_curr_year"`
-	NewEngineerCountCurrYear     int            `json:"new_engineer_count_curr_year"`
-	EngineerCommitCountsCurrYear map[string]int `json:"engineer_commit_counts_curr_year"`
-	EngineerCommitCountsAllTime  map[string]int `json:"engineer_commit_counts_all_time"`
-	EngineerCountCurrYear        int            `json:"engineer_count_curr_year"`
-	EngineerCountAllTime         int            `json:"engineer_count_all_time"`
+	NewEngineerCommitsCurrYear      []GitCommit        `json:"new_engineer_commits_curr_year"`
+	NewEngineerCountCurrYear        int                `json:"new_engineer_count_curr_year"`
+	EngineerCommitCountsCurrYear    map[string]int     `json:"engineer_commit_counts_curr_year"`
+	EngineerCommitCountsAllTime     map[string]int     `json:"engineer_commit_counts_all_time"`
+	EngineerCountCurrYear           int                `json:"engineer_count_curr_year"`
+	EngineerCountAllTime            int                `json:"engineer_count_all_time"`
+	EngineerCommitsOverTimeCurrYear []TotalCommitCount `json:"engineer_commits_over_time_curr_year"`
+}
+
+// Example: { date: '2023-01-03T08:00:00.000Z', name: 'Steve Bremer', value: 24 },
+// Used for Engineer Commits Over Time racing bar chart
+type TotalCommitCount struct {
+	// ISO Date string
+	Date  string `json:"date"`
+	Name  string `json:"name"`
+	Value int    `json:"value"`
 }

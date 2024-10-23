@@ -78,3 +78,21 @@ func GetEngineerCountAllTime(config Config) int {
 
 	return len(engineers)
 }
+
+// Example:
+//
+// [
+//
+//	{ Date: '2023-01-03T08:00:00.000Z', Name: 'Steve Bremer', Value: 24 },
+//	{ Date: '2023-01-03T08:00:00.000Z', Name: 'Gabe Jensen', Value: 340 },
+//	...
+//
+// ]
+func GetEngineerCommitsOverTimeCurrYear(config Config) []TotalCommitCount {
+	// TODO
+
+	return []TotalCommitCount{
+		{Date: "2023-01-03T08:00:00.000Z", Name: "Steve Bremer", Value: 24},
+		{Date: "2023-01-03T08:00:00.000Z", Name: "Gabe Jensen", Value: 340},
+	}
+}

@@ -283,22 +283,24 @@ func calculateRecap(config Config) {
 	engineerCommitCountsAllTime := GetEngineerCommitCountAllTime(config)
 	engineerCountCurrYear := GetEngineerCountCurrYear(config)
 	engineerCountAllTime := GetEngineerCountAllTime(config)
+	engineerCommitsOverTimeCurrYear := GetEngineerCommitsOverTimeCurrYear(config)
 
 	now := time.Now()
 	isoDateString := now.Format(time.RFC3339)
 
 	repoRecap := Recap{
-		Name:                         config.Name,
-		DateAnalyzed:                 isoDateString,
-		NumCommitsAllTime:            numCommitsAllTime,
-		NumCommitsPrevYear:           numCommitsPrevYear,
-		NumCommitsCurrYear:           numCommitsCurrYear,
-		NewEngineerCommitsCurrYear:   newEngineerCommitsCurrYear,
-		NewEngineerCountCurrYear:     newEngineerCountCurrYear,
-		EngineerCommitCountsCurrYear: engineerCommitCountsCurrYear,
-		EngineerCommitCountsAllTime:  engineerCommitCountsAllTime,
-		EngineerCountCurrYear:        engineerCountCurrYear,
-		EngineerCountAllTime:         engineerCountAllTime,
+		Name:                            config.Name,
+		DateAnalyzed:                    isoDateString,
+		NumCommitsAllTime:               numCommitsAllTime,
+		NumCommitsPrevYear:              numCommitsPrevYear,
+		NumCommitsCurrYear:              numCommitsCurrYear,
+		NewEngineerCommitsCurrYear:      newEngineerCommitsCurrYear,
+		NewEngineerCountCurrYear:        newEngineerCountCurrYear,
+		EngineerCommitCountsCurrYear:    engineerCommitCountsCurrYear,
+		EngineerCommitCountsAllTime:     engineerCommitCountsAllTime,
+		EngineerCountCurrYear:           engineerCountCurrYear,
+		EngineerCountAllTime:            engineerCountAllTime,
+		EngineerCommitsOverTimeCurrYear: engineerCommitsOverTimeCurrYear,
 	}
 	data, err := json.MarshalIndent(repoRecap, "", "  ")
 	if err != nil {
