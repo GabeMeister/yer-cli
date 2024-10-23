@@ -8,19 +8,30 @@ import (
 	"strings"
 )
 
-func getGitLogs(path string) []GitCommit {
+func getCommitsFromGitLogs(path string, mergeCommits bool) []GitCommit {
 	s := GetSpinner()
 
 	fmt.Println()
 	s.Suffix = " Retrieving git logs..."
 	s.Start()
 
-	cmd := exec.Command(
+	args := []string{
 		"git",
 		"log",
-		"--no-merges",
-		"--reverse",
-		"--format=-- Begin --%n-- Commit --%n%H%n-- Author --%n%aN%n-- Email --%n%aE%n-- Date --%n%ad%n-- Message --%n%B%n-- End --")
+	}
+
+	if mergeCommits {
+		args = append(args, "--merges")
+		args = append(args, "--first-parent")
+		args = append(args, "master")
+	} else {
+		args = append(args, "--no-merges")
+	}
+
+	args = append(args, "--reverse")
+	args = append(args, "--format=-- Begin --%n-- Commit --%n%H%n-- Author --%n%aN%n-- Email --%n%aE%n-- Date --%n%ad%n-- Message --%n%B%n-- End --")
+
+	cmd := exec.Command(args[0], args[1:]...)
 	cmd.Dir = path
 
 	rawOutput, err := cmd.Output()
@@ -94,10 +105,12 @@ func getGitLogs(path string) []GitCommit {
 
 	s.Stop()
 
-	fileChangeSummary := getFileChangeSummary(path)
+	if !mergeCommits {
+		fileChangeSummary := getFileChangeSummary(path)
 
-	for i := range commits {
-		commits[i].FileChanges = fileChangeSummary[commits[i].Commit]
+		for i := range commits {
+			commits[i].FileChanges = fileChangeSummary[commits[i].Commit]
+		}
 	}
 
 	return commits

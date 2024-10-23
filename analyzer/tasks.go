@@ -260,8 +260,11 @@ func getDuplicateUsers() map[string]string {
 }
 
 func gatherMetrics(config Config) {
-	commits := getGitLogs(config.Path)
+	commits := getCommitsFromGitLogs(config.Path, false)
 	SaveDataToFile(commits, utils.COMMITS_FILE)
+
+	mergeCommits := getCommitsFromGitLogs(config.Path, true)
+	SaveDataToFile(mergeCommits, utils.MERGE_COMMITS_FILE)
 }
 
 func calculateRecap(config Config) {

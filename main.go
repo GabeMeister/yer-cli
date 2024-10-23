@@ -8,9 +8,7 @@ import (
 	"fmt"
 	"io/fs"
 	"os"
-	"time"
-
-	"github.com/briandowns/spinner"
+	"os/exec"
 )
 
 var help = flag.Bool("h", false, "Print help menu")
@@ -31,16 +29,20 @@ func printHelp() {
 	flag.PrintDefaults()
 }
 
+func myFunc(args ...string) string {
+	cmd := exec.Command(args[0], args[1:]...)
+	output, _ := cmd.Output()
+	fmt.Println(string(output))
+
+	return string(output)
+}
+
 func runTest() {
-	s := spinner.New(spinner.CharSets[14], 100*time.Millisecond) // Build our new spinner
-	s.Suffix = " Hello 1 "
-	s.Start() // Start the spinner
-	time.Sleep(2 * time.Second)
-	s.Suffix = " Hello 2 "
-	time.Sleep(2 * time.Second)
-	s.Suffix = " Hello 3 "
-	time.Sleep(2 * time.Second)
-	s.Stop()
+	arr := []string{"git", "status"}
+
+	sum := myFunc(arr...)
+	fmt.Println(sum)
+
 }
 
 func main() {
