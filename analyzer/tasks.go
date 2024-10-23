@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"sort"
 	"strings"
@@ -20,6 +21,18 @@ func AnalyzeManually() bool {
 
 	for isValid := false; !isValid; isValid = isValidGitRepo(dir) {
 		dir = readDir()
+	}
+
+	// Check if repo is "clean" (on master branch, and no unstaged changes)
+	if !isRepoClean(dir) {
+		fmt.Println(`
+This tool will inspect your git repo at various commits.
+Please make sure your repo is on master (or main), 
+and there are no unstaged changes before continuing.
+
+Press enter to continue...`)
+		reader := bufio.NewReader(os.Stdin)
+		reader.ReadString('\n')
 	}
 
 	var fileExtensions []string
@@ -67,6 +80,31 @@ func AnalyzeWithConfig(path string) bool {
 /*
  * PRIVATE
  */
+
+func isRepoClean(dir string) bool {
+	// Check if we're on master branch
+	branchCmd := exec.Command("git", "branch", "--show-current")
+	branchCmd.Dir = dir
+	branchOutput, err := branchCmd.Output()
+	if err != nil {
+		return false
+	}
+
+	currentBranch := strings.TrimSpace(string(branchOutput))
+	if currentBranch != "master" && currentBranch != "main" {
+		return false
+	}
+
+	// Check for unstaged changes
+	statusCmd := exec.Command("git", "status", "--porcelain")
+	statusCmd.Dir = dir
+	statusOutput, err := statusCmd.Output()
+	if err != nil {
+		return false
+	}
+
+	return len(statusOutput) == 0
+}
 
 func readDir() string {
 	fmt.Println()
