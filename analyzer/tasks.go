@@ -170,6 +170,10 @@ func getExcludedDirs() []string {
 	return excludedDirs
 }
 
+// A lot of times in repos somehow the same user has two different git usernames
+// (for example, Gabe Jensen and GabeJensen). It could be because they changed
+// laptops, decided to change their user name randomly, etc. To make the stats
+// more accurate, we "bucket" duplicate usernames into one.
 func getDuplicateUsers() map[string]string {
 	commits := getGitCommits()
 	// Username -> int

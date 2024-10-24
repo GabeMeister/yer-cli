@@ -10,8 +10,7 @@ func GetNewEngineerCommitsCurrYear(config Config) []GitCommit {
 	// userName -> throwaway
 	engineersFromPast := make(map[string]int)
 	for _, commit := range pastCommits {
-		userName := getRealUsername(commit.Author, config)
-		engineersFromPast[userName] = 1
+		engineersFromPast[commit.Author] = 1
 	}
 
 	currYearCommits := getCurrYearGitCommits()
@@ -19,17 +18,15 @@ func GetNewEngineerCommitsCurrYear(config Config) []GitCommit {
 	// username -> bool on whether they have been processed or not
 	newEngineers := make(map[string]bool)
 	for _, commit := range currYearCommits {
-		userName := getRealUsername(commit.Author, config)
-
-		if _, ok := engineersFromPast[userName]; !ok {
-			newEngineers[userName] = false
+		if _, ok := engineersFromPast[commit.Author]; !ok {
+			newEngineers[commit.Author] = false
 		}
 	}
 
 	newEngineerCommits := []GitCommit{}
 
 	for _, commit := range currYearCommits {
-		userName := getRealUsername(commit.Author, config)
+		userName := commit.Author
 		processed, ok := newEngineers[userName]
 
 		if ok && !processed {
@@ -47,7 +44,7 @@ func GetEngineerCommitCountCurrYear(config Config) map[string]int {
 
 	for _, commit := range commits {
 		if utils.IsDateStrInYear(commit.Date, CURR_YEAR) {
-			userName := getRealUsername(commit.Author, config)
+			userName := commit.Author
 			engineers[userName] += 1
 		}
 	}
@@ -60,7 +57,7 @@ func GetEngineerCommitCountAllTime(config Config) map[string]int {
 	engineers := make(map[string]int)
 
 	for _, commit := range commits {
-		userName := getRealUsername(commit.Author, config)
+		userName := commit.Author
 		engineers[userName] += 1
 	}
 

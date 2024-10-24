@@ -61,16 +61,3 @@ func getConfig(path string) Config {
 
 	return data
 }
-
-// A lot of times in repos somehow the same user has two different git usernames
-// (for example, Gabe Jensen and GabeJensen). Could be because they changed
-// laptops, decided to change their user name, etc. To make the stats more
-// accurate, we should "bucket" the duplicate users into one, and hence this
-// helper function.
-func getRealUsername(userName string, config Config) string {
-	if config.DuplicateEngineers[userName] != "" {
-		return config.DuplicateEngineers[userName]
-	} else {
-		return userName
-	}
-}
