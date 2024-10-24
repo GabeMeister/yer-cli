@@ -284,7 +284,7 @@ func calculateRecap(config Config) {
 	newEngineerCommitsCurrYear := GetNewEngineerCommitsCurrYear(config)
 	newEngineerCountCurrYear := len(newEngineerCommitsCurrYear)
 	engineerCommitCountsCurrYear := GetEngineerCommitCountCurrYear(config)
-	engineerCommitCountsAllTime := GetEngineerCommitCountAllTime(config)
+	engineerCommitCountsAllTime := GetEngineerCommitCountAllTime()
 	engineerCountCurrYear := GetEngineerCountCurrYear(config)
 	engineerCountAllTime := GetEngineerCountAllTime(config)
 	engineerCommitsOverTimeCurrYear := GetEngineerCommitsOverTimeCurrYear(config)

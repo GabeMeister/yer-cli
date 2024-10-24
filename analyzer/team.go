@@ -2,6 +2,7 @@ package analyzer
 
 import (
 	"GabeMeister/yer-cli/utils"
+	"fmt"
 )
 
 func GetNewEngineerCommitsCurrYear(config Config) []GitCommit {
@@ -52,7 +53,18 @@ func GetEngineerCommitCountCurrYear(config Config) map[string]int {
 	return engineers
 }
 
-func GetEngineerCommitCountAllTime(config Config) map[string]int {
+func GetAllUsernames() []string {
+	engineers := GetEngineerCommitCountAllTime()
+
+	usernames := []string{}
+	for username := range engineers {
+		usernames = append(usernames, username)
+	}
+
+	return usernames
+}
+
+func GetEngineerCommitCountAllTime() map[string]int {
 	commits := getGitCommits()
 	engineers := make(map[string]int)
 
@@ -71,7 +83,7 @@ func GetEngineerCountCurrYear(config Config) int {
 }
 
 func GetEngineerCountAllTime(config Config) int {
-	engineers := GetEngineerCommitCountAllTime(config)
+	engineers := GetEngineerCommitCountAllTime()
 
 	return len(engineers)
 }
@@ -86,7 +98,25 @@ func GetEngineerCountAllTime(config Config) int {
 //
 // ]
 func GetEngineerCommitsOverTimeCurrYear(config Config) []TotalCommitCount {
+
+	// Get list of engineers
+	usernames := GetAllUsernames()
+	fmt.Println(usernames)
+
+	// Bucket commit counts for all enginers in past
+	pastCommits := getPastGitCommits()
+	fmt.Println(pastCommits)
+
+	// Get current year commits
+	currCommits := getCurrYearGitCommits()
+	fmt.Println(currCommits)
+
+	// Bucket commits into days they fall on
 	// TODO
+
+	// Create an array of 365 days
+	// Iterate through array, adding in "snapshot" of commit counts for each engineer that day, copying previous days into the next one
+	// Iterate through array, and add individual TotalCommitCount structs into final array
 
 	return []TotalCommitCount{
 		{Date: "2023-01-03T08:00:00.000Z", Name: "Steve Bremer", Value: 24},
