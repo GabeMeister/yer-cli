@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-func GetNewEngineerCommitsCurrYear(config Config) []GitCommit {
+func GetNewEngineerCommitsCurrYear() []GitCommit {
 	pastCommits := getPastGitCommits()
 
 	// userName -> throwaway
@@ -39,12 +39,28 @@ func GetNewEngineerCommitsCurrYear(config Config) []GitCommit {
 	return newEngineerCommits
 }
 
-func GetEngineerCommitCountCurrYear(config Config) map[string]int {
+func GetEngineerCommitCountCurrYear() map[string]int {
 	commits := getGitCommits()
 	engineers := make(map[string]int)
 
 	for _, commit := range commits {
 		if utils.IsDateStrInYear(commit.Date, CURR_YEAR) {
+			userName := commit.Author
+			engineers[userName] += 1
+		}
+	}
+
+	return engineers
+}
+
+func GetEngineerCommitCountPrevYear() map[string]int {
+	commits := getGitCommits()
+	engineers := make(map[string]int)
+
+	for _, commit := range commits {
+		commitYear := utils.GetYearFromDateStr(commit.Date)
+
+		if commitYear < CURR_YEAR {
 			userName := commit.Author
 			engineers[userName] += 1
 		}
@@ -76,13 +92,13 @@ func GetEngineerCommitCountAllTime() map[string]int {
 	return engineers
 }
 
-func GetEngineerCountCurrYear(config Config) int {
-	engineers := GetEngineerCommitCountCurrYear(config)
+func GetEngineerCountCurrYear() int {
+	engineers := GetEngineerCommitCountCurrYear()
 
 	return len(engineers)
 }
 
-func GetEngineerCountAllTime(config Config) int {
+func GetEngineerCountAllTime() int {
 	engineers := GetEngineerCommitCountAllTime()
 
 	return len(engineers)
@@ -97,24 +113,30 @@ func GetEngineerCountAllTime(config Config) int {
 //	...
 //
 // ]
-func GetEngineerCommitsOverTimeCurrYear(config Config) []TotalCommitCount {
+func GetEngineerCommitsOverTimeCurrYear() []TotalCommitCount {
 
 	// Get list of engineers
-	usernames := GetAllUsernames()
-	fmt.Println(usernames)
+	// usernames := GetAllUsernames()
 
 	// Bucket commit counts for all enginers in past
-	pastCommits := getPastGitCommits()
-	fmt.Println(pastCommits)
+	// pastCommits := getPastGitCommits()
+	// fmt.Println(pastCommits)
 
 	// Get current year commits
 	currCommits := getCurrYearGitCommits()
-	fmt.Println(currCommits)
+	for _, commit := range currCommits {
+		fmt.Println()
+		fmt.Println(commit.Commit, commit.Author, commit.Date)
+		fmt.Println()
+	}
 
 	// Bucket commits into days they fall on
+	engineerCommitCountPrevYear := GetEngineerCommitCountPrevYear()
+	fmt.Println(engineerCommitCountPrevYear)
 	// TODO
 
-	// Create an array of 365 days
+	// Create map of daily array
+
 	// Iterate through array, adding in "snapshot" of commit counts for each engineer that day, copying previous days into the next one
 	// Iterate through array, and add individual TotalCommitCount structs into final array
 
