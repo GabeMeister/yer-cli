@@ -7,15 +7,19 @@ import (
 	"path/filepath"
 )
 
-func initConfig(repoDir string, includedFileExtensions []string, excludedDirs []string, duplicateEngineers map[string]string) Config {
-	config := Config{
-		Path:                  repoDir,
-		Name:                  filepath.Base(repoDir),
-		IncludeFileExtensions: includedFileExtensions,
-		ExcludeDirectories:    excludedDirs,
-		ExcludeFiles:          []string{},
-		ExcludeEngineers:      []string{},
-		DuplicateEngineers:    duplicateEngineers,
+func initConfig(repoDir string, includedFileExtensions []string, excludedDirs []string, duplicateEngineers map[string]string) ConfigFile {
+	config := ConfigFile{
+		Repos: []RepoConfig{
+			RepoConfig{
+				Path:                  repoDir,
+				Name:                  filepath.Base(repoDir),
+				IncludeFileExtensions: includedFileExtensions,
+				ExcludeDirectories:    excludedDirs,
+				ExcludeFiles:          []string{},
+				ExcludeEngineers:      []string{},
+				DuplicateEngineers:    duplicateEngineers,
+			},
+		},
 	}
 	data, err := json.MarshalIndent(config, "", "  ")
 	if err != nil {
@@ -30,7 +34,7 @@ func initConfig(repoDir string, includedFileExtensions []string, excludedDirs []
 func updateDuplicateEngineers(path string, duplicateEngineers map[string]string) error {
 	// Update config, cause we wanna remember this for later
 	config := getConfig(path)
-	config.DuplicateEngineers = duplicateEngineers
+	config.Repos[0].DuplicateEngineers = duplicateEngineers
 	SaveDataToFile(config, path)
 
 	// Also want to update the commits.json file, replacing the duplicate git
@@ -47,13 +51,13 @@ func updateDuplicateEngineers(path string, duplicateEngineers map[string]string)
 	return nil
 }
 
-func getConfig(path string) Config {
+func getConfig(path string) ConfigFile {
 	bytes, err := os.ReadFile(path)
 	if err != nil {
 		panic(err)
 	}
 
-	var data Config
+	var data ConfigFile
 	jsonErr := json.Unmarshal(bytes, &data)
 	if jsonErr != nil {
 		panic(jsonErr)

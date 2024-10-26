@@ -1,6 +1,10 @@
 package analyzer
 
-type Config struct {
+type ConfigFile struct {
+	Repos []RepoConfig `json:"repos"`
+}
+
+type RepoConfig struct {
 	Name                  string            `json:"name"`
 	Path                  string            `json:"path"`
 	IncludeFileExtensions []string          `json:"include_file_extensions"`

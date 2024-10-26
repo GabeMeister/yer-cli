@@ -46,8 +46,11 @@ Press enter to continue...`)
 	}
 
 	config := initConfig(dir, fileExtensions, excludedDirs, make(map[string]string))
+	// For now, we're just handling 1, we can handle multiple repos in a
+	// concurrent way later
+	repoConfig := config.Repos[0]
 
-	gatherMetrics(config)
+	gatherMetrics(config.Repos[0])
 
 	duplicateEngineers := getDuplicateUsers()
 
@@ -56,7 +59,7 @@ Press enter to continue...`)
 		panic(err)
 	}
 
-	calculateRecap(config)
+	calculateRecap(repoConfig)
 
 	return true
 }
@@ -68,10 +71,12 @@ func AnalyzeWithConfig(path string) bool {
 	}
 
 	config := getConfig(path)
+	// For now, we're just handling 1 repo at a time
+	repoConfig := config.Repos[0]
 
-	// gatherMetrics(config)
-	// updateDuplicateEngineers(path, config.DuplicateEngineers)
-	calculateRecap(config)
+	gatherMetrics(repoConfig)
+	updateDuplicateEngineers(path, repoConfig.DuplicateEngineers)
+	calculateRecap(repoConfig)
 
 	return true
 }
@@ -262,7 +267,7 @@ func getDuplicateUsers() map[string]string {
 	}
 }
 
-func gatherMetrics(config Config) {
+func gatherMetrics(config RepoConfig) {
 	commits := getCommitsFromGitLogs(config.Path, false)
 	SaveDataToFile(commits, utils.COMMITS_FILE)
 
@@ -270,7 +275,7 @@ func gatherMetrics(config Config) {
 	SaveDataToFile(mergeCommits, utils.MERGE_COMMITS_FILE)
 }
 
-func calculateRecap(config Config) {
+func calculateRecap(config RepoConfig) {
 	s := GetSpinner()
 
 	fmt.Println()
@@ -382,7 +387,7 @@ func isValidConfig(path string) bool {
 	}
 
 	// Does it even contain json?
-	var configData Config
+	var configData ConfigFile
 	jsonErr := json.Unmarshal(content, &configData)
 	if jsonErr != nil {
 		// TODO: print instructions on making valid config file
@@ -390,18 +395,25 @@ func isValidConfig(path string) bool {
 		return false
 	}
 
+	if len(configData.Repos) == 0 {
+		fmt.Println("Must have at least one repo config specified within config file.")
+		return false
+	}
+
+	repoConfig := configData.Repos[0]
+
 	// Does it have the right stuff in the json?
-	if configData.Path == "" {
+	if repoConfig.Path == "" {
 		fmt.Println("Missing `path` in the config file.")
 		return false
 	}
 
-	if configData.Name == "" {
+	if repoConfig.Name == "" {
 		fmt.Println("Missing `name` in the config file.")
 		return false
 	}
 
-	if len(configData.IncludeFileExtensions) == 0 {
+	if len(repoConfig.IncludeFileExtensions) == 0 {
 		fmt.Println("Missing files to include in the config file.")
 		return false
 	}
