@@ -11,6 +11,7 @@ import (
 	"path/filepath"
 	"sort"
 	"strings"
+	"time"
 
 	input_autocomplete "github.com/JoaoDanielRufino/go-input-autocomplete"
 )
@@ -71,6 +72,7 @@ func AnalyzeWithConfig(path string) bool {
 	}
 
 	config := getConfig(path)
+
 	// For now, we're just handling 1 repo at a time
 	repoConfig := config.Repos[0]
 
@@ -282,40 +284,40 @@ func calculateRecap(config RepoConfig) {
 	s.Suffix = " Calculating repo stats..."
 	s.Start()
 
-	// numCommitsAllTime := GetNumCommitsAllTime()
-	// numCommitsPrevYear := GetNumCommitsPrevYear()
-	// numCommitsCurrYear := GetNumCommitsCurrYear()
-	// newEngineerCommitsCurrYear := GetNewEngineerCommitsCurrYear()
-	// newEngineerCountCurrYear := len(newEngineerCommitsCurrYear)
-	// engineerCommitCountsCurrYear := GetEngineerCommitCountCurrYear()
-	// engineerCommitCountsAllTime := GetEngineerCommitCountAllTime()
-	// engineerCountCurrYear := GetEngineerCountCurrYear()
-	// engineerCountAllTime := GetEngineerCountAllTime()
-	GetEngineerCommitsOverTimeCurrYear()
+	numCommitsAllTime := GetNumCommitsAllTime()
+	numCommitsPrevYear := GetNumCommitsPrevYear()
+	numCommitsCurrYear := GetNumCommitsCurrYear()
+	newEngineerCommitsCurrYear := GetNewEngineerCommitsCurrYear()
+	newEngineerCountCurrYear := len(newEngineerCommitsCurrYear)
+	engineerCommitCountsCurrYear := GetEngineerCommitCountCurrYear()
+	engineerCommitCountsAllTime := GetEngineerCommitCountAllTime()
+	engineerCountCurrYear := GetEngineerCountCurrYear()
+	engineerCountAllTime := GetEngineerCountAllTime()
+	engineerCommitsOverTimeCurrYear := GetEngineerCommitsOverTimeCurrYear()
 
-	// now := time.Now()
-	// isoDateString := now.Format(time.RFC3339)
+	now := time.Now()
+	isoDateString := now.Format(time.RFC3339)
 
-	// repoRecap := Recap{
-	// 	Name:                            config.Name,
-	// 	DateAnalyzed:                    isoDateString,
-	// 	NumCommitsAllTime:               numCommitsAllTime,
-	// 	NumCommitsPrevYear:              numCommitsPrevYear,
-	// 	NumCommitsCurrYear:              numCommitsCurrYear,
-	// 	NewEngineerCommitsCurrYear:      newEngineerCommitsCurrYear,
-	// 	NewEngineerCountCurrYear:        newEngineerCountCurrYear,
-	// 	EngineerCommitCountsCurrYear:    engineerCommitCountsCurrYear,
-	// 	EngineerCommitCountsAllTime:     engineerCommitCountsAllTime,
-	// 	EngineerCountCurrYear:           engineerCountCurrYear,
-	// 	EngineerCountAllTime:            engineerCountAllTime,
-	// 	EngineerCommitsOverTimeCurrYear: engineerCommitsOverTimeCurrYear,
-	// }
-	// data, err := json.MarshalIndent(repoRecap, "", "  ")
-	// if err != nil {
-	// 	panic(err)
-	// }
+	repoRecap := Recap{
+		Name:                            config.Name,
+		DateAnalyzed:                    isoDateString,
+		NumCommitsAllTime:               numCommitsAllTime,
+		NumCommitsPrevYear:              numCommitsPrevYear,
+		NumCommitsCurrYear:              numCommitsCurrYear,
+		NewEngineerCommitsCurrYear:      newEngineerCommitsCurrYear,
+		NewEngineerCountCurrYear:        newEngineerCountCurrYear,
+		EngineerCommitCountsCurrYear:    engineerCommitCountsCurrYear,
+		EngineerCommitCountsAllTime:     engineerCommitCountsAllTime,
+		EngineerCountCurrYear:           engineerCountCurrYear,
+		EngineerCountAllTime:            engineerCountAllTime,
+		EngineerCommitsOverTimeCurrYear: engineerCommitsOverTimeCurrYear,
+	}
+	data, err := json.MarshalIndent(repoRecap, "", "  ")
+	if err != nil {
+		panic(err)
+	}
 
-	// os.WriteFile(utils.RECAP_FILE, data, 0644)
+	os.WriteFile(utils.RECAP_FILE, data, 0644)
 
 	s.Stop()
 }

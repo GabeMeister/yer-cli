@@ -48,3 +48,16 @@ func IsDateStrBeforeYear(isoString string, year int) bool {
 	// Compare the extracted year with the given year
 	return parsedYear < year
 }
+
+func GetDaysOfYear(year int) []string {
+	dates := []string{}
+
+	currDate := time.Date(year, 1, 1, 0, 0, 0, 0, time.UTC)
+
+	for currDate.Year() == year {
+		dates = append(dates, currDate.Format("2006-01-02"))
+		currDate = currDate.AddDate(0, 0, 1)
+	}
+
+	return dates
+}

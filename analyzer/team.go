@@ -2,7 +2,7 @@ package analyzer
 
 import (
 	"GabeMeister/yer-cli/utils"
-	"fmt"
+	"time"
 )
 
 func GetNewEngineerCommitsCurrYear() []GitCommit {
@@ -113,35 +113,53 @@ func GetEngineerCountAllTime() int {
 //	...
 //
 // ]
-func GetEngineerCommitsOverTimeCurrYear() []TotalCommitCount {
 
-	// Get list of engineers
-	// usernames := GetAllUsernames()
+func GetEngineerCommitsOverTimeCurrYear() []TotalCommitCount {
+	dates := utils.GetDaysOfYear(CURR_YEAR)
+
+	// Create map of all possible dates this year
+	dateMap := make(map[string][]GitCommit)
+	for _, d := range dates {
+		dateMap[d] = nil
+	}
+
+	commitTracker := make(map[string]int)
 
 	// Bucket commit counts for all enginers in past
-	// pastCommits := getPastGitCommits()
-	// fmt.Println(pastCommits)
+	pastCommits := getPastGitCommits()
+	for _, commit := range pastCommits {
+		commitTracker[commit.Author] += 1
+	}
 
-	// Get current year commits
+	// Get current year commits, and bucket them under whatever date they fall on
 	currCommits := getCurrYearGitCommits()
 	for _, commit := range currCommits {
-		fmt.Println()
-		fmt.Println(commit.Commit, commit.Author, commit.Date)
-		fmt.Println()
+		commitDate, err := time.Parse("Mon Jan 2 15:04:05 2006 -0700", commit.Date)
+		if err != nil {
+			panic("Invalid dates found in commits: " + commit.Date)
+		}
+
+		commitDateStr := commitDate.Format("2006-01-02")
+		dateMap[commitDateStr] = append(dateMap[commitDateStr], commit)
 	}
 
-	// Bucket commits into days they fall on
-	engineerCommitCountPrevYear := GetEngineerCommitCountPrevYear()
-	fmt.Println(engineerCommitCountPrevYear)
-	// TODO
+	final := []TotalCommitCount{}
 
-	// Create map of daily array
+	for _, dateStr := range dates {
+		commitsOnDay := dateMap[dateStr]
 
-	// Iterate through array, adding in "snapshot" of commit counts for each engineer that day, copying previous days into the next one
-	// Iterate through array, and add individual TotalCommitCount structs into final array
+		for _, commit := range commitsOnDay {
+			commitTracker[commit.Author] += 1
+		}
 
-	return []TotalCommitCount{
-		{Date: "2023-01-03T08:00:00.000Z", Name: "Steve Bremer", Value: 24},
-		{Date: "2023-01-03T08:00:00.000Z", Name: "Gabe Jensen", Value: 340},
+		for userName, numCommits := range commitTracker {
+			final = append(final, TotalCommitCount{
+				Name:  userName,
+				Date:  dateStr,
+				Value: numCommits,
+			})
+		}
 	}
+
+	return final
 }
