@@ -3,6 +3,7 @@ package presentation
 import (
 	"GabeMeister/yer-cli/utils"
 	"embed"
+	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -97,6 +98,31 @@ func RunLocalServer() {
 	// 			"views/all-time-commits.html",
 	// 			AllTimeCommitsView{Count: recap.NumCommitsAllTime, RepoName: recap.Name}))
 	// })
+
+	e.GET("/engineer-commits-over-time", func(c echo.Context) error {
+		type EngineerCommitsOverTimeView struct {
+			Commits string
+		}
+		commitsOverTimeJson, err := json.Marshal(recap.EngineerCommitsOverTimeCurrYear)
+		if err != nil {
+			panic(err)
+		}
+
+		content := render(TemplateParams{
+			c:    c,
+			path: "pages/engineer-commits-over-time.html",
+			data: EngineerCommitsOverTimeView{Commits: string(commitsOverTimeJson)},
+		})
+
+		return c.HTML(
+			http.StatusOK,
+			content,
+		)
+	})
+
+	/*
+	 * RESOURCES
+	 */
 
 	e.GET("/example", func(c echo.Context) error {
 		content := render(TemplateParams{
