@@ -163,3 +163,57 @@ func GetEngineerCommitsOverTimeCurrYear() []TotalCommitCount {
 
 	return final
 }
+
+func GetMostCommitsByEngineerCurrYear() MostCommitsByEngineer {
+	// commits := getCurrYearGitCommits()
+
+	// Go from:
+
+	// [
+	//   {
+	//     "commit": "eaeea5e7b50864bc2695f7bfa73b7106974f2165",
+	//     "author": "Steve Bremer",
+	//     "email": "steve@redballoon.work",
+	//     "message": "Initial commit",
+	//     "date": "Mon Aug 29 22:36:29 2022 +0000",
+	//     "file_changes": [
+	//       {
+	//         "insertions": 92,
+	//         "deletions": 0,
+	//         "file_path": "README.md"
+	//       }
+	//     ]
+	//   },
+	//   .
+	//   .
+	//   .
+	// ]
+
+	// To:
+
+	// {
+	//   "2022-08-29": {
+	//     "Steve": [
+	//       "Initial commit",
+	//     ],
+	//     "Ezra": [
+	//       "this is broken",
+	//       "i fix",
+	//     ],
+	//   },
+	//   .
+	//   .
+	//   .
+	// }
+
+	return MostCommitsByEngineer{
+		Username: "Isaac Neace",
+		Date:     "2024-05-13",
+		Count:    3,
+		Commits: []string{
+			"This is a commit 1",
+			"This is a commit 2",
+			"This is a commit 3",
+		},
+	}
+}

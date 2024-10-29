@@ -297,6 +297,7 @@ func calculateRecap(config RepoConfig) {
 	commitsByMonthCurrYear := GetCommitsByMonthCurrYear()
 	commitsByWeekDayCurrYear := GetCommitsByWeekDayCurrYear()
 	commitsByHourCurrYear := GetCommitsByHourCurrYear()
+	mostCommitsByEngineerCurrYear := GetMostCommitsByEngineerCurrYear()
 
 	now := time.Now()
 	isoDateString := now.Format(time.RFC3339)
@@ -322,6 +323,7 @@ func calculateRecap(config RepoConfig) {
 		EngineerCountCurrYear:           engineerCountCurrYear,
 		EngineerCountAllTime:            engineerCountAllTime,
 		EngineerCommitsOverTimeCurrYear: engineerCommitsOverTimeCurrYear,
+		MostCommitsByEngineerCurrYear:   mostCommitsByEngineerCurrYear,
 	}
 	data, err := json.MarshalIndent(repoRecap, "", "  ")
 	if err != nil {
