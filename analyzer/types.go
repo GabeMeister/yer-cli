@@ -49,6 +49,11 @@ type CommitWeekDay struct {
 	Commits int    `json:"commits"`
 }
 
+type CommitHour struct {
+	Hour    string `json:"hour"`
+	Commits int    `json:"commits"`
+}
+
 type Recap struct {
 	Name         string `json:"name"`
 	DateAnalyzed string `json:"date_analyzed"`
@@ -59,6 +64,7 @@ type Recap struct {
 	NumCommitsCurrYear       int             `json:"num_commits_curr_year"`
 	CommitsByMonthCurrYear   []CommitMonth   `json:"commits_by_month_curr_year"`
 	CommitsByWeekDayCurrYear []CommitWeekDay `json:"commits_by_week_day_curr_year"`
+	CommitsByHourCurrYear    []CommitHour    `json:"commits_by_hour_curr_year"`
 
 	// Team
 	NewEngineerCommitsCurrYear      []GitCommit        `json:"new_engineer_commits_curr_year"`

@@ -106,6 +106,32 @@ func GetCommitsByWeekDayCurrYear() []CommitWeekDay {
 	return commitWeekDays
 }
 
+func GetCommitsByHourCurrYear() []CommitHour {
+	commits := getCurrYearGitCommits()
+
+	hourMap := make(map[int]int)
+
+	for _, commit := range commits {
+		currDate, err := time.Parse("Mon Jan 2 15:04:05 2006 -0700", commit.Date)
+		if err != nil {
+			panic(err)
+		}
+		hour := currDate.Hour()
+		hourMap[hour] += 1
+	}
+
+	commitHours := []CommitHour{}
+
+	for idx, hour := range HOURS {
+		commitHours = append(commitHours, CommitHour{
+			Hour:    hour,
+			Commits: hourMap[idx],
+		})
+	}
+
+	return commitHours
+}
+
 func getGitCommits() []GitCommit {
 	bytes, err := os.ReadFile(utils.COMMITS_FILE)
 	if err != nil {

@@ -296,6 +296,7 @@ func calculateRecap(config RepoConfig) {
 	engineerCommitsOverTimeCurrYear := GetEngineerCommitsOverTimeCurrYear()
 	commitsByMonthCurrYear := GetCommitsByMonthCurrYear()
 	commitsByWeekDayCurrYear := GetCommitsByWeekDayCurrYear()
+	commitsByHourCurrYear := GetCommitsByHourCurrYear()
 
 	now := time.Now()
 	isoDateString := now.Format(time.RFC3339)
@@ -311,6 +312,7 @@ func calculateRecap(config RepoConfig) {
 		NumCommitsCurrYear:       numCommitsCurrYear,
 		CommitsByMonthCurrYear:   commitsByMonthCurrYear,
 		CommitsByWeekDayCurrYear: commitsByWeekDayCurrYear,
+		CommitsByHourCurrYear:    commitsByHourCurrYear,
 
 		// Team
 		NewEngineerCommitsCurrYear:      newEngineerCommitsCurrYear,
