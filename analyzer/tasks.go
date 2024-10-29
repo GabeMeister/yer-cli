@@ -76,8 +76,8 @@ func AnalyzeWithConfig(path string) bool {
 	// For now, we're just handling 1 repo at a time
 	repoConfig := config.Repos[0]
 
-	gatherMetrics(repoConfig)
-	updateDuplicateEngineers(path, repoConfig.DuplicateEngineers)
+	// gatherMetrics(repoConfig)
+	// updateDuplicateEngineers(path, repoConfig.DuplicateEngineers)
 	calculateRecap(repoConfig)
 
 	return true
@@ -294,16 +294,25 @@ func calculateRecap(config RepoConfig) {
 	engineerCountCurrYear := GetEngineerCountCurrYear()
 	engineerCountAllTime := GetEngineerCountAllTime()
 	engineerCommitsOverTimeCurrYear := GetEngineerCommitsOverTimeCurrYear()
+	commitsByMonthCurrYear := GetCommitsByMonthCurrYear()
+	commitsByWeekDayCurrYear := GetCommitsByWeekDayCurrYear()
 
 	now := time.Now()
 	isoDateString := now.Format(time.RFC3339)
 
 	repoRecap := Recap{
-		Name:                            config.Name,
-		DateAnalyzed:                    isoDateString,
-		NumCommitsAllTime:               numCommitsAllTime,
-		NumCommitsPrevYear:              numCommitsPrevYear,
-		NumCommitsCurrYear:              numCommitsCurrYear,
+		// Metadata
+		Name:         config.Name,
+		DateAnalyzed: isoDateString,
+
+		// Commits
+		NumCommitsAllTime:        numCommitsAllTime,
+		NumCommitsPrevYear:       numCommitsPrevYear,
+		NumCommitsCurrYear:       numCommitsCurrYear,
+		CommitsByMonthCurrYear:   commitsByMonthCurrYear,
+		CommitsByWeekDayCurrYear: commitsByWeekDayCurrYear,
+
+		// Team
 		NewEngineerCommitsCurrYear:      newEngineerCommitsCurrYear,
 		NewEngineerCountCurrYear:        newEngineerCountCurrYear,
 		EngineerCommitCountsCurrYear:    engineerCommitCountsCurrYear,

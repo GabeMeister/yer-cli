@@ -39,14 +39,26 @@ type GitMergeCommit struct {
 	Date               string
 }
 
+type CommitMonth struct {
+	Month   string `json:"month"`
+	Commits int    `json:"commits"`
+}
+
+type CommitWeekDay struct {
+	Day     string `json:"day"`
+	Commits int    `json:"commits"`
+}
+
 type Recap struct {
 	Name         string `json:"name"`
 	DateAnalyzed string `json:"date_analyzed"`
 
 	// Commits
-	NumCommitsAllTime  int `json:"num_commits_all_time"`
-	NumCommitsPrevYear int `json:"num_commits_prev_year"`
-	NumCommitsCurrYear int `json:"num_commits_curr_year"`
+	NumCommitsAllTime        int             `json:"num_commits_all_time"`
+	NumCommitsPrevYear       int             `json:"num_commits_prev_year"`
+	NumCommitsCurrYear       int             `json:"num_commits_curr_year"`
+	CommitsByMonthCurrYear   []CommitMonth   `json:"commits_by_month_curr_year"`
+	CommitsByWeekDayCurrYear []CommitWeekDay `json:"commits_by_week_day_curr_year"`
 
 	// Team
 	NewEngineerCommitsCurrYear      []GitCommit        `json:"new_engineer_commits_curr_year"`
