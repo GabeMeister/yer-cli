@@ -1,6 +1,7 @@
 package analyzer
 
 import (
+	"GabeMeister/yer-cli/utils"
 	"fmt"
 	"os/exec"
 	"regexp"
@@ -8,13 +9,14 @@ import (
 	"strings"
 )
 
-func getCommitsFromGitLogs(path string, mergeCommits bool) []GitCommit {
+func getCommitsFromGitLogs(config RepoConfig, mergeCommits bool) []GitCommit {
 	s := GetSpinner()
 
 	fmt.Println()
 	s.Suffix = " Retrieving git logs..."
 	s.Start()
 
+	path := config.Path
 	args := []string{
 		"git",
 		"log",
@@ -106,7 +108,7 @@ func getCommitsFromGitLogs(path string, mergeCommits bool) []GitCommit {
 	s.Stop()
 
 	if !mergeCommits {
-		fileChangeSummary := getFileChangeSummary(path)
+		fileChangeSummary := getFileChangeSummary(config)
 
 		for i := range commits {
 			commits[i].FileChanges = fileChangeSummary[commits[i].Commit]
@@ -122,11 +124,12 @@ func isFileChangeLine(line string) bool {
 	return emailRegex.MatchString(line)
 }
 
-func getFileChangeSummary(path string) map[string][]FileChange {
+func getFileChangeSummary(config RepoConfig) map[string][]FileChange {
 	s := GetSpinner()
 	s.Suffix = " Retrieving file changes..."
 	s.Start()
 
+	path := config.Path
 	cmd := exec.Command(
 		"git",
 		"log",
@@ -155,6 +158,8 @@ func getFileChangeSummary(path string) map[string][]FileChange {
 			// We found a new commit, so we need to add the previous commit in and
 			// reset the temp variables
 			if currHash != "" {
+				currFileChanges = filterToOnlyIncludedFiles(config, currFileChanges)
+
 				fileChangeMap[currHash] = currFileChanges
 				currHash = ""
 				currFileChanges = []FileChange{}
@@ -188,4 +193,16 @@ func getFileChangeSummary(path string) map[string][]FileChange {
 
 	return fileChangeMap
 
+}
+
+func filterToOnlyIncludedFiles(config RepoConfig, fileChanges []FileChange) []FileChange {
+	filteredFileChanges := utils.Filter(fileChanges, func(c FileChange) bool {
+		fileExt := utils.GetFileExtension(c.FilePath)
+
+		return utils.Includes(config.IncludeFileExtensions, func(ext string) bool {
+			return fileExt == ext
+		})
+	})
+
+	return filteredFileChanges
 }

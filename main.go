@@ -42,15 +42,6 @@ type Gabe struct {
 }
 
 func runTest() {
-	gabes := make(map[string]Gabe)
-
-	gabe1 := Gabe{Age: 30}
-	gabes["First"] = gabe1
-
-	gabe1.Age = 100
-
-	fmt.Println(gabes)
-
 }
 
 func main() {

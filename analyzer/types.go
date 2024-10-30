@@ -72,6 +72,7 @@ type Recap struct {
 	CommitsByMonthCurrYear   []CommitMonth   `json:"commits_by_month_curr_year"`
 	CommitsByWeekDayCurrYear []CommitWeekDay `json:"commits_by_week_day_curr_year"`
 	CommitsByHourCurrYear    []CommitHour    `json:"commits_by_hour_curr_year"`
+	LargestCommitCurrYear    GitCommit       `json:"largest_commit_curr_year"`
 
 	// Team
 	NewEngineerCommitsCurrYear             []GitCommit                    `json:"new_engineer_commits_curr_year"`

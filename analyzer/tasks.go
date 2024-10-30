@@ -76,8 +76,8 @@ func AnalyzeWithConfig(path string) bool {
 	// For now, we're just handling 1 repo at a time
 	repoConfig := config.Repos[0]
 
-	// gatherMetrics(repoConfig)
-	// updateDuplicateEngineers(path, repoConfig.DuplicateEngineers)
+	gatherMetrics(repoConfig)
+	updateDuplicateEngineers(path, repoConfig.DuplicateEngineers)
 	calculateRecap(repoConfig)
 
 	return true
@@ -270,10 +270,10 @@ func getDuplicateUsers() map[string]string {
 }
 
 func gatherMetrics(config RepoConfig) {
-	commits := getCommitsFromGitLogs(config.Path, false)
+	commits := getCommitsFromGitLogs(config, false)
 	SaveDataToFile(commits, utils.COMMITS_FILE)
 
-	mergeCommits := getCommitsFromGitLogs(config.Path, true)
+	mergeCommits := getCommitsFromGitLogs(config, true)
 	SaveDataToFile(mergeCommits, utils.MERGE_COMMITS_FILE)
 }
 
@@ -298,6 +298,7 @@ func calculateRecap(config RepoConfig) {
 	commitsByWeekDayCurrYear := GetCommitsByWeekDayCurrYear()
 	commitsByHourCurrYear := GetCommitsByHourCurrYear()
 	mostSingleDayCommitsByEngineerCurrYear := GetMostCommitsByEngineerCurrYear()
+	largestCommitCurrYear := GetLargestCommitCurrYear()
 
 	now := time.Now()
 	isoDateString := now.Format(time.RFC3339)
@@ -314,6 +315,7 @@ func calculateRecap(config RepoConfig) {
 		CommitsByMonthCurrYear:   commitsByMonthCurrYear,
 		CommitsByWeekDayCurrYear: commitsByWeekDayCurrYear,
 		CommitsByHourCurrYear:    commitsByHourCurrYear,
+		LargestCommitCurrYear:    largestCommitCurrYear,
 
 		// Team
 		NewEngineerCommitsCurrYear:             newEngineerCommitsCurrYear,
