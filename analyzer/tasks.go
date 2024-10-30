@@ -297,7 +297,7 @@ func calculateRecap(config RepoConfig) {
 	commitsByMonthCurrYear := GetCommitsByMonthCurrYear()
 	commitsByWeekDayCurrYear := GetCommitsByWeekDayCurrYear()
 	commitsByHourCurrYear := GetCommitsByHourCurrYear()
-	mostCommitsByEngineerCurrYear := GetMostCommitsByEngineerCurrYear()
+	mostSingleDayCommitsByEngineerCurrYear := GetMostCommitsByEngineerCurrYear()
 
 	now := time.Now()
 	isoDateString := now.Format(time.RFC3339)
@@ -316,14 +316,14 @@ func calculateRecap(config RepoConfig) {
 		CommitsByHourCurrYear:    commitsByHourCurrYear,
 
 		// Team
-		NewEngineerCommitsCurrYear:      newEngineerCommitsCurrYear,
-		NewEngineerCountCurrYear:        newEngineerCountCurrYear,
-		EngineerCommitCountsCurrYear:    engineerCommitCountsCurrYear,
-		EngineerCommitCountsAllTime:     engineerCommitCountsAllTime,
-		EngineerCountCurrYear:           engineerCountCurrYear,
-		EngineerCountAllTime:            engineerCountAllTime,
-		EngineerCommitsOverTimeCurrYear: engineerCommitsOverTimeCurrYear,
-		MostCommitsByEngineerCurrYear:   mostCommitsByEngineerCurrYear,
+		NewEngineerCommitsCurrYear:             newEngineerCommitsCurrYear,
+		NewEngineerCountCurrYear:               newEngineerCountCurrYear,
+		EngineerCommitCountsCurrYear:           engineerCommitCountsCurrYear,
+		EngineerCommitCountsAllTime:            engineerCommitCountsAllTime,
+		EngineerCountCurrYear:                  engineerCountCurrYear,
+		EngineerCountAllTime:                   engineerCountAllTime,
+		EngineerCommitsOverTimeCurrYear:        engineerCommitsOverTimeCurrYear,
+		MostSingleDayCommitsByEngineerCurrYear: mostSingleDayCommitsByEngineerCurrYear,
 	}
 	data, err := json.MarshalIndent(repoRecap, "", "  ")
 	if err != nil {

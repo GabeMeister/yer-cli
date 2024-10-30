@@ -54,7 +54,7 @@ type CommitHour struct {
 	Commits int    `json:"commits"`
 }
 
-type MostCommitsByEngineer struct {
+type MostSingleDayCommitsByEngineer struct {
 	Username string   `json:"username"`
 	Date     string   `json:"date"`
 	Count    int      `json:"count"`
@@ -74,14 +74,14 @@ type Recap struct {
 	CommitsByHourCurrYear    []CommitHour    `json:"commits_by_hour_curr_year"`
 
 	// Team
-	NewEngineerCommitsCurrYear      []GitCommit           `json:"new_engineer_commits_curr_year"`
-	NewEngineerCountCurrYear        int                   `json:"new_engineer_count_curr_year"`
-	EngineerCommitCountsCurrYear    map[string]int        `json:"engineer_commit_counts_curr_year"`
-	EngineerCommitCountsAllTime     map[string]int        `json:"engineer_commit_counts_all_time"`
-	EngineerCountCurrYear           int                   `json:"engineer_count_curr_year"`
-	EngineerCountAllTime            int                   `json:"engineer_count_all_time"`
-	EngineerCommitsOverTimeCurrYear []TotalCommitCount    `json:"engineer_commits_over_time_curr_year"`
-	MostCommitsByEngineerCurrYear   MostCommitsByEngineer `json:"most_commits_by_engineer_curr_year"`
+	NewEngineerCommitsCurrYear             []GitCommit                    `json:"new_engineer_commits_curr_year"`
+	NewEngineerCountCurrYear               int                            `json:"new_engineer_count_curr_year"`
+	EngineerCommitCountsCurrYear           map[string]int                 `json:"engineer_commit_counts_curr_year"`
+	EngineerCommitCountsAllTime            map[string]int                 `json:"engineer_commit_counts_all_time"`
+	EngineerCountCurrYear                  int                            `json:"engineer_count_curr_year"`
+	EngineerCountAllTime                   int                            `json:"engineer_count_all_time"`
+	EngineerCommitsOverTimeCurrYear        []TotalCommitCount             `json:"engineer_commits_over_time_curr_year"`
+	MostSingleDayCommitsByEngineerCurrYear MostSingleDayCommitsByEngineer `json:"most_single_day_commits_by_engineer_curr_year"`
 }
 
 // Example: { date: '2023-01-03T08:00:00.000Z', name: 'Steve Bremer', value: 24 },

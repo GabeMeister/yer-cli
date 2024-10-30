@@ -164,9 +164,11 @@ func GetEngineerCommitsOverTimeCurrYear() []TotalCommitCount {
 	return final
 }
 
-func GetMostCommitsByEngineerCurrYear() MostCommitsByEngineer {
-	// commits := getCurrYearGitCommits()
+type CommitList []string
+type AuthorCommitList map[string]CommitList
+type DayCommitListByAuthor map[string]AuthorCommitList
 
+func GetMostCommitsByEngineerCurrYear() MostSingleDayCommitsByEngineer {
 	// Go from:
 
 	// [
@@ -206,14 +208,46 @@ func GetMostCommitsByEngineerCurrYear() MostCommitsByEngineer {
 	//   .
 	// }
 
-	return MostCommitsByEngineer{
-		Username: "Isaac Neace",
-		Date:     "2024-05-13",
-		Count:    3,
-		Commits: []string{
-			"This is a commit 1",
-			"This is a commit 2",
-			"This is a commit 3",
-		},
+	commits := getCurrYearGitCommits()
+	commitListByDay := DayCommitListByAuthor{}
+
+	for _, commit := range commits {
+		dateStr := utils.GetMachineReadableDateStr(commit.Date)
+		author := commit.Author
+		msg := commit.Message
+
+		if commitListByDay[dateStr] == nil {
+			commitListByDay[dateStr] = make(AuthorCommitList)
+		}
+
+		if commitListByDay[dateStr][author] == nil {
+			commitListByDay[dateStr][author] = CommitList{}
+		}
+
+		commitListByDay[dateStr][author] = append(commitListByDay[dateStr][author], msg)
 	}
+
+	mostCommitsAuthor := MostSingleDayCommitsByEngineer{
+		Username: "",
+		Date:     "2024-01-01",
+		Count:    0,
+		Commits:  []string{},
+	}
+
+	for _, date := range utils.GetDaysOfYear(CURR_YEAR) {
+		currDay := commitListByDay[date]
+
+		for author, commits := range currDay {
+			if len(commits) > mostCommitsAuthor.Count {
+				mostCommitsAuthor = MostSingleDayCommitsByEngineer{
+					Username: author,
+					Date:     date,
+					Count:    len(commits),
+					Commits:  commits,
+				}
+			}
+		}
+	}
+
+	return mostCommitsAuthor
 }

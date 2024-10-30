@@ -24,6 +24,30 @@ func GetYearFromDateStr(isoString string) int {
 	return parsed.Year()
 }
 
+// Returns "1/2/06"
+func GetSimpleDateStr(isoString string) string {
+	// Parse the ISO string
+	parsed, err := time.Parse("Mon Jan 2 15:04:05 2006 -0700", isoString)
+	if err != nil {
+		return ""
+	}
+
+	// Extract the year from the parsed time
+	return parsed.Format("1/2/06")
+}
+
+// Returns "2006-01-02"
+func GetMachineReadableDateStr(isoString string) string {
+	// Parse the ISO string
+	parsed, err := time.Parse("Mon Jan 2 15:04:05 2006 -0700", isoString)
+	if err != nil {
+		return ""
+	}
+
+	// Extract the year from the parsed time
+	return parsed.Format("2006-01-02")
+}
+
 // isoString: Thu Mar 21 08:28:07 2024 -0700
 // year: 2023
 func IsDateStrInYear(isoString string, year int) bool {
