@@ -228,3 +228,17 @@ func GetMostDeletionsInCommitCurrYear() GitCommit {
 
 	return mostDeletionsCommit
 }
+
+func GetLargestCommitMessageCurrYear() GitCommit {
+	commits := getCurrYearGitCommits()
+
+	largestLengthCommit := commits[0]
+
+	for _, commit := range commits {
+		if len(largestLengthCommit.Message) < len(commit.Message) {
+			largestLengthCommit = commit
+		}
+	}
+
+	return largestLengthCommit
+}

@@ -300,6 +300,7 @@ func calculateRecap(config RepoConfig) {
 	mostSingleDayCommitsByEngineerCurrYear := GetMostCommitsByEngineerCurrYear()
 	mostInsertionsInCommitCurrYear := GetMostInsertionsInCommitCurrYear()
 	mostDeletionsInCommitCurrYear := GetMostDeletionsInCommitCurrYear()
+	largestCommitMessageCurrYear := GetLargestCommitMessageCurrYear()
 
 	now := time.Now()
 	isoDateString := now.Format(time.RFC3339)
@@ -318,6 +319,7 @@ func calculateRecap(config RepoConfig) {
 		CommitsByHourCurrYear:          commitsByHourCurrYear,
 		MostInsertionsInCommitCurrYear: mostInsertionsInCommitCurrYear,
 		MostDeletionsInCommitCurrYear:  mostDeletionsInCommitCurrYear,
+		LargestCommitMessageCurrYear:   largestCommitMessageCurrYear,
 
 		// Team
 		NewEngineerCommitsCurrYear:             newEngineerCommitsCurrYear,
