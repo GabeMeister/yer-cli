@@ -298,7 +298,8 @@ func calculateRecap(config RepoConfig) {
 	commitsByWeekDayCurrYear := GetCommitsByWeekDayCurrYear()
 	commitsByHourCurrYear := GetCommitsByHourCurrYear()
 	mostSingleDayCommitsByEngineerCurrYear := GetMostCommitsByEngineerCurrYear()
-	largestCommitCurrYear := GetLargestCommitCurrYear()
+	mostInsertionsInCommitCurrYear := GetMostInsertionsInCommitCurrYear()
+	mostDeletionsInCommitCurrYear := GetMostDeletionsInCommitCurrYear()
 
 	now := time.Now()
 	isoDateString := now.Format(time.RFC3339)
@@ -309,13 +310,14 @@ func calculateRecap(config RepoConfig) {
 		DateAnalyzed: isoDateString,
 
 		// Commits
-		NumCommitsAllTime:        numCommitsAllTime,
-		NumCommitsPrevYear:       numCommitsPrevYear,
-		NumCommitsCurrYear:       numCommitsCurrYear,
-		CommitsByMonthCurrYear:   commitsByMonthCurrYear,
-		CommitsByWeekDayCurrYear: commitsByWeekDayCurrYear,
-		CommitsByHourCurrYear:    commitsByHourCurrYear,
-		LargestCommitCurrYear:    largestCommitCurrYear,
+		NumCommitsAllTime:              numCommitsAllTime,
+		NumCommitsPrevYear:             numCommitsPrevYear,
+		NumCommitsCurrYear:             numCommitsCurrYear,
+		CommitsByMonthCurrYear:         commitsByMonthCurrYear,
+		CommitsByWeekDayCurrYear:       commitsByWeekDayCurrYear,
+		CommitsByHourCurrYear:          commitsByHourCurrYear,
+		MostInsertionsInCommitCurrYear: mostInsertionsInCommitCurrYear,
+		MostDeletionsInCommitCurrYear:  mostDeletionsInCommitCurrYear,
 
 		// Team
 		NewEngineerCommitsCurrYear:             newEngineerCommitsCurrYear,

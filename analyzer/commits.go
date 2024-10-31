@@ -187,24 +187,44 @@ func getCurrYearGitCommits() []GitCommit {
 	return final
 }
 
-func GetLargestCommitCurrYear() GitCommit {
-	commits := getGitCommits()
+func GetMostInsertionsInCommitCurrYear() GitCommit {
+	commits := getCurrYearGitCommits()
 
-	largestCommit := commits[0]
-	largestChangeAmt := 0
+	mostInsertionsCommit := commits[0]
+	mostInsertionsAmt := 0
 
 	for _, commit := range commits {
 		totalChanges := 0
 		for _, fileChange := range commit.FileChanges {
 			totalChanges += fileChange.Insertions
-			totalChanges += fileChange.Deletions
 		}
 
-		if totalChanges > largestChangeAmt {
-			largestCommit = commit
-			largestChangeAmt = totalChanges
+		if totalChanges > mostInsertionsAmt {
+			mostInsertionsCommit = commit
+			mostInsertionsAmt = totalChanges
 		}
 	}
 
-	return largestCommit
+	return mostInsertionsCommit
+}
+
+func GetMostDeletionsInCommitCurrYear() GitCommit {
+	commits := getCurrYearGitCommits()
+
+	mostDeletionsCommit := commits[0]
+	largestDeletionsAmt := 0
+
+	for _, commit := range commits {
+		totalChanges := 0
+		for _, fileChange := range commit.FileChanges {
+			totalChanges += fileChange.Deletions
+		}
+
+		if totalChanges > largestDeletionsAmt {
+			mostDeletionsCommit = commit
+			largestDeletionsAmt = totalChanges
+		}
+	}
+
+	return mostDeletionsCommit
 }

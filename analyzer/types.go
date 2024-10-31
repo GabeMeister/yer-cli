@@ -66,13 +66,14 @@ type Recap struct {
 	DateAnalyzed string `json:"date_analyzed"`
 
 	// Commits
-	NumCommitsAllTime        int             `json:"num_commits_all_time"`
-	NumCommitsPrevYear       int             `json:"num_commits_prev_year"`
-	NumCommitsCurrYear       int             `json:"num_commits_curr_year"`
-	CommitsByMonthCurrYear   []CommitMonth   `json:"commits_by_month_curr_year"`
-	CommitsByWeekDayCurrYear []CommitWeekDay `json:"commits_by_week_day_curr_year"`
-	CommitsByHourCurrYear    []CommitHour    `json:"commits_by_hour_curr_year"`
-	LargestCommitCurrYear    GitCommit       `json:"largest_commit_curr_year"`
+	NumCommitsAllTime              int             `json:"num_commits_all_time"`
+	NumCommitsPrevYear             int             `json:"num_commits_prev_year"`
+	NumCommitsCurrYear             int             `json:"num_commits_curr_year"`
+	CommitsByMonthCurrYear         []CommitMonth   `json:"commits_by_month_curr_year"`
+	CommitsByWeekDayCurrYear       []CommitWeekDay `json:"commits_by_week_day_curr_year"`
+	CommitsByHourCurrYear          []CommitHour    `json:"commits_by_hour_curr_year"`
+	MostInsertionsInCommitCurrYear GitCommit       `json:"most_insertions_in_commit_curr_year"`
+	MostDeletionsInCommitCurrYear  GitCommit       `json:"most_deletions_in_commit__curr_year"`
 
 	// Team
 	NewEngineerCommitsCurrYear             []GitCommit                    `json:"new_engineer_commits_curr_year"`
