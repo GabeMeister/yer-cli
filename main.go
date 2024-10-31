@@ -42,6 +42,8 @@ type Gabe struct {
 }
 
 func runTest() {
+	str := fmt.Sprintf("%d-01-01", analyzer.CURR_YEAR)
+	fmt.Print("\n\n", "*** str ***", "\n", str, "\n\n\n")
 }
 
 func main() {

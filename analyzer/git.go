@@ -135,6 +135,8 @@ func getFileChangeSummary(config RepoConfig) map[string][]FileChange {
 		"log",
 		"--no-merges",
 		"--reverse",
+		"--after",
+		fmt.Sprintf("%d-01-01", CURR_YEAR),
 		"--numstat")
 	cmd.Dir = path
 
