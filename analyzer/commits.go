@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"os"
 	"sort"
+	"strings"
 	"time"
 )
 
@@ -252,4 +253,32 @@ func GetSmallestCommitMessagesCurrYear() []GitCommit {
 	})
 
 	return commits[0:5]
+}
+
+func GetCommitMessageHistogramCurrYear() []CommitMessageLengthFrequency {
+	commits := getCurrYearGitCommits()
+
+	lengthFrequencyMap := make(map[int]int)
+
+	for _, commit := range commits {
+		// "Convert" the `|||` back to newlines
+		msg := strings.ReplaceAll(commit.Message, "|||", "\n")
+		length := len(msg)
+		lengthFrequencyMap[length] += 1
+	}
+
+	commitMessageLengths := []CommitMessageLengthFrequency{}
+
+	for length, frequency := range lengthFrequencyMap {
+		commitMessageLengths = append(commitMessageLengths, CommitMessageLengthFrequency{
+			Length:    length,
+			Frequency: frequency,
+		})
+	}
+
+	sort.Slice(commitMessageLengths, func(i int, j int) bool {
+		return commitMessageLengths[i].Length < commitMessageLengths[j].Length
+	})
+
+	return commitMessageLengths
 }
