@@ -4,6 +4,7 @@ import (
 	"GabeMeister/yer-cli/utils"
 	"encoding/json"
 	"os"
+	"sort"
 	"time"
 )
 
@@ -241,4 +242,14 @@ func GetLargestCommitMessageCurrYear() GitCommit {
 	}
 
 	return largestLengthCommit
+}
+
+func GetSmallestCommitMessagesCurrYear() []GitCommit {
+	commits := getCurrYearGitCommits()
+
+	sort.Slice(commits, func(i int, j int) bool {
+		return len(commits[i].Message) < len(commits[j].Message)
+	})
+
+	return commits[0:5]
 }

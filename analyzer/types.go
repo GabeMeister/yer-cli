@@ -75,6 +75,7 @@ type Recap struct {
 	MostInsertionsInCommitCurrYear GitCommit       `json:"most_insertions_in_commit_curr_year"`
 	MostDeletionsInCommitCurrYear  GitCommit       `json:"most_deletions_in_commit__curr_year"`
 	LargestCommitMessageCurrYear   GitCommit       `json:"largest_commit_message_curr_year"`
+	SmallestCommitMessagesCurrYear []GitCommit     `json:"smallest_commit_messages_curr_year"`
 
 	// Team
 	NewEngineerCommitsCurrYear             []GitCommit                    `json:"new_engineer_commits_curr_year"`
