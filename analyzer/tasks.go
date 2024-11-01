@@ -306,6 +306,7 @@ func calculateRecap(config RepoConfig) {
 	largestCommitMessageCurrYear := GetLargestCommitMessageCurrYear()
 	smallestCommitMessagesCurrYear := GetSmallestCommitMessagesCurrYear()
 	commitMessageHistogramCurrYear := GetCommitMessageHistogramCurrYear()
+	directPushesOnMasterByEngineerCurrYear := GetDirectPushesOnMasterByEngineerCurrYear()
 
 	now := time.Now()
 	isoDateString := now.Format(time.RFC3339)
@@ -337,6 +338,7 @@ func calculateRecap(config RepoConfig) {
 		EngineerCountAllTime:                   engineerCountAllTime,
 		EngineerCommitsOverTimeCurrYear:        engineerCommitsOverTimeCurrYear,
 		MostSingleDayCommitsByEngineerCurrYear: mostSingleDayCommitsByEngineerCurrYear,
+		DirectPushesOnMasterByEngineerCurrYear: directPushesOnMasterByEngineerCurrYear,
 	}
 	data, err := json.MarshalIndent(repoRecap, "", "  ")
 	if err != nil {

@@ -149,6 +149,36 @@ func getGitCommits() []GitCommit {
 	return commits
 }
 
+func getMergeGitCommits() []GitCommit {
+	bytes, err := os.ReadFile(utils.MERGE_COMMITS_FILE)
+	if err != nil {
+		panic(err)
+	}
+
+	var commits []GitCommit
+	jsonErr := json.Unmarshal(bytes, &commits)
+	if jsonErr != nil {
+		panic(jsonErr)
+	}
+
+	return commits
+}
+
+func getDirectPushOnMasterCommits() []GitCommit {
+	bytes, err := os.ReadFile(utils.DIRECT_PUSH_ON_MASTER_COMMITS_FILE)
+	if err != nil {
+		panic(err)
+	}
+
+	var commits []GitCommit
+	jsonErr := json.Unmarshal(bytes, &commits)
+	if jsonErr != nil {
+		panic(jsonErr)
+	}
+
+	return commits
+}
+
 // Any commit that has come before the current year
 func getPastGitCommits() []GitCommit {
 	commits := getGitCommits()
@@ -178,6 +208,32 @@ func getPrevYearGitCommits() []GitCommit {
 
 func getCurrYearGitCommits() []GitCommit {
 	commits := getGitCommits()
+
+	final := []GitCommit{}
+	for _, commit := range commits {
+		if utils.IsDateStrInYear(commit.Date, CURR_YEAR) {
+			final = append(final, commit)
+		}
+	}
+
+	return final
+}
+
+func getCurrYearMergeGitCommits() []GitCommit {
+	commits := getMergeGitCommits()
+
+	final := []GitCommit{}
+	for _, commit := range commits {
+		if utils.IsDateStrInYear(commit.Date, CURR_YEAR) {
+			final = append(final, commit)
+		}
+	}
+
+	return final
+}
+
+func getCurrYearDirectPushOnMasterCommits() []GitCommit {
+	commits := getDirectPushOnMasterCommits()
 
 	final := []GitCommit{}
 	for _, commit := range commits {
@@ -281,4 +337,16 @@ func GetCommitMessageHistogramCurrYear() []CommitMessageLengthFrequency {
 	})
 
 	return commitMessageLengths
+}
+
+func GetDirectPushesOnMasterByEngineerCurrYear() map[string]int {
+	commits := getCurrYearDirectPushOnMasterCommits()
+
+	engineerToCommitMap := make(map[string]int)
+
+	for _, commit := range commits {
+		engineerToCommitMap[commit.Author] += 1
+	}
+
+	return engineerToCommitMap
 }

@@ -87,6 +87,7 @@ type Recap struct {
 	EngineerCountAllTime                   int                            `json:"engineer_count_all_time"`
 	EngineerCommitsOverTimeCurrYear        []TotalCommitCount             `json:"engineer_commits_over_time_curr_year"`
 	MostSingleDayCommitsByEngineerCurrYear MostSingleDayCommitsByEngineer `json:"most_single_day_commits_by_engineer_curr_year"`
+	DirectPushesOnMasterByEngineerCurrYear map[string]int                 `json:"direct_pushes_on_master_by_engineer_curr_year"`
 }
 
 // Example: { date: '2023-01-03T08:00:00.000Z', name: 'Steve Bremer', value: 24 },

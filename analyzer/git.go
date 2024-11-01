@@ -165,10 +165,6 @@ func getDirectPushToMasterCommitsCurrYear(config RepoConfig) []GitCommit {
 		return date1.UnixMicro() < date2.UnixMicro()
 	})
 
-	for _, c := range directPushToMasterCommits {
-		fmt.Println(c)
-	}
-
 	return directPushToMasterCommits
 }
 
