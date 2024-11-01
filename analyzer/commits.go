@@ -350,3 +350,15 @@ func GetDirectPushesOnMasterByEngineerCurrYear() map[string]int {
 
 	return engineerToCommitMap
 }
+
+func GetMergesToMasterByEngineerCurrYear() map[string]int {
+	commits := getCurrYearMergeGitCommits()
+
+	engineerToCommitMap := make(map[string]int)
+
+	for _, commit := range commits {
+		engineerToCommitMap[commit.Author] += 1
+	}
+
+	return engineerToCommitMap
+}
