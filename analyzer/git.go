@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os/exec"
 	"regexp"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -116,6 +117,59 @@ func getCommitsFromGitLogs(config RepoConfig, mergeCommits bool) []GitCommit {
 	}
 
 	return commits
+}
+
+func getDirectPushToMasterCommitsCurrYear(config RepoConfig) []GitCommit {
+	path := config.Path
+	commits := getCurrYearGitCommits()
+
+	// git log --no-merges --first-parent master
+	args := []string{
+		"git",
+		"log",
+		"--no-merges",
+		"--reverse",
+		"--first-parent",
+		"master",
+		"--format=%H",
+	}
+
+	cmd := exec.Command(args[0], args[1:]...)
+	cmd.Dir = path
+
+	rawOutput, err := cmd.Output()
+	if err != nil {
+		panic(err)
+	}
+
+	output := string(rawOutput)
+
+	commitHashes := strings.Split(output, "\n")
+	commitHashMap := make(map[string]bool)
+
+	for _, hash := range commitHashes {
+		commitHashMap[hash] = true
+	}
+
+	directPushToMasterCommits := []GitCommit{}
+	for _, commit := range commits {
+		if commitHashMap[commit.Commit] {
+			directPushToMasterCommits = append(directPushToMasterCommits, commit)
+		}
+	}
+
+	sort.Slice(directPushToMasterCommits, func(i int, j int) bool {
+		date1 := utils.GetDateFromISOString(directPushToMasterCommits[i].Date)
+		date2 := utils.GetDateFromISOString(directPushToMasterCommits[j].Date)
+
+		return date1.UnixMicro() < date2.UnixMicro()
+	})
+
+	for _, c := range directPushToMasterCommits {
+		fmt.Println(c)
+	}
+
+	return directPushToMasterCommits
 }
 
 func isFileChangeLine(line string) bool {

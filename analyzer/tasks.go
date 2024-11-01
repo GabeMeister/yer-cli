@@ -275,6 +275,9 @@ func gatherMetrics(config RepoConfig) {
 
 	mergeCommits := getCommitsFromGitLogs(config, true)
 	SaveDataToFile(mergeCommits, utils.MERGE_COMMITS_FILE)
+
+	directPushToMasterCommits := getDirectPushToMasterCommitsCurrYear(config)
+	SaveDataToFile(directPushToMasterCommits, utils.DIRECT_PUSH_ON_MASTER_COMMITS_FILE)
 }
 
 func calculateRecap(config RepoConfig) {

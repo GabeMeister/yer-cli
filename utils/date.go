@@ -4,6 +4,8 @@ import (
 	"time"
 )
 
+var COMMIT_DATE_FORMAT = "Mon Jan 2 15:04:05 2006 -0700"
+
 func FormatISODate(isoString string) (string, error) {
 	t, err := time.Parse(time.RFC3339, isoString)
 	if err != nil {
@@ -15,7 +17,7 @@ func FormatISODate(isoString string) (string, error) {
 
 func GetYearFromDateStr(isoString string) int {
 	// Parse the ISO string
-	parsed, err := time.Parse("Mon Jan 2 15:04:05 2006 -0700", isoString)
+	parsed, err := time.Parse(COMMIT_DATE_FORMAT, isoString)
 	if err != nil {
 		return -1
 	}
@@ -27,7 +29,7 @@ func GetYearFromDateStr(isoString string) int {
 // Returns "1/2/06"
 func GetSimpleDateStr(isoString string) string {
 	// Parse the ISO string
-	parsed, err := time.Parse("Mon Jan 2 15:04:05 2006 -0700", isoString)
+	parsed, err := time.Parse(COMMIT_DATE_FORMAT, isoString)
 	if err != nil {
 		return ""
 	}
@@ -39,7 +41,7 @@ func GetSimpleDateStr(isoString string) string {
 // Returns "2006-01-02"
 func GetMachineReadableDateStr(isoString string) string {
 	// Parse the ISO string
-	parsed, err := time.Parse("Mon Jan 2 15:04:05 2006 -0700", isoString)
+	parsed, err := time.Parse(COMMIT_DATE_FORMAT, isoString)
 	if err != nil {
 		return ""
 	}
@@ -84,4 +86,13 @@ func GetDaysOfYear(year int) []string {
 	}
 
 	return dates
+}
+
+func GetDateFromISOString(isoString string) time.Time {
+	d, err := time.Parse(COMMIT_DATE_FORMAT, isoString)
+	if err != nil {
+		panic(err)
+	}
+
+	return d
 }

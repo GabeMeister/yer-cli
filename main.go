@@ -3,6 +3,7 @@ package main
 import (
 	"GabeMeister/yer-cli/analyzer"
 	"GabeMeister/yer-cli/presentation"
+	"GabeMeister/yer-cli/utils"
 	"errors"
 	"flag"
 	"fmt"
@@ -42,8 +43,8 @@ type Gabe struct {
 }
 
 func runTest() {
-	str := fmt.Sprintf("%d-01-01", analyzer.CURR_YEAR)
-	fmt.Print("\n\n", "*** str ***", "\n", str, "\n\n\n")
+	d := utils.GetDateFromISOString("Mon Aug 29 22:36:29 2022 +0000")
+	fmt.Print("\n\n", "*** d2 ***", "\n", d, "\n\n\n")
 }
 
 func main() {
