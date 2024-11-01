@@ -308,6 +308,7 @@ func calculateRecap(config RepoConfig) {
 	commitMessageHistogramCurrYear := GetCommitMessageHistogramCurrYear()
 	directPushesOnMasterByEngineerCurrYear := GetDirectPushesOnMasterByEngineerCurrYear()
 	mergesToMasterByEngineerCurrYear := GetMergesToMasterByEngineerCurrYear()
+	mostMergesInOneDayCurrYear := GetMostMergesInOneDayCurrYear()
 
 	now := time.Now()
 	isoDateString := now.Format(time.RFC3339)
@@ -329,6 +330,7 @@ func calculateRecap(config RepoConfig) {
 		LargestCommitMessageCurrYear:   largestCommitMessageCurrYear,
 		SmallestCommitMessagesCurrYear: smallestCommitMessagesCurrYear,
 		CommitMessageHistogramCurrYear: commitMessageHistogramCurrYear,
+		MostMergesInOneDayCurrYear:     mostMergesInOneDayCurrYear,
 
 		// Team
 		NewEngineerCommitsCurrYear:             newEngineerCommitsCurrYear,

@@ -29,16 +29,6 @@ type GitCommit struct {
 	FileChanges []FileChange `json:"file_changes"`
 }
 
-type GitMergeCommit struct {
-	Commit             string
-	FirstParentCommit  string // Typically master when you branched off
-	SecondParentCommit string // Typically the final commit of the MR
-	Message            string
-	Author             string
-	Email              string
-	Date               string
-}
-
 type CommitMonth struct {
 	Month   string `json:"month"`
 	Commits int    `json:"commits"`
@@ -77,6 +67,7 @@ type Recap struct {
 	LargestCommitMessageCurrYear   GitCommit                      `json:"largest_commit_message_curr_year"`
 	SmallestCommitMessagesCurrYear []GitCommit                    `json:"smallest_commit_messages_curr_year"`
 	CommitMessageHistogramCurrYear []CommitMessageLengthFrequency `json:"commit_message_histogram_curr_year"`
+	MostMergesInOneDayCurrYear     MostMergesInOneDay             `json:"most_merges_in_one_day_curr_year"`
 
 	// Team
 	NewEngineerCommitsCurrYear             []GitCommit                    `json:"new_engineer_commits_curr_year"`
@@ -103,4 +94,10 @@ type TotalCommitCount struct {
 type CommitMessageLengthFrequency struct {
 	Length    int `json:"length"`
 	Frequency int `json:"frequency"`
+}
+
+type MostMergesInOneDay struct {
+	Count   int
+	Date    string `json:"date"`
+	Commits []GitCommit
 }

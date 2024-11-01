@@ -362,3 +362,32 @@ func GetMergesToMasterByEngineerCurrYear() map[string]int {
 
 	return engineerToCommitMap
 }
+
+func GetMostMergesInOneDayCurrYear() MostMergesInOneDay {
+	commits := getCurrYearMergeGitCommits()
+
+	dayCommitMap := make(map[string][]GitCommit)
+
+	for _, commit := range commits {
+		day := utils.GetSimpleDateStr(commit.Date)
+		dayCommitMap[day] = append(dayCommitMap[day], commit)
+	}
+
+	mostMergesInOneDay := MostMergesInOneDay{
+		Count: 0,
+	}
+
+	for day, commits := range dayCommitMap {
+		if mostMergesInOneDay.Count < len(commits) {
+			mostMergesInOneDay = MostMergesInOneDay{
+				Count:   len(commits),
+				Date:    day,
+				Commits: commits,
+			}
+		}
+	}
+
+	utils.Pause(mostMergesInOneDay)
+
+	return mostMergesInOneDay
+}
