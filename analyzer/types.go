@@ -56,18 +56,19 @@ type Recap struct {
 	DateAnalyzed string `json:"date_analyzed"`
 
 	// Commits
-	NumCommitsAllTime              int                            `json:"num_commits_all_time"`
-	NumCommitsPrevYear             int                            `json:"num_commits_prev_year"`
-	NumCommitsCurrYear             int                            `json:"num_commits_curr_year"`
-	CommitsByMonthCurrYear         []CommitMonth                  `json:"commits_by_month_curr_year"`
-	CommitsByWeekDayCurrYear       []CommitWeekDay                `json:"commits_by_week_day_curr_year"`
-	CommitsByHourCurrYear          []CommitHour                   `json:"commits_by_hour_curr_year"`
-	MostInsertionsInCommitCurrYear GitCommit                      `json:"most_insertions_in_commit_curr_year"`
-	MostDeletionsInCommitCurrYear  GitCommit                      `json:"most_deletions_in_commit__curr_year"`
-	LargestCommitMessageCurrYear   GitCommit                      `json:"largest_commit_message_curr_year"`
-	SmallestCommitMessagesCurrYear []GitCommit                    `json:"smallest_commit_messages_curr_year"`
-	CommitMessageHistogramCurrYear []CommitMessageLengthFrequency `json:"commit_message_histogram_curr_year"`
-	MostMergesInOneDayCurrYear     MostMergesInOneDay             `json:"most_merges_in_one_day_curr_year"`
+	NumCommitsAllTime               int                            `json:"num_commits_all_time"`
+	NumCommitsPrevYear              int                            `json:"num_commits_prev_year"`
+	NumCommitsCurrYear              int                            `json:"num_commits_curr_year"`
+	CommitsByMonthCurrYear          []CommitMonth                  `json:"commits_by_month_curr_year"`
+	CommitsByWeekDayCurrYear        []CommitWeekDay                `json:"commits_by_week_day_curr_year"`
+	CommitsByHourCurrYear           []CommitHour                   `json:"commits_by_hour_curr_year"`
+	MostInsertionsInCommitCurrYear  GitCommit                      `json:"most_insertions_in_commit_curr_year"`
+	MostDeletionsInCommitCurrYear   GitCommit                      `json:"most_deletions_in_commit__curr_year"`
+	LargestCommitMessageCurrYear    GitCommit                      `json:"largest_commit_message_curr_year"`
+	SmallestCommitMessagesCurrYear  []GitCommit                    `json:"smallest_commit_messages_curr_year"`
+	CommitMessageHistogramCurrYear  []CommitMessageLengthFrequency `json:"commit_message_histogram_curr_year"`
+	MostMergesInOneDayCurrYear      MostMergesInOneDay             `json:"most_merges_in_one_day_curr_year"`
+	AvgMergesToMasterPerDayCurrYear float64                        `json:"avg_merges_to_master_per_day_curr_year"`
 
 	// Team
 	NewEngineerCommitsCurrYear             []GitCommit                    `json:"new_engineer_commits_curr_year"`
@@ -80,6 +81,9 @@ type Recap struct {
 	MostSingleDayCommitsByEngineerCurrYear MostSingleDayCommitsByEngineer `json:"most_single_day_commits_by_engineer_curr_year"`
 	DirectPushesOnMasterByEngineerCurrYear map[string]int                 `json:"direct_pushes_on_master_by_engineer_curr_year"`
 	MergesToMasterByEngineerCurrYear       map[string]int                 `json:"merges_to_master_by_engineer_curr_year"`
+	CodeInsertionsByEngineer               map[string]int                 `json:"code_insertions_by_engineer"`
+	CodeDeletionsByEngineer                map[string]int                 `json:"code_deletions_by_engineer"`
+	FileChangeRatioByEngineer              map[string]float64             `json:"file_change_ratio_by_engineer"`
 }
 
 // Example: { date: '2023-01-03T08:00:00.000Z', name: 'Steve Bremer', value: 24 },

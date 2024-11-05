@@ -309,6 +309,10 @@ func calculateRecap(config RepoConfig) {
 	directPushesOnMasterByEngineerCurrYear := GetDirectPushesOnMasterByEngineerCurrYear()
 	mergesToMasterByEngineerCurrYear := GetMergesToMasterByEngineerCurrYear()
 	mostMergesInOneDayCurrYear := GetMostMergesInOneDayCurrYear()
+	avgMergesToMasterPerDayCurrYear := GetAvgMergesToMasterPerDayCurrYear()
+	codeInsertionsByEngineer := GetCodeInsertionsByEngineer()
+	codeDeletionsByEngineer := GetCodeDeletionsByEngineer()
+	fileChangeRatio := GetFileChangeRatio(codeInsertionsByEngineer, codeDeletionsByEngineer)
 
 	now := time.Now()
 	isoDateString := now.Format(time.RFC3339)
@@ -319,18 +323,19 @@ func calculateRecap(config RepoConfig) {
 		DateAnalyzed: isoDateString,
 
 		// Commits
-		NumCommitsAllTime:              numCommitsAllTime,
-		NumCommitsPrevYear:             numCommitsPrevYear,
-		NumCommitsCurrYear:             numCommitsCurrYear,
-		CommitsByMonthCurrYear:         commitsByMonthCurrYear,
-		CommitsByWeekDayCurrYear:       commitsByWeekDayCurrYear,
-		CommitsByHourCurrYear:          commitsByHourCurrYear,
-		MostInsertionsInCommitCurrYear: mostInsertionsInCommitCurrYear,
-		MostDeletionsInCommitCurrYear:  mostDeletionsInCommitCurrYear,
-		LargestCommitMessageCurrYear:   largestCommitMessageCurrYear,
-		SmallestCommitMessagesCurrYear: smallestCommitMessagesCurrYear,
-		CommitMessageHistogramCurrYear: commitMessageHistogramCurrYear,
-		MostMergesInOneDayCurrYear:     mostMergesInOneDayCurrYear,
+		NumCommitsAllTime:               numCommitsAllTime,
+		NumCommitsPrevYear:              numCommitsPrevYear,
+		NumCommitsCurrYear:              numCommitsCurrYear,
+		CommitsByMonthCurrYear:          commitsByMonthCurrYear,
+		CommitsByWeekDayCurrYear:        commitsByWeekDayCurrYear,
+		CommitsByHourCurrYear:           commitsByHourCurrYear,
+		MostInsertionsInCommitCurrYear:  mostInsertionsInCommitCurrYear,
+		MostDeletionsInCommitCurrYear:   mostDeletionsInCommitCurrYear,
+		LargestCommitMessageCurrYear:    largestCommitMessageCurrYear,
+		SmallestCommitMessagesCurrYear:  smallestCommitMessagesCurrYear,
+		CommitMessageHistogramCurrYear:  commitMessageHistogramCurrYear,
+		MostMergesInOneDayCurrYear:      mostMergesInOneDayCurrYear,
+		AvgMergesToMasterPerDayCurrYear: avgMergesToMasterPerDayCurrYear,
 
 		// Team
 		NewEngineerCommitsCurrYear:             newEngineerCommitsCurrYear,
@@ -343,6 +348,9 @@ func calculateRecap(config RepoConfig) {
 		MostSingleDayCommitsByEngineerCurrYear: mostSingleDayCommitsByEngineerCurrYear,
 		DirectPushesOnMasterByEngineerCurrYear: directPushesOnMasterByEngineerCurrYear,
 		MergesToMasterByEngineerCurrYear:       mergesToMasterByEngineerCurrYear,
+		CodeInsertionsByEngineer:               codeInsertionsByEngineer,
+		CodeDeletionsByEngineer:                codeDeletionsByEngineer,
+		FileChangeRatioByEngineer:              fileChangeRatio,
 	}
 	data, err := json.MarshalIndent(repoRecap, "", "  ")
 	if err != nil {

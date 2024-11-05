@@ -387,7 +387,46 @@ func GetMostMergesInOneDayCurrYear() MostMergesInOneDay {
 		}
 	}
 
-	utils.Pause(mostMergesInOneDay)
-
 	return mostMergesInOneDay
+}
+
+func GetAvgMergesToMasterPerDayCurrYear() float64 {
+	commits := getCurrYearMergeGitCommits()
+
+	dayCommitMap := make(map[string][]GitCommit)
+
+	for _, commit := range commits {
+		day := utils.GetSimpleDateStr(commit.Date)
+		dayCommitMap[day] = append(dayCommitMap[day], commit)
+	}
+
+	return float64(len(commits)) / float64(len(dayCommitMap))
+}
+
+func GetCodeInsertionsByEngineer() map[string]int {
+	commits := getCurrYearGitCommits()
+
+	authorInsertionsMap := make(map[string]int)
+
+	for _, commit := range commits {
+		for _, change := range commit.FileChanges {
+			authorInsertionsMap[commit.Author] += change.Insertions
+		}
+	}
+
+	return authorInsertionsMap
+}
+
+func GetCodeDeletionsByEngineer() map[string]int {
+	commits := getCurrYearGitCommits()
+
+	authorDeletionsMap := make(map[string]int)
+
+	for _, commit := range commits {
+		for _, change := range commit.FileChanges {
+			authorDeletionsMap[commit.Author] += change.Deletions
+		}
+	}
+
+	return authorDeletionsMap
 }
