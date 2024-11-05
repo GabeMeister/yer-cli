@@ -3,6 +3,7 @@ package analyzer
 import (
 	"encoding/json"
 	"os"
+	"sort"
 )
 
 func SaveDataToFile(data any, path string) {
@@ -29,4 +30,29 @@ func GetFileChangeRatio(insertionsByEngineer map[string]int, deletionsByEngineer
 	}
 
 	return ratios
+}
+
+func GetCommonlyChangedFiles() []FileChangeCount {
+	commits := getCurrYearGitCommits()
+	fileChangeTracker := make(map[string]int)
+
+	for _, commit := range commits {
+		for _, changes := range commit.FileChanges {
+			fileChangeTracker[changes.FilePath] += 1
+		}
+	}
+
+	fileChangeSlice := []FileChangeCount{}
+	for file, count := range fileChangeTracker {
+		fileChangeSlice = append(fileChangeSlice, FileChangeCount{
+			File:  file,
+			Count: count,
+		})
+	}
+
+	sort.Slice(fileChangeSlice, func(i int, j int) bool {
+		return fileChangeSlice[i].Count > fileChangeSlice[j].Count
+	})
+
+	return fileChangeSlice[0:5]
 }

@@ -164,6 +164,57 @@ func GetEngineerCommitsOverTimeCurrYear() []TotalCommitCount {
 	return final
 }
 
+// TODO: process files from past and then calculate the file changes over time via commits
+// func GetEngineerFileChangesOverTimeCurrYear() []TotalFileChangeCount {
+// 	dates := utils.GetDaysOfYear(CURR_YEAR)
+
+// 	// Create map of all possible dates this year
+// 	dateMap := make(map[string][]GitCommit)
+// 	for _, d := range dates {
+// 		dateMap[d] = nil
+// 	}
+
+// 	fileChangeTracker := make(map[string]int)
+
+// 	// Bucket commit counts for all enginers in past
+// 	pastCommits := getPastGitCommits()
+// 	for _, commit := range pastCommits {
+// 		fileChangeTracker[commit.Author] += 1
+// 	}
+
+// 	// Get current year commits, and bucket them under whatever date they fall on
+// 	currCommits := getCurrYearGitCommits()
+// 	for _, commit := range currCommits {
+// 		commitDate, err := time.Parse("Mon Jan 2 15:04:05 2006 -0700", commit.Date)
+// 		if err != nil {
+// 			panic("Invalid dates found in commits: " + commit.Date)
+// 		}
+
+// 		commitDateStr := commitDate.Format("2006-01-02")
+// 		dateMap[commitDateStr] = append(dateMap[commitDateStr], commit)
+// 	}
+
+// 	final := []TotalCommitCount{}
+
+// 	for _, dateStr := range dates {
+// 		commitsOnDay := dateMap[dateStr]
+
+// 		for _, commit := range commitsOnDay {
+// 			fileChangeTracker[commit.Author] += 1
+// 		}
+
+// 		for userName, numCommits := range fileChangeTracker {
+// 			final = append(final, TotalCommitCount{
+// 				Name:  userName,
+// 				Date:  dateStr,
+// 				Value: numCommits,
+// 			})
+// 		}
+// 	}
+
+// 	return final
+// }
+
 type CommitList []string
 type AuthorCommitList map[string]CommitList
 type DayCommitListByAuthor map[string]AuthorCommitList

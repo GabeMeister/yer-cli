@@ -313,6 +313,7 @@ func calculateRecap(config RepoConfig) {
 	codeInsertionsByEngineer := GetCodeInsertionsByEngineer()
 	codeDeletionsByEngineer := GetCodeDeletionsByEngineer()
 	fileChangeRatio := GetFileChangeRatio(codeInsertionsByEngineer, codeDeletionsByEngineer)
+	commonlyChangedFiles := GetCommonlyChangedFiles()
 
 	now := time.Now()
 	isoDateString := now.Format(time.RFC3339)
@@ -336,6 +337,7 @@ func calculateRecap(config RepoConfig) {
 		CommitMessageHistogramCurrYear:  commitMessageHistogramCurrYear,
 		MostMergesInOneDayCurrYear:      mostMergesInOneDayCurrYear,
 		AvgMergesToMasterPerDayCurrYear: avgMergesToMasterPerDayCurrYear,
+		CommonlyChangedFiles:            commonlyChangedFiles,
 
 		// Team
 		NewEngineerCommitsCurrYear:             newEngineerCommitsCurrYear,

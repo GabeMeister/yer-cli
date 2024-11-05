@@ -20,6 +20,11 @@ type FileChange struct {
 	FilePath   string `json:"file_path"`
 }
 
+type FileChangeCount struct {
+	File  string `json:"file"`
+	Count int    `json:"count"`
+}
+
 type GitCommit struct {
 	Commit      string       `json:"commit"`
 	Author      string       `json:"author"`
@@ -69,6 +74,7 @@ type Recap struct {
 	CommitMessageHistogramCurrYear  []CommitMessageLengthFrequency `json:"commit_message_histogram_curr_year"`
 	MostMergesInOneDayCurrYear      MostMergesInOneDay             `json:"most_merges_in_one_day_curr_year"`
 	AvgMergesToMasterPerDayCurrYear float64                        `json:"avg_merges_to_master_per_day_curr_year"`
+	CommonlyChangedFiles            []FileChangeCount              `json:"commonly_changed_files"`
 
 	// Team
 	NewEngineerCommitsCurrYear             []GitCommit                    `json:"new_engineer_commits_curr_year"`
@@ -89,6 +95,15 @@ type Recap struct {
 // Example: { date: '2023-01-03T08:00:00.000Z', name: 'Steve Bremer', value: 24 },
 // Used for Engineer Commits Over Time racing bar chart
 type TotalCommitCount struct {
+	// ISO Date string
+	Date  string `json:"date"`
+	Name  string `json:"name"`
+	Value int    `json:"value"`
+}
+
+// Example: { date: '2023-01-03T08:00:00.000Z', name: 'Steve Bremer', value: 2400 },
+// Used for Engineer Commits Over Time racing bar chart
+type TotalFileChangeCount struct {
 	// ISO Date string
 	Date  string `json:"date"`
 	Name  string `json:"name"`
