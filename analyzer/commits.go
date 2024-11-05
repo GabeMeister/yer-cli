@@ -198,7 +198,7 @@ func getPrevYearGitCommits() []GitCommit {
 
 	final := []GitCommit{}
 	for _, commit := range commits {
-		if utils.IsDateStrInYear(commit.Date, CURR_YEAR-1) {
+		if utils.IsDateStrInYear(commit.Date, PREV_YEAR) {
 			final = append(final, commit)
 		}
 	}
@@ -208,8 +208,8 @@ func getPrevYearGitCommits() []GitCommit {
 
 func getCurrYearGitCommits() []GitCommit {
 	commits := getGitCommits()
-
 	final := []GitCommit{}
+
 	for _, commit := range commits {
 		if utils.IsDateStrInYear(commit.Date, CURR_YEAR) {
 			final = append(final, commit)

@@ -76,6 +76,11 @@ type Recap struct {
 	AvgMergesToMasterPerDayCurrYear float64                        `json:"avg_merges_to_master_per_day_curr_year"`
 	CommonlyChangedFiles            []FileChangeCount              `json:"commonly_changed_files"`
 
+	// Files
+	FileCountPrevYear          int     `json:"file_count_prev_year"`
+	FileCountCurrYear          int     `json:"file_count_curr_year"`
+	FileCountPercentDifference float64 `json:"file_count_percent_difference"`
+
 	// Team
 	NewEngineerCommitsCurrYear             []GitCommit                    `json:"new_engineer_commits_curr_year"`
 	NewEngineerCountCurrYear               int                            `json:"new_engineer_count_curr_year"`
@@ -119,4 +124,10 @@ type MostMergesInOneDay struct {
 	Count   int
 	Date    string `json:"date"`
 	Commits []GitCommit
+}
+
+type FileBlame struct {
+	File      string         `json:"file"`
+	LineCount int            `json:"line_count"`
+	GitBlame  map[string]int `json:"git_blame"`
 }

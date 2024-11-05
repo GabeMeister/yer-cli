@@ -123,7 +123,6 @@ func getDirectPushToMasterCommitsCurrYear(config RepoConfig) []GitCommit {
 	path := config.Path
 	commits := getCurrYearGitCommits()
 
-	// git log --no-merges --first-parent master
 	args := []string{
 		"git",
 		"log",
@@ -257,4 +256,140 @@ func filterToOnlyIncludedFiles(config RepoConfig, fileChanges []FileChange) []Fi
 	})
 
 	return filteredFileChanges
+}
+
+func getRepoFiles(config RepoConfig, commitOrBranchName string) []string {
+	args := []string{
+		"git",
+		"ls-tree",
+		"-r",
+		commitOrBranchName,
+		"--name-only",
+	}
+
+	cmd := exec.Command(args[0], args[1:]...)
+	cmd.Dir = config.Path
+
+	rawOutput, err := cmd.Output()
+	if err != nil {
+		panic(err)
+	}
+
+	output := string(rawOutput)
+	files := strings.Split(output, "\n")
+	includedFiles := []string{}
+
+	// Filter to just files that we want to include and filter out files we want
+	// to exclude
+	for _, file := range files {
+		fileExtension := utils.GetFileExtension(file)
+		validFileExtension := utils.Includes(config.IncludeFileExtensions, func(ext string) bool {
+			return fileExtension == ext
+		})
+
+		if !validFileExtension {
+			continue
+		}
+
+		isExcludedFile := utils.Includes(config.ExcludeDirectories, func(dir string) bool {
+			return strings.HasPrefix(fileExtension, dir)
+		})
+
+		if isExcludedFile {
+			continue
+		}
+
+		includedFiles = append(includedFiles, file)
+	}
+
+	return includedFiles
+}
+
+func getFileBlameSummary(config RepoConfig, files []string) []FileBlame {
+	s := GetSpinner()
+	fmt.Println()
+	s.Suffix = " Analyzing Git blames..."
+	s.Start()
+
+	fileBlames := []FileBlame{}
+	totalFiles := len(files)
+
+	for idx, file := range files {
+		if idx%100 == 0 {
+			s.Suffix = fmt.Sprintf(" Processed %d/%d files...", idx, totalFiles)
+		}
+		args := []string{
+			"git",
+			"blame",
+			file,
+			"--line-porcelain",
+		}
+
+		cmd := exec.Command(args[0], args[1:]...)
+		cmd.Dir = config.Path
+
+		rawOutput, err := cmd.Output()
+		if err != nil {
+			panic(err)
+		}
+
+		output := string(rawOutput)
+		lines := strings.Split(output, "\n")
+		lines = utils.Filter(lines, func(line string) bool {
+			return strings.HasPrefix(line, "committer ")
+		})
+		authors := utils.Map(lines, func(line string) string {
+			authorName := strings.ReplaceAll(line, "committer ", "")
+
+			return getRealAuthorName(config, authorName)
+		})
+
+		authorLineCountMap := make(map[string]int)
+		for _, author := range authors {
+			authorLineCountMap[author] += 1
+		}
+
+		fileBlames = append(fileBlames, FileBlame{
+			File:      file,
+			LineCount: len(authors),
+			GitBlame:  authorLineCountMap,
+		})
+	}
+
+	s.Stop()
+
+	return fileBlames
+}
+
+func getLastCommitPrevYear(config RepoConfig) GitCommit {
+	commits := getPrevYearGitCommits()
+	lastIdx := len(commits) - 1
+
+	return commits[lastIdx]
+}
+
+func checkoutRepoToCommitOrBranchName(config RepoConfig, commitOrBranchName string) error {
+	args := []string{
+		"git",
+		"checkout",
+		commitOrBranchName,
+	}
+	cmd := exec.Command(args[0], args[1:]...)
+	cmd.Dir = config.Path
+
+	_, err := cmd.Output()
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func getRealAuthorName(config RepoConfig, authorName string) string {
+	realAuthorName, ok := config.DuplicateEngineers[authorName]
+	if ok {
+		return realAuthorName
+	}
+
+	return authorName
 }

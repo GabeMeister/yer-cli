@@ -1,6 +1,7 @@
 package analyzer
 
 import (
+	"GabeMeister/yer-cli/utils"
 	"encoding/json"
 	"os"
 	"sort"
@@ -17,6 +18,39 @@ func SaveDataToFile(data any, path string) {
 		panic(fileErr)
 	}
 }
+
+func GetPrevYearFileBlames() []FileBlame {
+	bytes, err := os.ReadFile(utils.PREV_YEAR_FILE_BLAMES_FILE)
+	if err != nil {
+		panic(err)
+	}
+
+	var fileBlames []FileBlame
+	jsonErr := json.Unmarshal(bytes, &fileBlames)
+	if jsonErr != nil {
+		panic(jsonErr)
+	}
+
+	return fileBlames
+}
+
+func GetCurrYearFileBlames() []FileBlame {
+	bytes, err := os.ReadFile(utils.CURR_YEAR_FILE_BLAMES_FILE)
+	if err != nil {
+		panic(err)
+	}
+
+	var fileBlames []FileBlame
+	jsonErr := json.Unmarshal(bytes, &fileBlames)
+	if jsonErr != nil {
+		panic(jsonErr)
+	}
+
+	return fileBlames
+}
+
+// func GetFilesCurrYear() []FileBlame {
+// }
 
 func GetFileChangeRatio(insertionsByEngineer map[string]int, deletionsByEngineer map[string]int) map[string]float64 {
 	ratios := make(map[string]float64)
@@ -55,4 +89,16 @@ func GetCommonlyChangedFiles() []FileChangeCount {
 	})
 
 	return fileChangeSlice[0:5]
+}
+
+func GetFileCountPrevYear() int {
+	fileBlames := GetPrevYearFileBlames()
+
+	return len(fileBlames)
+}
+
+func GetFileCountCurrYear() int {
+	fileBlames := GetCurrYearFileBlames()
+
+	return len(fileBlames)
 }

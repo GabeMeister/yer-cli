@@ -270,6 +270,12 @@ func getDuplicateUsers() map[string]string {
 }
 
 func gatherMetrics(config RepoConfig) {
+	currYearErr := checkoutRepoToCommitOrBranchName(config, "master")
+	if currYearErr != nil {
+		fmt.Println("Unable to git checkout repo to the latest commit")
+		panic(currYearErr)
+	}
+
 	commits := getCommitsFromGitLogs(config, false)
 	SaveDataToFile(commits, utils.COMMITS_FILE)
 
@@ -278,6 +284,31 @@ func gatherMetrics(config RepoConfig) {
 
 	directPushToMasterCommits := getDirectPushToMasterCommitsCurrYear(config)
 	SaveDataToFile(directPushToMasterCommits, utils.DIRECT_PUSH_ON_MASTER_COMMITS_FILE)
+
+	// Prev year files
+	lastCommitPrevYear := getLastCommitPrevYear(config)
+	fmt.Println("Analyzing last year's repo...")
+	prevYearErr := checkoutRepoToCommitOrBranchName(config, lastCommitPrevYear.Commit)
+	if prevYearErr != nil {
+		fmt.Println("Unable to git checkout repo to last year's files")
+		panic(prevYearErr)
+	}
+
+	prevYearFiles := getRepoFiles(config, lastCommitPrevYear.Commit)
+	prevYearBlames := getFileBlameSummary(config, prevYearFiles)
+	SaveDataToFile(prevYearBlames, utils.PREV_YEAR_FILE_BLAMES_FILE)
+
+	// Curr year files
+	fmt.Println("Analyzing this year's repo...")
+
+	currYearErr = checkoutRepoToCommitOrBranchName(config, "master")
+	if currYearErr != nil {
+		fmt.Println("Unable to git checkout repo back to the latest commit")
+		panic(currYearErr)
+	}
+	currYearFiles := getRepoFiles(config, "master")
+	currYearBlames := getFileBlameSummary(config, currYearFiles)
+	SaveDataToFile(currYearBlames, utils.CURR_YEAR_FILE_BLAMES_FILE)
 }
 
 func calculateRecap(config RepoConfig) {
@@ -314,6 +345,8 @@ func calculateRecap(config RepoConfig) {
 	codeDeletionsByEngineer := GetCodeDeletionsByEngineer()
 	fileChangeRatio := GetFileChangeRatio(codeInsertionsByEngineer, codeDeletionsByEngineer)
 	commonlyChangedFiles := GetCommonlyChangedFiles()
+	fileCountPrevYear := GetFileCountPrevYear()
+	fileCountCurrYear := GetFileCountCurrYear()
 
 	now := time.Now()
 	isoDateString := now.Format(time.RFC3339)
@@ -338,6 +371,11 @@ func calculateRecap(config RepoConfig) {
 		MostMergesInOneDayCurrYear:      mostMergesInOneDayCurrYear,
 		AvgMergesToMasterPerDayCurrYear: avgMergesToMasterPerDayCurrYear,
 		CommonlyChangedFiles:            commonlyChangedFiles,
+
+		// Files
+		FileCountPrevYear:          fileCountPrevYear,
+		FileCountCurrYear:          fileCountCurrYear,
+		FileCountPercentDifference: (float64(fileCountCurrYear) - float64(fileCountPrevYear)) / float64(fileCountPrevYear),
 
 		// Team
 		NewEngineerCommitsCurrYear:             newEngineerCommitsCurrYear,
