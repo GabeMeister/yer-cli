@@ -138,3 +138,23 @@ func GetSmallestFilesCurrYear() []FileSize {
 
 	return fileSizes
 }
+
+func GetTotalLinesOfCodePrevYear() int {
+	fileBlames := GetPrevYearFileBlames()
+	total := 0
+	for _, fileBlame := range fileBlames {
+		total += fileBlame.LineCount
+	}
+
+	return total
+}
+
+func GetTotalLinesOfCodeCurrYear() int {
+	fileBlames := GetCurrYearFileBlames()
+	total := 0
+	for _, fileBlame := range fileBlames {
+		total += fileBlame.LineCount
+	}
+
+	return total
+}

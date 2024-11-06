@@ -82,6 +82,8 @@ type Recap struct {
 	FileCountPercentDifference float64    `json:"file_count_percent_difference"`
 	LargestFilesCurrYear       []FileSize `json:"largest_files_curr_year"`
 	SmallestFilesCurrYear      []FileSize `json:"smallest_files_curr_year"`
+	TotalLinesOfCodePrevYear   int        `json:"total_lines_of_code_prev_year"`
+	TotalLinesOfCodeCurrYear   int        `json:"total_lines_of_code_curr_year"`
 
 	// Team
 	NewEngineerCommitsCurrYear             []GitCommit                    `json:"new_engineer_commits_curr_year"`
