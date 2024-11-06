@@ -120,6 +120,27 @@ func RunLocalServer() {
 		)
 	})
 
+	e.GET("/engineer-file-changes-over-time", func(c echo.Context) error {
+		type EngineerFileChangesOverTimeView struct {
+			FileChangesOverTime string
+		}
+		fileChangesOverTimeJson, err := json.Marshal(recap.EngineerFileChangesOverTimeCurrYear)
+		if err != nil {
+			panic(err)
+		}
+
+		content := render(TemplateParams{
+			c:    c,
+			path: "pages/engineer-file-changes-over-time.html",
+			data: EngineerFileChangesOverTimeView{FileChangesOverTime: string(fileChangesOverTimeJson)},
+		})
+
+		return c.HTML(
+			http.StatusOK,
+			content,
+		)
+	})
+
 	/*
 	 * RESOURCES
 	 */

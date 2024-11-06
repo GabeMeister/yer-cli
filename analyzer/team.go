@@ -164,56 +164,63 @@ func GetEngineerCommitsOverTimeCurrYear() []TotalCommitCount {
 	return final
 }
 
-// TODO: process files from past and then calculate the file changes over time via commits
-// func GetEngineerFileChangesOverTimeCurrYear() []TotalFileChangeCount {
-// 	dates := utils.GetDaysOfYear(CURR_YEAR)
+func GetEngineerFileChangesOverTimeCurrYear() []TotalFileChangeCount {
+	// engineer => line change count
+	fileChangeTracker := make(map[string]int)
 
-// 	// Create map of all possible dates this year
-// 	dateMap := make(map[string][]GitCommit)
-// 	for _, d := range dates {
-// 		dateMap[d] = nil
-// 	}
+	// Bucket file changes for all enginers in past
+	prevFileBlames := GetPrevYearFileBlames()
+	for _, fileBlame := range prevFileBlames {
+		for engineer, lineCount := range fileBlame.GitBlame {
+			fileChangeTracker[engineer] += lineCount
+		}
+	}
 
-// 	fileChangeTracker := make(map[string]int)
+	dates := utils.GetDaysOfYear(CURR_YEAR)
 
-// 	// Bucket commit counts for all enginers in past
-// 	pastCommits := getPastGitCommits()
-// 	for _, commit := range pastCommits {
-// 		fileChangeTracker[commit.Author] += 1
-// 	}
+	// Create map of all possible dates this year
+	dateMap := make(map[string][]GitCommit)
+	for _, d := range dates {
+		dateMap[d] = nil
+	}
 
-// 	// Get current year commits, and bucket them under whatever date they fall on
-// 	currCommits := getCurrYearGitCommits()
-// 	for _, commit := range currCommits {
-// 		commitDate, err := time.Parse("Mon Jan 2 15:04:05 2006 -0700", commit.Date)
-// 		if err != nil {
-// 			panic("Invalid dates found in commits: " + commit.Date)
-// 		}
+	// Get current year commits, and bucket them under whatever date they fall on
+	commits := getCurrYearGitCommits()
+	for _, commit := range commits {
+		commitDate, err := time.Parse("Mon Jan 2 15:04:05 2006 -0700", commit.Date)
+		if err != nil {
+			panic("Invalid dates found in commits: " + commit.Date)
+		}
 
-// 		commitDateStr := commitDate.Format("2006-01-02")
-// 		dateMap[commitDateStr] = append(dateMap[commitDateStr], commit)
-// 	}
+		commitDateStr := commitDate.Format("2006-01-02")
+		dateMap[commitDateStr] = append(dateMap[commitDateStr], commit)
+	}
 
-// 	final := []TotalCommitCount{}
+	final := []TotalFileChangeCount{}
 
-// 	for _, dateStr := range dates {
-// 		commitsOnDay := dateMap[dateStr]
+	for _, dateStr := range dates {
+		commitsOnDay := dateMap[dateStr]
 
-// 		for _, commit := range commitsOnDay {
-// 			fileChangeTracker[commit.Author] += 1
-// 		}
+		for _, commit := range commitsOnDay {
+			for _, fileChange := range commit.FileChanges {
+				fileChangeTracker[commit.Author] += fileChange.Insertions
+				fileChangeTracker[commit.Author] += fileChange.Deletions
+			}
+		}
 
-// 		for userName, numCommits := range fileChangeTracker {
-// 			final = append(final, TotalCommitCount{
-// 				Name:  userName,
-// 				Date:  dateStr,
-// 				Value: numCommits,
-// 			})
-// 		}
-// 	}
+		for userName, numFileChanges := range fileChangeTracker {
+			final = append(final, TotalFileChangeCount{
+				Name:  userName,
+				Date:  dateStr,
+				Value: numFileChanges,
+			})
 
-// 	return final
-// }
+		}
+
+	}
+
+	return final
+}
 
 type CommitList []string
 type AuthorCommitList map[string]CommitList

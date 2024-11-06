@@ -328,6 +328,7 @@ func calculateRecap(config RepoConfig) {
 	engineerCountCurrYear := GetEngineerCountCurrYear()
 	engineerCountAllTime := GetEngineerCountAllTime()
 	engineerCommitsOverTimeCurrYear := GetEngineerCommitsOverTimeCurrYear()
+	engineerFileChangesOverTimeCurrYear := GetEngineerFileChangesOverTimeCurrYear()
 	commitsByMonthCurrYear := GetCommitsByMonthCurrYear()
 	commitsByWeekDayCurrYear := GetCommitsByWeekDayCurrYear()
 	commitsByHourCurrYear := GetCommitsByHourCurrYear()
@@ -393,6 +394,7 @@ func calculateRecap(config RepoConfig) {
 		EngineerCountCurrYear:                  engineerCountCurrYear,
 		EngineerCountAllTime:                   engineerCountAllTime,
 		EngineerCommitsOverTimeCurrYear:        engineerCommitsOverTimeCurrYear,
+		EngineerFileChangesOverTimeCurrYear:    engineerFileChangesOverTimeCurrYear,
 		MostSingleDayCommitsByEngineerCurrYear: mostSingleDayCommitsByEngineerCurrYear,
 		DirectPushesOnMasterByEngineerCurrYear: directPushesOnMasterByEngineerCurrYear,
 		MergesToMasterByEngineerCurrYear:       mergesToMasterByEngineerCurrYear,

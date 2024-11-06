@@ -93,6 +93,7 @@ type Recap struct {
 	EngineerCountCurrYear                  int                            `json:"engineer_count_curr_year"`
 	EngineerCountAllTime                   int                            `json:"engineer_count_all_time"`
 	EngineerCommitsOverTimeCurrYear        []TotalCommitCount             `json:"engineer_commits_over_time_curr_year"`
+	EngineerFileChangesOverTimeCurrYear    []TotalFileChangeCount         `json:"engineer_file_changes_over_time_curr_year"`
 	MostSingleDayCommitsByEngineerCurrYear MostSingleDayCommitsByEngineer `json:"most_single_day_commits_by_engineer_curr_year"`
 	DirectPushesOnMasterByEngineerCurrYear map[string]int                 `json:"direct_pushes_on_master_by_engineer_curr_year"`
 	MergesToMasterByEngineerCurrYear       map[string]int                 `json:"merges_to_master_by_engineer_curr_year"`
