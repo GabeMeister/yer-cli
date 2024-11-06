@@ -102,3 +102,39 @@ func GetFileCountCurrYear() int {
 
 	return len(fileBlames)
 }
+
+func GetLargestFilesCurrYear() []FileSize {
+	fileBlames := GetCurrYearFileBlames()
+
+	sort.Slice(fileBlames, func(i int, j int) bool {
+		return fileBlames[i].LineCount > fileBlames[j].LineCount
+	})
+
+	fileSizes := []FileSize{}
+	for _, fileBlame := range fileBlames[0:10] {
+		fileSizes = append(fileSizes, FileSize{
+			File:      fileBlame.File,
+			LineCount: fileBlame.LineCount,
+		})
+	}
+
+	return fileSizes
+}
+
+func GetSmallestFilesCurrYear() []FileSize {
+	fileBlames := GetCurrYearFileBlames()
+
+	sort.Slice(fileBlames, func(i int, j int) bool {
+		return fileBlames[i].LineCount < fileBlames[j].LineCount
+	})
+
+	fileSizes := []FileSize{}
+	for _, fileBlame := range fileBlames[0:10] {
+		fileSizes = append(fileSizes, FileSize{
+			File:      fileBlame.File,
+			LineCount: fileBlame.LineCount,
+		})
+	}
+
+	return fileSizes
+}

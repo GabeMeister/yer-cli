@@ -347,6 +347,8 @@ func calculateRecap(config RepoConfig) {
 	commonlyChangedFiles := GetCommonlyChangedFiles()
 	fileCountPrevYear := GetFileCountPrevYear()
 	fileCountCurrYear := GetFileCountCurrYear()
+	largestFilesCurrYear := GetLargestFilesCurrYear()
+	smallestFilesCurrYear := GetSmallestFilesCurrYear()
 
 	now := time.Now()
 	isoDateString := now.Format(time.RFC3339)
@@ -376,6 +378,8 @@ func calculateRecap(config RepoConfig) {
 		FileCountPrevYear:          fileCountPrevYear,
 		FileCountCurrYear:          fileCountCurrYear,
 		FileCountPercentDifference: (float64(fileCountCurrYear) - float64(fileCountPrevYear)) / float64(fileCountPrevYear),
+		LargestFilesCurrYear:       largestFilesCurrYear,
+		SmallestFilesCurrYear:      smallestFilesCurrYear,
 
 		// Team
 		NewEngineerCommitsCurrYear:             newEngineerCommitsCurrYear,

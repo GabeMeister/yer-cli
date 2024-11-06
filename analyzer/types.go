@@ -77,9 +77,11 @@ type Recap struct {
 	CommonlyChangedFiles            []FileChangeCount              `json:"commonly_changed_files"`
 
 	// Files
-	FileCountPrevYear          int     `json:"file_count_prev_year"`
-	FileCountCurrYear          int     `json:"file_count_curr_year"`
-	FileCountPercentDifference float64 `json:"file_count_percent_difference"`
+	FileCountPrevYear          int        `json:"file_count_prev_year"`
+	FileCountCurrYear          int        `json:"file_count_curr_year"`
+	FileCountPercentDifference float64    `json:"file_count_percent_difference"`
+	LargestFilesCurrYear       []FileSize `json:"largest_files_curr_year"`
+	SmallestFilesCurrYear      []FileSize `json:"smallest_files_curr_year"`
 
 	// Team
 	NewEngineerCommitsCurrYear             []GitCommit                    `json:"new_engineer_commits_curr_year"`
@@ -130,4 +132,9 @@ type FileBlame struct {
 	File      string         `json:"file"`
 	LineCount int            `json:"line_count"`
 	GitBlame  map[string]int `json:"git_blame"`
+}
+
+type FileSize struct {
+	File      string `json:"file"`
+	LineCount int    `json:"line_count"`
 }
