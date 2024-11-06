@@ -353,6 +353,7 @@ func calculateRecap(config RepoConfig) {
 	totalLinesOfCodePrevYear := GetTotalLinesOfCodePrevYear()
 	totalLinesOfCodeCurrYear := GetTotalLinesOfCodeCurrYear()
 	totalLinesOfCodeInRepoByEngineer := GetTotalLinesOfCodeInRepoByEngineer()
+	sizeOfRepoByWeekCurrYear := GetSizeOfRepoByWeekCurrYear()
 
 	now := time.Now()
 	isoDateString := now.Format(time.RFC3339)
@@ -386,6 +387,7 @@ func calculateRecap(config RepoConfig) {
 		SmallestFilesCurrYear:      smallestFilesCurrYear,
 		TotalLinesOfCodePrevYear:   totalLinesOfCodePrevYear,
 		TotalLinesOfCodeCurrYear:   totalLinesOfCodeCurrYear,
+		SizeOfRepoByWeekCurrYear:   sizeOfRepoByWeekCurrYear,
 
 		// Team
 		NewEngineerCommitsCurrYear:             newEngineerCommitsCurrYear,

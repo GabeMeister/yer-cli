@@ -43,8 +43,8 @@ type Gabe struct {
 }
 
 func runTest() {
-	result := utils.IsDateStrInYear("Mon Aug 29 22:36:29 2024 +0000", analyzer.CURR_YEAR)
-	fmt.Println(result)
+	data := utils.GetWeeksOfYear()
+	fmt.Print("\n\n", "*** data ***", "\n", data, "\n\n\n")
 }
 
 func main() {

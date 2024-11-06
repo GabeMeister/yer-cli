@@ -88,6 +88,15 @@ func GetDaysOfYear(year int) []string {
 	return dates
 }
 
+func GetWeeksOfYear() []int {
+	weeks := []int{}
+	for i := 1; i <= 52; i++ {
+		weeks = append(weeks, i)
+	}
+
+	return weeks
+}
+
 func GetDateFromISOString(isoString string) time.Time {
 	d, err := time.Parse(COMMIT_DATE_FORMAT, isoString)
 	if err != nil {

@@ -158,3 +158,43 @@ func GetTotalLinesOfCodeCurrYear() int {
 
 	return total
 }
+
+func GetSizeOfRepoByWeekCurrYear() []RepoSizeTimeStamp {
+	commits := getCurrYearGitCommits()
+	weeks := utils.GetWeeksOfYear()
+
+	weekCommitsMap := make(map[int][]GitCommit)
+	for _, week := range weeks {
+		weekCommitsMap[week] = nil
+	}
+
+	for _, commit := range commits {
+		date := utils.GetDateFromISOString(commit.Date)
+		_, week := date.ISOWeek()
+
+		weekCommitsMap[week] = append(weekCommitsMap[week], commit)
+	}
+
+	totalLinesOfCodePrevYear := GetTotalLinesOfCodePrevYear()
+	runningTotal := totalLinesOfCodePrevYear
+	final := []RepoSizeTimeStamp{}
+
+	for week := 1; week <= 52; week++ {
+		weekCommits := weekCommitsMap[week]
+
+		for _, commit := range weekCommits {
+			for _, fileChanges := range commit.FileChanges {
+				runningTotal += fileChanges.Insertions
+				runningTotal -= fileChanges.Deletions
+			}
+
+		}
+
+		final = append(final, RepoSizeTimeStamp{
+			WeekNumber: week,
+			LineCount:  runningTotal,
+		})
+	}
+
+	return final
+}
