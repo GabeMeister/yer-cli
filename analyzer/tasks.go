@@ -352,6 +352,7 @@ func calculateRecap(config RepoConfig) {
 	smallestFilesCurrYear := GetSmallestFilesCurrYear()
 	totalLinesOfCodePrevYear := GetTotalLinesOfCodePrevYear()
 	totalLinesOfCodeCurrYear := GetTotalLinesOfCodeCurrYear()
+	totalLinesOfCodeInRepoByEngineer := GetTotalLinesOfCodeInRepoByEngineer()
 
 	now := time.Now()
 	isoDateString := now.Format(time.RFC3339)
@@ -401,6 +402,7 @@ func calculateRecap(config RepoConfig) {
 		CodeInsertionsByEngineer:               codeInsertionsByEngineer,
 		CodeDeletionsByEngineer:                codeDeletionsByEngineer,
 		FileChangeRatioByEngineer:              fileChangeRatio,
+		TotalLinesOfCodeInRepoByEngineer:       totalLinesOfCodeInRepoByEngineer,
 	}
 	data, err := json.MarshalIndent(repoRecap, "", "  ")
 	if err != nil {

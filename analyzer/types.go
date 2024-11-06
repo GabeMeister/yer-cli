@@ -100,6 +100,7 @@ type Recap struct {
 	CodeInsertionsByEngineer               map[string]int                 `json:"code_insertions_by_engineer"`
 	CodeDeletionsByEngineer                map[string]int                 `json:"code_deletions_by_engineer"`
 	FileChangeRatioByEngineer              map[string]float64             `json:"file_change_ratio_by_engineer"`
+	TotalLinesOfCodeInRepoByEngineer       map[string]int                 `json:"total_lines_of_code_in_repo_by_engineer"`
 }
 
 // Example: { date: '2023-01-03T08:00:00.000Z', name: 'Steve Bremer', value: 24 },

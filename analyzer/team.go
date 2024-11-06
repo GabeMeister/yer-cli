@@ -309,3 +309,16 @@ func GetMostCommitsByEngineerCurrYear() MostSingleDayCommitsByEngineer {
 
 	return mostCommitsAuthor
 }
+
+func GetTotalLinesOfCodeInRepoByEngineer() map[string]int {
+	engineerLineCountMap := make(map[string]int)
+
+	fileBlames := GetCurrYearFileBlames()
+	for _, fileBlame := range fileBlames {
+		for engineer, lineCount := range fileBlame.GitBlame {
+			engineerLineCountMap[engineer] += lineCount
+		}
+	}
+
+	return engineerLineCountMap
+}
