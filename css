@@ -1,4 +1,4 @@
 #!/bin/bash
 
 echo "Processing CSS..."
-npx tailwindcss --input ./presentation/styles/globals.css --output ./presentation/static/css/styles.css -w
+npx tailwindcss --input ./presentation/styles/globals.css --output ./presentation/static/css/styles.css

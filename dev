@@ -1,0 +1,10 @@
+#!/bin/bash
+
+echo "Running tailwind..."
+./css
+
+echo "Running templ..."
+templ generate
+
+echo "Running go build..."
+go build -o ./main .

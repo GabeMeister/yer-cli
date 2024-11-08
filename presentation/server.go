@@ -1,12 +1,15 @@
 package presentation
 
 import (
+	presentation_views "GabeMeister/yer-cli/presentation/views"
 	"GabeMeister/yer-cli/utils"
+	"context"
 	"embed"
 	"encoding/json"
 	"fmt"
 	"net/http"
 
+	"github.com/a-h/templ"
 	"github.com/labstack/echo/v4"
 )
 
@@ -22,6 +25,19 @@ func RunLocalServer() {
 	e.HidePort = true
 
 	recap, _ := getRecap()
+
+	e.GET("/hello", func(c echo.Context) error {
+		buf := templ.GetBuffer()
+		component := presentation_views.Hello("Josh")
+		err := component.Render(context.Background(), buf)
+		if err != nil {
+			panic(err)
+		}
+
+		content := buf.String()
+
+		return c.HTML(http.StatusOK, content)
+	})
 
 	e.GET("/", func(c echo.Context) error {
 		if !utils.HasRepoBeenAnalyzed() {
