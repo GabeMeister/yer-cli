@@ -1,0 +1,25 @@
+package presentation_views_layouts
+
+templ StandardLayout() {
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<title>Year End Recap</title>
+			<link rel="stylesheet" href="/css/styles.css"/>
+			<link rel="preconnect" href="https://fonts.googleapis.com"/>
+			<link rel="preconnect" href="https://fonts.gstatic.com"/>
+			<link href="https://fonts.googleapis.com/css2?family=Bitter&family=Lato&display=swap" rel="stylesheet"/>
+			<script src="/scripts/htmx.org@1.9.12.min.js"></script>
+			<script src="https://kit.fontawesome.com/e00224d8d7.js" crossorigin="anonymous"></script>
+		</head>
+		<body>
+			<div id="page-content" class="bg-gray-800 text-white min-h-screen">
+				<div>
+					{ children... }
+				</div>
+			</div>
+		</body>
+	</html>
+}

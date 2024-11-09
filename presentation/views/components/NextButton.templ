@@ -1,0 +1,15 @@
+package presentation_views_components 
+
+templ NextButton(href string) {
+	@Link(href) {
+		<button
+			hx-get={ href }
+			hx-push-url="true"
+			hx-target="#page-content"
+			class="cursor-pointer mt-12 text-xl text-blue-100 transition duration-800 bg-gray-600 hover:bg-gray-700 border-2 border-solid border-gray-100 rounded-md px-6 py-2"
+		>
+			<span>Next</span>
+			<i class="ml-1 fa-solid fa-arrow-right"></i>
+		</button>
+	}
+}

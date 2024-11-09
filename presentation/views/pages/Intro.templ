@@ -1,0 +1,25 @@
+package presentation_views_pages
+
+import (
+	"GabeMeister/yer-cli/analyzer"
+	presentation_views_components "GabeMeister/yer-cli/presentation/views/components"
+	"GabeMeister/yer-cli/utils"
+)
+
+func formatRecapDate(isoString string) string {
+	dateStr, err := utils.FormatISODate(isoString)
+	if err != nil {
+		panic(err)
+	}
+
+	return dateStr
+}
+
+templ Intro(recap analyzer.Recap) {
+	<div class="flex flex-col justify-center items-center min-h-screen">
+		<div class="text-8xl font-bold text-yellow-200">{ recap.Name }</div>
+		<div class="text-xl italic mt-3">Analyzed on { formatRecapDate(recap.DateAnalyzed) }</div>
+		<div class="py-8"></div>
+		@presentation_views_components.NextButton("/hello")
+	</div>
+}

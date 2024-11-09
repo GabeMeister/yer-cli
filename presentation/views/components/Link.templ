@@ -1,0 +1,7 @@
+package presentation_views_components 
+
+templ Link(href string) {
+	<a hx-get={ href } hx-push-url="true" hx-target="#page-content" class="text-blue-400 text-2xl">
+		{ children... }
+	</a>
+}

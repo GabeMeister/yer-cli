@@ -1,9 +1,8 @@
 package presentation
 
 import (
-	presentation_views "GabeMeister/yer-cli/presentation/views"
+	presentation_views_pages "GabeMeister/yer-cli/presentation/views/pages"
 	"GabeMeister/yer-cli/utils"
-	"context"
 	"embed"
 	"encoding/json"
 	"fmt"
@@ -11,7 +10,6 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/a-h/templ"
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 )
@@ -34,46 +32,30 @@ func RunLocalServer() {
 	recap, _ := getRecap()
 
 	e.GET("/hello", func(c echo.Context) error {
-		buf := templ.GetBuffer()
-		component := presentation_views.Hello("Dog", "36")
-		err := component.Render(context.Background(), buf)
-		if err != nil {
-			panic(err)
-		}
+		component := presentation_views_pages.Hello("Dog", "36")
+		content := render(RenderParams{
+			c:         c,
+			component: component,
+		})
 
-		return c.HTML(http.StatusOK, buf.String())
+		return c.HTML(http.StatusOK, content)
 	})
 
 	e.GET("/", func(c echo.Context) error {
 		if !utils.HasRepoBeenAnalyzed() {
-			return RepoNotFoundPage(c)
+			component := presentation_views_pages.RepoNotFound()
+			content := render(RenderParams{
+				c:         c,
+				component: component,
+			})
+
+			return c.HTML(http.StatusOK, content)
 		}
 
-		type NextButton struct {
-			Href string
-		}
-
-		dateStr, err := utils.FormatISODate(recap.DateAnalyzed)
-		if err != nil {
-			panic(err)
-		}
-
-		data := struct {
-			Title        string
-			DateAnalyzed string
-			NextButton   NextButton
-		}{
-			Title:        recap.Name,
-			DateAnalyzed: dateStr,
-			NextButton: NextButton{
-				Href: "/prev-year-commits",
-			},
-		}
-
-		content := render(TemplateParams{
-			c:    c,
-			path: "pages/intro.html",
-			data: data,
+		component := presentation_views_pages.Intro(recap)
+		content := render(RenderParams{
+			c:         c,
+			component: component,
 		})
 
 		return c.HTML(http.StatusOK, content)
@@ -84,7 +66,7 @@ func RunLocalServer() {
 			RepoName string
 			Count    int
 		}
-		content := render(TemplateParams{
+		content := renderOld(TemplateParams{
 			c:    c,
 			path: "pages/prev-year-commits.html",
 			data: PrevYearCommitsView{Count: recap.NumCommitsPrevYear, RepoName: recap.Name},
@@ -96,30 +78,6 @@ func RunLocalServer() {
 		)
 	})
 
-	// e.GET("/presentation/curr-year-commits", func(c echo.Context) error {
-	// 	type CurrYearCommitsView struct {
-	// 		RepoName string
-	// 		Count    int
-	// 	}
-	// 	return c.HTML(
-	// 		http.StatusOK,
-	// 		renderTemplate(
-	// 			"views/curr-year-commits.html",
-	// 			CurrYearCommitsView{Count: recap.NumCommitsCurrYear, RepoName: recap.Name}))
-	// })
-
-	// e.GET("/presentation/all-time-commits", func(c echo.Context) error {
-	// 	type AllTimeCommitsView struct {
-	// 		RepoName string
-	// 		Count    int
-	// 	}
-	// 	return c.HTML(
-	// 		http.StatusOK,
-	// 		renderTemplate(
-	// 			"views/all-time-commits.html",
-	// 			AllTimeCommitsView{Count: recap.NumCommitsAllTime, RepoName: recap.Name}))
-	// })
-
 	e.GET("/engineer-commits-over-time", func(c echo.Context) error {
 		type EngineerCommitsOverTimeView struct {
 			Commits string
@@ -129,7 +87,7 @@ func RunLocalServer() {
 			panic(err)
 		}
 
-		content := render(TemplateParams{
+		content := renderOld(TemplateParams{
 			c:    c,
 			path: "pages/engineer-commits-over-time.html",
 			data: EngineerCommitsOverTimeView{Commits: string(commitsOverTimeJson)},
@@ -150,7 +108,7 @@ func RunLocalServer() {
 			panic(err)
 		}
 
-		content := render(TemplateParams{
+		content := renderOld(TemplateParams{
 			c:    c,
 			path: "pages/engineer-file-changes-over-time.html",
 			data: EngineerFileChangesOverTimeView{FileChangesOverTime: string(fileChangesOverTimeJson)},
@@ -167,32 +125,15 @@ func RunLocalServer() {
 	 */
 
 	e.GET("/env", func(c echo.Context) error {
-		type EnvPage struct {
-			Env string
-		}
-
 		text := "Production"
 		if isDevMode {
 			text = "Development"
 		}
 
-		envData := EnvPage{
-			Env: text,
-		}
-
-		content := render(TemplateParams{
-			c:    c,
-			path: "pages/env.html",
-			data: envData,
-		})
-
-		return c.HTML(http.StatusOK, content)
-	})
-
-	e.GET("/example", func(c echo.Context) error {
-		content := render(TemplateParams{
-			c:    c,
-			path: "pages/example.html",
+		component := presentation_views_pages.Env(text)
+		content := render(RenderParams{
+			c:         c,
+			component: component,
 		})
 
 		return c.HTML(http.StatusOK, content)
