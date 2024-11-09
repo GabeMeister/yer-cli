@@ -7,9 +7,12 @@ import (
 	"embed"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 
 	"github.com/a-h/templ"
+	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 )
 
@@ -20,6 +23,10 @@ var views embed.FS
 var static embed.FS
 
 func RunLocalServer() {
+	godotenv.Load()
+
+	isDevMode := os.Getenv("DEV_MODE") == "true"
+
 	e := echo.New()
 	e.HideBanner = true
 	e.HidePort = true
@@ -28,15 +35,13 @@ func RunLocalServer() {
 
 	e.GET("/hello", func(c echo.Context) error {
 		buf := templ.GetBuffer()
-		component := presentation_views.Hello("Josh")
+		component := presentation_views.Hello("Dog", "36")
 		err := component.Render(context.Background(), buf)
 		if err != nil {
 			panic(err)
 		}
 
-		content := buf.String()
-
-		return c.HTML(http.StatusOK, content)
+		return c.HTML(http.StatusOK, buf.String())
 	})
 
 	e.GET("/", func(c echo.Context) error {
@@ -161,6 +166,29 @@ func RunLocalServer() {
 	 * RESOURCES
 	 */
 
+	e.GET("/env", func(c echo.Context) error {
+		type EnvPage struct {
+			Env string
+		}
+
+		text := "Production"
+		if isDevMode {
+			text = "Development"
+		}
+
+		envData := EnvPage{
+			Env: text,
+		}
+
+		content := render(TemplateParams{
+			c:    c,
+			path: "pages/env.html",
+			data: envData,
+		})
+
+		return c.HTML(http.StatusOK, content)
+	})
+
 	e.GET("/example", func(c echo.Context) error {
 		content := render(TemplateParams{
 			c:    c,
@@ -176,7 +204,24 @@ func RunLocalServer() {
 	})
 
 	e.GET("/css/styles.css", func(c echo.Context) error {
-		data, _ := static.ReadFile("static/css/styles.css")
+		var data []byte
+		var err error
+
+		data, err = static.ReadFile("static/css/styles.css")
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		// Directly read from the file on disk when developing, so we can get the
+		// fast hot module reloading for style tweaks, instead of fully rebuilding
+		// the whole go app every time
+		if isDevMode {
+			data, err = os.ReadFile("presentation/static/css/styles.css")
+			if err != nil {
+				log.Fatal(err)
+			}
+		}
+
 		return c.Blob(200, "text/css; charset=utf-8", data)
 	})
 

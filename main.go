@@ -3,16 +3,12 @@ package main
 import (
 	"GabeMeister/yer-cli/analyzer"
 	"GabeMeister/yer-cli/presentation"
-	presentation_views "GabeMeister/yer-cli/presentation/views"
-	"context"
 	"errors"
 	"flag"
 	"fmt"
 	"io/fs"
 	"os"
 	"os/exec"
-
-	"github.com/a-h/templ"
 )
 
 var help = flag.Bool("h", false, "Print help menu")
@@ -46,15 +42,6 @@ type Gabe struct {
 }
 
 func runTest() {
-	buf := templ.GetBuffer()
-	component := presentation_views.Hello("Zach")
-	err := component.Render(context.Background(), buf)
-	if err != nil {
-		panic(err)
-	}
-
-	output := buf.String()
-	fmt.Print("\n\n", "*** output ***", "\n", output, "\n\n\n")
 }
 
 func main() {

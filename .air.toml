@@ -5,11 +5,11 @@ tmp_dir = "tmp"
 [build]
   args_bin = []
   bin = "./main -v"
-  cmd = "./css && templ generate && go build -o ./main ."
+  cmd = "go build -o ./main . && templ generate --notify-proxy"
   delay = 1000
   exclude_dir = ["assets", "tmp", "vendor", "testdata"]
   exclude_file = []
-  exclude_regex = ["_test.go", ".*_templ.go", "presentation/static/css/styles.css"]
+  exclude_regex = ["_test.go", ".*_templ.go"]
   exclude_unchanged = false
   follow_symlink = false
   full_bin = ""

@@ -4,3 +4,4 @@ config.json
 builds/
 main
 configs/
+.env
