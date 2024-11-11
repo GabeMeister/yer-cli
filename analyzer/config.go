@@ -10,7 +10,7 @@ import (
 func initConfig(repoDir string, includedFileExtensions []string, excludedDirs []string, duplicateEngineers map[string]string) ConfigFile {
 	config := ConfigFile{
 		Repos: []RepoConfig{
-			RepoConfig{
+			{
 				Path:                  repoDir,
 				Name:                  filepath.Base(repoDir),
 				IncludeFileExtensions: includedFileExtensions,

@@ -27,15 +27,9 @@ func RunLocalServer() {
 
 	recap, _ := getRecap()
 
-	e.GET("/hello", func(c echo.Context) error {
-		component := presentation_views_pages.Hello("Dog", "36")
-		content := render(RenderParams{
-			c:         c,
-			component: component,
-		})
-
-		return c.HTML(http.StatusOK, content)
-	})
+	/*
+	 * PRESENTATION
+	 */
 
 	e.GET("/", func(c echo.Context) error {
 		if !utils.HasRepoBeenAnalyzed() {
@@ -178,24 +172,60 @@ func RunLocalServer() {
 		)
 	})
 
-	/*
-	 * RESOURCES
-	 */
-
-	e.GET("/env", func(c echo.Context) error {
-		text := "Production"
-		if isDevMode {
-			text = "Development"
+	e.GET("/file-count-prev-year", func(c echo.Context) error {
+		if !utils.HasRepoBeenAnalyzed() {
+			return renderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.Env(text)
+		component := presentation_views_pages.FileCountPrevYear(recap)
 		content := render(RenderParams{
 			c:         c,
 			component: component,
 		})
 
-		return c.HTML(http.StatusOK, content)
+		return c.HTML(
+			http.StatusOK,
+			content,
+		)
 	})
+
+	e.GET("/file-count-curr-year", func(c echo.Context) error {
+		if !utils.HasRepoBeenAnalyzed() {
+			return renderRepoNotFound(c)
+		}
+
+		component := presentation_views_pages.FileCountCurrYear(recap)
+		content := render(RenderParams{
+			c:         c,
+			component: component,
+		})
+
+		return c.HTML(
+			http.StatusOK,
+			content,
+		)
+	})
+
+	e.GET("/third-largest-file", func(c echo.Context) error {
+		if !utils.HasRepoBeenAnalyzed() {
+			return renderRepoNotFound(c)
+		}
+
+		component := presentation_views_pages.FileCountCurrYear(recap)
+		content := render(RenderParams{
+			c:         c,
+			component: component,
+		})
+
+		return c.HTML(
+			http.StatusOK,
+			content,
+		)
+	})
+
+	/*
+	 * RESOURCES
+	 */
 
 	e.GET("/favicon.ico", func(c echo.Context) error {
 		data, _ := static.ReadFile("static/images/favicon.ico")
@@ -233,6 +263,25 @@ func RunLocalServer() {
 	e.GET("/scripts/:name", func(c echo.Context) error {
 		data, _ := static.ReadFile(fmt.Sprintf("static/scripts/%s", c.Param("name")))
 		return c.Blob(200, "text/javascript", data)
+	})
+
+	/*
+	 * DEBUGGING
+	 */
+
+	e.GET("/env", func(c echo.Context) error {
+		text := "Production"
+		if isDevMode {
+			text = "Development"
+		}
+
+		component := presentation_views_pages.Env(text)
+		content := render(RenderParams{
+			c:         c,
+			component: component,
+		})
+
+		return c.HTML(http.StatusOK, content)
 	})
 
 	fmt.Println("\nDone! Browse to http://localhost:4000/")

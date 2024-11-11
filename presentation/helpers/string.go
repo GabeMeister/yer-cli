@@ -2,6 +2,7 @@ package presentation_helpers
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"golang.org/x/text/message"
 )
@@ -19,4 +20,8 @@ func Json(data any) string {
 	}
 
 	return string(bytes)
+}
+
+func Str(data any) string {
+	return fmt.Sprintf("%s", data)
 }
