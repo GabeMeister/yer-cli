@@ -2,7 +2,9 @@ package presentation
 
 import (
 	presentation_views_layouts "GabeMeister/yer-cli/presentation/views/layouts"
+	presentation_views_pages "GabeMeister/yer-cli/presentation/views/pages"
 	"context"
+	"net/http"
 
 	"github.com/a-h/templ"
 	"github.com/labstack/echo/v4"
@@ -40,4 +42,14 @@ func render(params RenderParams) string {
 
 		return buf.String()
 	}
+}
+
+func renderRepoNotFound(c echo.Context) error {
+	component := presentation_views_pages.RepoNotFound()
+	content := render(RenderParams{
+		c:         c,
+		component: component,
+	})
+
+	return c.HTML(http.StatusOK, content)
 }

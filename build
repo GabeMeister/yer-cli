@@ -1,5 +1,8 @@
 #!/bin/bash
 
+templ generate
+npx tailwindcss --input ./presentation/styles/globals.css --output ./presentation/static/css/styles.css
+
 echo "Building for Linux..."
 GOOS=linux GOARCH=amd64 go build -o ~/dev/yer-cli/builds/yer_linux_amd64
 GOOS=linux GOARCH=arm64 go build -o ~/dev/yer-cli/builds/yer_linux_arm64

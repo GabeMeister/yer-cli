@@ -1,0 +1,10 @@
+package presentation_views_pages
+
+import components "GabeMeister/yer-cli/presentation/views/components"
+
+templ EngineerCountAllTime(count int, repoName string) {
+	@components.Slide() {
+		@components.BigNumber(count)
+		<div class="text-xl mt-2">Engineers who have ever committed to <span class="font-bold">{ repoName }</span></div>
+	}
+}

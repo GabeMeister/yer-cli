@@ -13,9 +13,6 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-//go:embed views/*
-var views embed.FS
-
 //go:embed static/*
 var static embed.FS
 
@@ -42,13 +39,7 @@ func RunLocalServer() {
 
 	e.GET("/", func(c echo.Context) error {
 		if !utils.HasRepoBeenAnalyzed() {
-			component := presentation_views_pages.RepoNotFound()
-			content := render(RenderParams{
-				c:         c,
-				component: component,
-			})
-
-			return c.HTML(http.StatusOK, content)
+			return renderRepoNotFound(c)
 		}
 
 		component := presentation_views_pages.Intro(recap)
@@ -60,7 +51,53 @@ func RunLocalServer() {
 		return c.HTML(http.StatusOK, content)
 	})
 
+	e.GET("/new-engineer-count-curr-year", func(c echo.Context) error {
+		if !utils.HasRepoBeenAnalyzed() {
+			return renderRepoNotFound(c)
+		}
+
+		component := presentation_views_pages.NewEngineerCountCurrYear(recap.NewEngineerCountCurrYear)
+		content := render(RenderParams{
+			c:         c,
+			component: component,
+		})
+
+		return c.HTML(http.StatusOK, content)
+	})
+
+	e.GET("/engineer-count-curr-year", func(c echo.Context) error {
+		if !utils.HasRepoBeenAnalyzed() {
+			return renderRepoNotFound(c)
+		}
+
+		component := presentation_views_pages.EngineerCountCurrYear(recap.EngineerCountAllTime)
+		content := render(RenderParams{
+			c:         c,
+			component: component,
+		})
+
+		return c.HTML(http.StatusOK, content)
+	})
+
+	e.GET("/engineer-count-all-time", func(c echo.Context) error {
+		if !utils.HasRepoBeenAnalyzed() {
+			return renderRepoNotFound(c)
+		}
+
+		component := presentation_views_pages.EngineerCountAllTime(recap.EngineerCountAllTime, recap.Name)
+		content := render(RenderParams{
+			c:         c,
+			component: component,
+		})
+
+		return c.HTML(http.StatusOK, content)
+	})
+
 	e.GET("/num-commits-prev-year", func(c echo.Context) error {
+		if !utils.HasRepoBeenAnalyzed() {
+			return renderRepoNotFound(c)
+		}
+
 		component := presentation_views_pages.NumCommitsPrevYear(recap.NumCommitsPrevYear)
 		content := render(RenderParams{
 			c:         c,
@@ -74,6 +111,10 @@ func RunLocalServer() {
 	})
 
 	e.GET("/num-commits-curr-year", func(c echo.Context) error {
+		if !utils.HasRepoBeenAnalyzed() {
+			return renderRepoNotFound(c)
+		}
+
 		component := presentation_views_pages.NumCommitsCurrYear(recap.NumCommitsCurrYear)
 		content := render(RenderParams{
 			c:         c,
@@ -87,6 +128,10 @@ func RunLocalServer() {
 	})
 
 	e.GET("/num-commits-all-time", func(c echo.Context) error {
+		if !utils.HasRepoBeenAnalyzed() {
+			return renderRepoNotFound(c)
+		}
+
 		component := presentation_views_pages.NumCommitsAllTime(recap.NumCommitsAllTime)
 		content := render(RenderParams{
 			c:         c,
@@ -100,6 +145,10 @@ func RunLocalServer() {
 	})
 
 	e.GET("/engineer-commits-over-time", func(c echo.Context) error {
+		if !utils.HasRepoBeenAnalyzed() {
+			return renderRepoNotFound(c)
+		}
+
 		component := presentation_views_pages.EngineerCommitsOverTimeCurrYear(recap.EngineerCommitsOverTimeCurrYear)
 		content := render(RenderParams{
 			c:         c,
@@ -113,6 +162,10 @@ func RunLocalServer() {
 	})
 
 	e.GET("/engineer-file-changes-over-time", func(c echo.Context) error {
+		if !utils.HasRepoBeenAnalyzed() {
+			return renderRepoNotFound(c)
+		}
+
 		component := presentation_views_pages.EngineerFileChangesOverTimeCurrYear(recap.EngineerFileChangesOverTimeCurrYear)
 		content := render(RenderParams{
 			c:         c,

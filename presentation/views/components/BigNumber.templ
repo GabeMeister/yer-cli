@@ -1,0 +1,7 @@
+package presentation_views_components
+
+import helpers "GabeMeister/yer-cli/presentation/helpers"
+
+templ BigNumber(num int) {
+	<div class="text-9xl font-bold text-yellow-300">{ helpers.WithCommas(num) }</div>
+}
