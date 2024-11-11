@@ -76,6 +76,18 @@ func AnalyzeWithConfig(path string) bool {
 	// For now, we're just handling 1 repo at a time
 	repoConfig := config.Repos[0]
 
+	// Check if repo is "clean" (on master branch, and no unstaged changes)
+	if !isRepoClean(repoConfig.Path) {
+		fmt.Println(`
+This tool will inspect your git repo at various commits.
+Please make sure your repo is on master (or main), 
+and there are no unstaged changes before continuing.
+
+Press enter to continue...`)
+		reader := bufio.NewReader(os.Stdin)
+		reader.ReadString('\n')
+	}
+
 	gatherMetrics(repoConfig)
 	updateDuplicateEngineers(path, repoConfig.DuplicateEngineers)
 	calculateRecap(repoConfig)
