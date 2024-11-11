@@ -1,0 +1,13 @@
+package presentation_views_pages
+
+import (
+	"GabeMeister/yer-cli/analyzer"
+	presentation_helpers "GabeMeister/yer-cli/presentation/helpers"
+)
+
+templ EngineerFileChangesOverTimeCurrYear(fileChanges []analyzer.TotalFileChangeCount) {
+	<div>
+		<div id="container" data-value={ presentation_helpers.Json(fileChanges) } class="p-12"></div>
+		<script type="module" src="/scripts/racing-bar-chart.js"></script>
+	</div>
+}

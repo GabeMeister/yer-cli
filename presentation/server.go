@@ -4,7 +4,6 @@ import (
 	presentation_views_pages "GabeMeister/yer-cli/presentation/views/pages"
 	"GabeMeister/yer-cli/utils"
 	"embed"
-	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -61,15 +60,37 @@ func RunLocalServer() {
 		return c.HTML(http.StatusOK, content)
 	})
 
-	e.GET("/prev-year-commits", func(c echo.Context) error {
-		type PrevYearCommitsView struct {
-			RepoName string
-			Count    int
-		}
-		content := renderOld(TemplateParams{
-			c:    c,
-			path: "pages/prev-year-commits.html",
-			data: PrevYearCommitsView{Count: recap.NumCommitsPrevYear, RepoName: recap.Name},
+	e.GET("/num-commits-prev-year", func(c echo.Context) error {
+		component := presentation_views_pages.NumCommitsPrevYear(recap.NumCommitsPrevYear)
+		content := render(RenderParams{
+			c:         c,
+			component: component,
+		})
+
+		return c.HTML(
+			http.StatusOK,
+			content,
+		)
+	})
+
+	e.GET("/num-commits-curr-year", func(c echo.Context) error {
+		component := presentation_views_pages.NumCommitsCurrYear(recap.NumCommitsCurrYear)
+		content := render(RenderParams{
+			c:         c,
+			component: component,
+		})
+
+		return c.HTML(
+			http.StatusOK,
+			content,
+		)
+	})
+
+	e.GET("/num-commits-all-time", func(c echo.Context) error {
+		component := presentation_views_pages.NumCommitsAllTime(recap.NumCommitsAllTime)
+		content := render(RenderParams{
+			c:         c,
+			component: component,
 		})
 
 		return c.HTML(
@@ -79,18 +100,10 @@ func RunLocalServer() {
 	})
 
 	e.GET("/engineer-commits-over-time", func(c echo.Context) error {
-		type EngineerCommitsOverTimeView struct {
-			Commits string
-		}
-		commitsOverTimeJson, err := json.Marshal(recap.EngineerCommitsOverTimeCurrYear)
-		if err != nil {
-			panic(err)
-		}
-
-		content := renderOld(TemplateParams{
-			c:    c,
-			path: "pages/engineer-commits-over-time.html",
-			data: EngineerCommitsOverTimeView{Commits: string(commitsOverTimeJson)},
+		component := presentation_views_pages.EngineerCommitsOverTimeCurrYear(recap.EngineerCommitsOverTimeCurrYear)
+		content := render(RenderParams{
+			c:         c,
+			component: component,
 		})
 
 		return c.HTML(
@@ -100,18 +113,10 @@ func RunLocalServer() {
 	})
 
 	e.GET("/engineer-file-changes-over-time", func(c echo.Context) error {
-		type EngineerFileChangesOverTimeView struct {
-			FileChangesOverTime string
-		}
-		fileChangesOverTimeJson, err := json.Marshal(recap.EngineerFileChangesOverTimeCurrYear)
-		if err != nil {
-			panic(err)
-		}
-
-		content := renderOld(TemplateParams{
-			c:    c,
-			path: "pages/engineer-file-changes-over-time.html",
-			data: EngineerFileChangesOverTimeView{FileChangesOverTime: string(fileChangesOverTimeJson)},
+		component := presentation_views_pages.EngineerFileChangesOverTimeCurrYear(recap.EngineerFileChangesOverTimeCurrYear)
+		content := render(RenderParams{
+			c:         c,
+			component: component,
 		})
 
 		return c.HTML(

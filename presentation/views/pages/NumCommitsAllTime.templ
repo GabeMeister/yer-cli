@@ -1,0 +1,9 @@
+package presentation_views_pages
+
+import presentation_helpers "GabeMeister/yer-cli/presentation/helpers"
+
+templ NumCommitsAllTime(count int) {
+	<div>
+		<div>Number of commits made all time: { presentation_helpers.WithCommas(count) }</div>
+	</div>
+}
