@@ -359,6 +359,23 @@ func RunLocalServer() {
 		)
 	})
 
+	e.GET("/largest-commit-message-curr-year", func(c echo.Context) error {
+		if !utils.HasRepoBeenAnalyzed() {
+			return renderRepoNotFound(c)
+		}
+
+		component := presentation_views_pages.LargestCommitMessageCurrYear(recap)
+		content := render(RenderParams{
+			c:         c,
+			component: component,
+		})
+
+		return c.HTML(
+			http.StatusOK,
+			content,
+		)
+	})
+
 	/*
 	 * RESOURCES
 	 */

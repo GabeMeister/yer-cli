@@ -38,6 +38,18 @@ func GetSimpleDateStr(isoString string) string {
 	return parsed.Format("1/2/06")
 }
 
+// Returns "January 2, 2006"
+func GetHumanReadableDateStr(isoString string) string {
+	// Parse the ISO string
+	parsed, err := time.Parse(COMMIT_DATE_FORMAT, isoString)
+	if err != nil {
+		return ""
+	}
+
+	// Extract the year from the parsed time
+	return parsed.Format("January 2, 2006")
+}
+
 // Returns "2006-01-02"
 func GetMachineReadableDateStr(isoString string) string {
 	// Parse the ISO string
