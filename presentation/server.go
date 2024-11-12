@@ -257,6 +257,40 @@ func RunLocalServer() {
 		)
 	})
 
+	e.GET("/total-lines-of-code-prev-year", func(c echo.Context) error {
+		if !utils.HasRepoBeenAnalyzed() {
+			return renderRepoNotFound(c)
+		}
+
+		component := presentation_views_pages.TotalLinesOfCodePrevYear(recap)
+		content := render(RenderParams{
+			c:         c,
+			component: component,
+		})
+
+		return c.HTML(
+			http.StatusOK,
+			content,
+		)
+	})
+
+	e.GET("/total-lines-of-code-curr-year", func(c echo.Context) error {
+		if !utils.HasRepoBeenAnalyzed() {
+			return renderRepoNotFound(c)
+		}
+
+		component := presentation_views_pages.TotalLinesOfCodeCurrYear(recap)
+		content := render(RenderParams{
+			c:         c,
+			component: component,
+		})
+
+		return c.HTML(
+			http.StatusOK,
+			content,
+		)
+	})
+
 	/*
 	 * RESOURCES
 	 */
