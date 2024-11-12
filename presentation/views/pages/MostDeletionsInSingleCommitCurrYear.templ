@@ -1,0 +1,26 @@
+
+
+package presentation_views_pages
+
+import (
+	"GabeMeister/yer-cli/analyzer"
+	components "GabeMeister/yer-cli/presentation/views/components"
+)
+
+func getTotalDeletionsInCommit(fileChanges []analyzer.FileChange) int {
+	total := 0
+
+	for _, fileChange := range fileChanges {
+		total += fileChange.Deletions
+	}
+
+	return total
+}
+
+templ MostDeletionsInSingleCommitCurrYear(recap analyzer.Recap) {
+	@components.Slide() {
+		@components.BigNumber(getTotalDeletionsInCommit(recap.MostDeletionsInCommitCurrYear.FileChanges))
+		<div class="mt-6">Total deletions in single commit by <span class="font-bold">{ recap.MostDeletionsInCommitCurrYear.Author }</span></div>
+		<div class="mt-6 text-xl font-mono">"{ recap.MostDeletionsInCommitCurrYear.Message }"</div>
+	}
+}

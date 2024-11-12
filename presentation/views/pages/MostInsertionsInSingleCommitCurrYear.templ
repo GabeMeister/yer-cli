@@ -1,0 +1,25 @@
+
+package presentation_views_pages
+
+import (
+	"GabeMeister/yer-cli/analyzer"
+	components "GabeMeister/yer-cli/presentation/views/components"
+)
+
+func getTotalInsertionsInCommit(fileChanges []analyzer.FileChange) int {
+	total := 0
+
+	for _, fileChange := range fileChanges {
+		total += fileChange.Insertions
+	}
+
+	return total
+}
+
+templ MostInsertionsInSingleCommitCurrYear(recap analyzer.Recap) {
+	@components.Slide() {
+		@components.BigNumber(getTotalInsertionsInCommit(recap.MostInsertionsInCommitCurrYear.FileChanges))
+		<div class="mt-6">Total insertions in single commit by <span class="font-bold">{ recap.MostInsertionsInCommitCurrYear.Author }</span></div>
+		<div class="mt-6 text-xl font-mono">"{ recap.MostInsertionsInCommitCurrYear.Message }"</div>
+	}
+}
