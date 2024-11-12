@@ -1,0 +1,43 @@
+package presentation_views_pages
+
+import (
+	"GabeMeister/yer-cli/analyzer"
+	helpers "GabeMeister/yer-cli/presentation/helpers"
+	components "GabeMeister/yer-cli/presentation/views/components"
+	"path/filepath"
+	"strings"
+)
+
+func secondLargestFile(recap analyzer.Recap) analyzer.FileSize {
+	return recap.LargestFilesCurrYear[1]
+}
+
+func secondLargestFilePath(recap analyzer.Recap) string {
+	file := secondLargestFile(recap)
+	dir := filepath.Dir(file.File)
+
+	dir = strings.ReplaceAll(dir, "/", " / ")
+	dir = dir + " / "
+
+	return dir
+}
+
+func secondLargestFileName(recap analyzer.Recap) string {
+	file := secondLargestFile(recap)
+	fileName := filepath.Base(file.File)
+
+	return fileName
+}
+
+func secondLargestLineCount(recap analyzer.Recap) string {
+	return helpers.WithCommas(recap.LargestFilesCurrYear[1].LineCount)
+}
+
+templ SecondLargestFile(recap analyzer.Recap) {
+	@components.Slide() {
+		<div class="text-xl max-w-screen text-wrap">{ secondLargestFilePath(recap) }</div>
+		<div class="mt-4 text-5xl text-yellow-300 max-w-screen text-wrap">{ secondLargestFileName(recap) }</div>
+		<div class="italic mt-4 text-xl">({ secondLargestLineCount(recap) } lines)</div>
+		@components.NextButton("/largest-file")
+	}
+}

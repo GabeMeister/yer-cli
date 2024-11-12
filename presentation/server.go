@@ -211,7 +211,41 @@ func RunLocalServer() {
 			return renderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.FileCountCurrYear(recap)
+		component := presentation_views_pages.ThirdLargestFile(recap)
+		content := render(RenderParams{
+			c:         c,
+			component: component,
+		})
+
+		return c.HTML(
+			http.StatusOK,
+			content,
+		)
+	})
+
+	e.GET("/second-largest-file", func(c echo.Context) error {
+		if !utils.HasRepoBeenAnalyzed() {
+			return renderRepoNotFound(c)
+		}
+
+		component := presentation_views_pages.SecondLargestFile(recap)
+		content := render(RenderParams{
+			c:         c,
+			component: component,
+		})
+
+		return c.HTML(
+			http.StatusOK,
+			content,
+		)
+	})
+
+	e.GET("/largest-file", func(c echo.Context) error {
+		if !utils.HasRepoBeenAnalyzed() {
+			return renderRepoNotFound(c)
+		}
+
+		component := presentation_views_pages.LargestFile(recap)
 		content := render(RenderParams{
 			c:         c,
 			component: component,
