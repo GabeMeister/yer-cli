@@ -691,6 +691,14 @@ video {
   display: none;
 }
 
+.h-1 {
+  height: 0.25rem;
+}
+
+.h-\[500px\] {
+  height: 500px;
+}
+
 .min-h-screen {
   min-height: 100vh;
 }
@@ -709,6 +717,10 @@ video {
 
 .w-3 {
   width: 0.75rem;
+}
+
+.w-\[805px\] {
+  width: 805px;
 }
 
 .w-fit {
@@ -750,6 +762,14 @@ video {
 
 .gap-8 {
   gap: 2rem;
+}
+
+.overflow-scroll {
+  overflow: scroll;
+}
+
+.overflow-y-scroll {
+  overflow-y: scroll;
 }
 
 .text-wrap {
@@ -861,6 +881,10 @@ video {
 
 .text-center {
   text-align: center;
+}
+
+.font-mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
 .text-2xl {
@@ -1166,6 +1190,27 @@ video {
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
+}
+
+/* custom scrollbar */
+
+::-webkit-scrollbar {
+  width: 20px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #d6dee1;
+  border-radius: 20px;
+  border: 6px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #a8bbbf;
 }
 
 .hover\:bg-gray-700:hover {

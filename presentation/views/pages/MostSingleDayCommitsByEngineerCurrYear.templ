@@ -1,0 +1,27 @@
+
+package presentation_views_pages
+
+import (
+	"GabeMeister/yer-cli/analyzer"
+	components "GabeMeister/yer-cli/presentation/views/components"
+	"time"
+)
+
+func getSlideDate(dateStr string) string {
+	t, err := time.Parse("2006-01-02", dateStr)
+	if err != nil {
+		panic(err)
+	}
+
+	return t.Format("January 2, 2006")
+}
+
+templ MostSingleDayCommitsByEngineerCurrYear(recap analyzer.Recap) {
+	@components.Slide() {
+		<div class="mt-6 text-2xl"><span class="font-bold">{ recap.MostSingleDayCommitsByEngineerCurrYear.Username }</span> committed </div>
+		<div class="mt-6">
+			@components.BigNumber(recap.MostSingleDayCommitsByEngineerCurrYear.Count)
+		</div>
+		<div class="mt-6 text-2xl">times on { getSlideDate(recap.MostSingleDayCommitsByEngineerCurrYear.Date) }.</div>
+	}
+}
