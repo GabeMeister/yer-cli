@@ -416,6 +416,23 @@ func RunLocalServer() {
 		)
 	})
 
+	e.GET("/most-merges-in-one-day-commit-messages-curr-year", func(c echo.Context) error {
+		if !utils.HasRepoBeenAnalyzed() {
+			return renderRepoNotFound(c)
+		}
+
+		component := presentation_views_pages.MostMergesInOneDayCommitMessagesCurrYear(recap)
+		content := render(RenderParams{
+			c:         c,
+			component: component,
+		})
+
+		return c.HTML(
+			http.StatusOK,
+			content,
+		)
+	})
+
 	/*
 	 * RESOURCES
 	 */
