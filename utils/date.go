@@ -5,6 +5,17 @@ import (
 )
 
 var COMMIT_DATE_FORMAT = "Mon Jan 2 15:04:05 2006 -0700"
+var BASIC_DATE_FORMAT = "1/2/06"
+var HUMAN_READABLE_DATE_FORMAT = "January 2, 2006"
+
+func ParseDateStr(dateStr string, startFormat string, endFormat string) string {
+	t, err := time.Parse(startFormat, dateStr)
+	if err != nil {
+		return ""
+	}
+
+	return t.Format(endFormat)
+}
 
 func FormatISODate(isoString string) (string, error) {
 	t, err := time.Parse(time.RFC3339, isoString)

@@ -128,9 +128,9 @@ type CommitMessageLengthFrequency struct {
 }
 
 type MostMergesInOneDay struct {
-	Count   int
-	Date    string `json:"date"`
-	Commits []GitCommit
+	Count   int         `json:"count"`
+	Date    string      `json:"date"`
+	Commits []GitCommit `json:"commits"`
 }
 
 type FileBlame struct {
