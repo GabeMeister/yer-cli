@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
@@ -365,6 +366,28 @@ func RunLocalServer() {
 		}
 
 		component := presentation_views_pages.LargestCommitMessageCurrYear(recap)
+		content := render(RenderParams{
+			c:         c,
+			component: component,
+		})
+
+		return c.HTML(
+			http.StatusOK,
+			content,
+		)
+	})
+
+	e.GET("/shortest-commit-message-curr-year/:index", func(c echo.Context) error {
+		if !utils.HasRepoBeenAnalyzed() {
+			return renderRepoNotFound(c)
+		}
+
+		index, err := strconv.Atoi(c.Param("index"))
+		if err != nil {
+			panic(err)
+		}
+
+		component := presentation_views_pages.SmallestCommitMessagesCurrYear(recap, index)
 		content := render(RenderParams{
 			c:         c,
 			component: component,
