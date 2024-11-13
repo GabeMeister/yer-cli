@@ -1,0 +1,22 @@
+package presentation_views_pages
+
+import (
+	"GabeMeister/yer-cli/analyzer"
+	components "GabeMeister/yer-cli/presentation/views/components"
+	"strings"
+)
+
+func getCommitMessage(commit analyzer.GitCommit) string {
+	return strings.ReplaceAll(commit.Message, "|||", "\n") + "\n\n\n"
+}
+
+templ MostMergesInOneDayCommitMessagesCurrYear(recap analyzer.Recap) {
+	@components.Slide() {
+		<div class="overflow-y-scroll text-wrap h-[500px] w-[700px]">
+			for _, commit := range recap.MostMergesInOneDayCurrYear.Commits {
+				<div class="font-mono text-yellow-300">{ commit.Commit }</div>
+				<pre class="ml-6 w-[680px] text-wrap">{ getCommitMessage(commit) }</pre>
+			}
+		</div>
+	}
+}
