@@ -13,6 +13,10 @@ func WithCommas(num int) string {
 	return printer.Sprintf("%d", num)
 }
 
+func TruncateDigits(num float64) string {
+	return fmt.Sprintf("%.2f", num)
+}
+
 func Json(data any) string {
 	bytes, err := json.MarshalIndent(data, "", "  ")
 	if err != nil {

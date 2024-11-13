@@ -1,0 +1,8 @@
+
+package presentation_views_components
+
+import helpers "GabeMeister/yer-cli/presentation/helpers"
+
+templ BigFloat(num float64) {
+	<div class="text-9xl font-bold text-yellow-300">{ helpers.TruncateDigits(num) }</div>
+}
