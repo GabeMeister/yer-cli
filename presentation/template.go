@@ -23,7 +23,7 @@ func render(params RenderParams) string {
 	isHtmxRequest := len(htmxRequestHeader) > 0 && htmxRequestHeader[0] == "true"
 	buf := templ.GetBuffer()
 
-	if isHtmxRequest {
+	if false && isHtmxRequest {
 		// If it's an Htmx request, then that means the headers/styling has already
 		// loaded, so no need to add that into the response again
 		err := component.Render(context.Background(), buf)

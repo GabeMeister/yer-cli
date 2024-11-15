@@ -29,7 +29,7 @@ func StandardLayout() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!doctype html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Year End Recap</title><link rel=\"stylesheet\" href=\"/css/styles.css\"><link rel=\"preconnect\" href=\"https://fonts.googleapis.com\"><link rel=\"preconnect\" href=\"https://fonts.gstatic.com\"><link href=\"https://fonts.googleapis.com/css2?family=Bitter&amp;family=Lato&amp;display=swap\" rel=\"stylesheet\"><script src=\"/scripts/htmx.org@1.9.12.min.js\"></script><script src=\"https://kit.fontawesome.com/e00224d8d7.js\" crossorigin=\"anonymous\"></script></head><body><div id=\"page-content\" class=\"bg-gray-800 text-white min-h-screen\"><div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!doctype html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Year End Recap</title><link rel=\"stylesheet\" href=\"/css/styles.css\"><link rel=\"preconnect\" href=\"https://fonts.googleapis.com\"><link rel=\"preconnect\" href=\"https://fonts.gstatic.com\"><link href=\"https://fonts.googleapis.com/css2?family=Bitter&amp;family=Lato&amp;display=swap\" rel=\"stylesheet\"><script src=\"/scripts/htmx.org@1.9.12.min.js\"></script><script src=\"https://kit.fontawesome.com/e00224d8d7.js\" crossorigin=\"anonymous\"></script></head><body class=\"bg-gray-800 text-white min-h-screen\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -37,7 +37,7 @@ func StandardLayout() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div></body></html>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</body></html>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
