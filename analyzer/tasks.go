@@ -99,12 +99,6 @@ Press enter to continue...`)
  * PRIVATE
  */
 
-func stashRepo(dir string) {
-	stashCmd := exec.Command("git", "stash")
-	stashCmd.Dir = dir
-	stashCmd.Output()
-}
-
 func isRepoClean(dir string) bool {
 	// Check if we're on master branch
 	branchCmd := exec.Command("git", "branch", "--show-current")
@@ -304,6 +298,13 @@ func gatherMetrics(config RepoConfig) {
 
 	directPushToMasterCommits := getDirectPushToMasterCommitsCurrYear(config)
 	SaveDataToFile(directPushToMasterCommits, utils.DIRECT_PUSH_ON_MASTER_COMMITS_FILE)
+
+	// For now, if there's nothing from last year, then don't bother doing the
+	// full analysis
+	if !hasPrevYearCommits() {
+		fmt.Printf("Error: Repo must have commits from last year (%d) in order to run year end recap on it.\n", PREV_YEAR)
+		os.Exit(1)
+	}
 
 	// Prev year files
 	lastCommitPrevYear := getLastCommitPrevYear(config)

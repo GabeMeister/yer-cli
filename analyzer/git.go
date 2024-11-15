@@ -393,3 +393,15 @@ func getRealAuthorName(config RepoConfig, authorName string) string {
 
 	return authorName
 }
+
+func stashRepo(dir string) {
+	stashCmd := exec.Command("git", "stash")
+	stashCmd.Dir = dir
+	stashCmd.Output()
+}
+
+func hasPrevYearCommits() bool {
+	commits := getPrevYearGitCommits()
+
+	return len(commits) > 0
+}
