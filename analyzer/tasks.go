@@ -99,6 +99,12 @@ Press enter to continue...`)
  * PRIVATE
  */
 
+func stashRepo(dir string) {
+	stashCmd := exec.Command("git", "stash")
+	stashCmd.Dir = dir
+	stashCmd.Output()
+}
+
 func isRepoClean(dir string) bool {
 	// Check if we're on master branch
 	branchCmd := exec.Command("git", "branch", "--show-current")
@@ -282,6 +288,8 @@ func getDuplicateUsers() map[string]string {
 }
 
 func gatherMetrics(config RepoConfig) {
+	stashRepo(config.Path)
+
 	currYearErr := checkoutRepoToCommitOrBranchName(config, "master")
 	if currYearErr != nil {
 		fmt.Println("Unable to git checkout repo to the latest commit")

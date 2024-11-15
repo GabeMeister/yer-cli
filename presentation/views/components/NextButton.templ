@@ -12,7 +12,10 @@ templ NextButton(href string) {
 		>
 			<span>Next</span>
 			<i class="ml-1 fa-solid fa-arrow-right"></i>
-			<button onclick="history.back()">Go Back</button>
+			<button
+				onclick="console.log('yes'); history.back()"
+				hx-trigger="click, keydown[key=='ArrowLeft'] from:body"
+			>Go Back!</button>
 		</button>
 	}
 }
