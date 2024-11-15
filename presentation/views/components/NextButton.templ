@@ -1,21 +1,25 @@
 package presentation_views_components
 
 templ NextButton(href string) {
-	@Link(href) {
-		<button
-			id="next-btn"
-			hx-get={ href }
-			hx-push-url="true"
-			hx-target="body"
-			hx-trigger="click, keydown[key=='ArrowRight'] from:body"
-			class="cursor-pointer mt-12 text-lg text-blue-100 transition duration-800 bg-gray-600 hover:bg-gray-700 border-2 border-solid border-gray-100 rounded-md px-4 py-1"
-		>
-			<span>Next</span>
-			<i class="ml-1 fa-solid fa-arrow-right"></i>
-			<button
-				onclick="console.log('yes'); history.back()"
-				hx-trigger="click, keydown[key=='ArrowLeft'] from:body"
-			>Go Back!</button>
-		</button>
-	}
+	<button
+		hx-get={ href }
+		hx-push-url="true"
+		hx-target="body"
+		type="button"
+		id="next-btn"
+		hx-trigger="click, keydown[key=='ArrowRight'] from:body"
+		class="cursor-pointer mt-12 text-lg text-blue-100 transition duration-800 bg-gray-600 hover:bg-gray-700 border-2 border-solid border-gray-100 rounded-md px-4 py-1"
+	>
+		<span>Next</span>
+		<i class="ml-1 fa-solid fa-arrow-right"></i>
+	</button>
+	<script>
+		window.addEventListener('DOMContentLoaded', function() {
+			window.addEventListener('keydown', evt => {
+			  if (evt.key === "ArrowLeft") {
+  		  	history.back();
+  			}
+			});
+		});
+	</script>
 }
