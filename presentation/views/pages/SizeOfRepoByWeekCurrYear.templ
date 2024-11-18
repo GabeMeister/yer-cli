@@ -1,0 +1,15 @@
+package presentation_views_pages
+
+import (
+	"GabeMeister/yer-cli/analyzer"
+	helpers "GabeMeister/yer-cli/presentation/helpers"
+	components "GabeMeister/yer-cli/presentation/views/components"
+)
+
+templ SizeOfRepoByWeekCurrYear(recap analyzer.Recap) {
+	@components.Slide() {
+		<div id="container" data-value={ helpers.Json(recap.SizeOfRepoByWeekCurrYear) }></div>
+		<script type="module" src="/scripts/bar-chart.js"></script>
+		// @components.NextButton("/")
+	}
+}
