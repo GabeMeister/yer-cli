@@ -363,9 +363,9 @@ func calculateRecap(config RepoConfig) {
 	mergesToMasterByEngineerCurrYear := GetMergesToMasterByEngineerCurrYear()
 	mostMergesInOneDayCurrYear := GetMostMergesInOneDayCurrYear()
 	avgMergesToMasterPerDayCurrYear := GetAvgMergesToMasterPerDayCurrYear()
-	codeInsertionsByEngineer := GetCodeInsertionsByEngineer()
-	codeDeletionsByEngineer := GetCodeDeletionsByEngineer()
-	fileChangeRatio := GetFileChangeRatio(codeInsertionsByEngineer, codeDeletionsByEngineer)
+	codeInsertionsByEngineerCurrYear := GetCodeInsertionsByEngineerCurrYear()
+	codeDeletionsByEngineerCurrYear := GetCodeDeletionsByEngineerCurrYear()
+	fileChangeRatioCurrYear := GetFileChangeRatio(codeInsertionsByEngineerCurrYear, codeDeletionsByEngineerCurrYear)
 	commonlyChangedFiles := GetCommonlyChangedFiles()
 	fileCountPrevYear := GetFileCountPrevYear()
 	fileCountCurrYear := GetFileCountCurrYear()
@@ -422,9 +422,9 @@ func calculateRecap(config RepoConfig) {
 		MostSingleDayCommitsByEngineerCurrYear: mostSingleDayCommitsByEngineerCurrYear,
 		DirectPushesOnMasterByEngineerCurrYear: directPushesOnMasterByEngineerCurrYear,
 		MergesToMasterByEngineerCurrYear:       mergesToMasterByEngineerCurrYear,
-		CodeInsertionsByEngineer:               codeInsertionsByEngineer,
-		CodeDeletionsByEngineer:                codeDeletionsByEngineer,
-		FileChangeRatioByEngineer:              fileChangeRatio,
+		CodeInsertionsByEngineerCurrYear:       codeInsertionsByEngineerCurrYear,
+		CodeDeletionsByEngineerCurrYear:        codeDeletionsByEngineerCurrYear,
+		FileChangeRatioByEngineerCurrYear:      fileChangeRatioCurrYear,
 		TotalLinesOfCodeInRepoByEngineer:       totalLinesOfCodeInRepoByEngineer,
 	}
 	data, err := json.MarshalIndent(repoRecap, "", "  ")

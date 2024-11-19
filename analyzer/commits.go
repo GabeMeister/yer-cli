@@ -403,7 +403,7 @@ func GetAvgMergesToMasterPerDayCurrYear() float64 {
 	return float64(len(commits)) / float64(len(dayCommitMap))
 }
 
-func GetCodeInsertionsByEngineer() map[string]int {
+func GetCodeInsertionsByEngineerCurrYear() map[string]int {
 	commits := getCurrYearGitCommits()
 
 	authorInsertionsMap := make(map[string]int)
@@ -417,7 +417,7 @@ func GetCodeInsertionsByEngineer() map[string]int {
 	return authorInsertionsMap
 }
 
-func GetCodeDeletionsByEngineer() map[string]int {
+func GetCodeDeletionsByEngineerCurrYear() map[string]int {
 	commits := getCurrYearGitCommits()
 
 	authorDeletionsMap := make(map[string]int)

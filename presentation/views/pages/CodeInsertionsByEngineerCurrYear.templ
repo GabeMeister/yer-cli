@@ -1,0 +1,34 @@
+package presentation_views_pages
+
+import (
+	"GabeMeister/yer-cli/analyzer"
+	helpers "GabeMeister/yer-cli/presentation/helpers"
+	components "GabeMeister/yer-cli/presentation/views/components"
+	"fmt"
+	"sort"
+)
+
+func getCodeInsertionsChartData(recap analyzer.Recap) helpers.BarChartData {
+	barChartData := helpers.BarChartData{Data: []helpers.DataPoint{}, XAxisLabel: "Engineer", YAxisLabel: fmt.Sprintf("↑ Insertions (%d)", analyzer.CURR_YEAR)}
+	fmt.Print("\n\n", "*** recap.CodeInsertionsByEngineerCurrYear ***", "\n", recap.CodeInsertionsByEngineerCurrYear, "\n\n\n")
+
+	for engineer, insertions := range recap.CodeInsertionsByEngineerCurrYear {
+		barChartData.Data = append(barChartData.Data, helpers.DataPoint{
+			X: engineer,
+			Y: insertions,
+		})
+	}
+
+	sort.Slice(barChartData.Data, func(i int, j int) bool {
+		return barChartData.Data[i].Y > barChartData.Data[j].Y
+	})
+
+	return barChartData
+}
+
+templ CodeInsertionsByEngineerCurrYear(recap analyzer.Recap) {
+	@components.Slide() {
+		<div id="container" data-value={ helpers.Json(getCodeInsertionsChartData(recap)) }></div>
+		<script type="module" src="/scripts/bar-chart.js"></script>
+	}
+}

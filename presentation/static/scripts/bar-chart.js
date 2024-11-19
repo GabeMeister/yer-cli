@@ -81,7 +81,7 @@ function paintBarChart() {
     .attr("color", "black")
     .call(d3.axisBottom(x).tickSizeOuter(0))
     .selectAll("text")
-    .attr("font-size", "18")
+    .attr("font-size", "16")
     .attr("dx", "2em")
     .attr("dy", "2rem")
     .attr("transform", "rotate(30)");
