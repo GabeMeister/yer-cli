@@ -60,7 +60,11 @@ func GetFileChangeRatio(insertionsByEngineer map[string]int, deletionsByEngineer
 		insertions := float64(insertionCount)
 		deletions := float64(deletionsByEngineer[engineer])
 
-		ratios[engineer] = insertions / deletions
+		if deletions == 0 {
+			ratios[engineer] = 1
+		} else {
+			ratios[engineer] = insertions / deletions
+		}
 	}
 
 	return ratios
