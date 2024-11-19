@@ -1,12 +1,19 @@
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 
 /*
- * REQUIREMENTS: Must render html div with:
- * - id="container"
- * - data-value="[{"week_number": 1, "line_count": 1503}, ...]
+ * REQUIREMENTS: Must render html div with id="container" and the following in it's data-value attribute something like this:
+
+{
+    "data": [
+      {"x": "My Label 1", "y": 1503}, 
+      {"x": "My Label 2", "y": 1625} 
+    ],
+    "x_axis_label": "Commits",
+    "y_axis_label": "Line Count"
+}
+ 
  */
 
-// Declare the chart dimensions and margins.
 const width = 1400;
 const height = 700;
 const marginTop = 80;
@@ -14,70 +21,11 @@ const marginRight = 30;
 const marginBottom = 100;
 const marginLeft = 100;
 
-const weekToMonth = {
-  1: "Jan",
-  2: "Jan",
-  3: "Jan",
-  4: "Jan",
-  5: "Jan/Feb",
-  6: "Feb",
-  7: "Feb",
-  8: "Feb",
-  9: "Feb",
-  10: "Mar",
-  11: "Mar",
-  12: "Mar",
-  13: "Mar",
-  14: "Mar/Apr",
-  15: "Apr",
-  16: "Apr",
-  17: "Apr",
-  18: "Apr",
-  19: "May",
-  20: "May",
-  21: "May",
-  22: "May",
-  23: "May/Jun",
-  24: "Jun",
-  25: "Jun",
-  26: "Jun",
-  27: "Jun",
-  28: "Jul",
-  29: "Jul",
-  30: "Jul",
-  31: "Jul",
-  32: "Jul/Aug",
-  33: "Aug",
-  34: "Aug",
-  35: "Aug",
-  36: "Aug",
-  37: "Sep",
-  38: "Sep",
-  39: "Sep",
-  40: "Sep",
-  41: "Sep/Oct",
-  42: "Oct",
-  43: "Oct",
-  44: "Oct",
-  45: "Oct",
-  46: "Nov",
-  47: "Nov",
-  48: "Nov",
-  49: "Nov",
-  50: "Nov/Dec",
-  51: "Dec",
-  52: "Dec",
-};
-
 function paintBarChart() {
   const elem = document.querySelector("#container");
-  let data = JSON.parse(elem.getAttribute("data-value"));
-
-  // Convert data to be chart-friendly
-  data = data.map((d) => ({
-    week_number: weekToMonth[d.week_number],
-    line_count: d.line_count,
-  }));
+  let chartData = JSON.parse(elem.getAttribute("data-value"));
+  let data = chartData.data;
+  let yAxisLabel = chartData.y_axis_label;
 
   /*
    * X SCALE CALCULATION
@@ -86,7 +34,7 @@ function paintBarChart() {
     .scaleBand()
     .domain(
       data.map(function (d) {
-        return d.week_number;
+        return d.x;
       })
     )
     .range([marginLeft, width - marginRight])
@@ -97,7 +45,7 @@ function paintBarChart() {
    */
   const y = d3
     .scaleLinear()
-    .domain([0, d3.max(data, (d) => d.line_count)])
+    .domain([0, d3.max(data, (d) => d.y)])
     .range([height - marginBottom, marginTop]);
 
   /*
@@ -157,7 +105,7 @@ function paintBarChart() {
       .attr("font-size", "24")
       .attr("fill", "currentColor")
       .attr("text-anchor", "start")
-      .text("↑ Line Count")
+      .text(yAxisLabel)
   );
 
   /*
@@ -170,7 +118,7 @@ function paintBarChart() {
     .selectAll("rect")
     .data(data)
     .join("rect")
-    .attr("x", (d) => x(d.week_number))
+    .attr("x", (d) => x(d.x))
     .attr("y", (d) => {
       return y(0);
     })
@@ -190,11 +138,11 @@ function paintBarChart() {
     .ease(d3.easeBackOut)
     .duration(800)
     .attr("y", function (d) {
-      return y(d.line_count);
+      return y(d.y);
     })
     .attr("height", function (d) {
       const zero = y(0);
-      const yValue = y(d.line_count);
+      const yValue = y(d.y);
 
       return zero - yValue;
     })

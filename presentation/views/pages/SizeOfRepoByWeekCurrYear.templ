@@ -6,10 +6,77 @@ import (
 	components "GabeMeister/yer-cli/presentation/views/components"
 )
 
+var WEEK_TO_MONTH = map[int]string{
+	1:  "Jan",
+	2:  "Jan",
+	3:  "Jan",
+	4:  "Jan",
+	5:  "Jan/Feb",
+	6:  "Feb",
+	7:  "Feb",
+	8:  "Feb",
+	9:  "Feb",
+	10: "Mar",
+	11: "Mar",
+	12: "Mar",
+	13: "Mar",
+	14: "Mar/Apr",
+	15: "Apr",
+	16: "Apr",
+	17: "Apr",
+	18: "Apr",
+	19: "May",
+	20: "May",
+	21: "May",
+	22: "May",
+	23: "May/Jun",
+	24: "Jun",
+	25: "Jun",
+	26: "Jun",
+	27: "Jun",
+	28: "Jul",
+	29: "Jul",
+	30: "Jul",
+	31: "Jul",
+	32: "Jul/Aug",
+	33: "Aug",
+	34: "Aug",
+	35: "Aug",
+	36: "Aug",
+	37: "Sep",
+	38: "Sep",
+	39: "Sep",
+	40: "Sep",
+	41: "Sep/Oct",
+	42: "Oct",
+	43: "Oct",
+	44: "Oct",
+	45: "Oct",
+	46: "Nov",
+	47: "Nov",
+	48: "Nov",
+	49: "Nov",
+	50: "Nov/Dec",
+	51: "Dec",
+	52: "Dec",
+}
+
+func getRepoSizeChartData(recap analyzer.Recap) helpers.BarChartData {
+	barChartData := helpers.BarChartData{Data: []helpers.DataPoint{}, XAxisLabel: "Month", YAxisLabel: "↑ Line Count"}
+
+	for _, week := range recap.SizeOfRepoByWeekCurrYear {
+		barChartData.Data = append(barChartData.Data, helpers.DataPoint{
+			X: WEEK_TO_MONTH[week.WeekNumber],
+			Y: week.LineCount,
+		})
+	}
+
+	return barChartData
+}
+
 templ SizeOfRepoByWeekCurrYear(recap analyzer.Recap) {
 	@components.Slide() {
-		<div id="container" data-value={ helpers.Json(recap.SizeOfRepoByWeekCurrYear) }></div>
+		<div id="container" data-value={ helpers.Json(getRepoSizeChartData(recap)) }></div>
 		<script type="module" src="/scripts/bar-chart.js"></script>
-		// @components.NextButton("/")
 	}
 }

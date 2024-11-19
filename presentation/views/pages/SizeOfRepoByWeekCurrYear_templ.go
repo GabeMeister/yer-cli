@@ -14,6 +14,74 @@ import (
 	components "GabeMeister/yer-cli/presentation/views/components"
 )
 
+var WEEK_TO_MONTH = map[int]string{
+	1:  "Jan",
+	2:  "Jan",
+	3:  "Jan",
+	4:  "Jan",
+	5:  "Jan/Feb",
+	6:  "Feb",
+	7:  "Feb",
+	8:  "Feb",
+	9:  "Feb",
+	10: "Mar",
+	11: "Mar",
+	12: "Mar",
+	13: "Mar",
+	14: "Mar/Apr",
+	15: "Apr",
+	16: "Apr",
+	17: "Apr",
+	18: "Apr",
+	19: "May",
+	20: "May",
+	21: "May",
+	22: "May",
+	23: "May/Jun",
+	24: "Jun",
+	25: "Jun",
+	26: "Jun",
+	27: "Jun",
+	28: "Jul",
+	29: "Jul",
+	30: "Jul",
+	31: "Jul",
+	32: "Jul/Aug",
+	33: "Aug",
+	34: "Aug",
+	35: "Aug",
+	36: "Aug",
+	37: "Sep",
+	38: "Sep",
+	39: "Sep",
+	40: "Sep",
+	41: "Sep/Oct",
+	42: "Oct",
+	43: "Oct",
+	44: "Oct",
+	45: "Oct",
+	46: "Nov",
+	47: "Nov",
+	48: "Nov",
+	49: "Nov",
+	50: "Nov/Dec",
+	51: "Dec",
+	52: "Dec",
+}
+
+func getRepoSizeChartData(recap analyzer.Recap) helpers.BarChartData {
+	barChartData := helpers.BarChartData{Data: []helpers.DataPoint{}, XAxisLabel: "Month", YAxisLabel: "↑ Line Count"}
+
+	for _, week := range recap.SizeOfRepoByWeekCurrYear {
+		barChartData.Data = append(barChartData.Data, helpers.DataPoint{
+			X: WEEK_TO_MONTH[week.WeekNumber],
+			Y: week.LineCount,
+		})
+	}
+
+	return barChartData
+}
+
 func SizeOfRepoByWeekCurrYear(recap analyzer.Recap) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
@@ -52,15 +120,15 @@ func SizeOfRepoByWeekCurrYear(recap analyzer.Recap) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var3 string
-			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(helpers.Json(recap.SizeOfRepoByWeekCurrYear))
+			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(helpers.Json(getRepoSizeChartData(recap)))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/SizeOfRepoByWeekCurrYear.templ`, Line: 11, Col: 79}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/SizeOfRepoByWeekCurrYear.templ`, Line: 79, Col: 76}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></div><script type=\"module\" src=\"/scripts/bar-chart.js\"></script> ")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></div><script type=\"module\" src=\"/scripts/bar-chart.js\"></script>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
