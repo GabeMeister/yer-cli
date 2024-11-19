@@ -18,7 +18,6 @@ import (
 
 func getCodeInsertionsChartData(recap analyzer.Recap) helpers.BarChartData {
 	barChartData := helpers.BarChartData{Data: []helpers.DataPoint{}, XAxisLabel: "Engineer", YAxisLabel: fmt.Sprintf("↑ Insertions (%d)", analyzer.CURR_YEAR)}
-	fmt.Print("\n\n", "*** recap.CodeInsertionsByEngineerCurrYear ***", "\n", recap.CodeInsertionsByEngineerCurrYear, "\n\n\n")
 
 	for engineer, insertions := range recap.CodeInsertionsByEngineerCurrYear {
 		barChartData.Data = append(barChartData.Data, helpers.DataPoint{
@@ -74,7 +73,7 @@ func CodeInsertionsByEngineerCurrYear(recap analyzer.Recap) templ.Component {
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(helpers.Json(getCodeInsertionsChartData(recap)))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/CodeInsertionsByEngineerCurrYear.templ`, Line: 31, Col: 82}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/CodeInsertionsByEngineerCurrYear.templ`, Line: 30, Col: 82}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
