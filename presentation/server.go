@@ -518,6 +518,23 @@ func RunLocalServer() {
 		)
 	})
 
+	e.GET("/engineer-commit-counts-all-time", func(c echo.Context) error {
+		if !utils.HasRepoBeenAnalyzed() {
+			return renderRepoNotFound(c)
+		}
+
+		component := presentation_views_pages.EngineerCommitCountsAllTime(recap)
+		content := render(RenderParams{
+			c:         c,
+			component: component,
+		})
+
+		return c.HTML(
+			http.StatusOK,
+			content,
+		)
+	})
+
 	/*
 	 * RESOURCES
 	 */
