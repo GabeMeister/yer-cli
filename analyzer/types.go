@@ -98,8 +98,7 @@ type Recap struct {
 	MostSingleDayCommitsByEngineerCurrYear MostSingleDayCommitsByEngineer `json:"most_single_day_commits_by_engineer_curr_year"`
 	DirectPushesOnMasterByEngineerCurrYear map[string]int                 `json:"direct_pushes_on_master_by_engineer_curr_year"`
 	MergesToMasterByEngineerCurrYear       map[string]int                 `json:"merges_to_master_by_engineer_curr_year"`
-	CodeInsertionsByEngineerCurrYear       map[string]int                 `json:"code_insertions_by_engineer_curr_year"`
-	CodeDeletionsByEngineerCurrYear        map[string]int                 `json:"code_deletions_by_engineer_curr_year"`
+	FileChangesByEngineerCurrYear          map[string]int                 `json:"file_changes_by_engineer_curr_year"`
 	FileChangeRatioByEngineerCurrYear      map[string]float64             `json:"file_change_ratio_by_engineer_curr_year"`
 	TotalLinesOfCodeInRepoByEngineer       map[string]int                 `json:"total_lines_of_code_in_repo_by_engineer"`
 }

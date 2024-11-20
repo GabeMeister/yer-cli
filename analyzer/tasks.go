@@ -363,6 +363,7 @@ func calculateRecap(config RepoConfig) {
 	mergesToMasterByEngineerCurrYear := GetMergesToMasterByEngineerCurrYear()
 	mostMergesInOneDayCurrYear := GetMostMergesInOneDayCurrYear()
 	avgMergesToMasterPerDayCurrYear := GetAvgMergesToMasterPerDayCurrYear()
+	fileChangesByEngineerCurrYear := GetFileChangesByEngineerCurrYear()
 	codeInsertionsByEngineerCurrYear := GetCodeInsertionsByEngineerCurrYear()
 	codeDeletionsByEngineerCurrYear := GetCodeDeletionsByEngineerCurrYear()
 	fileChangeRatioCurrYear := GetFileChangeRatio(codeInsertionsByEngineerCurrYear, codeDeletionsByEngineerCurrYear)
@@ -422,8 +423,7 @@ func calculateRecap(config RepoConfig) {
 		MostSingleDayCommitsByEngineerCurrYear: mostSingleDayCommitsByEngineerCurrYear,
 		DirectPushesOnMasterByEngineerCurrYear: directPushesOnMasterByEngineerCurrYear,
 		MergesToMasterByEngineerCurrYear:       mergesToMasterByEngineerCurrYear,
-		CodeInsertionsByEngineerCurrYear:       codeInsertionsByEngineerCurrYear,
-		CodeDeletionsByEngineerCurrYear:        codeDeletionsByEngineerCurrYear,
+		FileChangesByEngineerCurrYear:          fileChangesByEngineerCurrYear,
 		FileChangeRatioByEngineerCurrYear:      fileChangeRatioCurrYear,
 		TotalLinesOfCodeInRepoByEngineer:       totalLinesOfCodeInRepoByEngineer,
 	}

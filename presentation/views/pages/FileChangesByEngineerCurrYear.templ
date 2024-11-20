@@ -8,13 +8,13 @@ import (
 	"sort"
 )
 
-func getCodeDeletionsChartData(recap analyzer.Recap) helpers.BarChartData {
-	barChartData := helpers.BarChartData{Data: []helpers.DataPoint{}, XAxisLabel: "Engineer", YAxisLabel: fmt.Sprintf("↑ Deletions (%d)", analyzer.CURR_YEAR)}
+func getFileChangesChartData(recap analyzer.Recap) helpers.BarChartData {
+	barChartData := helpers.BarChartData{Data: []helpers.DataPoint{}, XAxisLabel: "Engineer", YAxisLabel: fmt.Sprintf("↑ File Changes (%d)", analyzer.CURR_YEAR)}
 
-	for engineer, deletions := range recap.CodeDeletionsByEngineerCurrYear {
+	for engineer, fileChanges := range recap.FileChangesByEngineerCurrYear {
 		barChartData.Data = append(barChartData.Data, helpers.DataPoint{
 			X: engineer,
-			Y: deletions,
+			Y: fileChanges,
 		})
 	}
 
@@ -25,9 +25,9 @@ func getCodeDeletionsChartData(recap analyzer.Recap) helpers.BarChartData {
 	return barChartData
 }
 
-templ CodeDeletionsByEngineerCurrYear(recap analyzer.Recap) {
+templ FileChangesByEngineerCurrYear(recap analyzer.Recap) {
 	@components.Slide() {
-		<div id="container" data-value={ helpers.Json(getCodeDeletionsChartData(recap)) }></div>
+		<div id="container" data-value={ helpers.Json(getFileChangesChartData(recap)) }></div>
 		<script type="module" src="/scripts/bar-chart.js"></script>
 	}
 }

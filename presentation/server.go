@@ -467,12 +467,12 @@ func RunLocalServer() {
 		)
 	})
 
-	e.GET("/code-insertions-by-engineer-curr-year", func(c echo.Context) error {
+	e.GET("/file-changes-by-engineer-curr-year", func(c echo.Context) error {
 		if !utils.HasRepoBeenAnalyzed() {
 			return renderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.CodeInsertionsByEngineerCurrYear(recap)
+		component := presentation_views_pages.FileChangesByEngineerCurrYear(recap)
 		content := render(RenderParams{
 			c:         c,
 			component: component,
@@ -484,12 +484,12 @@ func RunLocalServer() {
 		)
 	})
 
-	e.GET("/code-deletions-by-engineer-curr-year", func(c echo.Context) error {
+	e.GET("/file-change-ratio-by-engineer-curr-year", func(c echo.Context) error {
 		if !utils.HasRepoBeenAnalyzed() {
 			return renderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.CodeDeletionsByEngineerCurrYear(recap)
+		component := presentation_views_pages.FileChangeRatioByEngineerCurrYear(recap)
 		content := render(RenderParams{
 			c:         c,
 			component: component,
