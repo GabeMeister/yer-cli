@@ -9,7 +9,8 @@ import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
       {"x": "My Label 2", "y": 1625} 
     ],
     "x_axis_label": "Commits",
-    "y_axis_label": "Line Count"
+    "y_axis_label": "Line Count",
+    "x_axis_mod": 1,
 }
  
  */
@@ -26,6 +27,9 @@ function paintBarChart() {
   let chartData = JSON.parse(elem.getAttribute("data-value"));
   let data = chartData.data;
   let yAxisLabel = chartData.y_axis_label;
+  // Sometimes there's too many x values that you have to only show one every 50
+  // or so (like the commit message length histogram)
+  const xAxisMod = !!chartData.x_axis_mod ? chartData.x_axis_mod : 1;
 
   /*
    * X SCALE CALCULATION
@@ -79,7 +83,12 @@ function paintBarChart() {
     .append("g")
     .attr("transform", `translate(0,${height - marginBottom})`)
     .attr("color", "black")
-    .call(d3.axisBottom(x).tickSizeOuter(0))
+    .call(
+      d3
+        .axisBottom(x)
+        .tickSizeOuter(0)
+        .tickFormat((d, i) => (i % xAxisMod === 0 ? d : ""))
+    )
     .selectAll("text")
     .attr("font-size", "16")
     .attr("dx", "2em")
@@ -125,9 +134,9 @@ function paintBarChart() {
     .attr("height", (_d) => {
       return 0;
     })
-    .attr("width", x.bandwidth() - 10)
-    .attr("rx", "5px")
-    .attr("ry", "5px");
+    .attr("width", x.bandwidth() + 1)
+    .attr("rx", "3px")
+    .attr("ry", "3px");
 
   /*
    * BAR ANIMATION

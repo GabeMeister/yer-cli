@@ -323,18 +323,22 @@ func GetCommitMessageHistogramCurrYear() []CommitMessageLengthFrequency {
 		lengthFrequencyMap[length] += 1
 	}
 
-	commitMessageLengths := []CommitMessageLengthFrequency{}
-
-	for length, frequency := range lengthFrequencyMap {
-		commitMessageLengths = append(commitMessageLengths, CommitMessageLengthFrequency{
-			Length:    length,
-			Frequency: frequency,
-		})
+	maxLength := 0
+	for length := range lengthFrequencyMap {
+		if length > maxLength {
+			maxLength = length
+		}
 	}
 
-	sort.Slice(commitMessageLengths, func(i int, j int) bool {
-		return commitMessageLengths[i].Length < commitMessageLengths[j].Length
-	})
+	commitMessageLengths := make([]CommitMessageLengthFrequency, maxLength+1)
+	for i := range maxLength + 1 {
+		commitMessageLengths[i].Length = i
+	}
+
+	for length, frequency := range lengthFrequencyMap {
+		commitMessageLengths[length].Length = length
+		commitMessageLengths[length].Frequency = frequency
+	}
 
 	return commitMessageLengths
 }

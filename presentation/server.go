@@ -586,6 +586,74 @@ func RunLocalServer() {
 		)
 	})
 
+	e.GET("/commits-by-month-curr-year", func(c echo.Context) error {
+		if !utils.HasRepoBeenAnalyzed() {
+			return renderRepoNotFound(c)
+		}
+
+		component := presentation_views_pages.CommitsByMonthCurrYear(recap)
+		content := render(RenderParams{
+			c:         c,
+			component: component,
+		})
+
+		return c.HTML(
+			http.StatusOK,
+			content,
+		)
+	})
+
+	e.GET("/commits-by-weekday-curr-year", func(c echo.Context) error {
+		if !utils.HasRepoBeenAnalyzed() {
+			return renderRepoNotFound(c)
+		}
+
+		component := presentation_views_pages.CommitsByWeekDayCurrYear(recap)
+		content := render(RenderParams{
+			c:         c,
+			component: component,
+		})
+
+		return c.HTML(
+			http.StatusOK,
+			content,
+		)
+	})
+
+	e.GET("/commits-by-hour-curr-year", func(c echo.Context) error {
+		if !utils.HasRepoBeenAnalyzed() {
+			return renderRepoNotFound(c)
+		}
+
+		component := presentation_views_pages.CommitsByHourCurrYear(recap)
+		content := render(RenderParams{
+			c:         c,
+			component: component,
+		})
+
+		return c.HTML(
+			http.StatusOK,
+			content,
+		)
+	})
+
+	e.GET("/commit-message-length-histogram-curr-year", func(c echo.Context) error {
+		if !utils.HasRepoBeenAnalyzed() {
+			return renderRepoNotFound(c)
+		}
+
+		component := presentation_views_pages.CommitMessageLengthHistogramCurrYear(recap)
+		content := render(RenderParams{
+			c:         c,
+			component: component,
+		})
+
+		return c.HTML(
+			http.StatusOK,
+			content,
+		)
+	})
+
 	/*
 	 * RESOURCES
 	 */

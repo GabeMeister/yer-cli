@@ -14,6 +14,7 @@ type BarChartData struct {
 	Data       []DataPoint `json:"data"`
 	XAxisLabel string      `json:"x_axis_label"`
 	YAxisLabel string      `json:"y_axis_label"`
+	XAxisMod   int         `json:"x_axis_mod"`
 }
 
 type BarChartFloatData struct {

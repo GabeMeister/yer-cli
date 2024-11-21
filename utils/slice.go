@@ -50,3 +50,11 @@ func Map[T any](slice []T, mapper func(T) T) (final []T) {
 
 	return final
 }
+
+func Reduce[T any, U any](slice []T, initial U, reducer func(U, T) U) U {
+	accumulator := initial
+	for _, item := range slice {
+		accumulator = reducer(accumulator, item)
+	}
+	return accumulator
+}

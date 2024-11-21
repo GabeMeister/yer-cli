@@ -1,0 +1,33 @@
+package presentation_views_pages
+
+import (
+	"GabeMeister/yer-cli/analyzer"
+	helpers "GabeMeister/yer-cli/presentation/helpers"
+	components "GabeMeister/yer-cli/presentation/views/components"
+	"fmt"
+)
+
+func getCommitMessageLengthHistogramCurrYearChartData(recap analyzer.Recap) helpers.BarChartData {
+	barChartData := helpers.BarChartData{
+		Data:       []helpers.DataPoint{},
+		XAxisLabel: "Engineer",
+		YAxisLabel: fmt.Sprintf("↑ Commit Length (%d)", analyzer.CURR_YEAR),
+		XAxisMod:   25,
+	}
+
+	for _, month := range recap.CommitMessageHistogramCurrYear[0:300] {
+		barChartData.Data = append(barChartData.Data, helpers.DataPoint{
+			X: fmt.Sprintf("%d", month.Length),
+			Y: month.Frequency,
+		})
+	}
+
+	return barChartData
+}
+
+templ CommitMessageLengthHistogramCurrYear(recap analyzer.Recap) {
+	@components.Slide() {
+		<div id="container" data-value={ helpers.Json(getCommitMessageLengthHistogramCurrYearChartData(recap)) }></div>
+		<script type="module" src="/scripts/bar-chart.js"></script>
+	}
+}

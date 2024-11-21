@@ -1,0 +1,28 @@
+package presentation_views_pages
+
+import (
+	"GabeMeister/yer-cli/analyzer"
+	helpers "GabeMeister/yer-cli/presentation/helpers"
+	components "GabeMeister/yer-cli/presentation/views/components"
+	"fmt"
+)
+
+func getCommitsByMonthCurrYearChartData(recap analyzer.Recap) helpers.BarChartData {
+	barChartData := helpers.BarChartData{Data: []helpers.DataPoint{}, XAxisLabel: "Engineer", YAxisLabel: fmt.Sprintf("↑ Commits (%d)", analyzer.CURR_YEAR)}
+
+	for _, month := range recap.CommitsByMonthCurrYear {
+		barChartData.Data = append(barChartData.Data, helpers.DataPoint{
+			X: month.Month,
+			Y: month.Commits,
+		})
+	}
+
+	return barChartData
+}
+
+templ CommitsByMonthCurrYear(recap analyzer.Recap) {
+	@components.Slide() {
+		<div id="container" data-value={ helpers.Json(getCommitsByMonthCurrYearChartData(recap)) }></div>
+		<script type="module" src="/scripts/bar-chart.js"></script>
+	}
+}
