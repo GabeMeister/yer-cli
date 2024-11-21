@@ -4,14 +4,30 @@ import (
 	"GabeMeister/yer-cli/analyzer"
 	components "GabeMeister/yer-cli/presentation/views/components"
 	"fmt"
+	"path/filepath"
+	"strings"
 )
+
+func fileDir(file string) string {
+	dir := filepath.Dir(file)
+
+	dir = strings.ReplaceAll(dir, "/", " / ")
+	dir = dir + " / "
+
+	return dir
+}
 
 templ CommonlyChangedFiles(recap analyzer.Recap) {
 	@components.Slide() {
-		<div class="yes">
-			for _, file := range recap.CommonlyChangedFiles {
-				<div>{ file.File }</div>
-				<div>{ fmt.Sprintf("%d", file.Count) }</div>
+		<div>
+			for idx, file := range recap.CommonlyChangedFiles {
+				<div class="flex items-end mt-10 gap-8">
+					<div class="text-5xl">{ fmt.Sprintf("#%d.", idx + 1) }</div>
+					<div class="flex flex-col">
+						<div class="text-xl text-slate-300">{ fileDir(file.File) }</div>
+						<div class="mt-2 text-5xl text-yellow-300 max-w-screen text-wrap flex items-center">{ filepath.Base(file.File) } <span class="text-lg text-slate-400 italic inline-block ml-5">{ fmt.Sprintf("(%d times)", file.Count) }</span></div>
+					</div>
+				</div>
 			}
 		</div>
 	}

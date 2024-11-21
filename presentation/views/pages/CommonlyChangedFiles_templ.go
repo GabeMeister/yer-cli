@@ -12,7 +12,18 @@ import (
 	"GabeMeister/yer-cli/analyzer"
 	components "GabeMeister/yer-cli/presentation/views/components"
 	"fmt"
+	"path/filepath"
+	"strings"
 )
+
+func fileDir(file string) string {
+	dir := filepath.Dir(file)
+
+	dir = strings.ReplaceAll(dir, "/", " / ")
+	dir = dir + " / "
+
+	return dir
+}
 
 func CommonlyChangedFiles(recap analyzer.Recap) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
@@ -47,38 +58,64 @@ func CommonlyChangedFiles(recap analyzer.Recap) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"yes\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			for _, file := range recap.CommonlyChangedFiles {
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div>")
+			for idx, file := range recap.CommonlyChangedFiles {
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"flex items-end mt-10 gap-8\"><div class=\"text-5xl\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var3 string
-				templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(file.File)
+				templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("#%d.", idx+1))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/CommonlyChangedFiles.templ`, Line: 13, Col: 20}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/CommonlyChangedFiles.templ`, Line: 25, Col: 57}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div>")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"flex flex-col\"><div class=\"text-xl text-slate-300\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var4 string
-				templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%d", file.Count))
+				templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(fileDir(file.File))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/CommonlyChangedFiles.templ`, Line: 14, Col: 40}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/CommonlyChangedFiles.templ`, Line: 27, Col: 62}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div>")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"mt-2 text-5xl text-yellow-300 max-w-screen text-wrap flex items-center\">")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				var templ_7745c5c3_Var5 string
+				templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(filepath.Base(file.File))
+				if templ_7745c5c3_Err != nil {
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/CommonlyChangedFiles.templ`, Line: 28, Col: 116}
+				}
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" <span class=\"text-lg text-slate-400 italic inline-block ml-5\">")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				var templ_7745c5c3_Var6 string
+				templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("(%d times)", file.Count))
+				if templ_7745c5c3_Err != nil {
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/CommonlyChangedFiles.templ`, Line: 28, Col: 220}
+				}
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span></div></div></div>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
