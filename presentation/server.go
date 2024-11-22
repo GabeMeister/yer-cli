@@ -1,6 +1,7 @@
 package presentation
 
 import (
+	"GabeMeister/yer-cli/analyzer"
 	presentation_views_pages "GabeMeister/yer-cli/presentation/views/pages"
 	"GabeMeister/yer-cli/utils"
 	"embed"
@@ -38,6 +39,20 @@ func RunLocalServer() {
 		}
 
 		component := presentation_views_pages.Intro(recap)
+		content := render(RenderParams{
+			c:         c,
+			component: component,
+		})
+
+		return c.HTML(http.StatusOK, content)
+	})
+
+	e.GET("/new-engineers-title", func(c echo.Context) error {
+		if !utils.HasRepoBeenAnalyzed() {
+			return renderRepoNotFound(c)
+		}
+
+		component := presentation_views_pages.Title(fmt.Sprintf("New Engineers (%d)", analyzer.CURR_YEAR))
 		content := render(RenderParams{
 			c:         c,
 			component: component,
