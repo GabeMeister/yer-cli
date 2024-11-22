@@ -2,6 +2,7 @@ package presentation
 
 import (
 	"GabeMeister/yer-cli/analyzer"
+	presentation_helpers "GabeMeister/yer-cli/presentation/helpers"
 	presentation_views_pages "GabeMeister/yer-cli/presentation/views/pages"
 	"GabeMeister/yer-cli/utils"
 	"embed"
@@ -55,11 +56,49 @@ func RunLocalServer() {
 		page := c.Param("page")
 
 		pageToTitleMap := map[string]string{
-			"new-engineer-count-curr-year": fmt.Sprintf("New Engineers (%d)", analyzer.CURR_YEAR),
-			"gabe":                         "dog",
+			"new-engineer-count-curr-year":                              fmt.Sprintf("New Engineers (%d)", analyzer.CURR_YEAR),
+			"engineer-count-curr-year":                                  fmt.Sprintf("Engineers who committed (%d)", analyzer.CURR_YEAR),
+			"engineer-count-all-time":                                   "Engineer Count (all time)",
+			"file-count-prev-year":                                      fmt.Sprintf("File Count (%d)", analyzer.PREV_YEAR),
+			"file-count-curr-year":                                      fmt.Sprintf("File Count (%d)", analyzer.CURR_YEAR),
+			"third-largest-file":                                        "",
+			"second-largest-file":                                       "",
+			"largest-file":                                              "",
+			"total-lines-of-code-prev-year":                             "",
+			"total-lines-of-code-curr-year":                             "",
+			"engineer-file-changes-over-time":                           "",
+			"size-of-repo-by-week-curr-year":                            "",
+			"total-lines-of-code-in-repo-by-engineer":                   "",
+			"file-changes-by-engineer-curr-year":                        "",
+			"file-change-ratio-by-engineer-curr-year":                   "",
+			"commonly-changed-files":                                    "",
+			"num-commits-prev-year":                                     "",
+			"num-commits-curr-year":                                     "",
+			"num-commits-all-time":                                      "",
+			"engineer-commits-over-time":                                "",
+			"engineer-commit-counts-curr-year":                          "",
+			"engineer-commit-counts-all-time":                           "",
+			"commits-by-month-curr-year":                                "",
+			"commits-by-weekday-curr-year":                              "",
+			"commits-by-hour-curr-year":                                 "",
+			"most-single-day-commits-by-engineer-curr-year":             "",
+			"most-single-day-commits-by-engineer-curr-year-commit-list": "",
+			"most-insertions-in-single-commit-curr-year":                "",
+			"most-deletions-in-single-commit-curr-year":                 "",
+			"largest-commit-message-curr-year":                          "",
+			"shortest-commit-message-curr-year":                         "",
+			"commit-message-length-histogram-curr-year":                 "",
+			"direct-pushes-on-master-by-engineer-curr-year":             "",
+			"merges-to-master-by-engineer-curr-year":                    "",
+			"most-merges-in-one-day-curr-year":                          "",
+			"avg-merges-per-day-to-master-curr-year":                    "",
 		}
 
-		component := presentation_views_pages.Title(pageToTitleMap[page])
+		nextBtnUrl := presentation_helpers.GetNextButtonLink(fmt.Sprintf("/%s/title", page), recap)
+		component := presentation_views_pages.Title(
+			pageToTitleMap[page],
+			nextBtnUrl,
+		)
 		content := render(RenderParams{
 			c:         c,
 			component: component,
@@ -73,7 +112,7 @@ func RunLocalServer() {
 			return renderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.NewEngineerCountCurrYear(recap.NewEngineerCountCurrYear)
+		component := presentation_views_pages.NewEngineerCountCurrYear(recap)
 		content := render(RenderParams{
 			c:         c,
 			component: component,
@@ -698,7 +737,7 @@ func RunLocalServer() {
 			return renderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.Title("The End")
+		component := presentation_views_pages.Title("The End", "#")
 		content := render(RenderParams{
 			c:         c,
 			component: component,

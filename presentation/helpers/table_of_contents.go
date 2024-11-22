@@ -1,6 +1,7 @@
 package presentation_helpers
 
 import (
+	"GabeMeister/yer-cli/analyzer"
 	"GabeMeister/yer-cli/utils"
 	"slices"
 )
@@ -109,4 +110,26 @@ func GetSingleYearRepoTableOfContents() []string {
 
 		return !slices.Contains(pagesRequiringMultipleYears, s)
 	})
+}
+
+func GetNextButtonLink(currUrl string, recap analyzer.Recap) string {
+	currPageIdx := utils.FindIndex(TABLE_OF_CONTENTS, func(page string) bool {
+		return page == currUrl
+	})
+
+	if recap.IsMultiYearRepo {
+		tableOfContents := GetTableOfContents()
+		return tableOfContents[getNextIdx(currPageIdx, len(tableOfContents))]
+	} else {
+		tableOfContents := GetSingleYearRepoTableOfContents()
+		return tableOfContents[getNextIdx(currPageIdx, len(tableOfContents))]
+	}
+}
+
+func getNextIdx(idx int, length int) int {
+	if idx+1 >= length {
+		return length
+	} else {
+		return idx + 1
+	}
 }

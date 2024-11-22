@@ -10,6 +10,7 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import (
 	"GabeMeister/yer-cli/analyzer"
+	helpers "GabeMeister/yer-cli/presentation/helpers"
 	components "GabeMeister/yer-cli/presentation/views/components"
 	"GabeMeister/yer-cli/utils"
 )
@@ -51,7 +52,7 @@ func Intro(recap analyzer.Recap) templ.Component {
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(recap.Name)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/Intro.templ`, Line: 20, Col: 62}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/Intro.templ`, Line: 21, Col: 62}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -64,7 +65,7 @@ func Intro(recap analyzer.Recap) templ.Component {
 		var templ_7745c5c3_Var3 string
 		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(formatRecapDate(recap.DateAnalyzed))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/Intro.templ`, Line: 21, Col: 84}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/Intro.templ`, Line: 22, Col: 84}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
@@ -74,7 +75,7 @@ func Intro(recap analyzer.Recap) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = components.NextButton("/third-largest-file").Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = components.NextButton(helpers.GetNextButtonLink("/", recap)).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

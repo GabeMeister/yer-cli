@@ -1,7 +1,18 @@
 package presentation_views_pages 
 
-import "fmt"
+import (
+	"GabeMeister/yer-cli/analyzer"
+	helpers "GabeMeister/yer-cli/presentation/helpers"
+	components "GabeMeister/yer-cli/presentation/views/components"
+	"fmt"
+)
 
-templ NewEngineerCountCurrYear(count int) {
-	<div>New engineer count curr year: { fmt.Sprintf("%d", count) }</div>
+templ NewEngineerCountCurrYear(recap analyzer.Recap) {
+	@components.Slide() {
+		<div class="flex flex-col items-center">
+			<div class="mt-2 text-9xl font-bold text-yellow-300 max-w-screen text-wrap flex items-center">{ fmt.Sprintf("%d", recap.NewEngineerCountCurrYear) }</div>
+			<div class="mt-12"></div>
+			@components.NextButton(helpers.GetNextButtonLink("/new-engineer-count-curr-year", recap))
+		</div>
+	}
 }
