@@ -9,6 +9,13 @@ import (
 	"time"
 )
 
+func GetIsMultiYearRepo() bool {
+	commits := getGitCommits()
+	firstCommit := commits[0]
+
+	return utils.GetYearFromDateStr(firstCommit.Date) < CURR_YEAR
+}
+
 func GetNumCommitsAllTime() int {
 	commits := getGitCommits()
 	return len(commits)

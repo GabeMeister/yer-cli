@@ -47,12 +47,19 @@ func RunLocalServer() {
 		return c.HTML(http.StatusOK, content)
 	})
 
-	e.GET("/new-engineers-title", func(c echo.Context) error {
+	e.GET("/:page/title", func(c echo.Context) error {
 		if !utils.HasRepoBeenAnalyzed() {
 			return renderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.Title(fmt.Sprintf("New Engineers (%d)", analyzer.CURR_YEAR))
+		page := c.Param("page")
+
+		pageToTitleMap := map[string]string{
+			"new-engineer-count-curr-year": fmt.Sprintf("New Engineers (%d)", analyzer.CURR_YEAR),
+			"gabe":                         "dog",
+		}
+
+		component := presentation_views_pages.Title(pageToTitleMap[page])
 		content := render(RenderParams{
 			c:         c,
 			component: component,
@@ -684,6 +691,20 @@ func RunLocalServer() {
 			http.StatusOK,
 			content,
 		)
+	})
+
+	e.GET("/end", func(c echo.Context) error {
+		if !utils.HasRepoBeenAnalyzed() {
+			return renderRepoNotFound(c)
+		}
+
+		component := presentation_views_pages.Title("The End")
+		content := render(RenderParams{
+			c:         c,
+			component: component,
+		})
+
+		return c.HTML(http.StatusOK, content)
 	})
 
 	/*

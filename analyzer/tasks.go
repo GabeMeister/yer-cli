@@ -339,6 +339,7 @@ func calculateRecap(config RepoConfig) {
 	s.Suffix = " Calculating repo stats..."
 	s.Start()
 
+	isMultiYearRepo := GetIsMultiYearRepo()
 	numCommitsAllTime := GetNumCommitsAllTime()
 	numCommitsPrevYear := GetNumCommitsPrevYear()
 	numCommitsCurrYear := GetNumCommitsCurrYear()
@@ -382,8 +383,9 @@ func calculateRecap(config RepoConfig) {
 
 	repoRecap := Recap{
 		// Metadata
-		Name:         config.Name,
-		DateAnalyzed: isoDateString,
+		Name:            config.Name,
+		DateAnalyzed:    isoDateString,
+		IsMultiYearRepo: isMultiYearRepo,
 
 		// Commits
 		NumCommitsAllTime:               numCommitsAllTime,

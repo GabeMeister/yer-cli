@@ -57,8 +57,9 @@ type MostSingleDayCommitsByEngineer struct {
 }
 
 type Recap struct {
-	Name         string `json:"name"`
-	DateAnalyzed string `json:"date_analyzed"`
+	Name            string `json:"name"`
+	DateAnalyzed    string `json:"date_analyzed"`
+	IsMultiYearRepo bool   `json:"is_multi_year_repo"`
 
 	// Commits
 	NumCommitsAllTime               int                            `json:"num_commits_all_time"`
