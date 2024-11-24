@@ -28,6 +28,6 @@ func getTotalLinesOfCodeInRepoByEngineerChartData(recap analyzer.Recap) helpers.
 templ TotalLinesOfCodeInRepoByEngineer(recap analyzer.Recap) {
 	@components.Slide() {
 		<div id="container" data-value={ helpers.Json(getTotalLinesOfCodeInRepoByEngineerChartData(recap)) }></div>
-		<script type="module" src="/scripts/bar-chart.js"></script>
+		@components.NextButton(helpers.GetNextButtonLink("/total-lines-of-code-in-repo-by-engineer", recap))
 	}
 }

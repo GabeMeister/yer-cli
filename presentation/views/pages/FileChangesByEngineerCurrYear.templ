@@ -28,6 +28,5 @@ func getFileChangesChartData(recap analyzer.Recap) helpers.BarChartData {
 templ FileChangesByEngineerCurrYear(recap analyzer.Recap) {
 	@components.Slide() {
 		<div id="container" data-value={ helpers.Json(getFileChangesChartData(recap)) }></div>
-		<script type="module" src="/scripts/bar-chart.js"></script>
 	}
 }

@@ -38,8 +38,8 @@ func largestLineCount(recap analyzer.Recap) string {
 templ LargestFile(recap analyzer.Recap) {
 	@components.Slide() {
 		<div class="text-xl max-w-screen text-wrap">{ largestFilePath(recap) }</div>
-		<div class="mt-4 text-5xl text-yellow-300 max-w-screen text-wrap">{ largestFileName(recap) }</div>
+		<div class="mt-4 text-5xl text-yellow-300 font-bold max-w-screen text-wrap">{ largestFileName(recap) }</div>
 		<div class="italic mt-4 text-xl">({ largestLineCount(recap) } lines)</div>
-		@components.NextButton("/")
+		@components.NextButton(helpers.GetNextButtonLink("/largest-file", recap))
 	}
 }

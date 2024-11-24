@@ -11,8 +11,10 @@ templ StandardLayout() {
 			<link rel="preconnect" href="https://fonts.googleapis.com"/>
 			<link rel="preconnect" href="https://fonts.gstatic.com"/>
 			<link href="https://fonts.googleapis.com/css2?family=Bitter&family=Lato&display=swap" rel="stylesheet"/>
-			<script src="/scripts/htmx.org@1.9.12.min.js"></script>
-			<script src="https://kit.fontawesome.com/e00224d8d7.js" crossorigin="anonymous"></script>
+			<script defer src="/scripts/htmx.org@1.9.12.min.js"></script>
+			<script defer src="https://kit.fontawesome.com/e00224d8d7.js" crossorigin="anonymous"></script>
+			// Custom Scripts
+			<script defer type="module" src="/scripts/init.js"></script>
 		</head>
 		<body class="bg-gray-800 text-white min-h-screen">
 			{ children... }

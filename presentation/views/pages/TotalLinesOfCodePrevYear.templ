@@ -2,13 +2,14 @@ package presentation_views_pages
 
 import (
 	"GabeMeister/yer-cli/analyzer"
+	helpers "GabeMeister/yer-cli/presentation/helpers"
 	components "GabeMeister/yer-cli/presentation/views/components"
-	"fmt"
 )
 
 templ TotalLinesOfCodePrevYear(recap analyzer.Recap) {
 	@components.Slide() {
 		@components.BigNumber(recap.TotalLinesOfCodePrevYear)
-		<div class="mt-6">Total Lines of Code in { fmt.Sprintf("%d", analyzer.PREV_YEAR) }</div>
+		<div class="mt-12"></div>
+		@components.NextButton(helpers.GetNextButtonLink("/total-lines-of-code-prev-year", recap))
 	}
 }

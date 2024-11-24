@@ -15,15 +15,15 @@ import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
  
  */
 
-const width = 1400;
+const width = 1200;
 const height = 700;
 const marginTop = 80;
 const marginRight = 30;
 const marginBottom = 100;
 const marginLeft = 100;
 
-function paintBarChart() {
-  const elem = document.querySelector("#container");
+export function paintBarChart() {
+  let elem = document.querySelector("#container");
   let chartData = JSON.parse(elem.getAttribute("data-value"));
   let data = chartData.data;
   let yAxisLabel = chartData.y_axis_label;
@@ -159,5 +159,3 @@ function paintBarChart() {
       return i * 15;
     });
 }
-
-paintBarChart();

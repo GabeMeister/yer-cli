@@ -28,6 +28,5 @@ func getCommitMessageLengthHistogramCurrYearChartData(recap analyzer.Recap) help
 templ CommitMessageLengthHistogramCurrYear(recap analyzer.Recap) {
 	@components.Slide() {
 		<div id="container" data-value={ helpers.Json(getCommitMessageLengthHistogramCurrYearChartData(recap)) }></div>
-		<script type="module" src="/scripts/bar-chart.js"></script>
 	}
 }

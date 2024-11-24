@@ -7,7 +7,6 @@ import (
 
 templ EngineerCommitsOverTimeCurrYear(commitsOverTime []analyzer.TotalCommitCount) {
 	<div>
-		<div id="container" data-value={ presentation_helpers.Json(commitsOverTime) } class="p-12"></div>
-		<script type="module" src="/scripts/racing-bar-chart.js"></script>
+		<div id="bar-chart-container" data-value={ presentation_helpers.Json(commitsOverTime) } class="p-12"></div>
 	</div>
 }

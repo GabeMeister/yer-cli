@@ -77,6 +77,6 @@ func getRepoSizeChartData(recap analyzer.Recap) helpers.BarChartData {
 templ SizeOfRepoByWeekCurrYear(recap analyzer.Recap) {
 	@components.Slide() {
 		<div id="container" data-value={ helpers.Json(getRepoSizeChartData(recap)) }></div>
-		<script type="module" src="/scripts/bar-chart.js"></script>
+		@components.NextButton(helpers.GetNextButtonLink("/size-of-repo-by-week-curr-year", recap))
 	}
 }

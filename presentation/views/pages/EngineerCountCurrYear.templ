@@ -1,10 +1,15 @@
 package presentation_views_pages
 
-import components "GabeMeister/yer-cli/presentation/views/components"
+import (
+	"GabeMeister/yer-cli/analyzer"
+	helpers "GabeMeister/yer-cli/presentation/helpers"
+	components "GabeMeister/yer-cli/presentation/views/components"
+)
 
-templ EngineerCountCurrYear(count int) {
+templ EngineerCountCurrYear(recap analyzer.Recap) {
 	@components.Slide() {
-		@components.BigNumber(count)
-		<div class="text-xl">Engineers who committed this year</div>
+		@components.BigNumber(recap.EngineerCountCurrYear)
+		<div class="mt-12"></div>
+		@components.NextButton(helpers.GetNextButtonLink("/engineer-count-curr-year", recap))
 	}
 }

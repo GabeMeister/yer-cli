@@ -36,8 +36,8 @@ func secondLargestLineCount(recap analyzer.Recap) string {
 templ SecondLargestFile(recap analyzer.Recap) {
 	@components.Slide() {
 		<div class="text-xl max-w-screen text-wrap">{ secondLargestFilePath(recap) }</div>
-		<div class="mt-4 text-5xl text-yellow-300 max-w-screen text-wrap">{ secondLargestFileName(recap) }</div>
+		<div class="mt-4 text-5xl text-yellow-300 font-bold max-w-screen text-wrap">{ secondLargestFileName(recap) }</div>
 		<div class="italic mt-4 text-xl">({ secondLargestLineCount(recap) } lines)</div>
-		@components.NextButton("/largest-file")
+		@components.NextButton(helpers.GetNextButtonLink("/second-largest-file", recap))
 	}
 }

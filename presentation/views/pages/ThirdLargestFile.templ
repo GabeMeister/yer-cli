@@ -38,8 +38,8 @@ func thirdLargestLineCount(recap analyzer.Recap) string {
 templ ThirdLargestFile(recap analyzer.Recap) {
 	@components.Slide() {
 		<div class="text-xl max-w-screen text-wrap">{ thirdLargestFilePath(recap) }</div>
-		<div class="mt-4 text-5xl text-yellow-300 max-w-screen text-wrap">{ thirdLargestFileName(recap) }</div>
+		<div class="mt-4 text-5xl text-yellow-300 font-bold max-w-screen text-wrap">{ thirdLargestFileName(recap) }</div>
 		<div class="italic mt-4 text-xl">({ thirdLargestLineCount(recap) } lines)</div>
-		@components.NextButton("/second-largest-file")
+		@components.NextButton(helpers.GetNextButtonLink("/third-largest-file", recap))
 	}
 }

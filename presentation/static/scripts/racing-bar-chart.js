@@ -10,12 +10,12 @@ function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-async function paintRacingBarChart() {
+export async function paintRacingBarChart() {
   const elem = document.querySelector("#container");
   const commitsOverTime = JSON.parse(elem.getAttribute("data-value"));
 
   // Declare the chart dimensions and margins.
-  const width = 600;
+  const width = 1000;
 
   // Number of bars
   const n = 12;
@@ -30,7 +30,7 @@ async function paintRacingBarChart() {
 
   // Height of the bar
   const barSize = 40;
-  const margin = { top: 16, right: 6, bottom: 6, left: 100 };
+  const margin = { top: 16, right: 6, bottom: 6, left: 125 };
 
   const height = margin.top + barSize * n + margin.bottom;
 
@@ -327,7 +327,20 @@ async function paintRacingBarChart() {
   const svg = d3
     .select("#container")
     .append("svg")
-    .attr("viewBox", [0, 0, width, height]);
+    .attr("width", width)
+    .attr("height", height);
+
+  svg
+    .append("g")
+    .attr("id", "background")
+    .append("rect")
+    .attr("fill", "#1F2937")
+    .attr("rx", "5px")
+    .attr("ry", "5px")
+    .attr("x", 0)
+    .attr("y", 0)
+    .attr("height", "100%")
+    .attr("width", "100%");
 
   const updateBars = bars(svg);
   const updateAxis = axis(svg);
@@ -346,9 +359,4 @@ async function paintRacingBarChart() {
 
     await delay(LOOP_DELAY_IN_MS);
   }
-
-  await delay(500);
-  document.body.style.backgroundColor = "#ffebb3";
 }
-
-paintRacingBarChart();

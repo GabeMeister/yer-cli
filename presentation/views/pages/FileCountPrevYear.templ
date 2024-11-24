@@ -2,13 +2,14 @@ package presentation_views_pages
 
 import (
 	"GabeMeister/yer-cli/analyzer"
+	helpers "GabeMeister/yer-cli/presentation/helpers"
 	components "GabeMeister/yer-cli/presentation/views/components"
-	"fmt"
 )
 
 templ FileCountPrevYear(recap analyzer.Recap) {
 	@components.Slide() {
 		@components.BigNumber(recap.FileCountPrevYear)
-		<div class="text-xl mt-4">Files at the end of { fmt.Sprintf("%d", analyzer.PREV_YEAR) }</div>
+		<div class="mt-12"></div>
+		@components.NextButton(helpers.GetNextButtonLink("/file-count-prev-year", recap))
 	}
 }

@@ -13,13 +13,4 @@ templ NextButton(href string) {
 		<span>Next</span>
 		<i class="ml-1 fa-solid fa-arrow-right"></i>
 	</button>
-	<script>
-		window.addEventListener('DOMContentLoaded', function() {
-			window.addEventListener('keydown', evt => {
-			  if (evt.key === "ArrowLeft") {
-  		  	history.back();
-  			}
-			});
-		});
-	</script>
 }

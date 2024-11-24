@@ -28,6 +28,5 @@ func getFileChangeRatioChartData(recap analyzer.Recap) helpers.BarChartFloatData
 templ FileChangeRatioByEngineerCurrYear(recap analyzer.Recap) {
 	@components.Slide() {
 		<div id="container" data-value={ helpers.Json(getFileChangeRatioChartData(recap)) }></div>
-		<script type="module" src="/scripts/bar-chart.js"></script>
 	}
 }
