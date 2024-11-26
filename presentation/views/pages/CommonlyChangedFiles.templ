@@ -2,6 +2,7 @@ package presentation_views_pages
 
 import (
 	"GabeMeister/yer-cli/analyzer"
+	helpers "GabeMeister/yer-cli/presentation/helpers"
 	components "GabeMeister/yer-cli/presentation/views/components"
 	"fmt"
 	"path/filepath"
@@ -30,5 +31,7 @@ templ CommonlyChangedFiles(recap analyzer.Recap) {
 				</div>
 			}
 		</div>
+		<div class="mb-12"></div>
+		@components.NextButton(helpers.GetNextButtonLink("/commonly-changed-files", recap))
 	}
 }

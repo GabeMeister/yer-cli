@@ -11,11 +11,11 @@ function delay(ms) {
 }
 
 export async function paintRacingBarChart() {
-  const elem = document.querySelector("#container");
+  const elem = document.querySelector("#racing-bar-chart-container");
   const commitsOverTime = JSON.parse(elem.getAttribute("data-value"));
 
   // Declare the chart dimensions and margins.
-  const width = 1000;
+  const width = 1200;
 
   // Number of bars
   const n = 12;
@@ -29,7 +29,7 @@ export async function paintRacingBarChart() {
   const duration = 250;
 
   // Height of the bar
-  const barSize = 40;
+  const barSize = 50;
   const margin = { top: 16, right: 6, bottom: 6, left: 125 };
 
   const height = margin.top + barSize * n + margin.bottom;
@@ -325,7 +325,7 @@ export async function paintRacingBarChart() {
   }
 
   const svg = d3
-    .select("#container")
+    .select("#racing-bar-chart-container")
     .append("svg")
     .attr("width", width)
     .attr("height", height);

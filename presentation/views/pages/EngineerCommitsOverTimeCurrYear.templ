@@ -2,11 +2,14 @@ package presentation_views_pages
 
 import (
 	"GabeMeister/yer-cli/analyzer"
-	presentation_helpers "GabeMeister/yer-cli/presentation/helpers"
+	helpers "GabeMeister/yer-cli/presentation/helpers"
+	components "GabeMeister/yer-cli/presentation/views/components"
 )
 
-templ EngineerCommitsOverTimeCurrYear(commitsOverTime []analyzer.TotalCommitCount) {
-	<div>
-		<div id="bar-chart-container" data-value={ presentation_helpers.Json(commitsOverTime) } class="p-12"></div>
-	</div>
+templ EngineerCommitsOverTimeCurrYear(recap analyzer.Recap) {
+	@components.Slide() {
+		<div id="racing-bar-chart-container" data-value={ helpers.Json(recap.EngineerFileChangesOverTimeCurrYear) } class="p-12"></div>
+		<div class="mt-12"></div>
+		@components.NextButton(helpers.GetNextButtonLink("/engineer-file-changes-over-time-curr-year", recap))
+	}
 }

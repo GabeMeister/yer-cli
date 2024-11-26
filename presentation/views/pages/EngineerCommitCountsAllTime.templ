@@ -28,5 +28,7 @@ func getEngineerCommitCountsAllTimeChartData(recap analyzer.Recap) helpers.BarCh
 templ EngineerCommitCountsAllTime(recap analyzer.Recap) {
 	@components.Slide() {
 		<div id="container" data-value={ helpers.Json(getEngineerCommitCountsAllTimeChartData(recap)) }></div>
+		<div class="mt-12"></div>
+		@components.NextButton(helpers.GetNextButtonLink("/engineer-commit-counts-all-time", recap))
 	}
 }

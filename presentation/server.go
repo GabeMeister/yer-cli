@@ -75,7 +75,7 @@ func RunLocalServer() {
 			"num-commits-curr-year":                         fmt.Sprintf("Number of Commits (%d)", analyzer.CURR_YEAR),
 			"num-commits-all-time":                          "Number of Commits (all time)",
 			"engineer-commits-over-time-curr-year":          fmt.Sprintf("Engineer Commits Over Time (%d)", analyzer.CURR_YEAR),
-			"engineer-file-changes-over-time":               fmt.Sprintf("Engineer File Changes Over Time (%d)", analyzer.CURR_YEAR),
+			"engineer-file-changes-over-time-curr-year":     fmt.Sprintf("Engineer File Changes Over Time (%d)", analyzer.CURR_YEAR),
 			"engineer-commit-counts-curr-year":              fmt.Sprintf("Engineer Commit Counts (%d)", analyzer.CURR_YEAR),
 			"engineer-commit-counts-all-time":               "Engineer Commit Counts (all time)",
 			"commits-by-month-curr-year":                    fmt.Sprintf("Commits by Month (%d)", analyzer.CURR_YEAR),
@@ -104,6 +104,25 @@ func RunLocalServer() {
 		})
 
 		return c.HTML(http.StatusOK, content)
+	})
+
+	e.GET("/shortest-commit-message-curr-year/title", func(c echo.Context) error {
+		if !utils.HasRepoBeenAnalyzed() {
+			return renderRepoNotFound(c)
+		}
+
+		nextBtnUrl := presentation_helpers.GetNextButtonLink("/shortest-commit-message-curr-year/title", recap)
+		component := presentation_views_pages.Title(
+			"Shortest Commit Messages",
+			nextBtnUrl,
+		)
+		content := render(RenderParams{
+			c:         c,
+			component: component,
+		})
+
+		return c.HTML(http.StatusOK, content)
+
 	})
 
 	e.GET("/new-engineer-count-curr-year", func(c echo.Context) error {
@@ -153,7 +172,7 @@ func RunLocalServer() {
 			return renderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.NumCommitsPrevYear(recap.NumCommitsPrevYear)
+		component := presentation_views_pages.NumCommitsPrevYear(recap)
 		content := render(RenderParams{
 			c:         c,
 			component: component,
@@ -170,7 +189,7 @@ func RunLocalServer() {
 			return renderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.NumCommitsCurrYear(recap.NumCommitsCurrYear)
+		component := presentation_views_pages.NumCommitsCurrYear(recap)
 		content := render(RenderParams{
 			c:         c,
 			component: component,
@@ -187,7 +206,7 @@ func RunLocalServer() {
 			return renderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.NumCommitsAllTime(recap.NumCommitsAllTime)
+		component := presentation_views_pages.NumCommitsAllTime(recap)
 		content := render(RenderParams{
 			c:         c,
 			component: component,
@@ -204,7 +223,7 @@ func RunLocalServer() {
 			return renderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.EngineerCommitsOverTimeCurrYear(recap.EngineerCommitsOverTimeCurrYear)
+		component := presentation_views_pages.EngineerCommitsOverTimeCurrYear(recap)
 		content := render(RenderParams{
 			c:         c,
 			component: component,
@@ -216,7 +235,7 @@ func RunLocalServer() {
 		)
 	})
 
-	e.GET("/engineer-file-changes-over-time", func(c echo.Context) error {
+	e.GET("/engineer-file-changes-over-time-curr-year", func(c echo.Context) error {
 		if !utils.HasRepoBeenAnalyzed() {
 			return renderRepoNotFound(c)
 		}

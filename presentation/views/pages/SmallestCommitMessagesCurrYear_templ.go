@@ -10,8 +10,10 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import (
 	"GabeMeister/yer-cli/analyzer"
+	helpers "GabeMeister/yer-cli/presentation/helpers"
 	components "GabeMeister/yer-cli/presentation/views/components"
 	"GabeMeister/yer-cli/utils"
+	"fmt"
 	"slices"
 )
 
@@ -49,14 +51,14 @@ func SmallestCommitMessagesCurrYear(recap analyzer.Recap, index int) templ.Compo
 					}()
 				}
 				ctx = templ.InitializeContext(ctx)
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"text-2xl\">On ")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"text-3xl\">On ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var3 string
 				templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(utils.GetHumanReadableDateStr(recap.SmallestCommitMessagesCurrYear[index-1].Date))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/SmallestCommitMessagesCurrYear.templ`, Line: 13, Col: 113}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/SmallestCommitMessagesCurrYear.templ`, Line: 16, Col: 92}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 				if templ_7745c5c3_Err != nil {
@@ -69,7 +71,7 @@ func SmallestCommitMessagesCurrYear(recap analyzer.Recap, index int) templ.Compo
 				var templ_7745c5c3_Var4 string
 				templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(recap.SmallestCommitMessagesCurrYear[index-1].Author)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/SmallestCommitMessagesCurrYear.templ`, Line: 13, Col: 213}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/SmallestCommitMessagesCurrYear.templ`, Line: 16, Col: 192}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 				if templ_7745c5c3_Err != nil {
@@ -82,13 +84,17 @@ func SmallestCommitMessagesCurrYear(recap analyzer.Recap, index int) templ.Compo
 				var templ_7745c5c3_Var5 string
 				templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(getCommitMsg(recap.SmallestCommitMessagesCurrYear[index-1].Message))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/SmallestCommitMessagesCurrYear.templ`, Line: 14, Col: 145}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/SmallestCommitMessagesCurrYear.templ`, Line: 19, Col: 76}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"</div>")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"</div><div class=\"mt-12\"></div>")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				templ_7745c5c3_Err = components.NextButton(helpers.GetNextButtonLink(fmt.Sprintf("/shortest-commit-message-curr-year/%d", index), recap)).Render(ctx, templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}

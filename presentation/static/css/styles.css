@@ -628,6 +628,10 @@ video {
   margin-bottom: 1.5rem;
 }
 
+.mb-12 {
+  margin-bottom: 3rem;
+}
+
 .ml-1 {
   margin-left: 0.25rem;
 }

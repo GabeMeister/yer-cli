@@ -28,5 +28,7 @@ func getEngineerCommitCountsChartData(recap analyzer.Recap) helpers.BarChartData
 templ EngineerCommitCountsCurrYear(recap analyzer.Recap) {
 	@components.Slide() {
 		<div id="container" data-value={ helpers.Json(getEngineerCommitCountsChartData(recap)) }></div>
+		<div class="mt-12"></div>
+		@components.NextButton(helpers.GetNextButtonLink("/engineer-commit-counts-curr-year", recap))
 	}
 }

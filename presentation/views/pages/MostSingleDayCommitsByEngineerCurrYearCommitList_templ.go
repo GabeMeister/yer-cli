@@ -10,6 +10,7 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import (
 	"GabeMeister/yer-cli/analyzer"
+	helpers "GabeMeister/yer-cli/presentation/helpers"
 	components "GabeMeister/yer-cli/presentation/views/components"
 )
 
@@ -58,7 +59,7 @@ func MostSingleDayCommitsByEngineerCurrYearCommitList(recap analyzer.Recap) temp
 				var templ_7745c5c3_Var3 string
 				templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(commit)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/MostSingleDayCommitsByEngineerCurrYearCommitList.templ`, Line: 12, Col: 50}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/MostSingleDayCommitsByEngineerCurrYearCommitList.templ`, Line: 13, Col: 50}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 				if templ_7745c5c3_Err != nil {
@@ -69,7 +70,11 @@ func MostSingleDayCommitsByEngineerCurrYearCommitList(recap analyzer.Recap) temp
 					return templ_7745c5c3_Err
 				}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</ul>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</ul><div class=\"mt-12\"></div>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = components.NextButton(helpers.GetNextButtonLink("/most-single-day-commits-by-engineer-curr-year-commit-list", recap)).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

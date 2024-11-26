@@ -23,5 +23,7 @@ func getCommitsByMonthCurrYearChartData(recap analyzer.Recap) helpers.BarChartDa
 templ CommitsByMonthCurrYear(recap analyzer.Recap) {
 	@components.Slide() {
 		<div id="container" data-value={ helpers.Json(getCommitsByMonthCurrYearChartData(recap)) }></div>
+		<div class="mt-12"></div>
+		@components.NextButton(helpers.GetNextButtonLink("/commits-by-month-curr-year", recap))
 	}
 }

@@ -3,7 +3,9 @@ import { paintRacingBarChart } from "./racing-bar-chart.js";
 
 window.htmx.onLoad((elem) => {
   const barChartElem = document.getElementById("container");
-  const racingBarChartElem = document.getElementById("bar-chart-container");
+  const racingBarChartElem = document.getElementById(
+    "racing-bar-chart-container"
+  );
 
   if (barChartElem !== null) {
     paintBarChart();

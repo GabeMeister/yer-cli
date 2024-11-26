@@ -23,5 +23,7 @@ func getCommitsByHourCurrYearChartData(recap analyzer.Recap) helpers.BarChartDat
 templ CommitsByHourCurrYear(recap analyzer.Recap) {
 	@components.Slide() {
 		<div id="container" data-value={ helpers.Json(getCommitsByHourCurrYearChartData(recap)) }></div>
+		<div class="mt-12"></div>
+		@components.NextButton(helpers.GetNextButtonLink("/commits-by-hour-curr-year", recap))
 	}
 }

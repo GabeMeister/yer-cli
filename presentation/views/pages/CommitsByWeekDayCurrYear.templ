@@ -23,5 +23,7 @@ func getCommitsByWeekDayCurrYearChartData(recap analyzer.Recap) helpers.BarChart
 templ CommitsByWeekDayCurrYear(recap analyzer.Recap) {
 	@components.Slide() {
 		<div id="container" data-value={ helpers.Json(getCommitsByWeekDayCurrYearChartData(recap)) }></div>
+		<div class="mt-12"></div>
+		@components.NextButton(helpers.GetNextButtonLink("/commits-by-weekday-curr-year", recap))
 	}
 }
