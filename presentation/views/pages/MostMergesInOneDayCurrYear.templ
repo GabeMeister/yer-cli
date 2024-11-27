@@ -3,6 +3,7 @@ package presentation_views_pages
 
 import (
 	"GabeMeister/yer-cli/analyzer"
+	helpers "GabeMeister/yer-cli/presentation/helpers"
 	components "GabeMeister/yer-cli/presentation/views/components"
 	"GabeMeister/yer-cli/utils"
 )
@@ -11,5 +12,7 @@ templ MostMergesInOneDayCurrYear(recap analyzer.Recap) {
 	@components.Slide() {
 		@components.BigNumber(recap.MostMergesInOneDayCurrYear.Count)
 		<div class="mt-8 text-2xl">merges to master on <span class="font-bold">{ utils.ParseDateStr(recap.MostMergesInOneDayCurrYear.Date, utils.BASIC_DATE_FORMAT, utils.HUMAN_READABLE_DATE_FORMAT) }</span></div>
+		<div class="mt-12"></div>
+		@components.NextButton(helpers.GetNextButtonLink("/most-merges-in-one-day-curr-year", recap))
 	}
 }

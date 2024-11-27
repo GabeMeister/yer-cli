@@ -12,12 +12,11 @@ import (
 	"GabeMeister/yer-cli/analyzer"
 	helpers "GabeMeister/yer-cli/presentation/helpers"
 	components "GabeMeister/yer-cli/presentation/views/components"
-	"fmt"
 	"sort"
 )
 
 func getTotalLinesOfCodeInRepoByEngineerChartData(recap analyzer.Recap) helpers.BarChartData {
-	barChartData := helpers.BarChartData{Data: []helpers.DataPoint{}, XAxisLabel: "Engineer", YAxisLabel: fmt.Sprintf("↑ Lines of Code (%d)", analyzer.CURR_YEAR)}
+	barChartData := helpers.BarChartData{Data: []helpers.DataPoint{}, XAxisLabel: "Engineer", YAxisLabel: "↑ Lines of Code"}
 
 	for engineer, lines := range recap.TotalLinesOfCodeInRepoByEngineer {
 		barChartData.Data = append(barChartData.Data, helpers.DataPoint{
@@ -73,7 +72,7 @@ func TotalLinesOfCodeInRepoByEngineer(recap analyzer.Recap) templ.Component {
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(helpers.Json(getTotalLinesOfCodeInRepoByEngineerChartData(recap)))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/TotalLinesOfCodeInRepoByEngineer.templ`, Line: 30, Col: 100}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/TotalLinesOfCodeInRepoByEngineer.templ`, Line: 29, Col: 100}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {

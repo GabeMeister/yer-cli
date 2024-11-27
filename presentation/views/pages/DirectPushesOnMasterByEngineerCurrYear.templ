@@ -28,5 +28,7 @@ func getDirectPushesOnMasterChartData(recap analyzer.Recap) helpers.BarChartData
 templ DirectPushesOnMasterByEngineerCurrYear(recap analyzer.Recap) {
 	@components.Slide() {
 		<div id="container" data-value={ helpers.Json(getDirectPushesOnMasterChartData(recap)) }></div>
+		<div class="mt-12"></div>
+		@components.NextButton(helpers.GetNextButtonLink("/direct-pushes-on-master-by-engineer-curr-year", recap))
 	}
 }

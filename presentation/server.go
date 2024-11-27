@@ -755,7 +755,7 @@ func RunLocalServer() {
 			return renderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.Title("The End", "#")
+		component := presentation_views_pages.Title("The End", "")
 		content := render(RenderParams{
 			c:         c,
 			component: component,

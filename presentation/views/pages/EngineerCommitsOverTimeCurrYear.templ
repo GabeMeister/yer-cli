@@ -8,7 +8,7 @@ import (
 
 templ EngineerCommitsOverTimeCurrYear(recap analyzer.Recap) {
 	@components.Slide() {
-		<div id="racing-bar-chart-container" data-value={ helpers.Json(recap.EngineerFileChangesOverTimeCurrYear) } class="p-12"></div>
+		<div id="racing-bar-chart-container" data-value={ helpers.Json(recap.EngineerCommitsOverTimeCurrYear) } class="p-12"></div>
 		<div class="mt-12"></div>
 		@components.NextButton(helpers.GetNextButtonLink("/engineer-file-changes-over-time-curr-year", recap))
 	}

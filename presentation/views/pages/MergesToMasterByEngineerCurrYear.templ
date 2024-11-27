@@ -28,5 +28,7 @@ func getMergesToMasterChartData(recap analyzer.Recap) helpers.BarChartData {
 templ MergesToMasterByEngineerCurrYear(recap analyzer.Recap) {
 	@components.Slide() {
 		<div id="container" data-value={ helpers.Json(getMergesToMasterChartData(recap)) }></div>
+		<div class="mt-12"></div>
+		@components.NextButton(helpers.GetNextButtonLink("/merges-to-master-by-engineer-curr-year", recap))
 	}
 }
