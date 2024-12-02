@@ -12,6 +12,7 @@ import (
 	"GabeMeister/yer-cli/analyzer"
 	helpers "GabeMeister/yer-cli/presentation/helpers"
 	components "GabeMeister/yer-cli/presentation/views/components"
+	"GabeMeister/yer-cli/utils"
 	"fmt"
 	"sort"
 )
@@ -21,7 +22,7 @@ func getMergesToMasterChartData(recap analyzer.Recap) helpers.BarChartData {
 
 	for engineer, merges := range recap.MergesToMasterByEngineerCurrYear {
 		barChartData.Data = append(barChartData.Data, helpers.DataPoint{
-			X: engineer,
+			X: helpers.Truncate(engineer),
 			Y: merges,
 		})
 	}
@@ -29,6 +30,8 @@ func getMergesToMasterChartData(recap analyzer.Recap) helpers.BarChartData {
 	sort.Slice(barChartData.Data, func(i int, j int) bool {
 		return barChartData.Data[i].Y > barChartData.Data[j].Y
 	})
+
+	barChartData.Data = utils.TruncateSlice(barChartData.Data, 20)
 
 	return barChartData
 }
@@ -73,7 +76,7 @@ func MergesToMasterByEngineerCurrYear(recap analyzer.Recap) templ.Component {
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(helpers.Json(getMergesToMasterChartData(recap)))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/MergesToMasterByEngineerCurrYear.templ`, Line: 30, Col: 82}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/MergesToMasterByEngineerCurrYear.templ`, Line: 33, Col: 82}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {

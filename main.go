@@ -3,7 +3,7 @@ package main
 import (
 	"GabeMeister/yer-cli/analyzer"
 	"GabeMeister/yer-cli/presentation"
-	presentation_helpers "GabeMeister/yer-cli/presentation/helpers"
+	"GabeMeister/yer-cli/utils"
 	"errors"
 	"flag"
 	"fmt"
@@ -43,8 +43,8 @@ type Gabe struct {
 }
 
 func runTest() {
-	toc := presentation_helpers.GetSingleYearRepoTableOfContents()
-	fmt.Print("\n\n", "*** toc ***", "\n", toc, "\n\n\n")
+	nums := []int{1, 2, 3}
+	fmt.Println(utils.TruncateSlice(nums, 2))
 }
 
 func main() {

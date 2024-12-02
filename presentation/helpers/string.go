@@ -29,3 +29,11 @@ func Json(data any) string {
 func Str(data any) string {
 	return fmt.Sprintf("%s", data)
 }
+
+func Truncate(s string) string {
+	if len(s) > 15 {
+		return fmt.Sprintf("%s...", s[0:15])
+	} else {
+		return s
+	}
+}

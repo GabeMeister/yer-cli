@@ -12,6 +12,7 @@ import (
 	"GabeMeister/yer-cli/analyzer"
 	helpers "GabeMeister/yer-cli/presentation/helpers"
 	components "GabeMeister/yer-cli/presentation/views/components"
+	"GabeMeister/yer-cli/utils"
 	"fmt"
 	"sort"
 )
@@ -21,7 +22,7 @@ func getEngineerCommitCountsChartData(recap analyzer.Recap) helpers.BarChartData
 
 	for engineer, commitCount := range recap.EngineerCommitCountsCurrYear {
 		barChartData.Data = append(barChartData.Data, helpers.DataPoint{
-			X: engineer,
+			X: helpers.Truncate(engineer),
 			Y: commitCount,
 		})
 	}
@@ -29,6 +30,8 @@ func getEngineerCommitCountsChartData(recap analyzer.Recap) helpers.BarChartData
 	sort.Slice(barChartData.Data, func(i int, j int) bool {
 		return barChartData.Data[i].Y > barChartData.Data[j].Y
 	})
+
+	barChartData.Data = utils.TruncateSlice(barChartData.Data, 20)
 
 	return barChartData
 }
@@ -73,7 +76,7 @@ func EngineerCommitCountsCurrYear(recap analyzer.Recap) templ.Component {
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(helpers.Json(getEngineerCommitCountsChartData(recap)))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/EngineerCommitCountsCurrYear.templ`, Line: 30, Col: 88}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/EngineerCommitCountsCurrYear.templ`, Line: 33, Col: 88}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {

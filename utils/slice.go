@@ -58,3 +58,11 @@ func Reduce[T any, U any](slice []T, initial U, reducer func(U, T) U) U {
 	}
 	return accumulator
 }
+
+func TruncateSlice[T any](slice []T, length int) []T {
+	if len(slice) > length {
+		return slice[:length]
+	} else {
+		return slice
+	}
+}

@@ -6,10 +6,11 @@ window.htmx.onLoad((elem) => {
   const racingBarChartElem = document.getElementById(
     "racing-bar-chart-container"
   );
+  const svgInPage = !!document.getElementsByTagName("svg").length;
 
-  if (barChartElem !== null) {
+  if (barChartElem !== null && !svgInPage) {
     paintBarChart();
-  } else if (racingBarChartElem !== null) {
+  } else if (racingBarChartElem !== null && !svgInPage) {
     paintRacingBarChart();
   }
 });

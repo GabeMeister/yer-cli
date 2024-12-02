@@ -4,6 +4,7 @@ import (
 	"GabeMeister/yer-cli/analyzer"
 	helpers "GabeMeister/yer-cli/presentation/helpers"
 	components "GabeMeister/yer-cli/presentation/views/components"
+	"GabeMeister/yer-cli/utils"
 	"fmt"
 	"sort"
 )
@@ -13,7 +14,7 @@ func getFileChangeRatioChartData(recap analyzer.Recap) helpers.BarChartFloatData
 
 	for engineer, fileChangeRatio := range recap.FileChangeRatioByEngineerCurrYear {
 		barChartData.Data = append(barChartData.Data, helpers.FloatDataPoint{
-			X: engineer,
+			X: helpers.Truncate(engineer),
 			Y: fileChangeRatio,
 		})
 	}
@@ -21,6 +22,8 @@ func getFileChangeRatioChartData(recap analyzer.Recap) helpers.BarChartFloatData
 	sort.Slice(barChartData.Data, func(i int, j int) bool {
 		return barChartData.Data[i].Y > barChartData.Data[j].Y
 	})
+
+	barChartData.Data = utils.TruncateSlice(barChartData.Data, 20)
 
 	return barChartData
 }
