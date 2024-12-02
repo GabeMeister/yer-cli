@@ -1,0 +1,17 @@
+package presentation_views_components
+
+import "fmt"
+
+templ ButtonLink(href string) {
+	<button
+		hx-get={ href }
+		hx-push-url="true"
+		hx-target="body"
+		type="button"
+		id={ fmt.Sprintf("button-link-%s-%s", href) }
+		hx-trigger="click, keydown[key=='ArrowRight'] from:body"
+		class="cursor-pointer mt-12 text-lg text-blue-100 transition duration-800 bg-gray-600 hover:bg-gray-700 border-2 border-solid border-gray-100 rounded-md px-4 py-1"
+	>
+		{ children... }
+	</button>
+}

@@ -64,7 +64,7 @@ func EngineerCommitsOverTimeCurrYear(recap analyzer.Recap) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = components.NextButton(helpers.GetNextButtonLink("/engineer-file-changes-over-time-curr-year", recap)).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = components.NextButton(helpers.GetNextButtonLink("/engineer-commits-over-time-curr-year", recap)).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
