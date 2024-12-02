@@ -5,17 +5,12 @@ import (
 	helpers "GabeMeister/yer-cli/presentation/helpers"
 	components "GabeMeister/yer-cli/presentation/views/components"
 	"GabeMeister/yer-cli/utils"
-	"strings"
 )
-
-func getCommitMsg(msg string) string {
-	return strings.ReplaceAll(msg, "|||", "\n")
-}
 
 templ LargestCommitMessageCurrYear(recap analyzer.Recap) {
 	@components.Slide() {
 		<div class="my-12 text-5xl">On { utils.GetHumanReadableDateStr(recap.LargestCommitMessageCurrYear.Date) }, <span class="font-bold text-yellow-300">{ recap.LargestCommitMessageCurrYear.Author }</span> committed:</div>
-		<div class="my-12 text-md font-mono w-3/4 overflow-x-scroll"><pre>{ getCommitMsg(recap.LargestCommitMessageCurrYear.Message) }</pre></div>
+		<div class="my-12 text-md font-mono w-3/4 overflow-x-scroll"><pre>{ helpers.GetReadableCommitMessage(recap.LargestCommitMessageCurrYear.Message) }</pre></div>
 		<div class="mt-12"></div>
 		@components.NextButton(helpers.GetNextButtonLink("/largest-commit-message-curr-year", recap))
 		<div class="mt-12"></div>

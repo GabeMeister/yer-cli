@@ -22,7 +22,7 @@ templ MostDeletionsInSingleCommitCurrYear(recap analyzer.Recap) {
 	@components.Slide() {
 		@components.BigNumber(getTotalDeletionsInCommit(recap.MostDeletionsInCommitCurrYear.FileChanges))
 		<div class="mt-8 text-xl">Lines removed by <span class="font-bold">{ recap.MostDeletionsInCommitCurrYear.Author }</span></div>
-		<div class="mt-12 text-2xl font-mono">"{ recap.MostDeletionsInCommitCurrYear.Message }"</div>
+		<pre class="mt-12 text-2xl font-mono">"{ helpers.GetReadableCommitMessage(recap.MostDeletionsInCommitCurrYear.Message) }"</pre>
 		<div class="mt-12"></div>
 		@components.NextButton(helpers.GetNextButtonLink("/most-deletions-in-single-commit-curr-year", recap))
 	}

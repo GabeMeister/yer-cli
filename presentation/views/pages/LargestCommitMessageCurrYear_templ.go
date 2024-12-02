@@ -13,12 +13,7 @@ import (
 	helpers "GabeMeister/yer-cli/presentation/helpers"
 	components "GabeMeister/yer-cli/presentation/views/components"
 	"GabeMeister/yer-cli/utils"
-	"strings"
 )
-
-func getCommitMsg(msg string) string {
-	return strings.ReplaceAll(msg, "|||", "\n")
-}
 
 func LargestCommitMessageCurrYear(recap analyzer.Recap) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
@@ -60,7 +55,7 @@ func LargestCommitMessageCurrYear(recap analyzer.Recap) templ.Component {
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(utils.GetHumanReadableDateStr(recap.LargestCommitMessageCurrYear.Date))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/LargestCommitMessageCurrYear.templ`, Line: 17, Col: 105}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/LargestCommitMessageCurrYear.templ`, Line: 12, Col: 105}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
@@ -73,7 +68,7 @@ func LargestCommitMessageCurrYear(recap analyzer.Recap) templ.Component {
 			var templ_7745c5c3_Var4 string
 			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(recap.LargestCommitMessageCurrYear.Author)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/LargestCommitMessageCurrYear.templ`, Line: 17, Col: 192}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/LargestCommitMessageCurrYear.templ`, Line: 12, Col: 192}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {
@@ -84,9 +79,9 @@ func LargestCommitMessageCurrYear(recap analyzer.Recap) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var5 string
-			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(getCommitMsg(recap.LargestCommitMessageCurrYear.Message))
+			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(helpers.GetReadableCommitMessage(recap.LargestCommitMessageCurrYear.Message))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/LargestCommitMessageCurrYear.templ`, Line: 18, Col: 126}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/LargestCommitMessageCurrYear.templ`, Line: 13, Col: 146}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 			if templ_7745c5c3_Err != nil {

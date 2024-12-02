@@ -21,7 +21,7 @@ templ MostInsertionsInSingleCommitCurrYear(recap analyzer.Recap) {
 	@components.Slide() {
 		@components.BigNumber(getTotalInsertionsInCommit(recap.MostInsertionsInCommitCurrYear.FileChanges))
 		<div class="mt-8 text-xl">Lines added by <span class="font-bold">{ recap.MostInsertionsInCommitCurrYear.Author }</span></div>
-		<div class="mt-12 text-2xl font-mono">"{ recap.MostInsertionsInCommitCurrYear.Message }"</div>
+		<pre class="mt-12 text-2xl font-mono">"{ helpers.GetReadableCommitMessage(recap.MostInsertionsInCommitCurrYear.Message) }"</pre>
 		<div class="mt-12"></div>
 		@components.NextButton(helpers.GetNextButtonLink("/most-insertions-in-single-commit-curr-year", recap))
 	}

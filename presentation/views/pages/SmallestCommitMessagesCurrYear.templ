@@ -16,7 +16,7 @@ templ SmallestCommitMessagesCurrYear(recap analyzer.Recap, index int) {
 				On { utils.GetHumanReadableDateStr(recap.SmallestCommitMessagesCurrYear[index - 1].Date) }, <span class="font-bold text-yellow-300">{ recap.SmallestCommitMessagesCurrYear[index - 1].Author }</span> committed:
 			</div>
 			<div class="mt-12 font-semibold text-yellow-300 text-center text-9xl">
-				"{ getCommitMsg(recap.SmallestCommitMessagesCurrYear[index - 1].Message) }"
+				"{ helpers.GetReadableCommitMessage(recap.SmallestCommitMessagesCurrYear[index - 1].Message) }"
 			</div>
 			<div class="mt-12"></div>
 			@components.NextButton(helpers.GetNextButtonLink(fmt.Sprintf("/shortest-commit-message-curr-year/%d", index), recap))
