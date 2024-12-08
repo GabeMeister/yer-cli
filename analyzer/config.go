@@ -7,17 +7,27 @@ import (
 	"path/filepath"
 )
 
-func initConfig(repoDir string, includedFileExtensions []string, excludedDirs []string, duplicateEngineers map[string]string) ConfigFile {
+type ConfigFileOptions struct {
+	RepoDir                string
+	IncludedFileExtensions []string
+	ExcludedDirs           []string
+	DuplicateEngineers     map[string]string
+	IncludeFileBlames      bool
+}
+
+func initConfig(options ConfigFileOptions) ConfigFile {
 	config := ConfigFile{
 		Repos: []RepoConfig{
 			{
-				Path:                  repoDir,
-				Name:                  filepath.Base(repoDir),
-				IncludeFileExtensions: includedFileExtensions,
-				ExcludeDirectories:    excludedDirs,
+				Version:               "0.0.1",
+				Path:                  options.RepoDir,
+				Name:                  filepath.Base(options.RepoDir),
+				IncludeFileExtensions: options.IncludedFileExtensions,
+				ExcludeDirectories:    options.ExcludedDirs,
 				ExcludeFiles:          []string{},
 				ExcludeEngineers:      []string{},
-				DuplicateEngineers:    duplicateEngineers,
+				DuplicateEngineers:    options.DuplicateEngineers,
+				IncludeFileBlames:     options.IncludeFileBlames,
 			},
 		},
 	}

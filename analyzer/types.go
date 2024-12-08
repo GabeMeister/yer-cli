@@ -5,6 +5,7 @@ type ConfigFile struct {
 }
 
 type RepoConfig struct {
+	Version               string            `json:"version"`
 	Name                  string            `json:"name"`
 	Path                  string            `json:"path"`
 	IncludeFileExtensions []string          `json:"include_file_extensions"`
@@ -12,6 +13,7 @@ type RepoConfig struct {
 	ExcludeFiles          []string          `json:"exclude_files"`
 	ExcludeEngineers      []string          `json:"exclude_engineers"`
 	DuplicateEngineers    map[string]string `json:"duplicate_engineers"`
+	IncludeFileBlames     bool              `json:"ignore_file_blames"`
 }
 
 type FileChange struct {
@@ -57,9 +59,11 @@ type MostSingleDayCommitsByEngineer struct {
 }
 
 type Recap struct {
-	Name            string `json:"name"`
-	DateAnalyzed    string `json:"date_analyzed"`
-	IsMultiYearRepo bool   `json:"is_multi_year_repo"`
+	Version            string `json:"version"`
+	Name               string `json:"name"`
+	DateAnalyzed       string `json:"date_analyzed"`
+	IsMultiYearRepo    bool   `json:"is_multi_year_repo"`
+	IncludesFileBlames bool   `json:"includes_file_blames"`
 
 	// Commits
 	NumCommitsAllTime               int                            `json:"num_commits_all_time"`

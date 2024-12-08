@@ -315,9 +315,7 @@ func getFileBlameSummary(config RepoConfig, files []string) []FileBlame {
 	totalFiles := len(files)
 
 	for idx, file := range files {
-		if idx%100 == 0 {
-			s.Suffix = fmt.Sprintf(" Processed %d/%d files...", idx, totalFiles)
-		}
+		s.Suffix = fmt.Sprintf(" Processed %d/%d files. (currently on %s)...", idx, totalFiles, file)
 		args := []string{
 			"git",
 			"blame",

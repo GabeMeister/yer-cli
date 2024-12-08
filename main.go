@@ -3,13 +3,11 @@ package main
 import (
 	"GabeMeister/yer-cli/analyzer"
 	"GabeMeister/yer-cli/presentation"
-	"GabeMeister/yer-cli/utils"
 	"errors"
 	"flag"
 	"fmt"
 	"io/fs"
 	"os"
-	"os/exec"
 )
 
 var help = flag.Bool("h", false, "Print help menu")
@@ -30,21 +28,7 @@ func printHelp() {
 	flag.PrintDefaults()
 }
 
-func myFunc(args ...string) string {
-	cmd := exec.Command(args[0], args[1:]...)
-	output, _ := cmd.Output()
-	fmt.Println(string(output))
-
-	return string(output)
-}
-
-type Gabe struct {
-	Age int
-}
-
 func runTest() {
-	nums := []int{1, 2, 3}
-	fmt.Println(utils.TruncateSlice(nums, 2))
 }
 
 func main() {

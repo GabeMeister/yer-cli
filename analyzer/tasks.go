@@ -41,12 +41,20 @@ Press enter to continue...`)
 		fileExtensions = getFileExtensions()
 	}
 
+	includeFileBlames := getShouldIncludeFileBlames()
+
 	var excludedDirs []string
 	for isValid := false; !isValid; isValid = areExcludedDirsValid(excludedDirs) {
 		excludedDirs = getExcludedDirs()
 	}
 
-	config := initConfig(dir, fileExtensions, excludedDirs, make(map[string]string))
+	config := initConfig(ConfigFileOptions{
+		RepoDir:                dir,
+		IncludedFileExtensions: fileExtensions,
+		ExcludedDirs:           excludedDirs,
+		DuplicateEngineers:     make(map[string]string),
+		IncludeFileBlames:      includeFileBlames,
+	})
 	// For now, we're just handling 1, we can handle multiple repos in a
 	// concurrent way later
 	repoConfig := config.Repos[0]
@@ -163,6 +171,23 @@ func getFileExtensions() []string {
 	}
 
 	return fileExtensions
+}
+
+func getShouldIncludeFileBlames() bool {
+	fmt.Println()
+	fmt.Println("Do you want to analyze git blames for advanced metrics? (Y/n)\n(Note: answer no for repos that have large commit histories)")
+	fmt.Print("> ")
+
+	reader := bufio.NewReader(os.Stdin)
+	text, err := reader.ReadString('\n')
+	if err != nil {
+		panic("Couldn't read in user input when getting answer for including file blames!")
+	}
+
+	text = strings.TrimSpace(text)
+	text = strings.ToLower(text)
+
+	return strings.HasPrefix(text, "y") || text == ""
 }
 
 func getExcludedDirs() []string {
@@ -315,9 +340,11 @@ func gatherMetrics(config RepoConfig) {
 		panic(prevYearErr)
 	}
 
-	prevYearFiles := getRepoFiles(config, lastCommitPrevYear.Commit)
-	prevYearBlames := getFileBlameSummary(config, prevYearFiles)
-	SaveDataToFile(prevYearBlames, utils.PREV_YEAR_FILE_BLAMES_FILE)
+	if config.IncludeFileBlames {
+		prevYearFiles := getRepoFiles(config, lastCommitPrevYear.Commit)
+		prevYearBlames := getFileBlameSummary(config, prevYearFiles)
+		SaveDataToFile(prevYearBlames, utils.PREV_YEAR_FILE_BLAMES_FILE)
+	}
 
 	// Curr year files
 	fmt.Println("Analyzing this year's repo...")
@@ -327,9 +354,12 @@ func gatherMetrics(config RepoConfig) {
 		fmt.Println("Unable to git checkout repo back to the latest commit")
 		panic(currYearErr)
 	}
-	currYearFiles := getRepoFiles(config, "master")
-	currYearBlames := getFileBlameSummary(config, currYearFiles)
-	SaveDataToFile(currYearBlames, utils.CURR_YEAR_FILE_BLAMES_FILE)
+
+	if config.IncludeFileBlames {
+		currYearFiles := getRepoFiles(config, "master")
+		currYearBlames := getFileBlameSummary(config, currYearFiles)
+		SaveDataToFile(currYearBlames, utils.CURR_YEAR_FILE_BLAMES_FILE)
+	}
 }
 
 func calculateRecap(config RepoConfig) {
@@ -383,9 +413,11 @@ func calculateRecap(config RepoConfig) {
 
 	repoRecap := Recap{
 		// Metadata
-		Name:            config.Name,
-		DateAnalyzed:    isoDateString,
-		IsMultiYearRepo: isMultiYearRepo,
+		Version:            "0.0.1",
+		Name:               config.Name,
+		DateAnalyzed:       isoDateString,
+		IsMultiYearRepo:    isMultiYearRepo,
+		IncludesFileBlames: config.IncludeFileBlames,
 
 		// Commits
 		NumCommitsAllTime:               numCommitsAllTime,

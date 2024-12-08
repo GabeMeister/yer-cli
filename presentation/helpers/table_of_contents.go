@@ -86,43 +86,78 @@ var TABLE_OF_CONTENTS = []string{
 	"/end",
 }
 
-func GetTableOfContents() []string {
-	return TABLE_OF_CONTENTS
-}
+func GetTableOfContents(recap analyzer.Recap) []string {
+	if recap.IncludesFileBlames {
+		return TABLE_OF_CONTENTS
+	} else {
+		pagesRequiringFileBlames := []string{
+			"/total-lines-of-code-in-repo-by-engineer/title",
+			"/total-lines-of-code-in-repo-by-engineer",
+			"/third-largest-file/title",
+			"/third-largest-file",
+			"/second-largest-file/title",
+			"/second-largest-file",
+			"/largest-file/title",
+			"/largest-file",
 
-func GetSingleYearRepoTableOfContents() []string {
-	// Single year repos can't involve anything with the previous year. But a lot
-	// of slides are still relevant, so we just filter the irrelevant pages
-	return utils.Filter(TABLE_OF_CONTENTS, func(s string) bool {
-		pagesRequiringMultipleYears := []string{
+			// TODO: re-write these next two slides so that they don't require file blames
 			"/file-count-prev-year/title",
 			"/file-count-prev-year",
+			"/file-count-curr-year/title",
+			"/file-count-curr-year",
+
+			// TODO: re-write these just manually counting lines of code and not using
+			// git blame
 			"/total-lines-of-code-prev-year/title",
 			"/total-lines-of-code-prev-year",
-			"/num-commits-prev-year/title",
-			"/num-commits-prev-year",
-			"/new-engineer-count-curr-year/title",
-			"/new-engineer-count-curr-year",
-			"/engineer-commit-counts-curr-year/title",
-			"/engineer-commit-counts-curr-year",
-			"/engineer-count-curr-year/title",
-			"/engineer-count-curr-year",
+			"/total-lines-of-code-curr-year/title",
+			"/total-lines-of-code-curr-year",
 		}
 
+		return utils.Filter(TABLE_OF_CONTENTS, func(s string) bool {
+			return !slices.Contains(pagesRequiringFileBlames, s)
+		})
+	}
+}
+
+func GetSingleYearRepoTableOfContents(recap analyzer.Recap) []string {
+	pagesRequiringMultipleYears := []string{
+		"/file-count-prev-year/title",
+		"/file-count-prev-year",
+		"/total-lines-of-code-prev-year/title",
+		"/total-lines-of-code-prev-year",
+		"/num-commits-prev-year/title",
+		"/num-commits-prev-year",
+		"/new-engineer-count-curr-year/title",
+		"/new-engineer-count-curr-year",
+		"/engineer-commit-counts-curr-year/title",
+		"/engineer-commit-counts-curr-year",
+		"/engineer-count-curr-year/title",
+		"/engineer-count-curr-year",
+	}
+
+	// Single year repos can't involve anything with the previous year. But a lot
+	// of slides are still relevant, so we just filter the irrelevant pages
+	return utils.Filter(GetTableOfContents(recap), func(s string) bool {
 		return !slices.Contains(pagesRequiringMultipleYears, s)
 	})
 }
 
 func GetNextButtonLink(currUrl string, recap analyzer.Recap) string {
-	currPageIdx := utils.FindIndex(TABLE_OF_CONTENTS, func(page string) bool {
-		return page == currUrl
-	})
 
 	if recap.IsMultiYearRepo {
-		tableOfContents := GetTableOfContents()
-		return tableOfContents[getNextIdx(currPageIdx, len(tableOfContents))]
+		tableOfContents := GetTableOfContents(recap)
+		currPageIdx := utils.FindIndex(tableOfContents, func(page string) bool {
+			return page == currUrl
+		})
+		final := tableOfContents[getNextIdx(currPageIdx, len(tableOfContents))]
+
+		return final
 	} else {
-		tableOfContents := GetSingleYearRepoTableOfContents()
+		tableOfContents := GetSingleYearRepoTableOfContents(recap)
+		currPageIdx := utils.FindIndex(tableOfContents, func(page string) bool {
+			return page == currUrl
+		})
 		return tableOfContents[getNextIdx(currPageIdx, len(tableOfContents))]
 	}
 }

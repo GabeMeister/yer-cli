@@ -15,16 +15,9 @@ func getCommitMessageLengthHistogramCurrYearChartData(recap analyzer.Recap) help
 		XAxisMod:   25,
 	}
 
-	// Find the longest commit message length
-	largest := 0
-	for _, data := range barChartData.Data {
-		length := data.Y
-		if length > largest {
-			largest = length
-		}
-	}
+	largest := len(recap.CommitMessageHistogramCurrYear)
 
-	// Cap the largest to 300 tho
+	// Cap the largest to 300 so the chart isn't ridiculously skinny bars
 	if largest > 300 {
 		largest = 300
 	}
