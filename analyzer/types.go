@@ -13,7 +13,7 @@ type RepoConfig struct {
 	ExcludeFiles          []string          `json:"exclude_files"`
 	ExcludeEngineers      []string          `json:"exclude_engineers"`
 	DuplicateEngineers    map[string]string `json:"duplicate_engineers"`
-	IncludeFileBlames     bool              `json:"ignore_file_blames"`
+	IncludeFileBlames     bool              `json:"include_file_blames"`
 }
 
 type FileChange struct {

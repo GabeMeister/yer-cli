@@ -292,7 +292,7 @@ func getRepoFiles(config RepoConfig, commitOrBranchName string) []string {
 		}
 
 		isExcludedFile := utils.Includes(config.ExcludeDirectories, func(dir string) bool {
-			return strings.HasPrefix(fileExtension, dir)
+			return strings.HasPrefix(file, dir)
 		})
 
 		if isExcludedFile {
