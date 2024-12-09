@@ -94,6 +94,7 @@ type Recap struct {
 	// Team
 	NewEngineerCommitsCurrYear             []GitCommit                    `json:"new_engineer_commits_curr_year"`
 	NewEngineerCountCurrYear               int                            `json:"new_engineer_count_curr_year"`
+	NewEngineerListCurrYear                []string                       `json:"new_engineer_list_curr_year"`
 	EngineerCommitCountsCurrYear           map[string]int                 `json:"engineer_commit_counts_curr_year"`
 	EngineerCommitCountsAllTime            map[string]int                 `json:"engineer_commit_counts_all_time"`
 	EngineerCountCurrYear                  int                            `json:"engineer_count_curr_year"`

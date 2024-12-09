@@ -10,6 +10,7 @@ var TABLE_OF_CONTENTS = []string{
 	"/",
 	"/new-engineer-count-curr-year/title",
 	"/new-engineer-count-curr-year",
+	"/new-engineer-list-curr-year",
 	"/engineer-count-curr-year/title",
 	"/engineer-count-curr-year",
 	"/engineer-count-all-time/title",

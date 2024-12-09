@@ -139,6 +139,20 @@ func RunLocalServer() {
 		return c.HTML(http.StatusOK, content)
 	})
 
+	e.GET("/new-engineer-list-curr-year", func(c echo.Context) error {
+		if !utils.HasRepoBeenAnalyzed() {
+			return renderRepoNotFound(c)
+		}
+
+		component := presentation_views_pages.NewEngineerListCurrYear(recap)
+		content := render(RenderParams{
+			c:         c,
+			component: component,
+		})
+
+		return c.HTML(http.StatusOK, content)
+	})
+
 	e.GET("/engineer-count-curr-year", func(c echo.Context) error {
 		if !utils.HasRepoBeenAnalyzed() {
 			return renderRepoNotFound(c)

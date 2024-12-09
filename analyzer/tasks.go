@@ -375,6 +375,9 @@ func calculateRecap(config RepoConfig) {
 	numCommitsCurrYear := GetNumCommitsCurrYear()
 	newEngineerCommitsCurrYear := GetNewEngineerCommitsCurrYear()
 	newEngineerCountCurrYear := len(newEngineerCommitsCurrYear)
+	newEngineerListCurrYear := utils.Map(newEngineerCommitsCurrYear, func(commit GitCommit) string {
+		return commit.Author
+	})
 	engineerCommitCountsCurrYear := GetEngineerCommitCountCurrYear()
 	engineerCommitCountsAllTime := GetEngineerCommitCountAllTime()
 	engineerCountCurrYear := GetEngineerCountCurrYear()
@@ -448,6 +451,7 @@ func calculateRecap(config RepoConfig) {
 		// Team
 		NewEngineerCommitsCurrYear:             newEngineerCommitsCurrYear,
 		NewEngineerCountCurrYear:               newEngineerCountCurrYear,
+		NewEngineerListCurrYear:                newEngineerListCurrYear,
 		EngineerCommitCountsCurrYear:           engineerCommitCountsCurrYear,
 		EngineerCommitCountsAllTime:            engineerCommitCountsAllTime,
 		EngineerCountCurrYear:                  engineerCountCurrYear,

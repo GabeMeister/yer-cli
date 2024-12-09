@@ -43,7 +43,7 @@ func Delete[T any](slice []T, test func(T) bool) (final []T) {
 	return final
 }
 
-func Map[T any](slice []T, mapper func(T) T) (final []T) {
+func Map[T any, U any](slice []T, mapper func(T) U) (final []U) {
 	for _, item := range slice {
 		final = append(final, mapper(item))
 	}
