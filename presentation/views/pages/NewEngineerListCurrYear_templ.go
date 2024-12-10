@@ -61,7 +61,7 @@ func NewEngineerListCurrYear(recap analyzer.Recap) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				for _, engineer := range recap.NewEngineerListCurrYear {
+				for i, engineer := range recap.NewEngineerListCurrYear {
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<span class=\"ml-3 inline-block\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
@@ -69,13 +69,23 @@ func NewEngineerListCurrYear(recap analyzer.Recap) templ.Component {
 					var templ_7745c5c3_Var3 string
 					templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(engineer)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/NewEngineerListCurrYear.templ`, Line: 18, Col: 47}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/NewEngineerListCurrYear.templ`, Line: 19, Col: 16}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" <span class=\"text-yellow-300\">|</span></span>")
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" ")
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+					if i < len(recap.NewEngineerListCurrYear)-1 {
+						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<span class=\"text-yellow-300\">|</span>")
+						if templ_7745c5c3_Err != nil {
+							return templ_7745c5c3_Err
+						}
+					}
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span>")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}

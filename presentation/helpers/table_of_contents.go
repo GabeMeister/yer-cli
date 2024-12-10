@@ -3,6 +3,7 @@ package presentation_helpers
 import (
 	"GabeMeister/yer-cli/analyzer"
 	"GabeMeister/yer-cli/utils"
+	"fmt"
 	"slices"
 )
 
@@ -145,7 +146,6 @@ func GetSingleYearRepoTableOfContents(recap analyzer.Recap) []string {
 }
 
 func GetNextButtonLink(currUrl string, recap analyzer.Recap) string {
-
 	if recap.IsMultiYearRepo {
 		tableOfContents := GetTableOfContents(recap)
 		currPageIdx := utils.FindIndex(tableOfContents, func(page string) bool {
@@ -169,4 +169,72 @@ func getNextIdx(idx int, length int) int {
 	} else {
 		return idx + 1
 	}
+}
+
+type TitleSlideData struct {
+	Title       string
+	Description string
+	NextBtnUrl  string
+}
+
+func GetTitleSlideData(page string, recap analyzer.Recap) TitleSlideData {
+	nextBtnUrl := GetNextButtonLink(fmt.Sprintf("/%s/title", page), recap)
+	data := TitleSlideData{
+		Title:       "",
+		Description: "",
+		NextBtnUrl:  nextBtnUrl,
+	}
+
+	switch page {
+	case "new-engineer-count-curr-year":
+		data.Title = "New Engineer Count"
+		data.Description = fmt.Sprintf("New engineers in %d who committed to %s.", analyzer.CURR_YEAR, recap.Name)
+	case "engineer-count-curr-year":
+		data.Title = "Total Engineer Count"
+		data.Description = fmt.Sprintf("Total number of engineers who committed to %s in %d.", recap.Name, analyzer.CURR_YEAR)
+	case "engineer-count-all-time":
+		data.Title = "All Time Engineers"
+		data.Description = fmt.Sprintf("Total number of engineers who committed to %s, since the beginning.", recap.Name)
+	case "file-count-prev-year":
+		data.Title = "Previous File Count"
+		data.Description = fmt.Sprintf("Total number of files that existed in %s last year. (%d)", recap.Name, analyzer.PREV_YEAR)
+	case "file-count-curr-year":
+		data.Title = "Current File Count"
+		data.Description = fmt.Sprintf("Total number of files that exist in %s this year. (%d)", recap.Name, analyzer.CURR_YEAR)
+	default:
+		panic(fmt.Sprintf("Unrecognized page for title slide: %s", page))
+	}
+
+	// "third-largest-file":                            "Third Largest File",
+	// "second-largest-file":                           "Second Largest File",
+	// "largest-file":                                  "Largest File",
+	// "total-lines-of-code-prev-year":                 fmt.Sprintf("Total Lines of Code (%d)", analyzer.PREV_YEAR),
+	// "total-lines-of-code-curr-year":                 fmt.Sprintf("Total Lines of Code (%d)", analyzer.CURR_YEAR),
+	// "size-of-repo-by-week-curr-year":                fmt.Sprintf("Size of Repo by Week (%d)", analyzer.CURR_YEAR),
+	// "total-lines-of-code-in-repo-by-engineer":       "Total Lines of Code by Engineer",
+	// "file-changes-by-engineer-curr-year":            fmt.Sprintf("File Changes by Engineer (%d)", analyzer.CURR_YEAR),
+	// "file-change-ratio-by-engineer-curr-year":       fmt.Sprintf("Insertions/Deletions Ratio by Engineer (%d)", analyzer.CURR_YEAR),
+	// "commonly-changed-files":                        "Most Commonly Changed Files",
+	// "num-commits-prev-year":                         fmt.Sprintf("Number of Commits (%d)", analyzer.PREV_YEAR),
+	// "num-commits-curr-year":                         fmt.Sprintf("Number of Commits (%d)", analyzer.CURR_YEAR),
+	// "num-commits-all-time":                          "Number of Commits (all time)",
+	// "engineer-commits-over-time-curr-year":          fmt.Sprintf("Engineer Commits Over Time (%d)", analyzer.CURR_YEAR),
+	// "engineer-file-changes-over-time-curr-year":     fmt.Sprintf("Engineer File Changes Over Time (%d)", analyzer.CURR_YEAR),
+	// "engineer-commit-counts-curr-year":              fmt.Sprintf("Engineer Commit Counts (%d)", analyzer.CURR_YEAR),
+	// "engineer-commit-counts-all-time":               "Engineer Commit Counts (all time)",
+	// "commits-by-month-curr-year":                    fmt.Sprintf("Commits by Month (%d)", analyzer.CURR_YEAR),
+	// "commits-by-weekday-curr-year":                  fmt.Sprintf("Commits by Weekday (%d)", analyzer.CURR_YEAR),
+	// "commits-by-hour-curr-year":                     fmt.Sprintf("Commits by Hour (%d)", analyzer.CURR_YEAR),
+	// "most-single-day-commits-by-engineer-curr-year": fmt.Sprintf("Most Single-Day Commits by Engineer (%d)", analyzer.CURR_YEAR),
+	// "most-insertions-in-single-commit-curr-year":    fmt.Sprintf("Most Insertions in a Single Commit (%d)", analyzer.CURR_YEAR),
+	// "most-deletions-in-single-commit-curr-year":     fmt.Sprintf("Most Deletions in a Single Commit (%d)", analyzer.CURR_YEAR),
+	// "largest-commit-message-curr-year":              fmt.Sprintf("Largest Commit Message (%d)", analyzer.CURR_YEAR),
+	// "shortest-commit-message-curr-year":             fmt.Sprintf("Shortest Commit Message (%d)", analyzer.CURR_YEAR),
+	// "commit-message-length-histogram-curr-year":     fmt.Sprintf("Commit Message Length Frequencies (%d)", analyzer.CURR_YEAR),
+	// "direct-pushes-on-master-by-engineer-curr-year": fmt.Sprintf("Direct Pushes on Master by Engineer (%d)", analyzer.CURR_YEAR),
+	// "merges-to-master-by-engineer-curr-year":        fmt.Sprintf("Merges to Master by Engineer (%d)", analyzer.CURR_YEAR),
+	// "most-merges-in-one-day-curr-year":              fmt.Sprintf("Most Merges in One Day (%d)", analyzer.CURR_YEAR),
+	// "avg-merges-per-day-to-master-curr-year":        fmt.Sprintf("Average Merges per Day to Master (%d)", analyzer.CURR_YEAR),
+
+	return data
 }

@@ -14,8 +14,13 @@ templ NewEngineerListCurrYear(recap analyzer.Recap) {
 		} else {
 			<h1 class="text-5xl my-12 text-yellow-300 font-bold">New Engineers:</h1>
 			<div class="flex items-center justify-center flex-wrap w-3/4 text-3xl leading-loose">
-				for _, engineer := range recap.NewEngineerListCurrYear {
-					<span class="ml-3 inline-block">{ engineer } <span class="text-yellow-300">|</span></span>
+				for i, engineer := range recap.NewEngineerListCurrYear {
+					<span class="ml-3 inline-block">
+						{ engineer }
+						if i < len(recap.NewEngineerListCurrYear) - 1 {
+							<span class="text-yellow-300">|</span>
+						}
+					</span>
 				}
 			</div>
 			<div class="mt-12"></div>

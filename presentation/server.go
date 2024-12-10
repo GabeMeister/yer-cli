@@ -1,7 +1,6 @@
 package presentation
 
 import (
-	"GabeMeister/yer-cli/analyzer"
 	presentation_helpers "GabeMeister/yer-cli/presentation/helpers"
 	presentation_views_pages "GabeMeister/yer-cli/presentation/views/pages"
 	"GabeMeister/yer-cli/utils"
@@ -55,49 +54,12 @@ func RunLocalServer() {
 
 		page := c.Param("page")
 
-		pageToTitleMap := map[string]string{
-			"new-engineer-count-curr-year":                  fmt.Sprintf("New Engineer Count (%d)", analyzer.CURR_YEAR),
-			"engineer-count-curr-year":                      fmt.Sprintf("Number of Engineers who committed to %s (%d)", recap.Name, analyzer.CURR_YEAR),
-			"engineer-count-all-time":                       fmt.Sprintf("Number of Engineers who committed to %s (all time)", recap.Name),
-			"file-count-prev-year":                          fmt.Sprintf("File Count (%d)", analyzer.PREV_YEAR),
-			"file-count-curr-year":                          fmt.Sprintf("File Count (%d)", analyzer.CURR_YEAR),
-			"third-largest-file":                            "Third Largest File",
-			"second-largest-file":                           "Second Largest File",
-			"largest-file":                                  "Largest File",
-			"total-lines-of-code-prev-year":                 fmt.Sprintf("Total Lines of Code (%d)", analyzer.PREV_YEAR),
-			"total-lines-of-code-curr-year":                 fmt.Sprintf("Total Lines of Code (%d)", analyzer.CURR_YEAR),
-			"size-of-repo-by-week-curr-year":                fmt.Sprintf("Size of Repo by Week (%d)", analyzer.CURR_YEAR),
-			"total-lines-of-code-in-repo-by-engineer":       "Total Lines of Code by Engineer",
-			"file-changes-by-engineer-curr-year":            fmt.Sprintf("File Changes by Engineer (%d)", analyzer.CURR_YEAR),
-			"file-change-ratio-by-engineer-curr-year":       fmt.Sprintf("Insertions/Deletions Ratio by Engineer (%d)", analyzer.CURR_YEAR),
-			"commonly-changed-files":                        "Most Commonly Changed Files",
-			"num-commits-prev-year":                         fmt.Sprintf("Number of Commits (%d)", analyzer.PREV_YEAR),
-			"num-commits-curr-year":                         fmt.Sprintf("Number of Commits (%d)", analyzer.CURR_YEAR),
-			"num-commits-all-time":                          "Number of Commits (all time)",
-			"engineer-commits-over-time-curr-year":          fmt.Sprintf("Engineer Commits Over Time (%d)", analyzer.CURR_YEAR),
-			"engineer-file-changes-over-time-curr-year":     fmt.Sprintf("Engineer File Changes Over Time (%d)", analyzer.CURR_YEAR),
-			"engineer-commit-counts-curr-year":              fmt.Sprintf("Engineer Commit Counts (%d)", analyzer.CURR_YEAR),
-			"engineer-commit-counts-all-time":               "Engineer Commit Counts (all time)",
-			"commits-by-month-curr-year":                    fmt.Sprintf("Commits by Month (%d)", analyzer.CURR_YEAR),
-			"commits-by-weekday-curr-year":                  fmt.Sprintf("Commits by Weekday (%d)", analyzer.CURR_YEAR),
-			"commits-by-hour-curr-year":                     fmt.Sprintf("Commits by Hour (%d)", analyzer.CURR_YEAR),
-			"most-single-day-commits-by-engineer-curr-year": fmt.Sprintf("Most Single-Day Commits by Engineer (%d)", analyzer.CURR_YEAR),
-			"most-insertions-in-single-commit-curr-year":    fmt.Sprintf("Most Insertions in a Single Commit (%d)", analyzer.CURR_YEAR),
-			"most-deletions-in-single-commit-curr-year":     fmt.Sprintf("Most Deletions in a Single Commit (%d)", analyzer.CURR_YEAR),
-			"largest-commit-message-curr-year":              fmt.Sprintf("Largest Commit Message (%d)", analyzer.CURR_YEAR),
-			"shortest-commit-message-curr-year":             fmt.Sprintf("Shortest Commit Message (%d)", analyzer.CURR_YEAR),
-			"commit-message-length-histogram-curr-year":     fmt.Sprintf("Commit Message Length Frequencies (%d)", analyzer.CURR_YEAR),
-			"direct-pushes-on-master-by-engineer-curr-year": fmt.Sprintf("Direct Pushes on Master by Engineer (%d)", analyzer.CURR_YEAR),
-			"merges-to-master-by-engineer-curr-year":        fmt.Sprintf("Merges to Master by Engineer (%d)", analyzer.CURR_YEAR),
-			"most-merges-in-one-day-curr-year":              fmt.Sprintf("Most Merges in One Day (%d)", analyzer.CURR_YEAR),
-			"avg-merges-per-day-to-master-curr-year":        fmt.Sprintf("Average Merges per Day to Master (%d)", analyzer.CURR_YEAR),
-		}
-
-		nextBtnUrl := presentation_helpers.GetNextButtonLink(fmt.Sprintf("/%s/title", page), recap)
-		component := presentation_views_pages.Title(
-			pageToTitleMap[page],
-			nextBtnUrl,
-		)
+		titleSlideData := presentation_helpers.GetTitleSlideData(page, recap)
+		component := presentation_views_pages.Title(presentation_views_pages.TitleParams{
+			Title:       titleSlideData.Title,
+			Description: titleSlideData.Description,
+			NextBtnUrl:  titleSlideData.NextBtnUrl,
+		})
 		content := render(RenderParams{
 			c:         c,
 			component: component,
@@ -112,10 +74,11 @@ func RunLocalServer() {
 		}
 
 		nextBtnUrl := presentation_helpers.GetNextButtonLink("/shortest-commit-message-curr-year/title", recap)
-		component := presentation_views_pages.Title(
-			"Shortest Commit Messages",
-			nextBtnUrl,
-		)
+		component := presentation_views_pages.Title(presentation_views_pages.TitleParams{
+			Title:       "Shortest Commit Messages",
+			Description: "The absolute shortest, low-effort commit messages engineers made this year.",
+			NextBtnUrl:  nextBtnUrl,
+		})
 		content := render(RenderParams{
 			c:         c,
 			component: component,
