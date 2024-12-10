@@ -9,7 +9,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"sort"
+	"slices"
 	"strings"
 	"time"
 
@@ -234,7 +234,22 @@ func getDuplicateUsers() map[string]string {
 	for userName := range userMap {
 		userNames = append(userNames, userName)
 	}
-	sort.Strings(userNames)
+
+	// Use this instead of strings.Sort() because you want lowercase and uppercase
+	// usernames to be next to each other. (For example, "Kaleb Trotter" and
+	// "ktrotter")
+	slices.SortFunc(userNames, func(userName1 string, userName2 string) int {
+		s1 := strings.ToLower(userName1)
+		s2 := strings.ToLower(userName2)
+
+		if s1 < s2 {
+			return -1
+		} else if s1 > s2 {
+			return 1
+		} else {
+			return 0
+		}
+	})
 
 	for _, userName := range userNames {
 		fmt.Println(userName)
