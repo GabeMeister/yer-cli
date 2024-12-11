@@ -52,9 +52,8 @@ func updateDuplicateEngineers(path string, duplicateEngineers map[string]string)
 	commits := getGitCommits()
 
 	for i := range commits {
-		if realUsername, ok := duplicateEngineers[commits[i].Author]; ok {
-			commits[i].Author = realUsername
-		}
+		realUsername := GetRealAuthorName(config.Repos[0], commits[i].Author)
+		commits[i].Author = realUsername
 	}
 	SaveDataToFile(commits, utils.COMMITS_FILE)
 

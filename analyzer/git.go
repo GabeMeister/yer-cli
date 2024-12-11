@@ -305,7 +305,7 @@ func getRepoFiles(config RepoConfig, commitOrBranchName string) []string {
 	return includedFiles
 }
 
-func getFileBlameSummary(config RepoConfig, files []string) []FileBlame {
+func GetFileBlameSummary(config RepoConfig, files []string) []FileBlame {
 	s := GetSpinner()
 	fmt.Println()
 	s.Suffix = " Analyzing Git blames..."
@@ -339,7 +339,7 @@ func getFileBlameSummary(config RepoConfig, files []string) []FileBlame {
 		authors := utils.Map(lines, func(line string) string {
 			authorName := strings.ReplaceAll(line, "committer ", "")
 
-			return getRealAuthorName(config, authorName)
+			return GetRealAuthorName(config, authorName)
 		})
 
 		authorLineCountMap := make(map[string]int)
@@ -383,13 +383,24 @@ func checkoutRepoToCommitOrBranchName(config RepoConfig, commitOrBranchName stri
 	return nil
 }
 
-func getRealAuthorName(config RepoConfig, authorName string) string {
-	realAuthorName, ok := config.DuplicateEngineers[authorName]
-	if ok {
-		return realAuthorName
+func GetRealAuthorName(config RepoConfig, authorName string) string {
+	name := authorName
+
+	for {
+		realAuthorName, ok := config.DuplicateEngineers[name]
+		if ok {
+			name = realAuthorName
+
+			// Loop again in case there's a "chain" of duplicate user names. For
+			// example one could have, "ktrotter" -> "kaleb.trotter",
+			// but then also have "kaleb.trotter" -> "Kaleb Trotter"
+			continue
+		}
+
+		break
 	}
 
-	return authorName
+	return name
 }
 
 func stashRepo(dir string) {

@@ -176,7 +176,7 @@ func getFileExtensions() []string {
 
 func getShouldIncludeFileBlames() bool {
 	fmt.Println()
-	fmt.Println("Do you want to analyze git blames for advanced metrics? (Y/n)\n(Note: answer no for repos that have large commit histories)")
+	fmt.Println("Do you want to include advanced stats? (Y/n)\nNote: this is usually fine for most repos, but answer no for repos that have EXTREMELY large commit histories (>100,000 commits)")
 	fmt.Print("> ")
 
 	reader := bufio.NewReader(os.Stdin)
@@ -304,7 +304,6 @@ func getDuplicateUsers() map[string]string {
 
 			duplicateEngineerMap[duplicateUsername] = realUsername
 
-			userNames = utils.Delete(userNames, func(item string) bool { return item == realUsername })
 			userNames = utils.Delete(userNames, func(item string) bool { return item == duplicateUsername })
 
 			fmt.Println()
@@ -358,7 +357,7 @@ func gatherMetrics(config RepoConfig) {
 
 	if config.IncludeFileBlames {
 		prevYearFiles := getRepoFiles(config, lastCommitPrevYear.Commit)
-		prevYearBlames := getFileBlameSummary(config, prevYearFiles)
+		prevYearBlames := GetFileBlameSummary(config, prevYearFiles)
 		SaveDataToFile(prevYearBlames, utils.PREV_YEAR_FILE_BLAMES_FILE)
 	}
 
@@ -373,7 +372,7 @@ func gatherMetrics(config RepoConfig) {
 
 	if config.IncludeFileBlames {
 		currYearFiles := getRepoFiles(config, "master")
-		currYearBlames := getFileBlameSummary(config, currYearFiles)
+		currYearBlames := GetFileBlameSummary(config, currYearFiles)
 		SaveDataToFile(currYearBlames, utils.CURR_YEAR_FILE_BLAMES_FILE)
 	}
 }
