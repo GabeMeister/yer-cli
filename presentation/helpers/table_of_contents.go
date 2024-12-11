@@ -201,15 +201,25 @@ func GetTitleSlideData(page string, recap analyzer.Recap) TitleSlideData {
 	case "file-count-curr-year":
 		data.Title = "Current File Count"
 		data.Description = fmt.Sprintf("Total number of files that exist in %s this year. (%d)", recap.Name, analyzer.CURR_YEAR)
+	case "third-largest-file":
+		data.Title = "Third Largest File"
+		data.Description = "The third largest file in the repo right now."
+	case "second-largest-file":
+		data.Title = "Second Largest File"
+		data.Description = "The second largest file in the repo right now."
+	case "largest-file":
+		data.Title = "Largest File"
+		data.Description = "The absolute largest file in the entire repo right now."
+	case "total-lines-of-code-prev-year":
+		data.Title = fmt.Sprintf("Total Lines of Code (%d)", analyzer.PREV_YEAR)
+		data.Description = fmt.Sprintf("Total lines of code in the entire repo as of the end of last year. (%d)", analyzer.PREV_YEAR)
+	case "total-lines-of-code-curr-year":
+		data.Title = fmt.Sprintf("Total Lines of Code (%d)", analyzer.CURR_YEAR)
+		data.Description = fmt.Sprintf("Total lines of code in the entire repo as of this year. (%d)", analyzer.CURR_YEAR)
 	default:
 		panic(fmt.Sprintf("Unrecognized page for title slide: %s", page))
 	}
 
-	// "third-largest-file":                            "Third Largest File",
-	// "second-largest-file":                           "Second Largest File",
-	// "largest-file":                                  "Largest File",
-	// "total-lines-of-code-prev-year":                 fmt.Sprintf("Total Lines of Code (%d)", analyzer.PREV_YEAR),
-	// "total-lines-of-code-curr-year":                 fmt.Sprintf("Total Lines of Code (%d)", analyzer.CURR_YEAR),
 	// "size-of-repo-by-week-curr-year":                fmt.Sprintf("Size of Repo by Week (%d)", analyzer.CURR_YEAR),
 	// "total-lines-of-code-in-repo-by-engineer":       "Total Lines of Code by Engineer",
 	// "file-changes-by-engineer-curr-year":            fmt.Sprintf("File Changes by Engineer (%d)", analyzer.CURR_YEAR),
