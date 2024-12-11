@@ -404,9 +404,9 @@ func GetRealAuthorName(config RepoConfig, authorName string) string {
 }
 
 func stashRepo(dir string) {
-	stashCmd := exec.Command("git", "stash")
-	stashCmd.Dir = dir
-	stashCmd.Output()
+	// stashCmd := exec.Command("git", "stash")
+	// stashCmd.Dir = dir
+	// stashCmd.Output()
 }
 
 func hasPrevYearCommits() bool {

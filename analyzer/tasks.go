@@ -152,6 +152,16 @@ func readDir() string {
 		dir = strings.ReplaceAll(dir, "~", homeDir)
 	}
 
+	if dir == "." {
+		currentDir, err := os.Getwd()
+		if err != nil {
+			fmt.Println("Error getting current directory")
+			panic(err)
+		}
+
+		dir = currentDir
+	}
+
 	return dir
 }
 
@@ -339,26 +349,21 @@ func gatherMetrics(config RepoConfig) {
 	directPushToMasterCommits := getDirectPushToMasterCommitsCurrYear(config)
 	SaveDataToFile(directPushToMasterCommits, utils.DIRECT_PUSH_ON_MASTER_COMMITS_FILE)
 
-	// For now, if there's nothing from last year, then don't bother doing the
-	// full analysis
-	if !hasPrevYearCommits() {
-		fmt.Printf("Error: Repo must have commits from last year (%d) in order to run year end recap on it.\n", PREV_YEAR)
-		os.Exit(1)
-	}
+	// Prev year files (if possible)
+	if hasPrevYearCommits() {
+		lastCommitPrevYear := getLastCommitPrevYear(config)
+		fmt.Println("Analyzing last year's repo...")
+		prevYearErr := checkoutRepoToCommitOrBranchName(config, lastCommitPrevYear.Commit)
+		if prevYearErr != nil {
+			fmt.Println("Unable to git checkout repo to last year's files")
+			panic(prevYearErr)
+		}
 
-	// Prev year files
-	lastCommitPrevYear := getLastCommitPrevYear(config)
-	fmt.Println("Analyzing last year's repo...")
-	prevYearErr := checkoutRepoToCommitOrBranchName(config, lastCommitPrevYear.Commit)
-	if prevYearErr != nil {
-		fmt.Println("Unable to git checkout repo to last year's files")
-		panic(prevYearErr)
-	}
-
-	if config.IncludeFileBlames {
-		prevYearFiles := getRepoFiles(config, lastCommitPrevYear.Commit)
-		prevYearBlames := GetFileBlameSummary(config, prevYearFiles)
-		SaveDataToFile(prevYearBlames, utils.PREV_YEAR_FILE_BLAMES_FILE)
+		if config.IncludeFileBlames {
+			prevYearFiles := getRepoFiles(config, lastCommitPrevYear.Commit)
+			prevYearBlames := GetFileBlameSummary(config, prevYearFiles)
+			SaveDataToFile(prevYearBlames, utils.PREV_YEAR_FILE_BLAMES_FILE)
+		}
 	}
 
 	// Curr year files

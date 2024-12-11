@@ -405,6 +405,9 @@ func GetMostMergesInOneDayCurrYear() MostMergesInOneDay {
 
 func GetAvgMergesToMasterPerDayCurrYear() float64 {
 	commits := getCurrYearMergeGitCommits()
+	if len(commits) == 0 {
+		return 0.0
+	}
 
 	dayCommitMap := make(map[string][]GitCommit)
 
