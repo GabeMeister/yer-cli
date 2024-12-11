@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"math"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -429,6 +430,11 @@ func calculateRecap(config RepoConfig) {
 	now := time.Now()
 	isoDateString := now.Format(time.RFC3339)
 
+	fileCountPercentDifference := (float64(fileCountCurrYear) - float64(fileCountPrevYear)) / float64(fileCountPrevYear)
+	if math.IsNaN(fileCountPercentDifference) {
+		panic("File count percent difference is NaN!")
+	}
+
 	repoRecap := Recap{
 		// Metadata
 		Version:            "0.0.1",
@@ -456,7 +462,7 @@ func calculateRecap(config RepoConfig) {
 		// Files
 		FileCountPrevYear:          fileCountPrevYear,
 		FileCountCurrYear:          fileCountCurrYear,
-		FileCountPercentDifference: (float64(fileCountCurrYear) - float64(fileCountPrevYear)) / float64(fileCountPrevYear),
+		FileCountPercentDifference: fileCountPercentDifference,
 		LargestFilesCurrYear:       largestFilesCurrYear,
 		SmallestFilesCurrYear:      smallestFilesCurrYear,
 		TotalLinesOfCodePrevYear:   totalLinesOfCodePrevYear,

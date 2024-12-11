@@ -3,6 +3,7 @@ package analyzer
 import (
 	"GabeMeister/yer-cli/utils"
 	"encoding/json"
+	"math"
 	"os"
 	"sort"
 	"strings"
@@ -18,6 +19,7 @@ func GetIsMultiYearRepo() bool {
 
 func GetNumCommitsAllTime() int {
 	commits := getGitCommits()
+
 	return len(commits)
 }
 
@@ -411,7 +413,13 @@ func GetAvgMergesToMasterPerDayCurrYear() float64 {
 		dayCommitMap[day] = append(dayCommitMap[day], commit)
 	}
 
-	return float64(len(commits)) / float64(len(dayCommitMap))
+	final := float64(len(commits)) / float64(len(dayCommitMap))
+
+	if math.IsNaN(final) {
+		panic("GetAvgMergesToMasterPerDayCurrYear() is NaN!")
+	}
+
+	return final
 }
 
 func GetFileChangesByEngineerCurrYear() map[string]int {

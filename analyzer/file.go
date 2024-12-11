@@ -3,6 +3,8 @@ package analyzer
 import (
 	"GabeMeister/yer-cli/utils"
 	"encoding/json"
+	"fmt"
+	"math"
 	"os"
 	"sort"
 )
@@ -60,6 +62,13 @@ func GetFileChangeRatio(insertionsByEngineer map[string]int, deletionsByEngineer
 			ratios[engineer] = 1
 		} else {
 			ratios[engineer] = insertions / deletions
+		}
+	}
+
+	for _, ratio := range ratios {
+		if math.IsNaN(ratio) {
+			fmt.Print("\n\n", "*** ERROR in GetFileChangeRatio(). Ratio is NaN: ***", "\n", ratios, "\n\n\n")
+			panic("Ratio is NaN in GetFileChangeRatio()!")
 		}
 	}
 
