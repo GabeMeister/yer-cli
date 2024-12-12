@@ -340,6 +340,9 @@ func gatherMetrics(config RepoConfig) {
 		panic(currYearErr)
 	}
 
+	// We want the latest changes
+	pullRepo(config.Path)
+
 	commits := getCommitsFromGitLogs(config, false)
 	SaveDataToFile(commits, utils.COMMITS_FILE)
 
