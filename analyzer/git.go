@@ -359,7 +359,7 @@ func GetFileBlameSummary(config RepoConfig, files []string) []FileBlame {
 	return fileBlames
 }
 
-func getLastCommitPrevYear(config RepoConfig) GitCommit {
+func getLastCommitPrevYear() GitCommit {
 	commits := getPrevYearGitCommits()
 	lastIdx := len(commits) - 1
 

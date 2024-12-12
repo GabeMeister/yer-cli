@@ -354,7 +354,7 @@ func gatherMetrics(config RepoConfig) {
 
 	// Prev year files (if possible)
 	if hasPrevYearCommits() {
-		lastCommitPrevYear := getLastCommitPrevYear(config)
+		lastCommitPrevYear := getLastCommitPrevYear()
 		fmt.Println("Analyzing last year's repo...")
 		prevYearErr := checkoutRepoToCommitOrBranchName(config, lastCommitPrevYear.Commit)
 		if prevYearErr != nil {
