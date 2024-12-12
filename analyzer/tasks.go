@@ -24,8 +24,10 @@ func AnalyzeManually() bool {
 		dir = readDir()
 	}
 
+	masterBranch := GetMasterBranchName(dir)
+
 	// Check if repo is "clean" (on master branch, and no unstaged changes)
-	if !isRepoClean(dir) {
+	if !isRepoClean(dir, masterBranch) {
 		fmt.Println(`
 This tool will inspect your git repo at various commits.
 Please make sure your repo is on master (or main), 
@@ -51,6 +53,7 @@ Press enter to continue...`)
 
 	config := initConfig(ConfigFileOptions{
 		RepoDir:                dir,
+		MasterBranchName:       masterBranch,
 		IncludedFileExtensions: fileExtensions,
 		ExcludedDirs:           excludedDirs,
 		DuplicateEngineers:     make(map[string]string),
@@ -86,7 +89,7 @@ func AnalyzeWithConfig(path string) bool {
 	repoConfig := config.Repos[0]
 
 	// Check if repo is "clean" (on master branch, and no unstaged changes)
-	if !isRepoClean(repoConfig.Path) {
+	if !isRepoClean(repoConfig.Path, repoConfig.MasterBranchName) {
 		fmt.Println(`
 This tool will inspect your git repo at various commits.
 Please make sure your repo is on master (or main), 
@@ -108,7 +111,7 @@ Press enter to continue...`)
  * PRIVATE
  */
 
-func isRepoClean(dir string) bool {
+func isRepoClean(dir string, masterBranch string) bool {
 	// Check if we're on master branch
 	branchCmd := exec.Command("git", "branch", "--show-current")
 	branchCmd.Dir = dir
@@ -118,7 +121,7 @@ func isRepoClean(dir string) bool {
 	}
 
 	currentBranch := strings.TrimSpace(string(branchOutput))
-	if currentBranch != "master" && currentBranch != "main" {
+	if currentBranch != masterBranch {
 		return false
 	}
 
@@ -222,6 +225,23 @@ func getExcludedDirs() []string {
 	})
 
 	return excludedDirs
+}
+
+func GetMasterBranchName(dir string) string {
+	masterBranchCmd := exec.Command("git", "branch", "-r")
+	masterBranchCmd.Dir = dir
+	rawOutput, _ := masterBranchCmd.Output()
+	text := string(rawOutput)
+	lines := strings.Split(text, "\n")
+	idx := slices.IndexFunc(lines, func(line string) bool {
+		return strings.Contains(line, "origin/HEAD")
+	})
+	masterBranchLine := lines[idx]
+
+	masterBranchName := strings.ReplaceAll(masterBranchLine, "origin/HEAD -> origin/", "")
+	masterBranchName = strings.TrimSpace(masterBranchName)
+
+	return masterBranchName
 }
 
 // A lot of times in repos somehow the same user has two different git usernames
@@ -334,7 +354,7 @@ func getDuplicateUsers() map[string]string {
 func gatherMetrics(config RepoConfig) {
 	stashRepo(config.Path)
 
-	currYearErr := checkoutRepoToCommitOrBranchName(config, "master")
+	currYearErr := checkoutRepoToCommitOrBranchName(config, config.MasterBranchName)
 	if currYearErr != nil {
 		fmt.Println("Unable to git checkout repo to the latest commit")
 		panic(currYearErr)
@@ -372,14 +392,14 @@ func gatherMetrics(config RepoConfig) {
 	// Curr year files
 	fmt.Println("Analyzing this year's repo...")
 
-	currYearErr = checkoutRepoToCommitOrBranchName(config, "master")
+	currYearErr = checkoutRepoToCommitOrBranchName(config, config.MasterBranchName)
 	if currYearErr != nil {
 		fmt.Println("Unable to git checkout repo back to the latest commit")
 		panic(currYearErr)
 	}
 
 	if config.IncludeFileBlames {
-		currYearFiles := getRepoFiles(config, "master")
+		currYearFiles := getRepoFiles(config, config.MasterBranchName)
 		currYearBlames := GetFileBlameSummary(config, currYearFiles)
 		SaveDataToFile(currYearBlames, utils.CURR_YEAR_FILE_BLAMES_FILE)
 	}

@@ -7,6 +7,7 @@ type ConfigFile struct {
 type RepoConfig struct {
 	Version               string            `json:"version"`
 	Name                  string            `json:"name"`
+	MasterBranchName      string            `json:"master_branch_name"`
 	Path                  string            `json:"path"`
 	IncludeFileExtensions []string          `json:"include_file_extensions"`
 	ExcludeDirectories    []string          `json:"exclude_directories"`

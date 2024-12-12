@@ -26,7 +26,7 @@ func getCommitsFromGitLogs(config RepoConfig, mergeCommits bool) []GitCommit {
 	if mergeCommits {
 		args = append(args, "--merges")
 		args = append(args, "--first-parent")
-		args = append(args, "master")
+		args = append(args, config.MasterBranchName)
 	} else {
 		args = append(args, "--no-merges")
 	}
@@ -129,7 +129,7 @@ func getDirectPushToMasterCommitsCurrYear(config RepoConfig) []GitCommit {
 		"--no-merges",
 		"--reverse",
 		"--first-parent",
-		"master",
+		config.MasterBranchName,
 		"--format=%H",
 	}
 

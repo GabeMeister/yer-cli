@@ -409,14 +409,8 @@ func GetAvgMergesToMasterPerDayCurrYear() float64 {
 		return 0.0
 	}
 
-	dayCommitMap := make(map[string][]GitCommit)
-
-	for _, commit := range commits {
-		day := utils.GetSimpleDateStr(commit.Date)
-		dayCommitMap[day] = append(dayCommitMap[day], commit)
-	}
-
-	final := float64(len(commits)) / float64(len(dayCommitMap))
+	numWorkDays := GetNumWorkDaysInCurrYear()
+	final := float64(len(commits)) / float64(numWorkDays)
 
 	if math.IsNaN(final) {
 		panic("GetAvgMergesToMasterPerDayCurrYear() is NaN!")

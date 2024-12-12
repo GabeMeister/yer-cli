@@ -9,6 +9,7 @@ import (
 
 type ConfigFileOptions struct {
 	RepoDir                string
+	MasterBranchName       string
 	IncludedFileExtensions []string
 	ExcludedDirs           []string
 	DuplicateEngineers     map[string]string
@@ -22,6 +23,7 @@ func initConfig(options ConfigFileOptions) ConfigFile {
 				Version:               "0.0.1",
 				Path:                  options.RepoDir,
 				Name:                  filepath.Base(options.RepoDir),
+				MasterBranchName:      options.MasterBranchName,
 				IncludeFileExtensions: options.IncludedFileExtensions,
 				ExcludeDirectories:    options.ExcludedDirs,
 				ExcludeFiles:          []string{},
