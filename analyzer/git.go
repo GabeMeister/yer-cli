@@ -175,7 +175,7 @@ func isFileChangeLine(line string) bool {
 
 func getFileChangeSummary(config RepoConfig) map[string][]FileChange {
 	s := GetSpinner()
-	s.Suffix = " Retrieving file changes..."
+	s.Suffix = " Retrieving line changes..."
 	s.Start()
 
 	path := config.Path
@@ -196,7 +196,7 @@ func getFileChangeSummary(config RepoConfig) map[string][]FileChange {
 
 	output := string(rawOutput)
 
-	s.Suffix = " Analyzing file changes..."
+	s.Suffix = " Analyzing line changes..."
 
 	lines := strings.Split(output, "\n")
 	fileChangeMap := make(map[string][]FileChange)

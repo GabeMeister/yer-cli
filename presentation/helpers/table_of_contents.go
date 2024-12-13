@@ -197,11 +197,11 @@ func GetTitleSlideData(page string, recap analyzer.Recap) TitleSlideData {
 
 	case "file-count-prev-year":
 		data.Title = "Previous File Count"
-		data.Description = fmt.Sprintf("Total number of files that existed in %s last year. (%d)", recap.Name, analyzer.PREV_YEAR)
+		data.Description = fmt.Sprintf("Total number of files that existed in %s last year (%d).", recap.Name, analyzer.PREV_YEAR)
 
 	case "file-count-curr-year":
 		data.Title = "Current File Count"
-		data.Description = fmt.Sprintf("Total number of files that exist in %s this year. (%d)", recap.Name, analyzer.CURR_YEAR)
+		data.Description = fmt.Sprintf("Total number of files that exist in %s this year (%d).", recap.Name, analyzer.CURR_YEAR)
 
 	case "third-largest-file":
 		data.Title = "Third Largest File"
@@ -217,11 +217,11 @@ func GetTitleSlideData(page string, recap analyzer.Recap) TitleSlideData {
 
 	case "total-lines-of-code-prev-year":
 		data.Title = fmt.Sprintf("Total Lines of Code (%d)", analyzer.PREV_YEAR)
-		data.Description = fmt.Sprintf("Total lines of code in the entire repo as of the end of last year. (%d)", analyzer.PREV_YEAR)
+		data.Description = fmt.Sprintf("Total lines of code in the entire repo as of the end of last year (%d).", analyzer.PREV_YEAR)
 
 	case "total-lines-of-code-curr-year":
 		data.Title = fmt.Sprintf("Total Lines of Code (%d)", analyzer.CURR_YEAR)
-		data.Description = fmt.Sprintf("Total lines of code in the entire repo as of this year. (%d)", analyzer.CURR_YEAR)
+		data.Description = fmt.Sprintf("Total lines of code in the entire repo as of this year (%d).", analyzer.CURR_YEAR)
 
 	case "size-of-repo-by-week-curr-year":
 		data.Title = "Weekly Repo Size"
@@ -232,24 +232,24 @@ func GetTitleSlideData(page string, recap analyzer.Recap) TitleSlideData {
 		data.Description = fmt.Sprintf("The total number of lines of code in %s, categorized by engineer.", recap.Name)
 
 	case "file-changes-by-engineer-curr-year":
-		data.Title = fmt.Sprintf("File Changes (%d)", analyzer.CURR_YEAR)
-		data.Description = fmt.Sprintf("The total number of code changes made in %d by engineer.", analyzer.CURR_YEAR)
+		data.Title = fmt.Sprintf("Line Changes (%d)", analyzer.CURR_YEAR)
+		data.Description = fmt.Sprintf("The total number of line changes made in %d by engineer.", analyzer.CURR_YEAR)
 
 	case "file-change-ratio-by-engineer-curr-year":
-		data.Title = "File Change Ratios"
-		data.Description = fmt.Sprintf("The ratio of file insertions to deletions by engineer. A higher number means an engineer adds in more code to the repo than removes it. (%d)", analyzer.CURR_YEAR)
+		data.Title = "Line Change Ratios"
+		data.Description = fmt.Sprintf("The ratio of line insertions to deletions by engineer. A higher number means an engineer adds in more code to the repo than removes it. (%d)", analyzer.CURR_YEAR)
 
 	case "commonly-changed-files":
 		data.Title = "Commonly Changed Files"
-		data.Description = fmt.Sprintf("The files that seem to be changed the most frequently throughout %d", analyzer.CURR_YEAR)
+		data.Description = fmt.Sprintf("The files that seem to be changed the most frequently throughout %d.", analyzer.CURR_YEAR)
 
 	case "num-commits-prev-year":
 		data.Title = fmt.Sprintf("Number of Commits (%d)", analyzer.PREV_YEAR)
-		data.Description = fmt.Sprintf("The total number of commits made by engineers last year (%d)", analyzer.PREV_YEAR)
+		data.Description = fmt.Sprintf("The total number of commits made by engineers last year (%d).", analyzer.PREV_YEAR)
 
 	case "num-commits-curr-year":
 		data.Title = fmt.Sprintf("Number of Commits (%d)", analyzer.CURR_YEAR)
-		data.Description = fmt.Sprintf("The total number of commits made by engineers this year (%d)", analyzer.CURR_YEAR)
+		data.Description = fmt.Sprintf("The total number of commits made by engineers this year (%d).", analyzer.CURR_YEAR)
 
 	case "num-commits-all-time":
 		data.Title = "Number of Commits (All Time)"
@@ -257,15 +257,15 @@ func GetTitleSlideData(page string, recap analyzer.Recap) TitleSlideData {
 
 	case "engineer-commits-over-time-curr-year":
 		data.Title = fmt.Sprintf("Commits Over Time (%d)", analyzer.CURR_YEAR)
-		data.Description = fmt.Sprintf("The number of commits made by each engineer, throughout the duration of %d", analyzer.CURR_YEAR)
+		data.Description = fmt.Sprintf("The number of commits made by each engineer, throughout the duration of %d.", analyzer.CURR_YEAR)
 
 	case "engineer-file-changes-over-time-curr-year":
-		data.Title = fmt.Sprintf("File Changes Over Time (%d)", analyzer.CURR_YEAR)
-		data.Description = fmt.Sprintf("The number of file changes made by engineer, throughout the duration of %d", analyzer.CURR_YEAR)
+		data.Title = fmt.Sprintf("Line Changes Over Time (%d)", analyzer.CURR_YEAR)
+		data.Description = fmt.Sprintf("The number of line changes made by engineer, throughout the duration of %d.", analyzer.CURR_YEAR)
 
 	case "engineer-commit-counts-curr-year":
 		data.Title = fmt.Sprintf("Commit Counts (%d)", analyzer.CURR_YEAR)
-		data.Description = fmt.Sprintf("The number of commits by each engineers in %d", analyzer.CURR_YEAR)
+		data.Description = fmt.Sprintf("The number of commits by each engineer in %d.", analyzer.CURR_YEAR)
 
 	case "engineer-commit-counts-all-time":
 		data.Title = "Commit Counts (All Time)"
@@ -273,55 +273,55 @@ func GetTitleSlideData(page string, recap analyzer.Recap) TitleSlideData {
 
 	case "commits-by-weekday-curr-year":
 		data.Title = "Commits by Weekday"
-		data.Description = fmt.Sprintf("Number of commits made each week day, throughout %d", analyzer.CURR_YEAR)
+		data.Description = fmt.Sprintf("Number of commits made each week day, throughout %d.", analyzer.CURR_YEAR)
 
 	case "commits-by-hour-curr-year":
 		data.Title = "Commits by Hour"
-		data.Description = fmt.Sprintf("Number of commits made each hour of the day, throughout %d", analyzer.CURR_YEAR)
+		data.Description = fmt.Sprintf("Number of commits made each hour of the day, throughout %d.", analyzer.CURR_YEAR)
 
 	case "commits-by-month-curr-year":
 		data.Title = "Commits by Month"
-		data.Description = fmt.Sprintf("Number of commits made each month of the year, throughout %d", analyzer.CURR_YEAR)
+		data.Description = fmt.Sprintf("Number of commits made each month of the year, throughout %d.", analyzer.CURR_YEAR)
 
 	case "most-single-day-commits-by-engineer-curr-year":
 		data.Title = "Most Single-Day Commits by Engineer"
-		data.Description = fmt.Sprintf("The most commits made in one day by an engineer in %d", analyzer.CURR_YEAR)
+		data.Description = fmt.Sprintf("The most commits made in one day by an engineer in %d.", analyzer.CURR_YEAR)
 
 	case "most-insertions-in-single-commit-curr-year":
 		data.Title = "Most Insertions in Commit"
-		data.Description = fmt.Sprintf("The most code added in a single commit in %d", analyzer.CURR_YEAR)
+		data.Description = fmt.Sprintf("The most code added in a single commit in %d.", analyzer.CURR_YEAR)
 
 	case "most-deletions-in-single-commit-curr-year":
 		data.Title = "Most Deletions in Commit"
-		data.Description = fmt.Sprintf("Most code removed in a single commit in %d", analyzer.CURR_YEAR)
+		data.Description = fmt.Sprintf("Most code removed in a single commit in %d.", analyzer.CURR_YEAR)
 
 	case "largest-commit-message-curr-year":
 		data.Title = "Largest Commit Message"
-		data.Description = fmt.Sprintf("Largest commit message written by an engineer in %d", analyzer.CURR_YEAR)
+		data.Description = fmt.Sprintf("Largest commit message written by an engineer in %d.", analyzer.CURR_YEAR)
 
 	case "shortest-commit-message-curr-year":
 		data.Title = "Shortest Commit Message"
-		data.Description = fmt.Sprintf("The shortest, low-effort commit messages written in %d", analyzer.CURR_YEAR)
+		data.Description = fmt.Sprintf("The shortest, low-effort commit messages written in %d.", analyzer.CURR_YEAR)
 
 	case "commit-message-length-histogram-curr-year":
 		data.Title = "Commit Message Lengths"
-		data.Description = fmt.Sprintf("A histogram tracking the frequency of git commit message lengths in %d", analyzer.CURR_YEAR)
+		data.Description = fmt.Sprintf("A histogram tracking the frequency of git commit message lengths in %d.", analyzer.CURR_YEAR)
 
 	case "direct-pushes-on-master-by-engineer-curr-year":
 		data.Title = "Direct Commits on Master"
-		data.Description = fmt.Sprintf("The number of direct commits to master, by engineer, in %d", analyzer.CURR_YEAR)
+		data.Description = fmt.Sprintf("The number of direct commits to master, by engineer, in %d.", analyzer.CURR_YEAR)
 
 	case "merges-to-master-by-engineer-curr-year":
 		data.Title = "Merges to Master"
-		data.Description = fmt.Sprintf("The engineers who are hitting merge on merge requests the most in %d", analyzer.CURR_YEAR)
+		data.Description = fmt.Sprintf("The engineers who are hitting merge on merge requests the most in %d.", analyzer.CURR_YEAR)
 
 	case "most-merges-in-one-day-curr-year":
 		data.Title = "Most Merges in One Day"
-		data.Description = fmt.Sprintf("The most amount of merges done in a single day in %d", analyzer.CURR_YEAR)
+		data.Description = fmt.Sprintf("The most amount of merges done in a single day in %d.", analyzer.CURR_YEAR)
 
 	case "avg-merges-per-day-to-master-curr-year":
 		data.Title = "Average Merges Per Day"
-		data.Description = fmt.Sprintf("The average number of merges the team did per day in %d", analyzer.CURR_YEAR)
+		data.Description = fmt.Sprintf("The average number of merges the team did per day in %d.", analyzer.CURR_YEAR)
 
 	default:
 		panic(fmt.Sprintf("Unrecognized page for title slide: %s", page))

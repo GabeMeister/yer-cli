@@ -18,7 +18,7 @@ import (
 )
 
 func getFileChangesChartData(recap analyzer.Recap) helpers.BarChartData {
-	barChartData := helpers.BarChartData{Data: []helpers.DataPoint{}, XAxisLabel: "Engineer", YAxisLabel: fmt.Sprintf("↑ File Changes (%d)", analyzer.CURR_YEAR)}
+	barChartData := helpers.BarChartData{Data: []helpers.DataPoint{}, XAxisLabel: "Engineer", YAxisLabel: fmt.Sprintf("↑ Line Changes (%d)", analyzer.CURR_YEAR)}
 
 	for engineer, fileChanges := range recap.FileChangesByEngineerCurrYear {
 		barChartData.Data = append(barChartData.Data, helpers.DataPoint{
