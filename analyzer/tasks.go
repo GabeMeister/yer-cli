@@ -382,8 +382,10 @@ func gatherMetrics(config RepoConfig) {
 			panic(prevYearErr)
 		}
 
+		prevYearFiles := getRepoFiles(config, lastCommitPrevYear.Commit)
+		SaveDataToFile(prevYearFiles, utils.PREV_YEAR_FILE_LIST_FILE)
+
 		if config.IncludeFileBlames {
-			prevYearFiles := getRepoFiles(config, lastCommitPrevYear.Commit)
 			prevYearBlames := GetFileBlameSummary(config, prevYearFiles)
 			SaveDataToFile(prevYearBlames, utils.PREV_YEAR_FILE_BLAMES_FILE)
 		}
@@ -398,8 +400,10 @@ func gatherMetrics(config RepoConfig) {
 		panic(currYearErr)
 	}
 
+	currYearFiles := getRepoFiles(config, config.MasterBranchName)
+	SaveDataToFile(currYearFiles, utils.CURR_YEAR_FILE_LIST_FILE)
+
 	if config.IncludeFileBlames {
-		currYearFiles := getRepoFiles(config, config.MasterBranchName)
 		currYearBlames := GetFileBlameSummary(config, currYearFiles)
 		SaveDataToFile(currYearBlames, utils.CURR_YEAR_FILE_BLAMES_FILE)
 	}

@@ -21,6 +21,50 @@ func SaveDataToFile(data any, path string) {
 	}
 }
 
+func GetPrevYearFileList() []string {
+	bytes, err := os.ReadFile(utils.PREV_YEAR_FILE_LIST_FILE)
+	if err != nil {
+		panic(err)
+	}
+
+	var files []string
+	jsonErr := json.Unmarshal(bytes, &files)
+	if jsonErr != nil {
+		panic(jsonErr)
+	}
+
+	return files
+
+}
+
+func GetCurrYearFileList() []string {
+	bytes, err := os.ReadFile(utils.CURR_YEAR_FILE_LIST_FILE)
+	if err != nil {
+		panic(err)
+	}
+
+	var files []string
+	jsonErr := json.Unmarshal(bytes, &files)
+	if jsonErr != nil {
+		panic(jsonErr)
+	}
+
+	return files
+
+}
+
+func HasPrevYearFileBlames() bool {
+	_, err := os.ReadFile(utils.PREV_YEAR_FILE_BLAMES_FILE)
+
+	return err == nil
+}
+
+func HasCurrYearFileBlames() bool {
+	_, err := os.ReadFile(utils.CURR_YEAR_FILE_BLAMES_FILE)
+
+	return err == nil
+}
+
 func GetPrevYearFileBlames() []FileBlame {
 	bytes, err := os.ReadFile(utils.PREV_YEAR_FILE_BLAMES_FILE)
 	if err != nil {
@@ -101,18 +145,22 @@ func GetCommonlyChangedFiles() []FileChangeCount {
 }
 
 func GetFileCountPrevYear() int {
-	fileBlames := GetPrevYearFileBlames()
+	files := GetPrevYearFileList()
 
-	return len(fileBlames)
+	return len(files)
 }
 
 func GetFileCountCurrYear() int {
-	fileBlames := GetCurrYearFileBlames()
+	files := GetCurrYearFileList()
 
-	return len(fileBlames)
+	return len(files)
 }
 
 func GetLargestFilesCurrYear() []FileSize {
+	if !HasCurrYearFileBlames() {
+		return []FileSize{}
+	}
+
 	fileBlames := GetCurrYearFileBlames()
 
 	sort.Slice(fileBlames, func(i int, j int) bool {
@@ -131,6 +179,10 @@ func GetLargestFilesCurrYear() []FileSize {
 }
 
 func GetSmallestFilesCurrYear() []FileSize {
+	if !HasCurrYearFileBlames() {
+		return []FileSize{}
+	}
+
 	fileBlames := GetCurrYearFileBlames()
 
 	sort.Slice(fileBlames, func(i int, j int) bool {
@@ -149,6 +201,10 @@ func GetSmallestFilesCurrYear() []FileSize {
 }
 
 func GetTotalLinesOfCodePrevYear() int {
+	if !HasPrevYearFileBlames() {
+		return 0
+	}
+
 	fileBlames := GetPrevYearFileBlames()
 	total := 0
 	for _, fileBlame := range fileBlames {
@@ -159,6 +215,10 @@ func GetTotalLinesOfCodePrevYear() int {
 }
 
 func GetTotalLinesOfCodeCurrYear() int {
+	if !HasCurrYearFileBlames() {
+		return 0
+	}
+
 	fileBlames := GetCurrYearFileBlames()
 	total := 0
 	for _, fileBlame := range fileBlames {

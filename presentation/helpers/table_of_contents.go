@@ -102,18 +102,15 @@ func GetTableOfContents(recap analyzer.Recap) []string {
 			"/largest-file/title",
 			"/largest-file",
 
-			// TODO: re-write these next two slides so that they don't require file blames
-			"/file-count-prev-year/title",
-			"/file-count-prev-year",
-			"/file-count-curr-year/title",
-			"/file-count-curr-year",
-
 			// TODO: re-write these just manually counting lines of code and not using
 			// git blame
 			"/total-lines-of-code-prev-year/title",
 			"/total-lines-of-code-prev-year",
 			"/total-lines-of-code-curr-year/title",
 			"/total-lines-of-code-curr-year",
+
+			"/engineer-file-changes-over-time-curr-year/title",
+			"/engineer-file-changes-over-time-curr-year",
 		}
 
 		return utils.Filter(TABLE_OF_CONTENTS, func(s string) bool {

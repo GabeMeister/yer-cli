@@ -165,6 +165,10 @@ func GetEngineerCommitsOverTimeCurrYear() []TotalCommitCount {
 }
 
 func GetEngineerFileChangesOverTimeCurrYear() []TotalFileChangeCount {
+	if !HasPrevYearFileBlames() || !HasCurrYearFileBlames() {
+		return []TotalFileChangeCount{}
+	}
+
 	// engineer => line change count
 	fileChangeTracker := make(map[string]int)
 
@@ -311,6 +315,10 @@ func GetMostCommitsByEngineerCurrYear() MostSingleDayCommitsByEngineer {
 }
 
 func GetTotalLinesOfCodeInRepoByEngineer() map[string]int {
+	if !HasCurrYearFileBlames() {
+		return make(map[string]int)
+	}
+
 	engineerLineCountMap := make(map[string]int)
 
 	fileBlames := GetCurrYearFileBlames()
