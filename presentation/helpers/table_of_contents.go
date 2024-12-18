@@ -48,8 +48,8 @@ var TABLE_OF_CONTENTS = []string{
 	"/num-commits-curr-year",
 	"/num-commits-all-time/title",
 	"/num-commits-all-time",
-	"/engineer-commits-over-time-curr-year/title",
-	"/engineer-commits-over-time-curr-year",
+	// "/engineer-commits-over-time-curr-year/title",
+	// "/engineer-commits-over-time-curr-year",
 	"/engineer-commit-counts-curr-year/title",
 	"/engineer-commit-counts-curr-year",
 	"/engineer-commit-counts-all-time/title",
@@ -288,12 +288,12 @@ func GetTitleSlideData(page string, recap analyzer.Recap) TitleSlideData {
 		data.Description = fmt.Sprintf("The most commits made in one day by an engineer in %d.", analyzer.CURR_YEAR)
 
 	case "most-insertions-in-single-commit-curr-year":
-		data.Title = "Most Insertions in Commit"
-		data.Description = fmt.Sprintf("The most code added in a single commit in %d.", analyzer.CURR_YEAR)
+		data.Title = "Most Code Added in Single Commit"
+		data.Description = fmt.Sprintf("The most massive single code change in %d.", analyzer.CURR_YEAR)
 
 	case "most-deletions-in-single-commit-curr-year":
-		data.Title = "Most Deletions in Commit"
-		data.Description = fmt.Sprintf("Most code removed in a single commit in %d.", analyzer.CURR_YEAR)
+		data.Title = "Most Code Removed in Single Commit"
+		data.Description = fmt.Sprintf("The most code nuked from the codebase in a single commit in %d.", analyzer.CURR_YEAR)
 
 	case "largest-commit-message-curr-year":
 		data.Title = "Largest Commit Message"
@@ -308,12 +308,12 @@ func GetTitleSlideData(page string, recap analyzer.Recap) TitleSlideData {
 		data.Description = fmt.Sprintf("A histogram tracking the frequency of git commit message lengths in %d.", analyzer.CURR_YEAR)
 
 	case "direct-pushes-on-master-by-engineer-curr-year":
-		data.Title = "Direct Commits on Master"
-		data.Description = fmt.Sprintf("The number of direct commits to master, by engineer, in %d.", analyzer.CURR_YEAR)
+		data.Title = "Direct Pushes on Master"
+		data.Description = fmt.Sprintf("The number of direct pushes to master, by engineer, in %d.", analyzer.CURR_YEAR)
 
 	case "merges-to-master-by-engineer-curr-year":
-		data.Title = "Merges to Master"
-		data.Description = fmt.Sprintf("The engineers who are hitting merge on merge requests the most in %d.", analyzer.CURR_YEAR)
+		data.Title = "Testing on Merge Requests"
+		data.Description = fmt.Sprintf("The engineers who tested and merged code the most in %d.", analyzer.CURR_YEAR)
 
 	case "most-merges-in-one-day-curr-year":
 		data.Title = "Most Merges in One Day"

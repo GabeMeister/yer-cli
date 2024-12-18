@@ -18,7 +18,7 @@ import (
 )
 
 func getMergesToMasterChartData(recap analyzer.Recap) helpers.BarChartData {
-	barChartData := helpers.BarChartData{Data: []helpers.DataPoint{}, XAxisLabel: "Engineer", YAxisLabel: fmt.Sprintf("↑ Commits (%d)", analyzer.CURR_YEAR)}
+	barChartData := helpers.BarChartData{Data: []helpers.DataPoint{}, XAxisLabel: "Engineer", YAxisLabel: fmt.Sprintf("↑ Merges (%d)", analyzer.CURR_YEAR)}
 
 	for engineer, merges := range recap.MergesToMasterByEngineerCurrYear {
 		barChartData.Data = append(barChartData.Data, helpers.DataPoint{
