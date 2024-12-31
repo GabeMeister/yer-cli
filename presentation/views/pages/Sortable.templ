@@ -1,0 +1,16 @@
+package presentation_views_pages
+
+import helpers "GabeMeister/yer-cli/presentation/helpers"
+
+templ Sortable(nums []int) {
+	<div data-templ-id="sortable">
+		<form class="sortable" hx-post="/items" hx-trigger="end" hx-target="body" hx-swap="innerHTML">
+			<div class="htmx-indicator">Updating...</div>
+			for _, num := range nums {
+				<div>
+					<input type="hidden" name="item" value={ helpers.IntToStr(num) }/>Item { helpers.IntToStr(num) }
+				</div>
+			}
+		</form>
+	</div>
+}

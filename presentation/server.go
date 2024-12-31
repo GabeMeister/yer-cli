@@ -787,6 +787,39 @@ func RunLocalServer() {
 	 * DEBUGGING
 	 */
 
+	e.GET("/sortable", func(c echo.Context) error {
+		component := presentation_views_pages.Sortable([]int{1, 2, 3, 4, 5})
+		content := render(RenderParams{
+			c:         c,
+			component: component,
+		})
+
+		return c.HTML(http.StatusOK, content)
+	})
+
+	e.POST("/items", func(c echo.Context) error {
+		data, err := c.FormParams()
+		if err != nil {
+			panic(err)
+		}
+
+		itemParam := data["item"]
+
+		nums := []int{}
+		for _, s := range itemParam {
+			num, _ := strconv.Atoi(s)
+			nums = append(nums, num)
+		}
+
+		component := presentation_views_pages.Sortable(nums)
+		content := render(RenderParams{
+			c:         c,
+			component: component,
+		})
+
+		return c.HTML(http.StatusOK, content)
+	})
+
 	e.GET("/env", func(c echo.Context) error {
 		text := "Production"
 		if isDevMode {
