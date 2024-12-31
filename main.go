@@ -46,7 +46,6 @@ func main() {
 			fmt.Printf("\nDone! View stats by running the following command:\n\n./year-end-recap -v\n\n")
 		} else {
 			fmt.Println("Failed to analyze repo. Please try again!")
-
 		}
 	} else if *configFile != "" {
 		fmt.Println("Analyzing using config...")
