@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
@@ -788,7 +789,7 @@ func RunLocalServer() {
 	 */
 
 	e.GET("/sortable", func(c echo.Context) error {
-		component := presentation_views_pages.Sortable([]int{1, 2, 3, 4, 5})
+		component := presentation_views_pages.Sortable([]int{1, 2, 3, 4, 5}, []int{})
 		content := render(RenderParams{
 			c:         c,
 			component: component,
@@ -803,15 +804,33 @@ func RunLocalServer() {
 			panic(err)
 		}
 
-		itemParam := data["item"]
+		leftItemsStr := data["left-form-items"][0]
+		leftItems := strings.Split(leftItemsStr, ",")
 
-		nums := []int{}
-		for _, s := range itemParam {
+		rightItemsStr := data["right-form-items"][0]
+		rightItems := strings.Split(rightItemsStr, ",")
+
+		nums1 := []int{}
+		for _, s := range leftItems {
+			if s == "" {
+				continue
+			}
+
 			num, _ := strconv.Atoi(s)
-			nums = append(nums, num)
+			nums1 = append(nums1, num)
 		}
 
-		component := presentation_views_pages.Sortable(nums)
+		nums2 := []int{}
+		for _, s := range rightItems {
+			if s == "" {
+				continue
+			}
+
+			num, _ := strconv.Atoi(s)
+			nums2 = append(nums2, num)
+		}
+
+		component := presentation_views_pages.Sortable(nums1, nums2)
 		content := render(RenderParams{
 			c:         c,
 			component: component,

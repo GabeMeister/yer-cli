@@ -1,16 +1,46 @@
 package presentation_views_pages
 
-import helpers "GabeMeister/yer-cli/presentation/helpers"
+import (
+	h "GabeMeister/yer-cli/presentation/helpers"
+	"strings"
+)
 
-templ Sortable(nums []int) {
+func getCombinedValue(nums []int) string {
+	strNums := []string{}
+	for _, n := range nums {
+		strNums = append(strNums, h.IntToStr(n))
+	}
+
+	final := strings.Join(strNums, ",")
+
+	return final
+}
+
+templ Sortable(nums1 []int, nums2 []int) {
 	<div data-templ-id="sortable">
-		<form class="sortable" hx-post="/items" hx-trigger="end" hx-target="body" hx-swap="innerHTML">
-			<div class="htmx-indicator">Updating...</div>
-			for _, num := range nums {
-				<div>
-					<input type="hidden" name="item" value={ helpers.IntToStr(num) }/>Item { helpers.IntToStr(num) }
-				</div>
-			}
+		<form id="shared-form" class="flex gap-2" hx-post="/items" hx-trigger="submit" hx-target="body" hx-swap="innerHTML">
+			<div id="left" class="sortable w-96 h-96 p-6 bg-gray-700">
+				for _, num := range nums1 {
+					<div>
+						<input type="hidden" name="item" value={ h.IntToStr(num) }/>Item { h.IntToStr(num) }
+					</div>
+				}
+				// For some reason, we HAVE to have a placeholder input that doesn't do
+				// anything in order to drag an item into a sortable with no items
+				<input type="hidden" name="ignore" class="h-0 w-0"/>
+				<input class="ignore-input" type="hidden" name="left-form-items" value={ getCombinedValue(nums1) }/>
+			</div>
+			<div id="right" class="sortable w-96 h-96 p-6 bg-gray-700">
+				for _, num := range nums2 {
+					<div>
+						<input type="hidden" name="item" value={ h.IntToStr(num) }/>Item { h.IntToStr(num) }
+					</div>
+				}
+				// For some reason, we HAVE to have a placeholder input that doesn't do
+				// anything in order to drag an item into a sortable with no items
+				<input type="hidden" name="ignore" class="h-0 w-0"/>
+				<input class="ignore-input" type="hidden" name="right-form-items" value={ getCombinedValue(nums2) }/>
+			</div>
 		</form>
 	</div>
 }
