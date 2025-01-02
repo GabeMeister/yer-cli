@@ -1,45 +1,42 @@
 package presentation_views_pages
 
 import (
-	h "GabeMeister/yer-cli/presentation/helpers"
-	"strings"
+	components "GabeMeister/yer-cli/presentation/views/components"
+	"GabeMeister/yer-cli/presentation/views/components/AnalyzeManuallyPage"
 )
 
-func getCombinedValue(nums []int) string {
-	strNums := []string{}
-	for _, n := range nums {
-		strNums = append(strNums, h.IntToStr(n))
-	}
-
-	final := strings.Join(strNums, ",")
-
-	return final
-}
-
-templ Sortable(nums1 []int, nums2 []int) {
+templ Sortable(allEngineers []string, duplicateEngineers []string) {
 	<div data-templ-id="sortable">
-		<form id="shared-form" class="flex gap-2" hx-post="/items" hx-trigger="submit" hx-target="body" hx-swap="innerHTML">
-			<div id="left" class="sortable w-96 h-96 p-6 bg-gray-700">
-				for _, num := range nums1 {
-					<div>
-						<input type="hidden" name="item" value={ h.IntToStr(num) }/>Item { h.IntToStr(num) }
-					</div>
-				}
-				// For some reason, we HAVE to have a placeholder input that doesn't do
-				// anything in order to drag an item into a sortable with no items
-				<input type="hidden" name="ignore" class="h-0 w-0"/>
-				<input class="ignore-input" type="hidden" name="left-form-items" value={ getCombinedValue(nums1) }/>
+		<form
+			id="shared-form"
+			class="flex gap-2"
+			hx-post="/items"
+			hx-trigger="submit"
+			hx-target="body"
+			hx-swap="innerHTML"
+		>
+			<div class="m-4">
+				<span>Filter: </span>
+				<input
+					type="text"
+					name="filter-text"
+					id="filter-text"
+					class="ml-2 p-1 text-black"
+					hx-post="/search-engineers"
+					hx-trigger="input changed delay:500ms, keyup=[key=='Enter'], load"
+					hx-target="#left"
+					hx-swap="outerHTML"
+				/>
 			</div>
+			@AnalyzeManuallyPage.AllEngineersList(allEngineers)
 			<div id="right" class="sortable w-96 h-96 p-6 bg-gray-700">
-				for _, num := range nums2 {
-					<div>
-						<input type="hidden" name="item" value={ h.IntToStr(num) }/>Item { h.IntToStr(num) }
-					</div>
+				for _, engineer := range duplicateEngineers {
+					@components.DraggableText(engineer)
 				}
 				// For some reason, we HAVE to have a placeholder input that doesn't do
 				// anything in order to drag an item into a sortable with no items
 				<input type="hidden" name="ignore" class="h-0 w-0"/>
-				<input class="ignore-input" type="hidden" name="right-form-items" value={ getCombinedValue(nums2) }/>
+				<input class="ignore-input" type="hidden" name="right-form-items" value={ AnalyzeManuallyPage.GetCombinedValue(duplicateEngineers) }/>
 			</div>
 		</form>
 	</div>

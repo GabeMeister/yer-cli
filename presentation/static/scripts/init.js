@@ -6,17 +6,17 @@ function handleSortables(elem) {
     const left = [
       ...document
         .querySelector("#left")
-        .querySelectorAll("input[name='item']")
+        .querySelectorAll(".draggable-text")
         .values()
-        .map((item) => item.value),
+        .map((item) => item.textContent),
     ];
 
     const right = [
       ...document
         .querySelector("#right")
-        .querySelectorAll("input[name='item']")
+        .querySelectorAll(".draggable-text")
         .values()
-        .map((item) => item.value),
+        .map((item) => item.textContent),
     ];
 
     const leftHiddenInput = document.querySelector(
@@ -30,7 +30,7 @@ function handleSortables(elem) {
     rightHiddenInput.value = right.join(",");
   }
 
-  let sortables = elem.querySelectorAll(".sortable");
+  let sortables = document.querySelectorAll(".sortable");
 
   for (let i = 0; i < sortables.length; i++) {
     let sortable = sortables[i];

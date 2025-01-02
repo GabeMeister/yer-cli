@@ -2,6 +2,7 @@ package presentation
 
 import (
 	presentation_helpers "GabeMeister/yer-cli/presentation/helpers"
+	"GabeMeister/yer-cli/presentation/views/components/AnalyzeManuallyPage"
 	presentation_views_pages "GabeMeister/yer-cli/presentation/views/pages"
 	"GabeMeister/yer-cli/utils"
 	"embed"
@@ -788,8 +789,31 @@ func RunLocalServer() {
 	 * DEBUGGING
 	 */
 
+	initialEngineers := []string{"Kenny", "Isaac Neace", "Gabe Jensen", "ktrotter", "Kaleb Trotter", "Stephen Bremer", "Kenny Kline", "Ezra Youngren", "Isaac", "Steve Bremer"}
+
 	e.GET("/sortable", func(c echo.Context) error {
-		component := presentation_views_pages.Sortable([]int{1, 2, 3, 4, 5}, []int{})
+		component := presentation_views_pages.Sortable(initialEngineers, []string{})
+		content := render(RenderParams{
+			c:         c,
+			component: component,
+		})
+
+		return c.HTML(http.StatusOK, content)
+	})
+
+	e.POST("/search-engineers", func(c echo.Context) error {
+		text := c.FormValue("filter-text")
+		text = strings.ToLower(text)
+
+		matches := []string{}
+		for _, engineer := range initialEngineers {
+			lowerCaseEngineer := strings.ToLower(engineer)
+
+			if strings.Contains(lowerCaseEngineer, text) {
+				matches = append(matches, engineer)
+			}
+		}
+		component := AnalyzeManuallyPage.AllEngineersList(matches)
 		content := render(RenderParams{
 			c:         c,
 			component: component,
@@ -810,27 +834,25 @@ func RunLocalServer() {
 		rightItemsStr := data["right-form-items"][0]
 		rightItems := strings.Split(rightItemsStr, ",")
 
-		nums1 := []int{}
+		allEngineers := []string{}
 		for _, s := range leftItems {
 			if s == "" {
 				continue
 			}
 
-			num, _ := strconv.Atoi(s)
-			nums1 = append(nums1, num)
+			allEngineers = append(allEngineers, s)
 		}
 
-		nums2 := []int{}
+		duplicateEngineers := []string{}
 		for _, s := range rightItems {
 			if s == "" {
 				continue
 			}
 
-			num, _ := strconv.Atoi(s)
-			nums2 = append(nums2, num)
+			duplicateEngineers = append(duplicateEngineers, s)
 		}
 
-		component := presentation_views_pages.Sortable(nums1, nums2)
+		component := presentation_views_pages.Sortable(allEngineers, duplicateEngineers)
 		content := render(RenderParams{
 			c:         c,
 			component: component,

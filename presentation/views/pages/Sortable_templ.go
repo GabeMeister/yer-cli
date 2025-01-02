@@ -9,22 +9,11 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 import (
-	h "GabeMeister/yer-cli/presentation/helpers"
-	"strings"
+	components "GabeMeister/yer-cli/presentation/views/components"
+	"GabeMeister/yer-cli/presentation/views/components/AnalyzeManuallyPage"
 )
 
-func getCombinedValue(nums []int) string {
-	strNums := []string{}
-	for _, n := range nums {
-		strNums = append(strNums, h.IntToStr(n))
-	}
-
-	final := strings.Join(strNums, ",")
-
-	return final
-}
-
-func Sortable(nums1 []int, nums2 []int) templ.Component {
+func Sortable(allEngineers []string, duplicateEngineers []string) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -45,87 +34,20 @@ func Sortable(nums1 []int, nums2 []int) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div data-templ-id=\"sortable\"><form id=\"shared-form\" class=\"flex gap-2\" hx-post=\"/items\" hx-trigger=\"submit\" hx-target=\"body\" hx-swap=\"innerHTML\"><div id=\"left\" class=\"sortable w-96 h-96 p-6 bg-gray-700\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div data-templ-id=\"sortable\"><form id=\"shared-form\" class=\"flex gap-2\" hx-post=\"/items\" hx-trigger=\"submit\" hx-target=\"body\" hx-swap=\"innerHTML\"><div class=\"m-4\"><span>Filter: </span> <input type=\"text\" name=\"filter-text\" id=\"filter-text\" class=\"ml-2 p-1 text-black\" hx-post=\"/search-engineers\" hx-trigger=\"input changed delay:500ms, keyup=[key==&#39;Enter&#39;], load\" hx-target=\"#left\" hx-swap=\"outerHTML\"></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		for _, num := range nums1 {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div><input type=\"hidden\" name=\"item\" value=\"")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			var templ_7745c5c3_Var2 string
-			templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(h.IntToStr(num))
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/Sortable.templ`, Line: 25, Col: 62}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Item ")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			var templ_7745c5c3_Var3 string
-			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(h.IntToStr(num))
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/Sortable.templ`, Line: 25, Col: 88}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div>")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<input type=\"hidden\" name=\"ignore\" class=\"h-0 w-0\"> <input class=\"ignore-input\" type=\"hidden\" name=\"left-form-items\" value=\"")
+		templ_7745c5c3_Err = AnalyzeManuallyPage.AllEngineersList(allEngineers).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var4 string
-		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(getCombinedValue(nums1))
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/Sortable.templ`, Line: 31, Col: 100}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"right\" class=\"sortable w-96 h-96 p-6 bg-gray-700\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></div><div id=\"right\" class=\"sortable w-96 h-96 p-6 bg-gray-700\">")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		for _, num := range nums2 {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div><input type=\"hidden\" name=\"item\" value=\"")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			var templ_7745c5c3_Var5 string
-			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(h.IntToStr(num))
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/Sortable.templ`, Line: 36, Col: 62}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Item ")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			var templ_7745c5c3_Var6 string
-			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(h.IntToStr(num))
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/Sortable.templ`, Line: 36, Col: 88}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div>")
+		for _, engineer := range duplicateEngineers {
+			templ_7745c5c3_Err = components.DraggableText(engineer).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -134,12 +56,12 @@ func Sortable(nums1 []int, nums2 []int) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var7 string
-		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(getCombinedValue(nums2))
+		var templ_7745c5c3_Var2 string
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(AnalyzeManuallyPage.GetCombinedValue(duplicateEngineers))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/Sortable.templ`, Line: 42, Col: 101}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/Sortable.templ`, Line: 39, Col: 134}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
