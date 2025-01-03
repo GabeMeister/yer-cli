@@ -16,7 +16,7 @@ type ConfigFileOptions struct {
 	IncludeFileBlames      bool
 }
 
-func initConfig(options ConfigFileOptions) ConfigFile {
+func InitConfig(options ConfigFileOptions) ConfigFile {
 	config := ConfigFile{
 		Repos: []RepoConfig{
 			{
@@ -45,7 +45,7 @@ func initConfig(options ConfigFileOptions) ConfigFile {
 
 func updateDuplicateEngineers(path string, duplicateEngineers map[string]string) error {
 	// Update config, cause we wanna remember this for later
-	config := getConfig(path)
+	config := GetConfig(path)
 	config.Repos[0].DuplicateEngineers = duplicateEngineers
 	SaveDataToFile(config, path)
 
@@ -62,7 +62,7 @@ func updateDuplicateEngineers(path string, duplicateEngineers map[string]string)
 	return nil
 }
 
-func getConfig(path string) ConfigFile {
+func GetConfig(path string) ConfigFile {
 	bytes, err := os.ReadFile(path)
 	if err != nil {
 		panic(err)

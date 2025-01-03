@@ -51,7 +51,7 @@ Press enter to continue...`)
 		excludedDirs = getExcludedDirs()
 	}
 
-	config := initConfig(ConfigFileOptions{
+	config := InitConfig(ConfigFileOptions{
 		RepoDir:                dir,
 		MasterBranchName:       masterBranch,
 		IncludedFileExtensions: fileExtensions,
@@ -83,7 +83,7 @@ func AnalyzeWithConfig(path string) bool {
 		return false
 	}
 
-	config := getConfig(path)
+	config := GetConfig(path)
 
 	// For now, we're just handling 1 repo at a time
 	repoConfig := config.Repos[0]

@@ -5,7 +5,7 @@ import (
 	"GabeMeister/yer-cli/presentation/views/components/AnalyzeManuallyPage"
 )
 
-templ Sortable(allEngineers []string, duplicateEngineers []string) {
+templ Sortable(allEngineers []string, selectedEngineers []string, duplicateEngineers map[string]string) {
 	<div data-templ-id="sortable">
 		<form
 			id="shared-form"
@@ -30,18 +30,25 @@ templ Sortable(allEngineers []string, duplicateEngineers []string) {
 			</div>
 			@AnalyzeManuallyPage.AllEngineersList(allEngineers)
 			<div id="right" class="sortable w-96 h-96 p-6 bg-gray-700">
-				for _, engineer := range duplicateEngineers {
+				for _, engineer := range selectedEngineers {
 					@components.DraggableText(engineer)
 				}
 				// For some reason, we HAVE to have a placeholder input that doesn't do
 				// anything in order to drag an item into a sortable with no items
 				<input type="hidden" name="ignore" class="h-0 w-0"/>
-				<input class="ignore-input" type="hidden" name="right-form-items" value={ AnalyzeManuallyPage.GetCombinedValue(duplicateEngineers) }/>
+				<input class="ignore-input" type="hidden" name="right-form-items" value={ AnalyzeManuallyPage.GetCombinedValue(selectedEngineers) }/>
 			</div>
 		</form>
 		<div>
+			for duplicate, real := range duplicateEngineers {
+				<div>
+					{ duplicate }: { real }
+				</div>
+			}
+		</div>
+		<div>
 			<form hx-post="/submit-duplicate" hx-target="body">
-				<input type="hidden" name="duplicate-engineers" value={ AnalyzeManuallyPage.GetCombinedValue(duplicateEngineers) }/>
+				<input type="hidden" name="duplicate-engineers" value={ AnalyzeManuallyPage.GetCombinedValue(selectedEngineers) }/>
 				<button class="px-2 py-1 bg-white rounded-lg text-black m-4">Submit</button>
 			</form>
 		</div>

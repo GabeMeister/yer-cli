@@ -34,11 +34,6 @@ function handleSortables(elem) {
       "input[name='duplicate-engineers']"
     );
     duplicateEngineersHiddenInput.value = right.join(",");
-    console.log(
-      "\n\n***** duplicateEngineersHiddenInput.value *****\n",
-      duplicateEngineersHiddenInput.value,
-      "\n\n"
-    );
   }
 
   let sortables = document.querySelectorAll(".sortable");

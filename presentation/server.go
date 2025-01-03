@@ -1,6 +1,7 @@
 package presentation
 
 import (
+	"GabeMeister/yer-cli/analyzer"
 	presentation_helpers "GabeMeister/yer-cli/presentation/helpers"
 	"GabeMeister/yer-cli/presentation/views/components/AnalyzeManuallyPage"
 	presentation_views_pages "GabeMeister/yer-cli/presentation/views/pages"
@@ -792,10 +793,19 @@ func RunLocalServer() {
 	initialEngineers := []string{"Kenny", "Isaac Neace", "Gabe Jensen", "ktrotter", "Kaleb Trotter", "Stephen Bremer", "Kenny Kline", "Ezra Youngren", "Isaac", "Steve Bremer"}
 
 	e.GET("/sortable", func(c echo.Context) error {
-		component := presentation_views_pages.Sortable(initialEngineers, []string{})
+
+		analyzer.InitConfig(analyzer.ConfigFileOptions{
+			RepoDir:                "/home/gabe/dev/rb-frontend",
+			MasterBranchName:       "master",
+			IncludedFileExtensions: []string{"ts", "tsx", "js", "jsx"},
+			ExcludedDirs:           []string{"node_modules", "build"},
+			DuplicateEngineers:     make(map[string]string),
+			IncludeFileBlames:      true,
+		})
+
 		content := render(RenderParams{
 			c:         c,
-			component: component,
+			component: presentation_views_pages.Sortable(initialEngineers, []string{}, make(map[string]string)),
 		})
 
 		return c.HTML(http.StatusOK, content)
@@ -843,16 +853,18 @@ func RunLocalServer() {
 			allEngineers = append(allEngineers, s)
 		}
 
-		duplicateEngineers := []string{}
+		selectedEngineers := []string{}
 		for _, s := range rightItems {
 			if s == "" {
 				continue
 			}
 
-			duplicateEngineers = append(duplicateEngineers, s)
+			selectedEngineers = append(selectedEngineers, s)
 		}
 
-		component := presentation_views_pages.Sortable(allEngineers, duplicateEngineers)
+		config := analyzer.GetConfig("./config.json")
+
+		component := presentation_views_pages.Sortable(allEngineers, selectedEngineers, config.Repos[0].DuplicateEngineers)
 		content := render(RenderParams{
 			c:         c,
 			component: component,
@@ -862,10 +874,21 @@ func RunLocalServer() {
 	})
 
 	e.POST("/submit-duplicate", func(c echo.Context) error {
-		animal := c.FormValue("duplicate-engineers")
-		text := fmt.Sprintf("<h1>%s</h1>", animal)
+		duplicatesList := c.FormValue("duplicate-engineers")
+		userNames := strings.Split(duplicatesList, ",")
 
-		return c.HTML(http.StatusOK, text)
+		config := analyzer.GetConfig("./config.json")
+		config.Repos[0].DuplicateEngineers[userNames[0]] = userNames[1]
+		fmt.Print("\n\n", "*** config ***", "\n", config, "\n\n\n")
+		analyzer.SaveDataToFile(config, "./config.json")
+
+		component := presentation_views_pages.Sortable(initialEngineers, []string{}, config.Repos[0].DuplicateEngineers)
+		content := render(RenderParams{
+			c:         c,
+			component: component,
+		})
+
+		return c.HTML(http.StatusOK, content)
 	})
 
 	e.GET("/env", func(c echo.Context) error {
