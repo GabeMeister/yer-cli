@@ -34,7 +34,7 @@ func Sortable(allEngineers []string, duplicateEngineers []string) templ.Componen
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div data-templ-id=\"sortable\"><form id=\"shared-form\" class=\"flex gap-2\" hx-post=\"/items\" hx-trigger=\"submit\" hx-target=\"body\" hx-swap=\"innerHTML\"><div class=\"m-4\"><span>Filter: </span> <input type=\"text\" name=\"filter-text\" id=\"filter-text\" class=\"ml-2 p-1 text-black\" hx-post=\"/search-engineers\" hx-trigger=\"input changed delay:500ms, keyup=[key==&#39;Enter&#39;], load\" hx-target=\"#left\" hx-swap=\"outerHTML\"></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div data-templ-id=\"sortable\"><form id=\"shared-form\" class=\"flex gap-2\" hx-post=\"/items\" hx-trigger=\"submit\" hx-target=\"body\" hx-swap=\"innerHTML\"><div class=\"m-4\"><span>Filter: </span> <input type=\"text\" name=\"filter-text\" id=\"filter-text\" class=\"ml-2 p-1 text-black\" hx-post=\"/search-engineers\" hx-trigger=\"input changed delay:500ms, keyup=[key==&#39;Enter&#39;]\" hx-target=\"#left\" hx-swap=\"outerHTML\"></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -65,7 +65,20 @@ func Sortable(allEngineers []string, duplicateEngineers []string) templ.Componen
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></div></form></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></div></form><div><form hx-post=\"/submit-duplicate\" hx-target=\"body\"><input type=\"hidden\" name=\"duplicate-engineers\" value=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var3 string
+		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(AnalyzeManuallyPage.GetCombinedValue(duplicateEngineers))
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/Sortable.templ`, Line: 44, Col: 116}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"> <button class=\"px-2 py-1 bg-white rounded-lg text-black m-4\">Submit</button></form></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

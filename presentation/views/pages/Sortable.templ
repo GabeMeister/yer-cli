@@ -23,7 +23,7 @@ templ Sortable(allEngineers []string, duplicateEngineers []string) {
 					id="filter-text"
 					class="ml-2 p-1 text-black"
 					hx-post="/search-engineers"
-					hx-trigger="input changed delay:500ms, keyup=[key=='Enter'], load"
+					hx-trigger="input changed delay:500ms, keyup=[key=='Enter']"
 					hx-target="#left"
 					hx-swap="outerHTML"
 				/>
@@ -39,5 +39,11 @@ templ Sortable(allEngineers []string, duplicateEngineers []string) {
 				<input class="ignore-input" type="hidden" name="right-form-items" value={ AnalyzeManuallyPage.GetCombinedValue(duplicateEngineers) }/>
 			</div>
 		</form>
+		<div>
+			<form hx-post="/submit-duplicate" hx-target="body">
+				<input type="hidden" name="duplicate-engineers" value={ AnalyzeManuallyPage.GetCombinedValue(duplicateEngineers) }/>
+				<button class="px-2 py-1 bg-white rounded-lg text-black m-4">Submit</button>
+			</form>
+		</div>
 	</div>
 }

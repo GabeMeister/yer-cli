@@ -861,6 +861,13 @@ func RunLocalServer() {
 		return c.HTML(http.StatusOK, content)
 	})
 
+	e.POST("/submit-duplicate", func(c echo.Context) error {
+		animal := c.FormValue("duplicate-engineers")
+		text := fmt.Sprintf("<h1>%s</h1>", animal)
+
+		return c.HTML(http.StatusOK, text)
+	})
+
 	e.GET("/env", func(c echo.Context) error {
 		text := "Production"
 		if isDevMode {

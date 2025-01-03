@@ -28,6 +28,17 @@ function handleSortables(elem) {
       "input[name='right-form-items']"
     );
     rightHiddenInput.value = right.join(",");
+
+    // Handle the other form for actually submitting the duplicate
+    const duplicateEngineersHiddenInput = document.querySelector(
+      "input[name='duplicate-engineers']"
+    );
+    duplicateEngineersHiddenInput.value = right.join(",");
+    console.log(
+      "\n\n***** duplicateEngineersHiddenInput.value *****\n",
+      duplicateEngineersHiddenInput.value,
+      "\n\n"
+    );
   }
 
   let sortables = document.querySelectorAll(".sortable");
