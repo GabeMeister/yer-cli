@@ -1,22 +1,21 @@
-package presentation
+package analyzer
 
 import (
-	"GabeMeister/yer-cli/analyzer"
 	"GabeMeister/yer-cli/utils"
 	"encoding/json"
 	"os"
 )
 
-func getRecap() (analyzer.Recap, error) {
+func GetRecap() (Recap, error) {
 	if !utils.HasRepoBeenAnalyzed() {
-		return analyzer.Recap{}, os.ErrNotExist
+		return Recap{}, os.ErrNotExist
 	}
 
 	data, err := os.ReadFile(utils.RECAP_FILE)
 	if err != nil {
 		panic(err)
 	}
-	var repoRecap analyzer.Recap
+	var repoRecap Recap
 
 	json.Unmarshal(data, &repoRecap)
 
