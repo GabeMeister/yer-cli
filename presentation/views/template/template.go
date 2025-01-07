@@ -1,4 +1,4 @@
-package presentation
+package template
 
 import (
 	presentation_views_layouts "GabeMeister/yer-cli/presentation/views/layouts"
@@ -11,13 +11,13 @@ import (
 )
 
 type RenderParams struct {
-	c         echo.Context
-	component templ.Component
+	C         echo.Context
+	Component templ.Component
 }
 
-func render(params RenderParams) string {
-	component := params.component
-	c := params.c
+func Render(params RenderParams) string {
+	component := params.Component
+	c := params.C
 
 	htmxRequestHeader := c.Request().Header["Hx-Request"]
 	isHtmxRequest := len(htmxRequestHeader) > 0 && htmxRequestHeader[0] == "true"
@@ -44,11 +44,11 @@ func render(params RenderParams) string {
 	}
 }
 
-func renderRepoNotFound(c echo.Context) error {
+func RenderRepoNotFound(c echo.Context) error {
 	component := presentation_views_pages.RepoNotFound()
-	content := render(RenderParams{
-		c:         c,
-		component: component,
+	content := Render(RenderParams{
+		C:         c,
+		Component: component,
 	})
 
 	return c.HTML(http.StatusOK, content)
