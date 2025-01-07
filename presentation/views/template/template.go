@@ -2,7 +2,7 @@ package template
 
 import (
 	presentation_views_layouts "GabeMeister/yer-cli/presentation/views/layouts"
-	presentation_views_pages "GabeMeister/yer-cli/presentation/views/pages"
+	"GabeMeister/yer-cli/presentation/views/pages"
 	"context"
 	"net/http"
 
@@ -45,7 +45,7 @@ func Render(params RenderParams) string {
 }
 
 func RenderRepoNotFound(c echo.Context) error {
-	component := presentation_views_pages.RepoNotFound()
+	component := pages.RepoNotFound()
 	content := Render(RenderParams{
 		C:         c,
 		Component: component,

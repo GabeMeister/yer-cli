@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"os"
 
-	presentation_views_pages "GabeMeister/yer-cli/presentation/views/pages"
+	"GabeMeister/yer-cli/presentation/views/pages"
 
 	"github.com/labstack/echo/v4"
 )
@@ -19,7 +19,7 @@ func AddDebuggingRoutes(e *echo.Echo) {
 			text = "Development"
 		}
 
-		component := presentation_views_pages.Env(text)
+		component := pages.Env(text)
 
 		content := t.Render(t.RenderParams{
 			C:         c,

@@ -7,7 +7,7 @@ import (
 	"strconv"
 
 	helpers "GabeMeister/yer-cli/presentation/helpers"
-	presentation_views_pages "GabeMeister/yer-cli/presentation/views/pages"
+	"GabeMeister/yer-cli/presentation/views/pages"
 	t "GabeMeister/yer-cli/presentation/views/template"
 
 	"github.com/labstack/echo/v4"
@@ -21,7 +21,7 @@ func AddPresentationRoutes(e *echo.Echo) {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.Intro(recap)
+		component := pages.Intro(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -38,7 +38,7 @@ func AddPresentationRoutes(e *echo.Echo) {
 		page := c.Param("page")
 
 		titleSlideData := helpers.GetTitleSlideData(page, recap)
-		component := presentation_views_pages.Title(presentation_views_pages.TitleParams{
+		component := pages.Title(pages.TitleParams{
 			Title:       titleSlideData.Title,
 			Description: titleSlideData.Description,
 			NextBtnUrl:  titleSlideData.NextBtnUrl,
@@ -57,7 +57,7 @@ func AddPresentationRoutes(e *echo.Echo) {
 		}
 
 		nextBtnUrl := helpers.GetNextButtonLink("/shortest-commit-message-curr-year/title", recap)
-		component := presentation_views_pages.Title(presentation_views_pages.TitleParams{
+		component := pages.Title(pages.TitleParams{
 			Title:       "Shortest Commit Messages",
 			Description: "The absolute shortest, low-effort commit messages engineers made this year.",
 			NextBtnUrl:  nextBtnUrl,
@@ -76,7 +76,7 @@ func AddPresentationRoutes(e *echo.Echo) {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.NewEngineerCountCurrYear(recap)
+		component := pages.NewEngineerCountCurrYear(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -90,7 +90,7 @@ func AddPresentationRoutes(e *echo.Echo) {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.NewEngineerListCurrYear(recap)
+		component := pages.NewEngineerListCurrYear(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -104,7 +104,7 @@ func AddPresentationRoutes(e *echo.Echo) {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.EngineerCountCurrYear(recap)
+		component := pages.EngineerCountCurrYear(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -118,7 +118,7 @@ func AddPresentationRoutes(e *echo.Echo) {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.EngineerCountAllTime(recap)
+		component := pages.EngineerCountAllTime(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -132,7 +132,7 @@ func AddPresentationRoutes(e *echo.Echo) {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.NumCommitsPrevYear(recap)
+		component := pages.NumCommitsPrevYear(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -149,7 +149,7 @@ func AddPresentationRoutes(e *echo.Echo) {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.NumCommitsCurrYear(recap)
+		component := pages.NumCommitsCurrYear(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -166,7 +166,7 @@ func AddPresentationRoutes(e *echo.Echo) {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.NumCommitsAllTime(recap)
+		component := pages.NumCommitsAllTime(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -183,7 +183,7 @@ func AddPresentationRoutes(e *echo.Echo) {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.EngineerCommitsOverTimeCurrYear(recap)
+		component := pages.EngineerCommitsOverTimeCurrYear(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -200,7 +200,7 @@ func AddPresentationRoutes(e *echo.Echo) {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.EngineerFileChangesOverTimeCurrYear(recap)
+		component := pages.EngineerFileChangesOverTimeCurrYear(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -217,7 +217,7 @@ func AddPresentationRoutes(e *echo.Echo) {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.FileCountPrevYear(recap)
+		component := pages.FileCountPrevYear(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -234,7 +234,7 @@ func AddPresentationRoutes(e *echo.Echo) {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.FileCountCurrYear(recap)
+		component := pages.FileCountCurrYear(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -251,7 +251,7 @@ func AddPresentationRoutes(e *echo.Echo) {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.ThirdLargestFile(recap)
+		component := pages.ThirdLargestFile(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -268,7 +268,7 @@ func AddPresentationRoutes(e *echo.Echo) {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.SecondLargestFile(recap)
+		component := pages.SecondLargestFile(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -285,7 +285,7 @@ func AddPresentationRoutes(e *echo.Echo) {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.LargestFile(recap)
+		component := pages.LargestFile(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -302,7 +302,7 @@ func AddPresentationRoutes(e *echo.Echo) {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.TotalLinesOfCodePrevYear(recap)
+		component := pages.TotalLinesOfCodePrevYear(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -319,7 +319,7 @@ func AddPresentationRoutes(e *echo.Echo) {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.TotalLinesOfCodeCurrYear(recap)
+		component := pages.TotalLinesOfCodeCurrYear(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -336,7 +336,7 @@ func AddPresentationRoutes(e *echo.Echo) {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.MostSingleDayCommitsByEngineerCurrYear(recap)
+		component := pages.MostSingleDayCommitsByEngineerCurrYear(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -353,7 +353,7 @@ func AddPresentationRoutes(e *echo.Echo) {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.MostSingleDayCommitsByEngineerCurrYearCommitList(recap)
+		component := pages.MostSingleDayCommitsByEngineerCurrYearCommitList(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -370,7 +370,7 @@ func AddPresentationRoutes(e *echo.Echo) {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.MostInsertionsInSingleCommitCurrYear(recap)
+		component := pages.MostInsertionsInSingleCommitCurrYear(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -387,7 +387,7 @@ func AddPresentationRoutes(e *echo.Echo) {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.MostDeletionsInSingleCommitCurrYear(recap)
+		component := pages.MostDeletionsInSingleCommitCurrYear(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -404,7 +404,7 @@ func AddPresentationRoutes(e *echo.Echo) {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.LargestCommitMessageCurrYear(recap)
+		component := pages.LargestCommitMessageCurrYear(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -426,7 +426,7 @@ func AddPresentationRoutes(e *echo.Echo) {
 			panic(err)
 		}
 
-		component := presentation_views_pages.SmallestCommitMessagesCurrYear(recap, index)
+		component := pages.SmallestCommitMessagesCurrYear(recap, index)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -443,7 +443,7 @@ func AddPresentationRoutes(e *echo.Echo) {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.MostMergesInOneDayCurrYear(recap)
+		component := pages.MostMergesInOneDayCurrYear(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -460,7 +460,7 @@ func AddPresentationRoutes(e *echo.Echo) {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.MostMergesInOneDayCommitMessagesCurrYear(recap)
+		component := pages.MostMergesInOneDayCommitMessagesCurrYear(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -477,7 +477,7 @@ func AddPresentationRoutes(e *echo.Echo) {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.AvgMergesToMasterPerDayCurrYear(recap)
+		component := pages.AvgMergesToMasterPerDayCurrYear(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -494,7 +494,7 @@ func AddPresentationRoutes(e *echo.Echo) {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.SizeOfRepoByWeekCurrYear(recap)
+		component := pages.SizeOfRepoByWeekCurrYear(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -511,7 +511,7 @@ func AddPresentationRoutes(e *echo.Echo) {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.FileChangesByEngineerCurrYear(recap)
+		component := pages.FileChangesByEngineerCurrYear(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -528,7 +528,7 @@ func AddPresentationRoutes(e *echo.Echo) {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.FileChangeRatioByEngineerCurrYear(recap)
+		component := pages.FileChangeRatioByEngineerCurrYear(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -545,7 +545,7 @@ func AddPresentationRoutes(e *echo.Echo) {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.EngineerCommitCountsCurrYear(recap)
+		component := pages.EngineerCommitCountsCurrYear(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -562,7 +562,7 @@ func AddPresentationRoutes(e *echo.Echo) {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.EngineerCommitCountsAllTime(recap)
+		component := pages.EngineerCommitCountsAllTime(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -579,7 +579,7 @@ func AddPresentationRoutes(e *echo.Echo) {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.DirectPushesOnMasterByEngineerCurrYear(recap)
+		component := pages.DirectPushesOnMasterByEngineerCurrYear(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -596,7 +596,7 @@ func AddPresentationRoutes(e *echo.Echo) {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.MergesToMasterByEngineerCurrYear(recap)
+		component := pages.MergesToMasterByEngineerCurrYear(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -613,7 +613,7 @@ func AddPresentationRoutes(e *echo.Echo) {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.TotalLinesOfCodeInRepoByEngineer(recap)
+		component := pages.TotalLinesOfCodeInRepoByEngineer(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -630,7 +630,7 @@ func AddPresentationRoutes(e *echo.Echo) {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.CommitsByMonthCurrYear(recap)
+		component := pages.CommitsByMonthCurrYear(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -647,7 +647,7 @@ func AddPresentationRoutes(e *echo.Echo) {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.CommitsByWeekDayCurrYear(recap)
+		component := pages.CommitsByWeekDayCurrYear(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -664,7 +664,7 @@ func AddPresentationRoutes(e *echo.Echo) {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.CommitsByHourCurrYear(recap)
+		component := pages.CommitsByHourCurrYear(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -681,7 +681,7 @@ func AddPresentationRoutes(e *echo.Echo) {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.CommitMessageLengthHistogramCurrYear(recap)
+		component := pages.CommitMessageLengthHistogramCurrYear(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -698,7 +698,7 @@ func AddPresentationRoutes(e *echo.Echo) {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.CommonlyChangedFiles(recap)
+		component := pages.CommonlyChangedFiles(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -715,7 +715,7 @@ func AddPresentationRoutes(e *echo.Echo) {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := presentation_views_pages.TheEnd()
+		component := pages.TheEnd()
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,

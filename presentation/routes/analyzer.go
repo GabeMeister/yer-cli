@@ -3,7 +3,7 @@ package routes
 import (
 	"GabeMeister/yer-cli/analyzer"
 	"GabeMeister/yer-cli/presentation/views/components/AnalyzeManuallyPage"
-	presentation_views_pages "GabeMeister/yer-cli/presentation/views/pages"
+	"GabeMeister/yer-cli/presentation/views/pages"
 	t "GabeMeister/yer-cli/presentation/views/template"
 	"net/http"
 	"strings"
@@ -27,7 +27,7 @@ func AddAnalyzerRoutes(e *echo.Echo) {
 
 		content := t.Render(t.RenderParams{
 			C:         c,
-			Component: presentation_views_pages.Sortable(initialEngineers, []string{}, make(map[string]string)),
+			Component: pages.Sortable(initialEngineers, []string{}, make(map[string]string)),
 		})
 
 		return c.HTML(http.StatusOK, content)
@@ -86,7 +86,7 @@ func AddAnalyzerRoutes(e *echo.Echo) {
 
 		config := analyzer.GetConfig("./config.json")
 
-		component := presentation_views_pages.Sortable(allEngineers, selectedEngineers, config.Repos[0].DuplicateEngineers)
+		component := pages.Sortable(allEngineers, selectedEngineers, config.Repos[0].DuplicateEngineers)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -103,7 +103,7 @@ func AddAnalyzerRoutes(e *echo.Echo) {
 		config.Repos[0].DuplicateEngineers[userNames[0]] = userNames[1]
 		analyzer.SaveDataToFile(config, "./config.json")
 
-		component := presentation_views_pages.Sortable(initialEngineers, []string{}, config.Repos[0].DuplicateEngineers)
+		component := pages.Sortable(initialEngineers, []string{}, config.Repos[0].DuplicateEngineers)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
