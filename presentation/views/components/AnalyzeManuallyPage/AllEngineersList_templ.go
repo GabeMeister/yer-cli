@@ -41,14 +41,14 @@ func AllEngineersList(allEngineers []string) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<input type=\"hidden\" name=\"ignore\" class=\"h-0 w-0\"> <input class=\"ignore-input\" type=\"hidden\" name=\"left-form-items\" value=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<input type=\"hidden\" name=\"ignore\" class=\"h-0 w-0\"> <input type=\"hidden\" name=\"all-engineers\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(GetCombinedValue(allEngineers))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/AnalyzeManuallyPage/AllEngineersList.templ`, Line: 13, Col: 105}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/AnalyzeManuallyPage/AllEngineersList.templ`, Line: 13, Col: 82}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {

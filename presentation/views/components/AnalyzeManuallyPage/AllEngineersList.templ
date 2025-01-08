@@ -1,4 +1,4 @@
-package AnalyzeManuallyPage 
+package AnalyzeManuallyPage
 
 import components "GabeMeister/yer-cli/presentation/views/components"
 
@@ -10,6 +10,6 @@ templ AllEngineersList(allEngineers []string) {
 		// For some reason, we HAVE to have a placeholder input that doesn't do
 		// anything in order to drag an item into a sortable with no items
 		<input type="hidden" name="ignore" class="h-0 w-0"/>
-		<input class="ignore-input" type="hidden" name="left-form-items" value={ GetCombinedValue(allEngineers) }/>
+		<input type="hidden" name="all-engineers" value={ GetCombinedValue(allEngineers) }/>
 	</div>
 }

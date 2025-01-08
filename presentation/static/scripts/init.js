@@ -20,12 +20,12 @@ function handleSortables(elem) {
     ];
 
     const leftHiddenInput = document.querySelector(
-      "input[name='left-form-items']"
+      "input[name='all-engineers']"
     );
     leftHiddenInput.value = left.join(",");
 
     const rightHiddenInput = document.querySelector(
-      "input[name='right-form-items']"
+      "input[name='duplicate-engineers']"
     );
     rightHiddenInput.value = right.join(",");
 

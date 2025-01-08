@@ -5,12 +5,12 @@ import (
 	"GabeMeister/yer-cli/presentation/views/components/AnalyzeManuallyPage"
 )
 
-templ Sortable(allEngineers []string, selectedEngineers []string, duplicateEngineers map[string]string) {
+templ AnalyzeManually(allEngineers []string, selectedEngineers []string, duplicateEngineers map[string]string) {
 	<div data-templ-id="sortable">
 		<form
 			id="shared-form"
 			class="flex gap-2"
-			hx-post="/items"
+			hx-post="/duplicate-engineer-drag-complete"
 			hx-trigger="submit"
 			hx-target="body"
 			hx-swap="innerHTML"
@@ -36,7 +36,7 @@ templ Sortable(allEngineers []string, selectedEngineers []string, duplicateEngin
 				// For some reason, we HAVE to have a placeholder input that doesn't do
 				// anything in order to drag an item into a sortable with no items
 				<input type="hidden" name="ignore" class="h-0 w-0"/>
-				<input class="ignore-input" type="hidden" name="right-form-items" value={ AnalyzeManuallyPage.GetCombinedValue(selectedEngineers) }/>
+				<input class="ignore-input" type="hidden" name="duplicate-engineers" value={ AnalyzeManuallyPage.GetCombinedValue(selectedEngineers) }/>
 			</div>
 		</form>
 		<div>
@@ -49,7 +49,13 @@ templ Sortable(allEngineers []string, selectedEngineers []string, duplicateEngin
 		<div>
 			<form hx-post="/submit-duplicate" hx-target="body">
 				<input type="hidden" name="duplicate-engineers" value={ AnalyzeManuallyPage.GetCombinedValue(selectedEngineers) }/>
-				<button class="px-2 py-1 bg-white rounded-lg text-black m-4">Submit</button>
+				<button
+					class={ "px-2 py-1 bg-white rounded-lg text-black m-4",
+					templ.KV("opacity-50 cursor-not-allowed", len(selectedEngineers) <= 1) }
+					disabled?={ len(selectedEngineers) <= 1 }
+				>
+					Submit
+				</button>
 			</form>
 		</div>
 	</div>

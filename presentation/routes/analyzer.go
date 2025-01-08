@@ -14,8 +14,7 @@ import (
 func AddAnalyzerRoutes(e *echo.Echo) {
 	initialEngineers := []string{"Kenny", "Isaac Neace", "Gabe Jensen", "ktrotter", "Kaleb Trotter", "Stephen Bremer", "Kenny Kline", "Ezra Youngren", "Isaac", "Steve Bremer"}
 
-	e.GET("/sortable", func(c echo.Context) error {
-
+	e.GET("/analyze-manually", func(c echo.Context) error {
 		analyzer.InitConfig(analyzer.ConfigFileOptions{
 			RepoDir:                "/home/gabe/dev/rb-frontend",
 			MasterBranchName:       "master",
@@ -27,7 +26,7 @@ func AddAnalyzerRoutes(e *echo.Echo) {
 
 		content := t.Render(t.RenderParams{
 			C:         c,
-			Component: pages.Sortable(initialEngineers, []string{}, make(map[string]string)),
+			Component: pages.AnalyzeManually(initialEngineers, []string{}, make(map[string]string)),
 		})
 
 		return c.HTML(http.StatusOK, content)
@@ -54,16 +53,16 @@ func AddAnalyzerRoutes(e *echo.Echo) {
 		return c.HTML(http.StatusOK, content)
 	})
 
-	e.POST("/items", func(c echo.Context) error {
+	e.POST("/duplicate-engineer-drag-complete", func(c echo.Context) error {
 		data, err := c.FormParams()
 		if err != nil {
 			panic(err)
 		}
 
-		leftItemsStr := data["left-form-items"][0]
+		leftItemsStr := data["all-engineers"][0]
 		leftItems := strings.Split(leftItemsStr, ",")
 
-		rightItemsStr := data["right-form-items"][0]
+		rightItemsStr := data["duplicate-engineers"][0]
 		rightItems := strings.Split(rightItemsStr, ",")
 
 		allEngineers := []string{}
@@ -86,7 +85,7 @@ func AddAnalyzerRoutes(e *echo.Echo) {
 
 		config := analyzer.GetConfig("./config.json")
 
-		component := pages.Sortable(allEngineers, selectedEngineers, config.Repos[0].DuplicateEngineers)
+		component := pages.AnalyzeManually(allEngineers, selectedEngineers, config.Repos[0].DuplicateEngineers)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -103,7 +102,7 @@ func AddAnalyzerRoutes(e *echo.Echo) {
 		config.Repos[0].DuplicateEngineers[userNames[0]] = userNames[1]
 		analyzer.SaveDataToFile(config, "./config.json")
 
-		component := pages.Sortable(initialEngineers, []string{}, config.Repos[0].DuplicateEngineers)
+		component := pages.AnalyzeManually(initialEngineers, []string{}, config.Repos[0].DuplicateEngineers)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
