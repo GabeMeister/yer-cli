@@ -1,4 +1,4 @@
-package presentation_helpers
+package helpers
 
 type DataPoint struct {
 	X string `json:"x"`

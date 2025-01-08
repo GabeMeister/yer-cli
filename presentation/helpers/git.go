@@ -1,4 +1,4 @@
-package presentation_helpers
+package helpers
 
 import "strings"
 
