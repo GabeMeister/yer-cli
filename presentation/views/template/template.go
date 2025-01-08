@@ -1,7 +1,7 @@
 package template
 
 import (
-	presentation_views_layouts "GabeMeister/yer-cli/presentation/views/layouts"
+	"GabeMeister/yer-cli/presentation/views/layouts"
 	"GabeMeister/yer-cli/presentation/views/pages"
 	"context"
 	"net/http"
@@ -34,7 +34,7 @@ func Render(params RenderParams) string {
 		return buf.String()
 	} else {
 		ctx := templ.WithChildren(context.Background(), component)
-		standardLayout := presentation_views_layouts.StandardLayout()
+		standardLayout := layouts.StandardLayout()
 		err := standardLayout.Render(ctx, buf)
 		if err != nil {
 			panic(err)
