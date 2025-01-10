@@ -13,7 +13,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func AddPresentationRoutes(e *echo.Echo) {
+func addPresentationRoutes(e *echo.Echo) {
 	recap, _ := analyzer.GetRecap()
 
 	e.GET("/", func(c echo.Context) error {

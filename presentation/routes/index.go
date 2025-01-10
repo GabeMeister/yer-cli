@@ -7,10 +7,10 @@ import (
 )
 
 func Init(e *echo.Echo, static embed.FS) error {
-	AddAnalyzerRoutes(e)
-	AddPresentationRoutes(e)
-	AddResourceRoutes(e, static)
-	AddDebuggingRoutes(e)
+	addAnalyzerRoutes(e)
+	addPresentationRoutes(e)
+	addResourceRoutes(e, static)
+	addDebuggingRoutes(e)
 
 	return nil
 }

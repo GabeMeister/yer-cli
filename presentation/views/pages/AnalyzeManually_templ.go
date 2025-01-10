@@ -108,13 +108,13 @@ func AnalyzeManually(allEngineers []string, selectedEngineers []string, duplicat
 		var templ_7745c5c3_Var5 string
 		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(AnalyzeManuallyPage.GetCombinedValue(selectedEngineers))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/AnalyzeManually.templ`, Line: 51, Col: 115}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/AnalyzeManually.templ`, Line: 54, Col: 68}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"> ")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" id=\"duplicate-engineers\"> ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -147,7 +147,7 @@ func AnalyzeManually(allEngineers []string, selectedEngineers []string, duplicat
 				return templ_7745c5c3_Err
 			}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(">Submit</button></form></div></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(">Submit</button></form></div><br><form hx-post=\"/do-something\" hx-swap=\"outerHTML\" hx-target=\"body\" hx-include=\"#duplicate-engineers\"><input type=\"text\" name=\"gabe\" id=\"gabe\" class=\"text-black\"> <button>Click Me</button></form></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

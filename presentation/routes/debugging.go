@@ -10,7 +10,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func AddDebuggingRoutes(e *echo.Echo) {
+func addDebuggingRoutes(e *echo.Echo) {
 	isDevMode := os.Getenv("DEV_MODE") == "true"
 
 	e.GET("/env", func(c echo.Context) error {
@@ -27,5 +27,9 @@ func AddDebuggingRoutes(e *echo.Echo) {
 		})
 
 		return c.HTML(http.StatusOK, content)
+	})
+
+	e.POST("/do-something", func(c echo.Context) error {
+		return c.HTML(http.StatusOK, "<div>Ok</div>")
 	})
 }

@@ -9,7 +9,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func AddResourceRoutes(e *echo.Echo, static embed.FS) {
+func addResourceRoutes(e *echo.Echo, static embed.FS) {
 	isDevMode := os.Getenv("DEV_MODE") == "true"
 
 	e.GET("/favicon.ico", func(c echo.Context) error {

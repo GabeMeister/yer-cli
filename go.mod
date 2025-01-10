@@ -36,6 +36,7 @@ require (
 	github.com/pelletier/go-toml/v2 v2.1.1 // indirect
 	github.com/pkg/term v1.2.0-beta.2 // indirect
 	github.com/posener/complete v1.2.3 // indirect
+	github.com/samber/lo v1.47.0 // indirect
 	github.com/spf13/afero v1.11.0 // indirect
 	github.com/spf13/cast v1.6.0 // indirect
 	github.com/tdewolff/parse/v2 v2.7.12 // indirect

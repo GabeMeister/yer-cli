@@ -2,6 +2,10 @@ package routes
 
 import (
 	"GabeMeister/yer-cli/analyzer"
+	"GabeMeister/yer-cli/presentation/routes/helpers"
+
+	"github.com/samber/lo"
+
 	"GabeMeister/yer-cli/presentation/views/components/AnalyzeManuallyPage"
 	"GabeMeister/yer-cli/presentation/views/pages"
 	t "GabeMeister/yer-cli/presentation/views/template"
@@ -11,8 +15,9 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func AddAnalyzerRoutes(e *echo.Echo) {
-	initialEngineers := []string{"Kenny", "Isaac Neace", "Gabe Jensen", "ktrotter", "Kaleb Trotter", "Stephen Bremer", "Kenny Kline", "Ezra Youngren", "Isaac", "Steve Bremer"}
+var InitialEngineers = []string{"Kenny", "Kenny1", "Kenny2", "Isaac Neace", "Gabe Jensen", "ktrotter", "Kaleb Trotter", "Stephen Bremer", "Kenny Kline", "Ezra Youngren", "Isaac", "Steve Bremer"}
+
+func addAnalyzerRoutes(e *echo.Echo) {
 
 	e.GET("/analyze-manually", func(c echo.Context) error {
 		analyzer.InitConfig(analyzer.ConfigFileOptions{
@@ -26,7 +31,7 @@ func AddAnalyzerRoutes(e *echo.Echo) {
 
 		content := t.Render(t.RenderParams{
 			C:         c,
-			Component: pages.AnalyzeManually(initialEngineers, []string{}, make(map[string]string)),
+			Component: pages.AnalyzeManually(InitialEngineers, []string{}, make(map[string]string)),
 		})
 
 		return c.HTML(http.StatusOK, content)
@@ -37,7 +42,7 @@ func AddAnalyzerRoutes(e *echo.Echo) {
 		text = strings.ToLower(text)
 
 		matches := []string{}
-		for _, engineer := range initialEngineers {
+		for _, engineer := range InitialEngineers {
 			lowerCaseEngineer := strings.ToLower(engineer)
 
 			if strings.Contains(lowerCaseEngineer, text) {
@@ -99,10 +104,17 @@ func AddAnalyzerRoutes(e *echo.Echo) {
 		userNames := strings.Split(duplicatesList, ",")
 
 		config := analyzer.GetConfig("./config.json")
-		config.Repos[0].DuplicateEngineers[userNames[0]] = userNames[1]
-		analyzer.SaveDataToFile(config, "./config.json")
 
-		component := pages.AnalyzeManually(initialEngineers, []string{}, config.Repos[0].DuplicateEngineers)
+		for _, userName := range userNames[1:] {
+			config.Repos[0].DuplicateEngineers[userName] = userNames[0]
+		}
+
+		allDuplicates := lo.Keys(config.Repos[0].DuplicateEngineers)
+
+		analyzer.SaveDataToFile(config, "./config.json")
+		engineersLeft := helpers.GetEngineersLeft(InitialEngineers, allDuplicates)
+
+		component := pages.AnalyzeManually(engineersLeft, []string{}, config.Repos[0].DuplicateEngineers)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,

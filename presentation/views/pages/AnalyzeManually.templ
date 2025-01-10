@@ -48,7 +48,12 @@ templ AnalyzeManually(allEngineers []string, selectedEngineers []string, duplica
 		</div>
 		<div>
 			<form hx-post="/submit-duplicate" hx-target="body">
-				<input type="hidden" name="duplicate-engineers" value={ AnalyzeManuallyPage.GetCombinedValue(selectedEngineers) }/>
+				<input
+					type="hidden"
+					name="duplicate-engineers"
+					value={ AnalyzeManuallyPage.GetCombinedValue(selectedEngineers) }
+					id="duplicate-engineers"
+				/>
 				<button
 					class={ "px-2 py-1 bg-white rounded-lg text-black m-4",
 					templ.KV("opacity-50 cursor-not-allowed", len(selectedEngineers) <= 1) }
@@ -58,5 +63,22 @@ templ AnalyzeManually(allEngineers []string, selectedEngineers []string, duplica
 				</button>
 			</form>
 		</div>
+		<br/>
+		<form
+			hx-post="/do-something"
+			hx-swap="outerHTML"
+			hx-target="body"
+			hx-include="#duplicate-engineers"
+		>
+			<input
+				type="text"
+				name="gabe"
+				id="gabe"
+				class="text-black"
+			/>
+			<button>
+				Click Me
+			</button>
+		</form>
 	</div>
 }
