@@ -18,7 +18,6 @@ import (
 var InitialEngineers = []string{"Kenny", "Kenny1", "Kenny2", "Isaac Neace", "Gabe Jensen", "ktrotter", "Kaleb Trotter", "Stephen Bremer", "Kenny Kline", "Ezra Youngren", "Isaac", "Steve Bremer"}
 
 func addAnalyzerRoutes(e *echo.Echo) {
-
 	e.GET("/analyze-manually", func(c echo.Context) error {
 		analyzer.InitConfig(analyzer.ConfigFileOptions{
 			RepoDir:                "/home/gabe/dev/rb-frontend",
@@ -58,7 +57,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		return c.HTML(http.StatusOK, content)
 	})
 
-	e.POST("/duplicate-engineer-drag-complete", func(c echo.Context) error {
+	e.PATCH("/temp-duplicate-group", func(c echo.Context) error {
 		data, err := c.FormParams()
 		if err != nil {
 			panic(err)
@@ -99,7 +98,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		return c.HTML(http.StatusOK, content)
 	})
 
-	e.POST("/submit-duplicate", func(c echo.Context) error {
+	e.POST("/duplicate-group", func(c echo.Context) error {
 		duplicatesList := c.FormValue("duplicate-engineers")
 		userNames := strings.Split(duplicatesList, ",")
 

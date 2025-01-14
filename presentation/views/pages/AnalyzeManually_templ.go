@@ -8,10 +8,7 @@ package pages
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import (
-	components "GabeMeister/yer-cli/presentation/views/components"
-	"GabeMeister/yer-cli/presentation/views/components/AnalyzeManuallyPage"
-)
+import "GabeMeister/yer-cli/presentation/views/components/AnalyzeManuallyPage"
 
 func AnalyzeManually(allEngineers []string, selectedEngineers []string, duplicateEngineers map[string]string) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
@@ -34,7 +31,7 @@ func AnalyzeManually(allEngineers []string, selectedEngineers []string, duplicat
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div data-templ-id=\"sortable\"><form id=\"shared-form\" class=\"flex gap-2\" hx-post=\"/duplicate-engineer-drag-complete\" hx-trigger=\"submit\" hx-target=\"body\" hx-swap=\"innerHTML\"><div class=\"m-4\"><span>Filter: </span> <input type=\"text\" name=\"filter-text\" id=\"filter-text\" class=\"ml-2 p-1 text-black\" hx-post=\"/search-engineers\" hx-trigger=\"input changed delay:500ms, keyup=[key==&#39;Enter&#39;]\" hx-target=\"#left\" hx-swap=\"outerHTML\"></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div data-templ-id=\"analyze-manually\" id=\"analyze-manually\" class=\"m-3\"><form id=\"shared-form\" class=\"flex gap-2\" hx-patch=\"/temp-duplicate-group\" hx-trigger=\"submit\" hx-target=\"#analyze-manually\" hx-swap=\"innerHTML\"><div class=\"flex flex-col\"><div class=\"m-4\"><span>Filter: </span> <input type=\"text\" name=\"filter-text\" id=\"filter-text\" class=\"ml-2 p-1 text-black\" hx-post=\"/search-engineers\" hx-trigger=\"input changed delay:500ms, keyup=[key==&#39;Enter&#39;]\" hx-target=\"#left\" hx-swap=\"outerHTML\"></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -42,112 +39,23 @@ func AnalyzeManually(allEngineers []string, selectedEngineers []string, duplicat
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"right\" class=\"sortable w-96 h-96 p-6 bg-gray-700\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		for _, engineer := range selectedEngineers {
-			templ_7745c5c3_Err = components.DraggableText(engineer).Render(ctx, templ_7745c5c3_Buffer)
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<input type=\"hidden\" name=\"ignore\" class=\"h-0 w-0\"> <input class=\"ignore-input\" type=\"hidden\" name=\"duplicate-engineers\" value=\"")
+		templ_7745c5c3_Err = AnalyzeManuallyPage.DuplicateEngineersList(selectedEngineers).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var2 string
-		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(AnalyzeManuallyPage.GetCombinedValue(selectedEngineers))
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/AnalyzeManually.templ`, Line: 39, Col: 136}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</form>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></div></form><div>")
+		templ_7745c5c3_Err = AnalyzeManuallyPage.DuplicateGroups().Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		for duplicate, real := range duplicateEngineers {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div>")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			var templ_7745c5c3_Var3 string
-			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(duplicate)
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/AnalyzeManually.templ`, Line: 45, Col: 16}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(": ")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			var templ_7745c5c3_Var4 string
-			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(real)
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/AnalyzeManually.templ`, Line: 45, Col: 26}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div>")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div><form hx-post=\"/submit-duplicate\" hx-target=\"body\"><input type=\"hidden\" name=\"duplicate-engineers\" value=\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var5 string
-		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(AnalyzeManuallyPage.GetCombinedValue(selectedEngineers))
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/AnalyzeManually.templ`, Line: 54, Col: 68}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" id=\"duplicate-engineers\"> ")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var6 = []any{"px-2 py-1 bg-white rounded-lg text-black m-4",
-			templ.KV("opacity-50 cursor-not-allowed", len(selectedEngineers) <= 1)}
-		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var6...)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<button class=\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var7 string
-		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(templ.CSSClasses(templ_7745c5c3_Var6).String())
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/AnalyzeManually.templ`, Line: 1, Col: 0}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		if len(selectedEngineers) <= 1 {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" disabled")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(">Submit</button></form></div><br><form hx-post=\"/do-something\" hx-swap=\"outerHTML\" hx-target=\"body\" hx-include=\"#duplicate-engineers\"><input type=\"text\" name=\"gabe\" id=\"gabe\" class=\"text-black\"> <button>Click Me</button></form></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
