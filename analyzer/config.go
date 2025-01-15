@@ -12,7 +12,7 @@ type ConfigFileOptions struct {
 	MasterBranchName       string
 	IncludedFileExtensions []string
 	ExcludedDirs           []string
-	DuplicateEngineers     map[string]string
+	DuplicateEngineers     []DuplicateEngineerGroup
 	IncludeFileBlames      bool
 }
 
@@ -43,7 +43,7 @@ func InitConfig(options ConfigFileOptions) ConfigFile {
 	return config
 }
 
-func updateDuplicateEngineers(path string, duplicateEngineers map[string]string) error {
+func updateDuplicateEngineers(path string, duplicateEngineers []DuplicateEngineerGroup) error {
 	// Update config, cause we wanna remember this for later
 	config := GetConfig(path)
 	config.Repos[0].DuplicateEngineers = duplicateEngineers

@@ -4,17 +4,22 @@ type ConfigFile struct {
 	Repos []RepoConfig `json:"repos"`
 }
 
+type DuplicateEngineerGroup struct {
+	Real       string   `json:"real"`
+	Duplicates []string `json:"duplicates"`
+}
+
 type RepoConfig struct {
-	Version               string            `json:"version"`
-	Name                  string            `json:"name"`
-	MasterBranchName      string            `json:"master_branch_name"`
-	Path                  string            `json:"path"`
-	IncludeFileExtensions []string          `json:"include_file_extensions"`
-	ExcludeDirectories    []string          `json:"exclude_directories"`
-	ExcludeFiles          []string          `json:"exclude_files"`
-	ExcludeEngineers      []string          `json:"exclude_engineers"`
-	DuplicateEngineers    map[string]string `json:"duplicate_engineers"`
-	IncludeFileBlames     bool              `json:"include_file_blames"`
+	Version               string                   `json:"version"`
+	Name                  string                   `json:"name"`
+	MasterBranchName      string                   `json:"master_branch_name"`
+	Path                  string                   `json:"path"`
+	IncludeFileExtensions []string                 `json:"include_file_extensions"`
+	ExcludeDirectories    []string                 `json:"exclude_directories"`
+	ExcludeFiles          []string                 `json:"exclude_files"`
+	ExcludeEngineers      []string                 `json:"exclude_engineers"`
+	DuplicateEngineers    []DuplicateEngineerGroup `json:"duplicate_engineers"`
+	IncludeFileBlames     bool                     `json:"include_file_blames"`
 }
 
 type FileChange struct {

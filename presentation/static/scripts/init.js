@@ -1,7 +1,7 @@
 import { paintBarChart } from "./bar-chart.js";
 import { paintRacingBarChart } from "./racing-bar-chart.js";
 
-function handleSortables(elem) {
+function handleAnalyzeManuallyPageDragDrop(elem) {
   function updateHiddenInputs() {
     const left = [
       ...document
@@ -70,7 +70,7 @@ function handleSortables(elem) {
 }
 
 window.htmx.onLoad((elem) => {
-  handleSortables(elem);
+  handleAnalyzeManuallyPageDragDrop(elem);
 
   const barChartElem = document.getElementById("container");
   const racingBarChartElem = document.getElementById(

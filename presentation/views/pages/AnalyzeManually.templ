@@ -1,9 +1,14 @@
 package pages
 
-import "GabeMeister/yer-cli/presentation/views/components/AnalyzeManuallyPage"
+import (
+	"GabeMeister/yer-cli/analyzer"
+	"GabeMeister/yer-cli/presentation/views/components/AnalyzeManuallyPage"
+)
 
-templ AnalyzeManually(allEngineers []string, selectedEngineers []string, duplicateEngineers map[string]string) {
-	<div data-templ-id="analyze-manually" id="analyze-manually" class="m-3">
+templ AnalyzeManually(
+	allEngineers []string,
+	selectedEngineers []string, duplicateEngineerGroups []analyzer.DuplicateEngineerGroup) {
+	<div data-template-id="analyze-manually" id="analyze-manually" class="m-3">
 		<form
 			id="shared-form"
 			class="flex gap-2"
@@ -30,6 +35,6 @@ templ AnalyzeManually(allEngineers []string, selectedEngineers []string, duplica
 			</div>
 			@AnalyzeManuallyPage.DuplicateEngineersList(selectedEngineers)
 		</form>
-		@AnalyzeManuallyPage.DuplicateGroups()
+		@AnalyzeManuallyPage.DuplicateGroups(duplicateEngineerGroups)
 	</div>
 }

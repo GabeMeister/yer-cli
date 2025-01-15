@@ -384,23 +384,15 @@ func checkoutRepoToCommitOrBranchName(config RepoConfig, commitOrBranchName stri
 }
 
 func GetRealAuthorName(config RepoConfig, authorName string) string {
-	name := authorName
-
-	for {
-		realAuthorName, ok := config.DuplicateEngineers[name]
-		if ok {
-			name = realAuthorName
-
-			// Loop again in case there's a "chain" of duplicate user names. For
-			// example one could have, "ktrotter" -> "kaleb.trotter",
-			// but then also have "kaleb.trotter" -> "Kaleb Trotter"
-			continue
+	for _, dupGroup := range config.DuplicateEngineers {
+		for _, dup := range dupGroup.Duplicates {
+			if authorName == dup {
+				return dup
+			}
 		}
-
-		break
 	}
 
-	return name
+	return authorName
 }
 
 func stashRepo(dir string) {

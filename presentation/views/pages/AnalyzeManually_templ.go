@@ -8,9 +8,14 @@ package pages
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import "GabeMeister/yer-cli/presentation/views/components/AnalyzeManuallyPage"
+import (
+	"GabeMeister/yer-cli/analyzer"
+	"GabeMeister/yer-cli/presentation/views/components/AnalyzeManuallyPage"
+)
 
-func AnalyzeManually(allEngineers []string, selectedEngineers []string, duplicateEngineers map[string]string) templ.Component {
+func AnalyzeManually(
+	allEngineers []string,
+	selectedEngineers []string, duplicateEngineerGroups []analyzer.DuplicateEngineerGroup) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -31,7 +36,7 @@ func AnalyzeManually(allEngineers []string, selectedEngineers []string, duplicat
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div data-templ-id=\"analyze-manually\" id=\"analyze-manually\" class=\"m-3\"><form id=\"shared-form\" class=\"flex gap-2\" hx-patch=\"/temp-duplicate-group\" hx-trigger=\"submit\" hx-target=\"#analyze-manually\" hx-swap=\"innerHTML\"><div class=\"flex flex-col\"><div class=\"m-4\"><span>Filter: </span> <input type=\"text\" name=\"filter-text\" id=\"filter-text\" class=\"ml-2 p-1 text-black\" hx-post=\"/search-engineers\" hx-trigger=\"input changed delay:500ms, keyup=[key==&#39;Enter&#39;]\" hx-target=\"#left\" hx-swap=\"outerHTML\"></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div data-template-id=\"analyze-manually\" id=\"analyze-manually\" class=\"m-3\"><form id=\"shared-form\" class=\"flex gap-2\" hx-patch=\"/temp-duplicate-group\" hx-trigger=\"submit\" hx-target=\"#analyze-manually\" hx-swap=\"innerHTML\"><div class=\"flex flex-col\"><div class=\"m-4\"><span>Filter: </span> <input type=\"text\" name=\"filter-text\" id=\"filter-text\" class=\"ml-2 p-1 text-black\" hx-post=\"/search-engineers\" hx-trigger=\"input changed delay:500ms, keyup=[key==&#39;Enter&#39;]\" hx-target=\"#left\" hx-swap=\"outerHTML\"></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -51,7 +56,7 @@ func AnalyzeManually(allEngineers []string, selectedEngineers []string, duplicat
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = AnalyzeManuallyPage.DuplicateGroups().Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = AnalyzeManuallyPage.DuplicateGroups(duplicateEngineerGroups).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

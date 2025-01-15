@@ -56,7 +56,7 @@ Press enter to continue...`)
 		MasterBranchName:       masterBranch,
 		IncludedFileExtensions: fileExtensions,
 		ExcludedDirs:           excludedDirs,
-		DuplicateEngineers:     make(map[string]string),
+		DuplicateEngineers:     []DuplicateEngineerGroup{},
 		IncludeFileBlames:      includeFileBlames,
 	})
 	// For now, we're just handling 1, we can handle multiple repos in a
@@ -244,111 +244,114 @@ func GetMasterBranchName(dir string) string {
 	return masterBranchName
 }
 
-// A lot of times in repos somehow the same user has two different git usernames
+// A lot of times in repos, somehow the same user has two different git usernames
 // (for example, Gabe Jensen and GabeJensen). It could be because they changed
 // laptops, decided to change their user name randomly, etc. To make the stats
 // more accurate, we "bucket" duplicate usernames into one.
-func getDuplicateUsers() map[string]string {
-	commits := getGitCommits()
-	// Username -> int
-	userMap := make(map[string]int)
+func getDuplicateUsers() []DuplicateEngineerGroup {
+	// commits := getGitCommits()
+	// // Username -> int
+	// userMap := make(map[string]int)
 
-	for _, commit := range commits {
-		userMap[commit.Author] = 1
-	}
+	// for _, commit := range commits {
+	// 	userMap[commit.Author] = 1
+	// }
 
-	fmt.Println()
-	fmt.Println("The list of git usernames are:")
-	fmt.Println()
+	// fmt.Println()
+	// fmt.Println("The list of git usernames are:")
+	// fmt.Println()
 
-	userNames := []string{}
-	for userName := range userMap {
-		userNames = append(userNames, userName)
-	}
+	// userNames := []string{}
+	// for userName := range userMap {
+	// 	userNames = append(userNames, userName)
+	// }
 
-	// Use this instead of strings.Sort() because you want lowercase and uppercase
-	// usernames to be next to each other. (For example, "Kaleb Trotter" and
-	// "ktrotter")
-	slices.SortFunc(userNames, func(userName1 string, userName2 string) int {
-		s1 := strings.ToLower(userName1)
-		s2 := strings.ToLower(userName2)
+	// // Use this instead of strings.Sort() because you want lowercase and uppercase
+	// // usernames to be next to each other. (For example, "Kaleb Trotter" and
+	// // "ktrotter")
+	// slices.SortFunc(userNames, func(userName1 string, userName2 string) int {
+	// 	s1 := strings.ToLower(userName1)
+	// 	s2 := strings.ToLower(userName2)
 
-		if s1 < s2 {
-			return -1
-		} else if s1 > s2 {
-			return 1
-		} else {
-			return 0
-		}
-	})
+	// 	if s1 < s2 {
+	// 		return -1
+	// 	} else if s1 > s2 {
+	// 		return 1
+	// 	} else {
+	// 		return 0
+	// 	}
+	// })
 
-	for _, userName := range userNames {
-		fmt.Println(userName)
-	}
+	// for _, userName := range userNames {
+	// 	fmt.Println(userName)
+	// }
 
-	fmt.Println()
-	fmt.Print("Are there any duplicates? (y/N) ")
+	// fmt.Println()
+	// fmt.Print("Are there any duplicates? (y/N) ")
 
-	reader := bufio.NewReader(os.Stdin)
-	text, err := reader.ReadString('\n')
-	if err != nil {
-		panic(err)
-	}
-	answer := strings.TrimSpace(text)
+	// reader := bufio.NewReader(os.Stdin)
+	// text, err := reader.ReadString('\n')
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// answer := strings.TrimSpace(text)
 
-	if len(answer) > 0 && strings.ToLower(string(answer[0])) == "y" {
-		duplicateEngineerMap := make(map[string]string)
+	// if len(answer) > 0 && strings.ToLower(string(answer[0])) == "y" {
+	// 	duplicateEngineerMap := []DuplicateEngineerGroup{}
 
-		for i := 0; i < 1000; i++ {
-			fmt.Println()
+	// 	for i := 0; i < 1000; i++ {
+	// 		fmt.Println()
 
-			fillerWord := "a"
-			if i >= 1 {
-				fillerWord = "another"
-			}
+	// 		fillerWord := "a"
+	// 		if i >= 1 {
+	// 			fillerWord = "another"
+	// 		}
 
-			fmt.Println("Type " + fillerWord + " duplicate username (or type \"exit\" when done):")
-			fmt.Print("> ")
+	// 		fmt.Println("Type " + fillerWord + " duplicate username (or type \"exit\" when done):")
+	// 		fmt.Print("> ")
 
-			reader := bufio.NewReader(os.Stdin)
-			text, err := reader.ReadString('\n')
-			if err != nil {
-				panic(err)
-			}
-			duplicateUsername := strings.TrimSpace(text)
+	// 		reader := bufio.NewReader(os.Stdin)
+	// 		text, err := reader.ReadString('\n')
+	// 		if err != nil {
+	// 			panic(err)
+	// 		}
+	// 		duplicateUsername := strings.TrimSpace(text)
 
-			if duplicateUsername == "exit" {
-				break
-			}
+	// 		if duplicateUsername == "exit" {
+	// 			break
+	// 		}
 
-			fmt.Println()
-			fmt.Println("Type the real username for " + duplicateUsername + ":")
-			fmt.Print("> ")
+	// 		fmt.Println()
+	// 		fmt.Println("Type the real username for " + duplicateUsername + ":")
+	// 		fmt.Print("> ")
 
-			reader = bufio.NewReader(os.Stdin)
-			text, err = reader.ReadString('\n')
-			if err != nil {
-				panic(err)
-			}
-			realUsername := strings.TrimSpace(text)
+	// 		reader = bufio.NewReader(os.Stdin)
+	// 		text, err = reader.ReadString('\n')
+	// 		if err != nil {
+	// 			panic(err)
+	// 		}
+	// 		realUsername := strings.TrimSpace(text)
 
-			duplicateEngineerMap[duplicateUsername] = realUsername
+	// 		duplicateEngineerMap[duplicateUsername] = realUsername
 
-			userNames = utils.Delete(userNames, func(item string) bool { return item == duplicateUsername })
+	// 		userNames = utils.Delete(userNames, func(item string) bool { return item == duplicateUsername })
 
-			fmt.Println()
-			fmt.Println("The remaining git usernames are:")
-			fmt.Println()
+	// 		fmt.Println()
+	// 		fmt.Println("The remaining git usernames are:")
+	// 		fmt.Println()
 
-			for _, userName := range userNames {
-				fmt.Println(userName)
-			}
-		}
+	// 		for _, userName := range userNames {
+	// 			fmt.Println(userName)
+	// 		}
+	// 	}
 
-		return duplicateEngineerMap
-	} else {
-		return map[string]string{}
-	}
+	// 	return duplicateEngineerMap
+	// } else {
+	// 	return map[string]string{}
+	// }
+
+	// This function is going away so just put this here so things build
+	return []DuplicateEngineerGroup{}
 }
 
 func gatherMetrics(config RepoConfig) {
