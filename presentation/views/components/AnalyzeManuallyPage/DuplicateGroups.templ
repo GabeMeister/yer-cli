@@ -25,7 +25,13 @@ templ DuplicateGroups(duplicateEngineerGroups []analyzer.DuplicateEngineerGroup)
 							</ul>
 						</div>
 					</div>
-					<div class="cursor-pointer hover:text-blue-400">Edit</div>
+					<div
+						class="cursor-pointer hover:text-blue-400"
+						hx-post="/"
+						hx-include="#all-engineers, #duplicate-engineers"
+					>
+						Edit
+					</div>
 				</div>
 			}
 		}

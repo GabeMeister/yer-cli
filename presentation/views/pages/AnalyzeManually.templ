@@ -7,7 +7,10 @@ import (
 
 templ AnalyzeManually(
 	allEngineers []string,
-	selectedEngineers []string, duplicateEngineerGroups []analyzer.DuplicateEngineerGroup) {
+	selectedEngineers []string,
+	duplicateEngineerGroups []analyzer.DuplicateEngineerGroup,
+	searchText string,
+) {
 	<div data-template-id="analyze-manually" id="analyze-manually" class="m-3">
 		<form
 			id="shared-form"
@@ -29,6 +32,7 @@ templ AnalyzeManually(
 						hx-trigger="input changed delay:500ms, keyup=[key=='Enter']"
 						hx-target="#left"
 						hx-swap="outerHTML"
+						value={ searchText }
 					/>
 				</div>
 				@AnalyzeManuallyPage.AllEngineersList(allEngineers)

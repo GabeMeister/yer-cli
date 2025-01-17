@@ -78,7 +78,7 @@ func DuplicateGroups(duplicateEngineerGroups []analyzer.DuplicateEngineerGroup) 
 						return templ_7745c5c3_Err
 					}
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</ul></div></div><div class=\"cursor-pointer hover:text-blue-400\">Edit</div></div>")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</ul></div></div><div class=\"cursor-pointer hover:text-blue-400\" hx-post=\"/\" hx-include=\"#all-engineers, #duplicate-engineers\">Edit</div></div>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}

@@ -2,6 +2,9 @@ package routes
 
 import (
 	"GabeMeister/yer-cli/analyzer"
+	"slices"
+
+	"github.com/samber/lo"
 
 	"GabeMeister/yer-cli/presentation/views/components/AnalyzeManuallyPage"
 	"GabeMeister/yer-cli/presentation/views/pages"
@@ -35,6 +38,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 				InitialEngineers,
 				[]string{},
 				config.Repos[0].DuplicateEngineers,
+				"",
 			),
 		})
 
@@ -45,11 +49,14 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		text := c.FormValue("filter-text")
 		text = strings.ToLower(text)
 
+		dupEngineersRaw := c.FormValue("duplicate-engineers")
+		tempDupEngineers := strings.Split(dupEngineersRaw, ",")
+
 		matches := []string{}
 		for _, engineer := range InitialEngineers {
 			lowerCaseEngineer := strings.ToLower(engineer)
 
-			if strings.Contains(lowerCaseEngineer, text) {
+			if strings.Contains(lowerCaseEngineer, text) && !slices.Contains(tempDupEngineers, engineer) {
 				matches = append(matches, engineer)
 			}
 		}
@@ -63,38 +70,26 @@ func addAnalyzerRoutes(e *echo.Echo) {
 	})
 
 	e.PATCH("/temp-duplicate-group", func(c echo.Context) error {
-		data, err := c.FormParams()
-		if err != nil {
-			panic(err)
-		}
 
-		leftItemsStr := data["all-engineers"][0]
+		leftItemsStr := c.FormValue("all-engineers")
 		leftItems := strings.Split(leftItemsStr, ",")
 
-		rightItemsStr := data["duplicate-engineers"][0]
+		rightItemsStr := c.FormValue("duplicate-engineers")
 		rightItems := strings.Split(rightItemsStr, ",")
 
-		allEngineers := []string{}
-		for _, s := range leftItems {
-			if s == "" {
-				continue
-			}
+		filterText := c.FormValue("filter-text")
 
-			allEngineers = append(allEngineers, s)
-		}
+		allEngineers := lo.Filter(leftItems, func(engineer string, _ int) bool {
+			return engineer != ""
+		})
 
-		selectedEngineers := []string{}
-		for _, s := range rightItems {
-			if s == "" {
-				continue
-			}
-
-			selectedEngineers = append(selectedEngineers, s)
-		}
+		selectedEngineers := lo.Filter(rightItems, func(engineer string, _ int) bool {
+			return engineer != ""
+		})
 
 		config := analyzer.GetConfig("./config.json")
 
-		component := pages.AnalyzeManually(allEngineers, selectedEngineers, config.Repos[0].DuplicateEngineers)
+		component := pages.AnalyzeManually(allEngineers, selectedEngineers, config.Repos[0].DuplicateEngineers, filterText)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -104,10 +99,8 @@ func addAnalyzerRoutes(e *echo.Echo) {
 	})
 
 	e.POST("/duplicate-group", func(c echo.Context) error {
-		allEngineersRaw := c.FormValue("all-engineers")
 		duplicatesListRaw := c.FormValue("duplicate-engineers")
 
-		allEngineersLeft := strings.Split(allEngineersRaw, ",")
 		duplicateEngineers := strings.Split(duplicatesListRaw, ",")
 
 		config := analyzer.GetConfig("./config.json")
@@ -116,9 +109,30 @@ func addAnalyzerRoutes(e *echo.Echo) {
 			Duplicates: duplicateEngineers[1:],
 		})
 
+		allDups := make(map[string]bool)
+		for _, dupGroup := range config.Repos[0].DuplicateEngineers {
+			allDups[dupGroup.Real] = true
+
+			for _, dup := range dupGroup.Duplicates {
+				allDups[dup] = true
+			}
+		}
+
+		remainingEngineers := []string{}
+		for _, engineer := range InitialEngineers {
+			if _, found := allDups[engineer]; !found {
+				remainingEngineers = append(remainingEngineers, engineer)
+			}
+		}
+
 		analyzer.SaveDataToFile(config, "./config.json")
 
-		component := pages.AnalyzeManually(allEngineersLeft, []string{}, config.Repos[0].DuplicateEngineers)
+		component := pages.AnalyzeManually(
+			remainingEngineers,
+			[]string{},
+			config.Repos[0].DuplicateEngineers,
+			"",
+		)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
