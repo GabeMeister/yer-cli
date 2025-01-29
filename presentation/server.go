@@ -12,7 +12,20 @@ import (
 //go:embed static/*
 var static embed.FS
 
-func RunLocalServer() {
+func RunAnalyzeManuallyPage() {
+	godotenv.Load()
+
+	e := echo.New()
+	e.HideBanner = true
+	e.HidePort = true
+
+	routes.Init(e, static)
+
+	fmt.Println("\nDone! Browse to http://localhost:4000/analyze-manually")
+	e.Logger.Fatal(e.Start(":4000"))
+}
+
+func RunPresentationPage() {
 	godotenv.Load()
 
 	e := echo.New()

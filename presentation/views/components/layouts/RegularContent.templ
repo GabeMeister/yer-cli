@@ -1,0 +1,34 @@
+package layouts 
+
+// For "regular" content on a page (i.e. the width doesn't go the full page, and
+// is capped at 1440px, and anything below it displays a "Must view on a Desktop
+// Browser" message)
+templ RegularContent() {
+	<div class="h-screen w-screen">
+		<div class="lg:hidden">
+			Must view on a desktop machine
+		</div>
+		<div class="hidden lg:block">
+			<div class="grid grid-cols-[1fr_minmax(1024px,1440px)_1fr]">
+				<div></div>
+				<div>
+					{ children... }
+				</div>
+				<div></div>
+				// <div class="bg-yellow-200 text-center text-lg">4</div>
+				// <div class="bg-orange-300 text-center text-lg">5</div>
+				// <div class="bg-purple-300 text-center text-lg">6</div>
+				// <div class="bg-gray-400 text-center text-lg">7</div>
+				// <div class="bg-amber-300 text-center text-lg">8</div>
+				// <div class="bg-green-300 text-center text-lg">9</div>
+				// <div class="bg-blue-300 text-center text-lg">10</div>
+				// <div class="bg-red-300 text-center text-lg">11</div>
+				// <div class="bg-yellow-200 text-center text-lg">12</div>
+				// <div class="bg-orange-300 text-center text-lg">13</div>
+				// <div class="bg-purple-300 text-center text-lg">14</div>
+				// <div class="bg-gray-400 text-center text-lg">15</div>
+				// <div class="bg-amber-300 text-center text-lg">16</div>
+			</div>
+		</div>
+	</div>
+}

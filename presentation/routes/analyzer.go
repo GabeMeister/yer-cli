@@ -20,14 +20,12 @@ var InitialEngineers = []string{"Kenny", "Kenny1", "Kenny2", "Isaac Neace", "Gab
 func addAnalyzerRoutes(e *echo.Echo) {
 	e.GET("/analyze-manually", func(c echo.Context) error {
 		analyzer.InitConfig(analyzer.ConfigFileOptions{
-			RepoDir:                "/home/gabe/dev/rb-frontend",
-			MasterBranchName:       "master",
-			IncludedFileExtensions: []string{"ts", "tsx", "js", "jsx"},
-			ExcludedDirs:           []string{"node_modules", "build"},
-			DuplicateEngineers: []analyzer.DuplicateEngineerGroup{
-				{Real: "ktrotter", Duplicates: []string{"Kaleb Trotter"}},
-			},
-			IncludeFileBlames: true,
+			RepoDir:                "",
+			MasterBranchName:       "",
+			IncludedFileExtensions: []string{},
+			ExcludedDirs:           []string{},
+			DuplicateEngineers:     []analyzer.DuplicateEngineerGroup{},
+			IncludeFileBlames:      true,
 		})
 
 		config := analyzer.GetConfig("./config.json")

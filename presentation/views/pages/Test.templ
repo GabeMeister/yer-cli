@@ -1,0 +1,41 @@
+package pages
+
+import "GabeMeister/yer-cli/presentation/views/components/layouts"
+
+templ Test() {
+	// <style>
+	//   .gabe-grid {
+	//     display: grid;
+	//     grid-template-columns: 1fr minmax(1024px, 1440px) 1fr;
+	//     grid-template-rows: 200px;
+	//     gap: 16px;
+	//   }
+	// </style>
+	@layouts.RegularContent() {
+		<div class="bg-blue-300 text-center text-lg border-8 border-black">
+			<div>This is the content!</div>
+		</div>
+	}
+	// <div class="bg-white w-full h-screen text-black">
+	// 	<div class="bg-gray-200 grid grid-cols-[1fr_minmax(1024px,1440px)_1fr]">
+	// 		<div class="bg-green-300 text-center text-lg"></div>
+	// 		<div class="bg-blue-300 text-center text-lg border-8 border-black">
+	// 			<div class="h-48">This is content</div>
+	// 		</div>
+	// 		<div class="bg-red-300 text-center text-lg"></div>
+	// 		// <div class="bg-yellow-200 text-center text-lg">4</div>
+	// 		// <div class="bg-orange-300 text-center text-lg">5</div>
+	// 		// <div class="bg-purple-300 text-center text-lg">6</div>
+	// 		// <div class="bg-gray-400 text-center text-lg">7</div>
+	// 		// <div class="bg-amber-300 text-center text-lg">8</div>
+	// 		// <div class="bg-green-300 text-center text-lg">9</div>
+	// 		// <div class="bg-blue-300 text-center text-lg">10</div>
+	// 		// <div class="bg-red-300 text-center text-lg">11</div>
+	// 		// <div class="bg-yellow-200 text-center text-lg">12</div>
+	// 		// <div class="bg-orange-300 text-center text-lg">13</div>
+	// 		// <div class="bg-purple-300 text-center text-lg">14</div>
+	// 		// <div class="bg-gray-400 text-center text-lg">15</div>
+	// 		// <div class="bg-amber-300 text-center text-lg">16</div>
+	// 	</div>
+	// </div>
+}

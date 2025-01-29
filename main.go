@@ -41,12 +41,7 @@ func main() {
 		printHelp()
 	} else if *analyzeRepo {
 		fmt.Println("Analyzing with manual prompts...")
-		result := analyzer.AnalyzeManually()
-		if result {
-			fmt.Printf("\nDone! View stats by running the following command:\n\n./year-end-recap -v\n\n")
-		} else {
-			fmt.Println("Failed to analyze repo. Please try again!")
-		}
+		presentation.RunAnalyzeManuallyPage()
 	} else if *configFile != "" {
 		fmt.Println("Analyzing using config...")
 		result := analyzer.AnalyzeWithConfig(*configFile)
@@ -57,7 +52,7 @@ func main() {
 		}
 	} else if *view {
 		fmt.Println("Setting up local web server...")
-		presentation.RunLocalServer()
+		presentation.RunPresentationPage()
 	} else if *test {
 		runTest()
 	} else {
