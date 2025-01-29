@@ -21,7 +21,7 @@ func RunAnalyzeManuallyPage() {
 
 	routes.Init(e, static)
 
-	fmt.Println("\nDone! Browse to http://localhost:4000/analyze-manually")
+	fmt.Println("\nTo create a new Year End Recap, browse to http://localhost:4000/create-recap")
 	e.Logger.Fatal(e.Start(":4000"))
 }
 

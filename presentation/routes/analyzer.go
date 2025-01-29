@@ -18,7 +18,7 @@ import (
 var InitialEngineers = []string{"Kenny", "Kenny1", "Kenny2", "Isaac Neace", "Gabe Jensen", "ktrotter", "Kaleb Trotter", "Stephen Bremer", "Kenny Kline", "Ezra Youngren", "Isaac", "Steve Bremer"}
 
 func addAnalyzerRoutes(e *echo.Echo) {
-	e.GET("/analyze-manually", func(c echo.Context) error {
+	e.GET("/create-recap", func(c echo.Context) error {
 		analyzer.InitConfig(analyzer.ConfigFileOptions{
 			RepoDir:                "",
 			MasterBranchName:       "",

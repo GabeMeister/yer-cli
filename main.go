@@ -40,7 +40,6 @@ func main() {
 	if *help {
 		printHelp()
 	} else if *analyzeRepo {
-		fmt.Println("Analyzing with manual prompts...")
 		presentation.RunAnalyzeManuallyPage()
 	} else if *configFile != "" {
 		fmt.Println("Analyzing using config...")

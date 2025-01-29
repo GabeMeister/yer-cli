@@ -1,0 +1,17 @@
+package pages
+
+import (
+	"GabeMeister/yer-cli/analyzer"
+	"GabeMeister/yer-cli/presentation/views/components"
+)
+
+templ AnalyzeManually(
+	allEngineers []string,
+	selectedEngineers []string,
+	duplicateEngineerGroups []analyzer.DuplicateEngineerGroup,
+	searchText string,
+) {
+	@components.Page() {
+		<h1>This is the Create Recap page. 3</h1>
+	}
+}
