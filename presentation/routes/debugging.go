@@ -39,4 +39,15 @@ func addDebuggingRoutes(e *echo.Echo) {
 
 		return c.HTML(http.StatusOK, content)
 	})
+
+	e.GET("/buttons", func(c echo.Context) error {
+		component := pages.ButtonsPage()
+
+		content := t.Render(t.RenderParams{
+			C:         c,
+			Component: component,
+		})
+
+		return c.HTML(http.StatusOK, content)
+	})
 }
