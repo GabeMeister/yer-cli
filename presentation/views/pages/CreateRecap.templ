@@ -13,5 +13,15 @@ templ AnalyzeManually(
 ) {
 	@components.Page() {
 		<h1>This is the Create Recap page. 3</h1>
+		<form hx-patch="/config-file" hx-swap="outerHTML" hx-target="this">
+			@components.TextInput(components.TextInputProps{
+				Id:   "recap-name",
+				Name: "recap-name",
+			})
+			<br/>
+			@components.Button() {
+				<span>Submit</span>
+			}
+		</form>
 	}
 }

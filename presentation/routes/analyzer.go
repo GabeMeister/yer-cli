@@ -43,6 +43,28 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		return c.HTML(http.StatusOK, content)
 	})
 
+	e.PATCH("/config-file", func(c echo.Context) error {
+		recapName := c.FormValue("recap-name")
+		recapName = strings.ToLower(recapName)
+
+		updatedRecap := analyzer.ConfigFile{
+			Repos: []analyzer.RepoConfig{
+				{
+					Name: recapName,
+				}},
+		}
+
+		analyzer.UpdateConfig(updatedRecap)
+
+		component := AnalyzeManuallyPage.SuccessMessage()
+		content := t.Render(t.RenderParams{
+			C:         c,
+			Component: component,
+		})
+
+		return c.HTML(http.StatusOK, content)
+	})
+
 	e.POST("/search-engineers", func(c echo.Context) error {
 		text := c.FormValue("filter-text")
 		text = strings.ToLower(text)

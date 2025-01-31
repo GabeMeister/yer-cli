@@ -4,7 +4,6 @@ import (
 	"GabeMeister/yer-cli/utils"
 	"encoding/json"
 	"os"
-	"path/filepath"
 )
 
 type ConfigFileOptions struct {
@@ -22,7 +21,7 @@ func InitConfig(options ConfigFileOptions) ConfigFile {
 			{
 				Version:               "0.0.1",
 				Path:                  options.RepoDir,
-				Name:                  filepath.Base(options.RepoDir),
+				Name:                  "",
 				MasterBranchName:      options.MasterBranchName,
 				IncludeFileExtensions: options.IncludedFileExtensions,
 				ExcludeDirectories:    options.ExcludedDirs,
@@ -75,4 +74,8 @@ func GetConfig(path string) ConfigFile {
 	}
 
 	return data
+}
+
+func UpdateConfig(config ConfigFile) {
+	SaveDataToFile(config, utils.DEFAULT_CONFIG_FILE)
 }

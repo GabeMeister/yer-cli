@@ -1,0 +1,10 @@
+package components 
+
+type TextInputProps struct {
+	Id   string
+	Name string
+}
+
+templ TextInput(props TextInputProps) {
+	<input type="text" class="border-black border-2" name={ props.Name } id={ props.Id }/>
+}
