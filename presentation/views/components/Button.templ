@@ -3,7 +3,7 @@ package components
 import "strings"
 
 type ButtonProps struct {
-	Loading  bool
+	Id       string
 	Disabled bool
 	Size     string
 }
@@ -28,7 +28,7 @@ func getButtonCss(props ButtonProps) string {
 }
 
 templ Button(props ButtonProps) {
-	<button class={ getButtonCss(props) }>
+	<button id={ props.Id } class={ getButtonCss(props) }>
 		{ children... }
 	</button>
 }

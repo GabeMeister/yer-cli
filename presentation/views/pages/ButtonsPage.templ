@@ -1,9 +1,38 @@
 package pages 
 
-import "GabeMeister/yer-cli/presentation/views/components"
+// Props:
+// id
+// name
+// color
+// size
+// leftIcon
+// rightIcon
 
+// hxGet
+// hxPost
+// hxPatch
+// hxPut
+// hxDelete
+// hxIndicator
+// hxSwap
 templ ButtonsPage() {
-	@components.Button(components.ButtonProps{}) {
-		<span>Hello there!</span>
-	}
+	<button
+		class="btn"
+		hx-post="/example"
+		hx-swap="outerHTML"
+		hx-indicator="#loading-spinner"
+	>
+		<div class="flex gap-3 justify-center items-center">
+			<span>Click Me 8!</span>
+			<i class="fa-solid fa-chevron-right"></i>
+		</div>
+		<div
+			id="loading-spinner"
+			class="absolute top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-inherit htmx-indicator rounded-md"
+		>
+			<i
+				class="text-white fa-solid fa-circle-notch animate-spin"
+			></i>
+		</div>
+	</button>
 }

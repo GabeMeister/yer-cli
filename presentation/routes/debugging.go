@@ -4,6 +4,7 @@ import (
 	t "GabeMeister/yer-cli/presentation/views/template"
 	"net/http"
 	"os"
+	"time"
 
 	"GabeMeister/yer-cli/presentation/views/pages"
 
@@ -38,6 +39,12 @@ func addDebuggingRoutes(e *echo.Echo) {
 		})
 
 		return c.HTML(http.StatusOK, content)
+	})
+
+	e.POST("/example", func(c echo.Context) error {
+		time.Sleep(700 * time.Millisecond)
+
+		return c.HTML(http.StatusOK, "<div>Success!</div>")
 	})
 
 	e.GET("/buttons", func(c echo.Context) error {

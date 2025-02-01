@@ -28,3 +28,9 @@
 ::-webkit-scrollbar-thumb:hover {
   background-color: #a8bbbf;
 }
+
+.btn {
+  /* We include `relative` here to be able to show loading content within the
+  button */
+  @apply px-4 py-3 bg-sky-600 relative text-white rounded-md hover:bg-sky-700 duration-200;
+}
