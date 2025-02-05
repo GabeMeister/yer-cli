@@ -1,4 +1,4 @@
-package AnalyzeManuallyPage
+package ConfigSetupPage
 
 import "strings"
 

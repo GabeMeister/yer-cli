@@ -79,3 +79,9 @@ func GetConfig(path string) ConfigFile {
 func UpdateConfig(config ConfigFile) {
 	SaveDataToFile(config, utils.DEFAULT_CONFIG_FILE)
 }
+
+func DoesConfigExist(path string) bool {
+	_, err := os.ReadFile(path)
+
+	return err == nil
+}

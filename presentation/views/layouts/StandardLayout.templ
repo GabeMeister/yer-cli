@@ -17,8 +17,11 @@ templ StandardLayout() {
 			// Custom Scripts
 			<script defer type="module" src="/scripts/init.js"></script>
 		</head>
-		<body class="min-h-screen">
-			{ children... }
+		<body class="h-screen">
+			<div class="overflow-y-scroll min-h-screen">
+				{ children... }
+				<div id="toast"></div>
+			</div>
 		</body>
 	</html>
 }

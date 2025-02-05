@@ -2,15 +2,13 @@ package routes
 
 import (
 	"GabeMeister/yer-cli/analyzer"
-	"slices"
+	"GabeMeister/yer-cli/utils"
+	"fmt"
+	"time"
 
-	"github.com/samber/lo"
-
-	"GabeMeister/yer-cli/presentation/views/components/AnalyzeManuallyPage"
 	"GabeMeister/yer-cli/presentation/views/pages"
 	t "GabeMeister/yer-cli/presentation/views/template"
 	"net/http"
-	"strings"
 
 	"github.com/labstack/echo/v4"
 )
@@ -18,26 +16,27 @@ import (
 var InitialEngineers = []string{"Kenny", "Kenny1", "Kenny2", "Isaac Neace", "Gabe Jensen", "ktrotter", "Kaleb Trotter", "Stephen Bremer", "Kenny Kline", "Ezra Youngren", "Isaac", "Steve Bremer"}
 
 func addAnalyzerRoutes(e *echo.Echo) {
-	e.GET("/create-recap", func(c echo.Context) error {
-		analyzer.InitConfig(analyzer.ConfigFileOptions{
-			RepoDir:                "",
-			MasterBranchName:       "",
-			IncludedFileExtensions: []string{},
-			ExcludedDirs:           []string{},
-			DuplicateEngineers:     []analyzer.DuplicateEngineerGroup{},
-			IncludeFileBlames:      true,
-		})
 
-		config := analyzer.GetConfig("./config.json")
+	e.GET("/create-recap", func(c echo.Context) error {
+		if !analyzer.DoesConfigExist(utils.DEFAULT_CONFIG_FILE) {
+			fmt.Print("\n\n", "*** in it ***", "\n", "\n\n\n")
+			analyzer.InitConfig(analyzer.ConfigFileOptions{
+				RepoDir:                "",
+				MasterBranchName:       "",
+				IncludedFileExtensions: []string{},
+				ExcludedDirs:           []string{},
+				DuplicateEngineers:     []analyzer.DuplicateEngineerGroup{},
+				IncludeFileBlames:      true,
+			})
+		}
+
+		config := analyzer.GetConfig(utils.DEFAULT_CONFIG_FILE)
 
 		content := t.Render(t.RenderParams{
 			C: c,
-			Component: pages.AnalyzeManually(
-				InitialEngineers,
-				[]string{},
-				config.Repos[0].DuplicateEngineers,
-				"",
-			),
+			Component: pages.ConfigSetup(pages.ConfigSetupProps{
+				RecapName: config.Repos[0].Name,
+			}),
 		})
 
 		return c.HTML(http.StatusOK, content)
@@ -45,18 +44,20 @@ func addAnalyzerRoutes(e *echo.Echo) {
 
 	e.PATCH("/config-file", func(c echo.Context) error {
 		recapName := c.FormValue("recap-name")
-		recapName = strings.ToLower(recapName)
 
-		updatedRecap := analyzer.ConfigFile{
+		updatedConfig := analyzer.ConfigFile{
 			Repos: []analyzer.RepoConfig{
 				{
 					Name: recapName,
 				}},
 		}
 
-		analyzer.UpdateConfig(updatedRecap)
+		analyzer.UpdateConfig(updatedConfig)
 
-		component := AnalyzeManuallyPage.SuccessMessage()
+		component := pages.ConfigSetup(pages.ConfigSetupProps{
+			RecapName: updatedConfig.Repos[0].Name,
+			Toast:     time.Now().Format("2006-01-02 15:04:05"),
+		})
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -65,99 +66,96 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		return c.HTML(http.StatusOK, content)
 	})
 
-	e.POST("/search-engineers", func(c echo.Context) error {
-		text := c.FormValue("filter-text")
-		text = strings.ToLower(text)
+	// e.POST("/search-engineers", func(c echo.Context) error {
+	// 	text := c.FormValue("filter-text")
+	// 	text = strings.ToLower(text)
 
-		dupEngineersRaw := c.FormValue("duplicate-engineers")
-		tempDupEngineers := strings.Split(dupEngineersRaw, ",")
+	// 	dupEngineersRaw := c.FormValue("duplicate-engineers")
+	// 	tempDupEngineers := strings.Split(dupEngineersRaw, ",")
 
-		matches := []string{}
-		for _, engineer := range InitialEngineers {
-			lowerCaseEngineer := strings.ToLower(engineer)
+	// 	matches := []string{}
+	// 	for _, engineer := range InitialEngineers {
+	// 		lowerCaseEngineer := strings.ToLower(engineer)
 
-			if strings.Contains(lowerCaseEngineer, text) && !slices.Contains(tempDupEngineers, engineer) {
-				matches = append(matches, engineer)
-			}
-		}
-		component := AnalyzeManuallyPage.AllEngineersList(matches)
-		content := t.Render(t.RenderParams{
-			C:         c,
-			Component: component,
-		})
+	// 		if strings.Contains(lowerCaseEngineer, text) && !slices.Contains(tempDupEngineers, engineer) {
+	// 			matches = append(matches, engineer)
+	// 		}
+	// 	}
+	// 	component := ConfigSetupPage.AllEngineersList(matches)
+	// 	content := t.Render(t.RenderParams{
+	// 		C:         c,
+	// 		Component: component,
+	// 	})
 
-		return c.HTML(http.StatusOK, content)
-	})
+	// 	return c.HTML(http.StatusOK, content)
+	// })
 
-	e.PATCH("/temp-duplicate-group", func(c echo.Context) error {
+	// e.PATCH("/temp-duplicate-group", func(c echo.Context) error {
 
-		leftItemsStr := c.FormValue("all-engineers")
-		leftItems := strings.Split(leftItemsStr, ",")
+	// 	leftItemsStr := c.FormValue("all-engineers")
+	// 	leftItems := strings.Split(leftItemsStr, ",")
 
-		rightItemsStr := c.FormValue("duplicate-engineers")
-		rightItems := strings.Split(rightItemsStr, ",")
+	// 	rightItemsStr := c.FormValue("duplicate-engineers")
+	// 	rightItems := strings.Split(rightItemsStr, ",")
 
-		filterText := c.FormValue("filter-text")
+	// 	filterText := c.FormValue("filter-text")
 
-		allEngineers := lo.Filter(leftItems, func(engineer string, _ int) bool {
-			return engineer != ""
-		})
+	// 	allEngineers := lo.Filter(leftItems, func(engineer string, _ int) bool {
+	// 		return engineer != ""
+	// 	})
 
-		selectedEngineers := lo.Filter(rightItems, func(engineer string, _ int) bool {
-			return engineer != ""
-		})
+	// 	selectedEngineers := lo.Filter(rightItems, func(engineer string, _ int) bool {
+	// 		return engineer != ""
+	// 	})
 
-		config := analyzer.GetConfig("./config.json")
+	// 	config := analyzer.GetConfig("./config.json")
 
-		component := pages.AnalyzeManually(allEngineers, selectedEngineers, config.Repos[0].DuplicateEngineers, filterText)
-		content := t.Render(t.RenderParams{
-			C:         c,
-			Component: component,
-		})
+	// 	component := pages.(allEngineers, selectedEngineers, config.Repos[0].DuplicateEngineers, filterText)
+	// 	content := t.Render(t.RenderParams{
+	// 		C:         c,
+	// 		Component: component,
+	// 	})
 
-		return c.HTML(http.StatusOK, content)
-	})
+	// 	return c.HTML(http.StatusOK, content)
+	// })
 
-	e.POST("/duplicate-group", func(c echo.Context) error {
-		duplicatesListRaw := c.FormValue("duplicate-engineers")
+	// 	e.POST("/duplicate-group", func(c echo.Context) error {
+	// 		duplicatesListRaw := c.FormValue("duplicate-engineers")
 
-		duplicateEngineers := strings.Split(duplicatesListRaw, ",")
+	// 		duplicateEngineers := strings.Split(duplicatesListRaw, ",")
 
-		config := analyzer.GetConfig("./config.json")
-		config.Repos[0].DuplicateEngineers = append(config.Repos[0].DuplicateEngineers, analyzer.DuplicateEngineerGroup{
-			Real:       duplicateEngineers[0],
-			Duplicates: duplicateEngineers[1:],
-		})
+	// 		config := analyzer.GetConfig("./config.json")
+	// 		config.Repos[0].DuplicateEngineers = append(config.Repos[0].DuplicateEngineers, analyzer.DuplicateEngineerGroup{
+	// 			Real:       duplicateEngineers[0],
+	// 			Duplicates: duplicateEngineers[1:],
+	// 		})
 
-		allDups := make(map[string]bool)
-		for _, dupGroup := range config.Repos[0].DuplicateEngineers {
-			allDups[dupGroup.Real] = true
+	// 		allDups := make(map[string]bool)
+	// 		for _, dupGroup := range config.Repos[0].DuplicateEngineers {
+	// 			allDups[dupGroup.Real] = true
 
-			for _, dup := range dupGroup.Duplicates {
-				allDups[dup] = true
-			}
-		}
+	// 			for _, dup := range dupGroup.Duplicates {
+	// 				allDups[dup] = true
+	// 			}
+	// 		}
 
-		remainingEngineers := []string{}
-		for _, engineer := range InitialEngineers {
-			if _, found := allDups[engineer]; !found {
-				remainingEngineers = append(remainingEngineers, engineer)
-			}
-		}
+	// 		remainingEngineers := []string{}
+	// 		for _, engineer := range InitialEngineers {
+	// 			if _, found := allDups[engineer]; !found {
+	// 				remainingEngineers = append(remainingEngineers, engineer)
+	// 			}
+	// 		}
 
-		analyzer.SaveDataToFile(config, "./config.json")
+	// 		analyzer.SaveDataToFile(config, "./config.json")
 
-		component := pages.AnalyzeManually(
-			remainingEngineers,
-			[]string{},
-			config.Repos[0].DuplicateEngineers,
-			"",
-		)
-		content := t.Render(t.RenderParams{
-			C:         c,
-			Component: component,
-		})
+	// 		component := pages.ConfigSetup(pages.ConfigSetupProps{
+	// 			RecapName: config.Repos[0].Name,
+	// 		})
+	// 		content := t.Render(t.RenderParams{
+	// 			C:         c,
+	// 			Component: component,
+	// 		})
 
-		return c.HTML(http.StatusOK, content)
-	})
+	//		return c.HTML(http.StatusOK, content)
+	//	})
 }

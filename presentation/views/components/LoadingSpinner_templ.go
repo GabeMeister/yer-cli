@@ -29,7 +29,7 @@ func LoadingSpinner() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"loading-spinner\" class=\"absolute top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-inherit htmx-indicator rounded-md\"><i class=\"text-white fa-solid fa-circle-notch animate-spin\"></i></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"loading-spinner\" class=\"htmx-indicator absolute top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-inherit rounded-md\"><i class=\"text-white fa-solid fa-circle-notch fa-xs animate-spin\"></i></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

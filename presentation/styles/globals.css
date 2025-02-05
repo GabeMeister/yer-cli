@@ -46,3 +46,39 @@
 .btn.lg {
   @apply px-5 py-4;
 }
+
+.text-input {
+  @apply px-4 py-3 text-lg leading-3 border-gray-300 border hover:border-gray-500 focus:border-gray-500 text-gray-600 outline-none duration-200 rounded-md;
+}
+
+.h1 {
+  @apply text-3xl font-bold;
+}
+
+.toast {
+  animation: slideIn 0.3s ease-in forwards, fadeOut 0.5s ease-in forwards 2.5s;
+}
+
+/* Slide In Animation */
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Fade Out Animation */
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+}
