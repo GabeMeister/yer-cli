@@ -8,19 +8,8 @@ package pages
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-// Props:
-// color
-// size
-// leftIcon
-// rightIcon
+import "GabeMeister/yer-cli/presentation/views/components"
 
-// hxGet
-// hxPost
-// hxPatch
-// hxPut
-// hxDelete
-// hxIndicator
-// hxSwap
 func ButtonsPage() templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
@@ -42,7 +31,15 @@ func ButtonsPage() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<button class=\"btn\" hx-post=\"/example\" hx-swap=\"outerHTML\" hx-indicator=\"#loading-spinner\"><div class=\"flex gap-3 justify-center items-center\"><span>Click Me 8!</span> <i class=\"fa-solid fa-chevron-right\"></i></div><div id=\"loading-spinner\" class=\"absolute top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-inherit htmx-indicator rounded-md\"><i class=\"text-white fa-solid fa-circle-notch animate-spin\"></i></div></button>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<button id=\"gabe\" class=\"btn lg green\" hx-post=\"/example\" hx-swap=\"outerHTML\"><div class=\"flex gap-3 justify-center items-center\"><span>Click Me 4</span> <i class=\"fa-solid fa-plus\"></i></div>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = components.LoadingSpinner().Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</button>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

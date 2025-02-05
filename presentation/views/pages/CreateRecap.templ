@@ -19,9 +19,12 @@ templ AnalyzeManually(
 				Name: "recap-name",
 			})
 			<br/>
-			// @components.Button(@components.ButtonProps{ loading: false, disabled: false }) {
-			// 	<span>Submit</span>
-			// }
+			<button
+				class="btn lg"
+			>
+				Submit
+				@components.LoadingSpinner()
+			</button>
 		</form>
 	}
 }
