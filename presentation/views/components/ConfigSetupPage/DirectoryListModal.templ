@@ -1,0 +1,35 @@
+package ConfigSetupPage 
+
+import (
+	"GabeMeister/yer-cli/presentation/views/components"
+	"fmt"
+	"path"
+)
+
+func getFilesUrl(rootDir string, dir string) string {
+	fullDirPath := path.Join(rootDir, dir)
+
+	return fmt.Sprintf("/files?dir=%s", fullDirPath)
+}
+
+templ DirectoryListModal(rootDir string, dirs []string) {
+	@components.Modal("dir-list-modal") {
+		<div class="flex flex-col gap-3">
+			<div class="h-64 overflow-y-scroll">
+				for _, dir := range dirs {
+					<div
+						hx-get={ getFilesUrl(rootDir, dir) }
+						hx-swap="outerHTML"
+						hx-target="#dir-list-modal"
+						class="cursor-pointer hover:bg-gray-200 duration-200 px-2 py-1 rounded-sm"
+					>
+						{ dir }
+					</div>
+				}
+			</div>
+			<button class="btn lg">
+				Submit
+			</button>
+		</div>
+	}
+}

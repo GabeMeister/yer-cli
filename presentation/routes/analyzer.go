@@ -3,9 +3,10 @@ package routes
 import (
 	"GabeMeister/yer-cli/analyzer"
 	"GabeMeister/yer-cli/utils"
-	"fmt"
+	"os"
 	"time"
 
+	"GabeMeister/yer-cli/presentation/views/components/ConfigSetupPage"
 	"GabeMeister/yer-cli/presentation/views/pages"
 	t "GabeMeister/yer-cli/presentation/views/template"
 	"net/http"
@@ -19,7 +20,6 @@ func addAnalyzerRoutes(e *echo.Echo) {
 
 	e.GET("/create-recap", func(c echo.Context) error {
 		if !analyzer.DoesConfigExist(utils.DEFAULT_CONFIG_FILE) {
-			fmt.Print("\n\n", "*** in it ***", "\n", "\n\n\n")
 			analyzer.InitConfig(analyzer.ConfigFileOptions{
 				RepoDir:                "",
 				MasterBranchName:       "",
@@ -58,6 +58,30 @@ func addAnalyzerRoutes(e *echo.Echo) {
 			RecapName: updatedConfig.Repos[0].Name,
 			Toast:     time.Now().Format("2006-01-02 15:04:05"),
 		})
+		content := t.Render(t.RenderParams{
+			C:         c,
+			Component: component,
+		})
+
+		return c.HTML(http.StatusOK, content)
+	})
+
+	e.GET("/files", func(c echo.Context) error {
+		dir := c.FormValue("dir")
+		rootDir := dir
+
+		if rootDir == "" {
+			homeDir, err := os.UserHomeDir()
+			if err != nil {
+				panic(err)
+			}
+
+			// Default to the user's home directory
+			rootDir = homeDir
+		}
+		dirs := utils.GetDirs(rootDir)
+
+		component := ConfigSetupPage.DirectoryListModal(rootDir, dirs)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,

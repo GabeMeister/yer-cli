@@ -34,6 +34,14 @@ templ ConfigSetup(props ConfigSetupProps) {
 							required
 						/>
 						<button
+							class="btn"
+							hx-get="/files"
+							hx-swap="beforeend"
+							hx-target="body"
+						>
+							Add Repo
+						</button>
+						<button
 							class="btn lg"
 						>
 							Save
