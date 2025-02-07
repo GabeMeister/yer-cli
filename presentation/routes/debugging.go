@@ -57,4 +57,19 @@ func addDebuggingRoutes(e *echo.Echo) {
 
 		return c.HTML(http.StatusOK, content)
 	})
+
+	e.GET("/fade-in", func(c echo.Context) error {
+		component := pages.FadeIn()
+
+		content := t.Render(t.RenderParams{
+			C:         c,
+			Component: component,
+		})
+
+		return c.HTML(http.StatusOK, content)
+	})
+
+	e.GET("/fade-in-request", func(c echo.Context) error {
+		return c.HTML(http.StatusOK, "<div class='bg-green-400'>Hey there!</div>")
+	})
 }

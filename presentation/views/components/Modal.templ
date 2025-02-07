@@ -1,14 +1,18 @@
 package components 
 
+import "fmt"
+
 templ Modal(id string) {
-	<div id={ id }>
+	<div data-template-id="Modal" id={ id }>
 		<div
-			data-template-id="Modal Background"
 			class="absolute top-0 left-0 right-0 bottom-0 bg-black opacity-70 flex justify-center items-start"
 		></div>
 		<div
-			data-template-id="Modal"
 			class="absolute top-0 left-0 right-0 bottom-0 flex justify-center items-start"
+			hx-get="/clear"
+			hx-trigger="click, keyup[key=='Escape'] from:body"
+			hx-target={ fmt.Sprintf("#%s", id) }
+			hx-swap="outerHTML"
 		>
 			// TODO: add X button automatically
 			<div class="opacity-100 text-black font-bold bg-white max-h-96 p-6 mt-40 rounded-md w-1/3 min-w-96">

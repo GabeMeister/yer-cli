@@ -1,0 +1,10 @@
+package pages 
+
+templ FadeIn() {
+	<div id="wrap" class="fixed top-0 right-0 left-0 bottom-0 text-center bg-gray-200 block h-0 transition-opacity	 duration-1000 ease-in opacity-0 overflow-hidden"></div>
+	<button
+		hx-get="/fade-in-request"
+		hx-target="#wrap"
+		hx-swap="beforeend"
+	>Click Me 6</button>
+}

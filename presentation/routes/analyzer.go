@@ -90,6 +90,10 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		return c.HTML(http.StatusOK, content)
 	})
 
+	e.GET("/clear", func(c echo.Context) error {
+		return c.HTML(http.StatusOK, "")
+	})
+
 	// e.POST("/search-engineers", func(c echo.Context) error {
 	// 	text := c.FormValue("filter-text")
 	// 	text = strings.ToLower(text)

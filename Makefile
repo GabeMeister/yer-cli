@@ -12,7 +12,7 @@ live/tailwind:
 	--build.cmd "npx tailwindcss --input ./presentation/styles/globals.css --output ./presentation/static/css/styles.css" \
 	--build.bin "true" \
 	--build.delay "100" \
-	--build.include_ext "templ,globals.css"
+	--build.include_ext "templ"
 
 # Watch for any changes to the styles.css file, and notify the proxy that
 # styling has changed
