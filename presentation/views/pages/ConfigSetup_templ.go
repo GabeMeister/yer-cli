@@ -53,7 +53,7 @@ func ConfigSetup(props ConfigSetupProps) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"config-setup\"><div class=\"bg-gray-800 flex justify-center items-center min-h-screen\"><div class=\"bg-white w-1/3  p-12 rounded-md\"><form hx-patch=\"/config-file\" hx-swap=\"outerHTML\" hx-target=\"#config-setup\" class=\"flex flex-col items-center justify-center gap-6\"><h1 class=\"h1\">Config Setup</h1><input type=\"text\" class=\"text-input\" placeholder=\"Recap Name\" name=\"recap-name\" id=\"recap-name\" value=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"config-setup\"><div class=\"bg-gray-800 flex justify-center items-center min-h-screen\"><div class=\"bg-white w-1/3  p-12 rounded-md\"><form hx-patch=\"/config-file\" hx-swap=\"outerHTML\" hx-target=\"#config-setup\" class=\"flex flex-col items-start gap-6\"><h1 class=\"h1\">Config Setup</h1><input type=\"text\" class=\"text-input w-full\" placeholder=\"Recap Name\" name=\"recap-name\" id=\"recap-name\" value=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -66,7 +66,7 @@ func ConfigSetup(props ConfigSetupProps) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" required> <button class=\"btn\" hx-get=\"/files\" hx-swap=\"beforeend\" hx-target=\"body\">Add Repo</button> <button class=\"btn lg\">Save")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" required> <button class=\"btn\" hx-get=\"/dir-list-modal\" hx-swap=\"beforeend\" hx-target=\"body\"><span class=\"flex gap-2 items-center\"><i class=\"fa-solid fa-plus\"></i> <span>Add Repo</span></span></button> <button class=\"btn lg w-full\">Save")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -86,7 +86,7 @@ func ConfigSetup(props ConfigSetupProps) templ.Component {
 				var templ_7745c5c3_Var4 string
 				templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(props.Toast)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/ConfigSetup.templ`, Line: 60, Col: 17}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/ConfigSetup.templ`, Line: 63, Col: 17}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 				if templ_7745c5c3_Err != nil {

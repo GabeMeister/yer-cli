@@ -66,19 +66,8 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		return c.HTML(http.StatusOK, content)
 	})
 
-	e.GET("/files", func(c echo.Context) error {
-		dir := c.FormValue("dir")
-		rootDir := dir
-
-		if rootDir == "" {
-			homeDir, err := os.UserHomeDir()
-			if err != nil {
-				panic(err)
-			}
-
-			// Default to the user's home directory
-			rootDir = homeDir
-		}
+	e.GET("/dir-list-modal", func(c echo.Context) error {
+		rootDir, _ := os.UserHomeDir()
 		dirs := utils.GetDirs(rootDir)
 
 		component := ConfigSetupPage.DirectoryListModal(rootDir, dirs)
@@ -88,6 +77,27 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		})
 
 		return c.HTML(http.StatusOK, content)
+	})
+
+	e.GET("/dir-list", func(c echo.Context) error {
+		baseDir := c.FormValue("dir")
+		if baseDir == "" {
+			panic("Using PATCH /dir-list wrong: need to include base dir")
+		}
+
+		dirs := utils.GetDirs(baseDir)
+
+		component := ConfigSetupPage.DirectoryList(ConfigSetupPage.DirectoryListProps{
+			Dirs:    dirs,
+			BaseDir: baseDir,
+		})
+		content := t.Render(t.RenderParams{
+			C:         c,
+			Component: component,
+		})
+
+		return c.HTML(http.StatusOK, content)
+
 	})
 
 	e.GET("/clear", func(c echo.Context) error {

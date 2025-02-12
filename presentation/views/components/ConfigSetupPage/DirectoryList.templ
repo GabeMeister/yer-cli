@@ -1,0 +1,41 @@
+package ConfigSetupPage 
+
+import (
+	"fmt"
+	"path"
+)
+
+type DirectoryListProps struct {
+	Dirs    []string
+	BaseDir string
+}
+
+func getDirUrl(rootDir string, dir string) string {
+	fullDirPath := path.Join(rootDir, dir)
+
+	return fmt.Sprintf("/dir-list?dir=%s", fullDirPath)
+}
+
+templ DirectoryList(props DirectoryListProps) {
+	<div id="dir-list" class="flex flex-col gap-3">
+		<div class="overflow-y-scroll">
+			for _, dir := range props.Dirs {
+				<div
+					hx-get={ getDirUrl(props.BaseDir, dir) }
+					hx-swap="outerHTML"
+					hx-target="#dir-list"
+					hx-event="click"
+					class="cursor-pointer hover:bg-gray-200 duration-200 px-2 py-1 rounded-sm font-light hover:font-medium"
+				>
+					{ dir }
+				</div>
+			}
+		</div>
+		// TODO: actually submit this
+		<button
+			class="btn lg"
+		>
+			Submit
+		</button>
+	</div>
+}

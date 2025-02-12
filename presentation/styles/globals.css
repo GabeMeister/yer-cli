@@ -56,11 +56,12 @@
 }
 
 .toast {
-  animation: slideIn 0.3s ease-in forwards, fadeOut 0.5s ease-in forwards 2.5s;
+  animation: slide-in 0.3s ease-in forwards,
+    slide-out 0.5s ease-in forwards 2.5s;
 }
 
 /* Slide In Animation */
-@keyframes slideIn {
+@keyframes slide-in {
   from {
     transform: translateX(-100%);
     opacity: 0;
@@ -71,8 +72,19 @@
   }
 }
 
-/* Fade Out Animation */
-@keyframes fadeOut {
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  100% {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+@keyframes slide-out {
   from {
     opacity: 1;
     transform: translateX(0);
@@ -83,8 +95,36 @@
   }
 }
 
-#wrap:not(:empty) {
-  height: 100vh;
-  width: 100vw;
-  opacity: 1;
+@keyframes fade-in-animation {
+  0% {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  100% {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+@keyframes fade-in-animation-opacity-50 {
+  0% {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  100% {
+    opacity: 0.5;
+    visibility: visible;
+  }
+}
+
+.fade-in {
+  opacity: 0;
+  visibility: hidden;
+  animation: fade-in-animation 0.3s ease-in forwards;
+}
+
+.fade-in.opacity-50 {
+  animation: fade-in-animation-opacity-50 0.3s ease-in forwards;
 }
