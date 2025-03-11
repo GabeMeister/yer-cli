@@ -34,7 +34,7 @@ func Modal(props ModalProps) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"modal-root\" data-template-id=\"Modal\"><div class=\"absolute top-0 left-0 right-0 bottom-0 bg-black opacity-50 flex justify-center items-start fade-in\"></div><div class=\"absolute inset-0 flex justify-center items-start fade-in\"><div class=\"opacity-100 text-black font-bold bg-white max-h-[calc(100vh-80px)] p-8 mt-32 rounded-md w-1/3 min-w-96 overflow-y-auto flex flex-col gap-4\" id=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"modal-root\" data-template-id=\"Modal\"><div class=\"absolute top-0 left-0 right-0 bottom-0 bg-black opacity-50 flex justify-center items-start fade-in\"></div><div class=\"absolute inset-0 flex justify-center items-start fade-in\"><div class=\"opacity-100 text-black font-bold bg-white max-h-[calc(100vh-200px)] p-8 mt-16 rounded-md w-1/3 min-w-96 overflow-y-auto flex flex-col gap-4\" id=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -60,7 +60,7 @@ func Modal(props ModalProps) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h1><i class=\"fa-solid fa-xmark fa-lg cursor-pointer text-gray-400 hover:text-gray-500 duration-200\" hx-get=\"/clear\" hx-target=\"#modal-root\" hx-swap=\"outerHTML\"></i></div><hr class=\"\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h1><i class=\"fa-solid fa-xmark fa-lg cursor-pointer text-gray-400 hover:text-gray-500 duration-200\" hx-get=\"/clear\" hx-target=\"#modal-root\" hx-swap=\"outerHTML\"></i></div><hr><div class=\"overflow-y-auto\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -68,7 +68,7 @@ func Modal(props ModalProps) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

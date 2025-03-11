@@ -67,10 +67,11 @@ func addAnalyzerRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/dir-list-modal", func(c echo.Context) error {
-		rootDir, _ := os.UserHomeDir()
-		dirs := utils.GetDirs(rootDir)
+		// baseDir := "/home/gabe/dev/rb-frontend/remix/routes/employer._search.applications"
+		baseDir, _ := os.UserHomeDir()
+		dirs := utils.GetDirs(baseDir)
 
-		component := ConfigSetupPage.DirectoryListModal(rootDir, dirs)
+		component := ConfigSetupPage.DirectoryListModal(baseDir, dirs)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
