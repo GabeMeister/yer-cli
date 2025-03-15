@@ -36,6 +36,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 			C: c,
 			Component: pages.ConfigSetup(pages.ConfigSetupProps{
 				RecapName: config.Repos[0].Name,
+				RepoPath:  config.Repos[0].Path,
 			}),
 		})
 
@@ -98,7 +99,26 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		})
 
 		return c.HTML(http.StatusOK, content)
+	})
 
+	e.POST("/repo-path", func(c echo.Context) error {
+		repoPath := c.FormValue("repo-path")
+		config := analyzer.GetConfig(utils.DEFAULT_CONFIG_FILE)
+		config.Repos[0].Path = repoPath
+
+		analyzer.UpdateConfig(config)
+
+		component := pages.ConfigSetup(pages.ConfigSetupProps{
+			RecapName: config.Repos[0].Name,
+			RepoPath:  config.Repos[0].Path,
+			Toast:     time.Now().Format("2006-01-02 15:04:05"),
+		})
+		content := t.Render(t.RenderParams{
+			C:         c,
+			Component: component,
+		})
+
+		return c.HTML(http.StatusOK, content)
 	})
 
 	e.GET("/clear", func(c echo.Context) error {

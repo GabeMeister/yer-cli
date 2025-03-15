@@ -4,6 +4,7 @@ import "GabeMeister/yer-cli/presentation/views/components"
 
 type ConfigSetupProps struct {
 	RecapName string
+	RepoPath  string
 	Toast     string
 
 	// AllEngineers            []string
@@ -19,8 +20,8 @@ templ ConfigSetup(props ConfigSetupProps) {
 				<div class="bg-white w-1/3  p-12 rounded-md">
 					<form
 						hx-patch="/config-file"
-						hx-swap="outerHTML"
-						hx-target="#config-setup"
+						hx-swap="innerHTML"
+						hx-target="#root"
 						class="flex flex-col items-start gap-6"
 					>
 						<h1 class="h1">Config Setup</h1>
@@ -33,8 +34,12 @@ templ ConfigSetup(props ConfigSetupProps) {
 							value={ props.RecapName }
 							required
 						/>
+						if props.RepoPath != "" {
+							<div>{ props.RepoPath }</div>
+						}
 						<button
 							class="btn"
+							type="button"
 							hx-get="/dir-list-modal"
 							hx-swap="beforeend"
 							hx-target="body"
