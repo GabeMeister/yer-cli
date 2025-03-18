@@ -45,11 +45,13 @@ func addAnalyzerRoutes(e *echo.Echo) {
 
 	e.PATCH("/config-file", func(c echo.Context) error {
 		recapName := c.FormValue("recap-name")
+		repoPath := c.FormValue("repo-path")
 
 		updatedConfig := analyzer.ConfigFile{
 			Repos: []analyzer.RepoConfig{
 				{
 					Name: recapName,
+					Path: repoPath,
 				}},
 		}
 
@@ -57,6 +59,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 
 		component := pages.ConfigSetup(pages.ConfigSetupProps{
 			RecapName: updatedConfig.Repos[0].Name,
+			RepoPath:  updatedConfig.Repos[0].Path,
 			Toast:     time.Now().Format("2006-01-02 15:04:05"),
 		})
 		content := t.Render(t.RenderParams{
@@ -68,8 +71,11 @@ func addAnalyzerRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/dir-list-modal", func(c echo.Context) error {
-		// baseDir := "/home/gabe/dev/rb-frontend/remix/routes/employer._search.applications"
+		config := analyzer.GetConfig(utils.DEFAULT_CONFIG_FILE)
 		baseDir, _ := os.UserHomeDir()
+		if len(config.Repos) > 0 && config.Repos[0].Path != "" {
+			baseDir = config.Repos[0].Path
+		}
 		dirs := utils.GetDirs(baseDir)
 
 		component := ConfigSetupPage.DirectoryListModal(baseDir, dirs)
@@ -117,6 +123,9 @@ func addAnalyzerRoutes(e *echo.Echo) {
 			C:         c,
 			Component: component,
 		})
+		content += `
+			<div id='modal-root' hx-swap-oob='true'></div>
+		`
 
 		return c.HTML(http.StatusOK, content)
 	})

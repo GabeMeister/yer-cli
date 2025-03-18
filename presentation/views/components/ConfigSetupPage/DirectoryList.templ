@@ -17,8 +17,13 @@ func getDirUrl(rootDir string, dir string) string {
 }
 
 templ DirectoryList(props DirectoryListProps) {
-	<div id="dir-list" class="flex flex-col gap-3">
-		<form hx-post="/repo-path" method="post" hx-swap="innerHTML" hx-target="#root">
+	<div id="dir-list">
+		<form
+			hx-post="/repo-path"
+			hx-target="#root"
+			hx-swap="innerHTML"
+			class="flex flex-col gap-3"
+		>
 			<div class="h-48 overflow-y-auto border border-gray-200 rounded-sm">
 				for _, dir := range props.Dirs {
 					<div
@@ -34,7 +39,7 @@ templ DirectoryList(props DirectoryListProps) {
 			</div>
 			<div>
 				<h1>Current Directory:</h1>
-				<div class="text-md font-normal text-gray-500 overflow-x-scroll">{ props.BaseDir }</div>
+				<div class="text-md font-normal text-gray-500 overflow-x-auto">{ props.BaseDir }</div>
 				<input type="hidden" value={ props.BaseDir } name="repo-path"/>
 			</div>
 			<button
