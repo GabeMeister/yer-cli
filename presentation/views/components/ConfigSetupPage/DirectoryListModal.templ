@@ -7,7 +7,7 @@ templ DirectoryListModal(baseDir string, dirs []string) {
 		Id:    "dir-list-modal",
 		Title: "Select Repo",
 	}) {
-		@DirectoryList(DirectoryListProps{
+		@DirectoryListForm(DirectoryListFormProps{
 			Dirs:    dirs,
 			BaseDir: baseDir,
 		})

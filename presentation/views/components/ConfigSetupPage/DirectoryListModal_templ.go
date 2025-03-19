@@ -43,7 +43,7 @@ func DirectoryListModal(baseDir string, dirs []string) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = DirectoryList(DirectoryListProps{
+			templ_7745c5c3_Err = DirectoryListForm(DirectoryListFormProps{
 				Dirs:    dirs,
 				BaseDir: baseDir,
 			}).Render(ctx, templ_7745c5c3_Buffer)

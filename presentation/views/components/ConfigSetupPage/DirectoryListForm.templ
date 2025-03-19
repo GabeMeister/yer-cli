@@ -1,0 +1,53 @@
+package ConfigSetupPage 
+
+import (
+	"fmt"
+	"path"
+)
+
+type DirectoryListFormProps struct {
+	Dirs    []string
+	BaseDir string
+}
+
+func getDirUrl(rootDir string, dir string) string {
+	fullDirPath := path.Join(rootDir, dir)
+
+	return fmt.Sprintf("/dir-list?dir=%s", fullDirPath)
+}
+
+templ DirectoryListForm(props DirectoryListFormProps) {
+	<div id="dir-list-form">
+		<input
+			type="text"
+			name="search-term"
+			hx-get="/filtered-dir-contents"
+			hx-include="#repo-path"
+			hx-trigger="input changed delay:500ms, keyup[key=='Enter'], load"
+			hx-target="#dir-list"
+			hx-swap="outerHTML"
+		/>
+		<form
+			hx-post="/repo-path"
+			hx-target="#repo-path-section"
+			hx-swap="outerHTML"
+			class="flex flex-col gap-3"
+		>
+			@DirectoryList(DirectoryListProps{
+				BaseDir: props.BaseDir,
+				Dirs:    props.Dirs,
+			})
+			<div>
+				<h1>Current Directory:</h1>
+				<div class="text-md font-normal text-gray-500 overflow-x-auto">{ props.BaseDir }</div>
+				<input type="hidden" value={ props.BaseDir } name="repo-path" id="repo-path"/>
+			</div>
+			<button
+				class="btn lg"
+				type="submit"
+			>
+				Select Current Directory
+			</button>
+		</form>
+	</div>
+}

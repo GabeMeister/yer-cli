@@ -4,6 +4,7 @@ import (
 	"GabeMeister/yer-cli/analyzer"
 	"GabeMeister/yer-cli/utils"
 	"os"
+	"strings"
 	"time"
 
 	"GabeMeister/yer-cli/presentation/views/components/ConfigSetupPage"
@@ -91,7 +92,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 
 		dirs := utils.GetDirs(baseDir)
 
-		component := ConfigSetupPage.DirectoryList(ConfigSetupPage.DirectoryListProps{
+		component := ConfigSetupPage.DirectoryListForm(ConfigSetupPage.DirectoryListFormProps{
 			Dirs:    dirs,
 			BaseDir: baseDir,
 		})
@@ -105,10 +106,6 @@ func addAnalyzerRoutes(e *echo.Echo) {
 
 	e.POST("/repo-path", func(c echo.Context) error {
 		repoPath := c.FormValue("repo-path")
-		config := analyzer.GetConfig(utils.DEFAULT_CONFIG_FILE)
-		config.Repos[0].Path = repoPath
-
-		analyzer.UpdateConfig(config)
 
 		component := ConfigSetupPage.RepoPath(ConfigSetupPage.RepoPathProps{
 			RepoPath: repoPath,
@@ -120,6 +117,31 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		content += `
 			<div id='modal-root' hx-swap-oob='true'></div>
 		`
+
+		return c.HTML(http.StatusOK, content)
+	})
+
+	e.GET("/filtered-dir-contents", func(c echo.Context) error {
+		searchTerm := c.FormValue("search-term")
+		searchTerm = strings.ToLower(searchTerm)
+		baseDir := c.FormValue("repo-path")
+
+		dirs := utils.GetDirs(baseDir)
+		filteredDirs := []string{}
+		for _, dir := range dirs {
+			if strings.Contains(strings.ToLower(dir), searchTerm) {
+				filteredDirs = append(filteredDirs, dir)
+			}
+		}
+
+		component := ConfigSetupPage.DirectoryList(ConfigSetupPage.DirectoryListProps{
+			BaseDir: baseDir,
+			Dirs:    filteredDirs,
+		})
+		content := t.Render(t.RenderParams{
+			C:         c,
+			Component: component,
+		})
 
 		return c.HTML(http.StatusOK, content)
 	})

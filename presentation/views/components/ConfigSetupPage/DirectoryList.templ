@@ -1,53 +1,24 @@
-package ConfigSetupPage 
-
-import (
-	"fmt"
-	"path"
-)
+package ConfigSetupPage
 
 type DirectoryListProps struct {
-	Dirs    []string
 	BaseDir string
-}
-
-func getDirUrl(rootDir string, dir string) string {
-	fullDirPath := path.Join(rootDir, dir)
-
-	return fmt.Sprintf("/dir-list?dir=%s", fullDirPath)
+	Dirs    []string
 }
 
 templ DirectoryList(props DirectoryListProps) {
 	<div id="dir-list">
-		<form
-			hx-post="/repo-path"
-			hx-target="#repo-path-section"
-			hx-swap="outerHTML"
-			class="flex flex-col gap-3"
-		>
-			<div class="h-48 overflow-y-auto border border-gray-200 rounded-sm">
-				for _, dir := range props.Dirs {
-					<div
-						hx-get={ getDirUrl(props.BaseDir, dir) }
-						hx-swap="outerHTML"
-						hx-target="#dir-list"
-						hx-event="click"
-						class="cursor-pointer hover:bg-gray-200 duration-200 px-2 py-1 rounded-sm font-light overflow-x-hidden"
-					>
-						{ dir }
-					</div>
-				}
-			</div>
-			<div>
-				<h1>Current Directory:</h1>
-				<div class="text-md font-normal text-gray-500 overflow-x-auto">{ props.BaseDir }</div>
-				<input type="hidden" value={ props.BaseDir } name="repo-path"/>
-			</div>
-			<button
-				class="btn lg"
-				type="submit"
-			>
-				Select Current Directory
-			</button>
-		</form>
+		<div class="h-48 overflow-y-auto border border-gray-200 rounded-sm">
+			for _, dir := range props.Dirs {
+				<div
+					hx-get={ getDirUrl(props.BaseDir, dir) }
+					hx-swap="outerHTML"
+					hx-target="#dir-list-form"
+					hx-event="click"
+					class="cursor-pointer hover:bg-gray-200 duration-200 px-2 py-1 rounded-sm font-light overflow-x-hidden"
+				>
+					{ dir }
+				</div>
+			}
+		</div>
 	</div>
 }
