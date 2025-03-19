@@ -1,0 +1,44 @@
+package ConfigSetupPage
+
+type RepoPathProps struct {
+	RepoPath string
+}
+
+func truncateRepoPath(path string) string {
+	maxLength := 30
+
+	if len(path) > maxLength {
+		startIdx := len(path) - maxLength
+		return "..." + path[startIdx:]
+	} else {
+		return path
+	}
+}
+
+templ RepoPath(props RepoPathProps) {
+	<div id="repo-path-section" class="w-full">
+		if props.RepoPath == "" {
+			<button
+				class="btn"
+				type="button"
+				hx-get="/dir-list-modal"
+				hx-target="body"
+				hx-swap="beforeend"
+			>
+				<i class="fa-solid fa-plus"></i>
+				<span>Add Repo</span>
+			</button>
+		} else {
+			<div class="flex gap-3 items-center w-full">
+				<i
+					class="fa-solid fa-pencil text-gray-400 hover:text-gray-500 duration-200 cursor-pointer"
+					hx-get="/dir-list-modal"
+					hx-target="body"
+					hx-swap="beforeend"
+				></i>
+				<p>{ truncateRepoPath(props.RepoPath) }</p>
+				<input type="hidden" name="repo-path" value={ props.RepoPath }/>
+			</div>
+		}
+	</div>
+}

@@ -45,7 +45,7 @@ func DirectoryList(props DirectoryListProps) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"dir-list\"><form hx-post=\"/repo-path\" hx-target=\"#root\" hx-swap=\"innerHTML\" class=\"flex flex-col gap-3\"><div class=\"h-48 overflow-y-auto border border-gray-200 rounded-sm\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"dir-list\"><form hx-post=\"/repo-path\" hx-target=\"#repo-path-section\" hx-swap=\"outerHTML\" class=\"flex flex-col gap-3\"><div class=\"h-48 overflow-y-auto border border-gray-200 rounded-sm\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

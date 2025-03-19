@@ -20,8 +20,8 @@ templ DirectoryList(props DirectoryListProps) {
 	<div id="dir-list">
 		<form
 			hx-post="/repo-path"
-			hx-target="#root"
-			hx-swap="innerHTML"
+			hx-target="#repo-path-section"
+			hx-swap="outerHTML"
 			class="flex flex-col gap-3"
 		>
 			<div class="h-48 overflow-y-auto border border-gray-200 rounded-sm">

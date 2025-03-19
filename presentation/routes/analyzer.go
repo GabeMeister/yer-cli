@@ -47,19 +47,15 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		recapName := c.FormValue("recap-name")
 		repoPath := c.FormValue("repo-path")
 
-		updatedConfig := analyzer.ConfigFile{
-			Repos: []analyzer.RepoConfig{
-				{
-					Name: recapName,
-					Path: repoPath,
-				}},
-		}
+		config := analyzer.GetConfig(utils.DEFAULT_CONFIG_FILE)
+		config.Repos[0].Name = recapName
+		config.Repos[0].Path = repoPath
 
-		analyzer.UpdateConfig(updatedConfig)
+		analyzer.UpdateConfig(config)
 
 		component := pages.ConfigSetup(pages.ConfigSetupProps{
-			RecapName: updatedConfig.Repos[0].Name,
-			RepoPath:  updatedConfig.Repos[0].Path,
+			RecapName: config.Repos[0].Name,
+			RepoPath:  config.Repos[0].Path,
 			Toast:     time.Now().Format("2006-01-02 15:04:05"),
 		})
 		content := t.Render(t.RenderParams{
@@ -114,10 +110,8 @@ func addAnalyzerRoutes(e *echo.Echo) {
 
 		analyzer.UpdateConfig(config)
 
-		component := pages.ConfigSetup(pages.ConfigSetupProps{
-			RecapName: config.Repos[0].Name,
-			RepoPath:  config.Repos[0].Path,
-			Toast:     time.Now().Format("2006-01-02 15:04:05"),
+		component := ConfigSetupPage.RepoPath(ConfigSetupPage.RepoPathProps{
+			RepoPath: repoPath,
 		})
 		content := t.Render(t.RenderParams{
 			C:         c,
