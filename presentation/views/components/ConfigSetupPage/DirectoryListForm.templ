@@ -17,21 +17,26 @@ func getDirUrl(rootDir string, dir string) string {
 }
 
 templ DirectoryListForm(props DirectoryListFormProps) {
-	<div id="dir-list-form">
-		<input
-			type="text"
-			name="search-term"
-			hx-get="/filtered-dir-contents"
-			hx-include="#repo-path"
-			hx-trigger="input changed delay:500ms, keyup[key=='Enter'], load"
-			hx-target="#dir-list"
-			hx-swap="outerHTML"
-		/>
+	<div id="dir-list-form" class="flex flex-col gap-6">
+		<div class="flex flex-col gap-2 w-full">
+			<label for="search-term">Filter Directories:</label>
+			<input
+				type="text"
+				id="search-term"
+				class="text-input w-full font-normal"
+				name="search-term"
+				hx-get="/filtered-dir-contents"
+				hx-include="#repo-path"
+				hx-trigger="input changed delay:500ms, keyup[key=='Enter'], load"
+				hx-target="#dir-list"
+				hx-swap="outerHTML"
+			/>
+		</div>
 		<form
 			hx-post="/repo-path"
 			hx-target="#repo-path-section"
 			hx-swap="outerHTML"
-			class="flex flex-col gap-3"
+			class="flex flex-col gap-6"
 		>
 			@DirectoryList(DirectoryListProps{
 				BaseDir: props.BaseDir,

@@ -57,7 +57,7 @@ func ConfigSetup(props ConfigSetupProps) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"config-setup\"><div class=\"bg-gray-800 flex justify-center items-center min-h-screen\"><div class=\"bg-white w-1/3 min-w-[400px] p-12 rounded-md\"><form hx-patch=\"/config-file\" hx-swap=\"innerHTML\" hx-target=\"#root\" class=\"flex flex-col items-start gap-6\"><h1 class=\"h1\">Config Setup</h1><input type=\"text\" class=\"text-input w-full\" placeholder=\"Recap Name\" name=\"recap-name\" id=\"recap-name\" value=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"config-setup\"><div class=\"bg-gray-800 flex justify-center items-center min-h-screen\"><div class=\"bg-white w-1/3 min-w-[600px] max-w-[750px] p-12 rounded-md\"><form hx-patch=\"/config-file\" hx-swap=\"innerHTML\" hx-target=\"#root\" class=\"flex flex-col items-start gap-6\"><h1 class=\"h1\">Config Setup</h1><input type=\"text\" class=\"text-input w-full\" placeholder=\"Recap Name\" name=\"recap-name\" id=\"recap-name\" value=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

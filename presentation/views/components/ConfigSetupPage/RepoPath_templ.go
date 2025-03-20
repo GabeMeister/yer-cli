@@ -54,14 +54,14 @@ func RepoPath(props RepoPathProps) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		} else {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"flex gap-3 items-center w-full\"><i class=\"fa-solid fa-pencil text-gray-400 hover:text-gray-500 duration-200 cursor-pointer\" hx-get=\"/dir-list-modal\" hx-target=\"body\" hx-swap=\"beforeend\"></i><p>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"flex gap-3 items-center w-full\"><i class=\"fa-solid fa-pencil text-gray-400 hover:text-gray-500 duration-200 cursor-pointer\" hx-get=\"/dir-list-modal\" hx-target=\"body\" hx-swap=\"beforeend\"></i><p class=\"text-lg\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var2 string
 			templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(truncateRepoPath(props.RepoPath))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/ConfigSetupPage/RepoPath.templ`, Line: 39, Col: 41}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/ConfigSetupPage/RepoPath.templ`, Line: 39, Col: 57}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 			if templ_7745c5c3_Err != nil {

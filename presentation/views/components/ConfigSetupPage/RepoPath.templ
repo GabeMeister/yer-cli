@@ -36,7 +36,7 @@ templ RepoPath(props RepoPathProps) {
 					hx-target="body"
 					hx-swap="beforeend"
 				></i>
-				<p>{ truncateRepoPath(props.RepoPath) }</p>
+				<p class="text-lg">{ truncateRepoPath(props.RepoPath) }</p>
 				<input type="hidden" name="repo-path" value={ props.RepoPath }/>
 			</div>
 		}
