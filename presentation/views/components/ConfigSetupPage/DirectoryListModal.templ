@@ -2,14 +2,21 @@ package ConfigSetupPage
 
 import "GabeMeister/yer-cli/presentation/views/components"
 
-templ DirectoryListModal(baseDir string, dirs []string) {
+type DirectoryListModalProps struct {
+	BaseDir string
+	Dirs    []string
+	Error   string
+}
+
+templ DirectoryListModal(props DirectoryListModalProps) {
 	@components.Modal(components.ModalProps{
 		Id:    "dir-list-modal",
 		Title: "Select Repo",
 	}) {
 		@DirectoryListForm(DirectoryListFormProps{
-			Dirs:    dirs,
-			BaseDir: baseDir,
+			BaseDir: props.BaseDir,
+			Dirs:    props.Dirs,
+			Error:   props.Error,
 		})
 	}
 }

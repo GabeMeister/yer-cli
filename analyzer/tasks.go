@@ -20,7 +20,7 @@ import (
 func AnalyzeManually() bool {
 	var dir string
 
-	for isValid := false; !isValid; isValid = isValidGitRepo(dir) {
+	for isValid := false; !isValid; isValid = IsValidGitRepo(dir) {
 		dir = readDir()
 	}
 
@@ -530,7 +530,7 @@ func calculateRecap(config RepoConfig) {
 	s.Stop()
 }
 
-func isValidGitRepo(dir string) bool {
+func IsValidGitRepo(dir string) bool {
 	_, fileErr := os.Stat(dir)
 
 	if errors.Is(fileErr, os.ErrNotExist) {

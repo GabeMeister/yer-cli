@@ -75,7 +75,10 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		}
 		dirs := utils.GetDirs(baseDir)
 
-		component := ConfigSetupPage.DirectoryListModal(baseDir, dirs)
+		component := ConfigSetupPage.DirectoryListModal(ConfigSetupPage.DirectoryListModalProps{
+			BaseDir: baseDir,
+			Dirs:    dirs,
+		})
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -106,17 +109,44 @@ func addAnalyzerRoutes(e *echo.Echo) {
 
 	e.POST("/repo-path", func(c echo.Context) error {
 		repoPath := c.FormValue("repo-path")
+		isGitRepo := analyzer.IsValidGitRepo(repoPath)
 
-		component := ConfigSetupPage.RepoPath(ConfigSetupPage.RepoPathProps{
-			RepoPath: repoPath,
-		})
-		content := t.Render(t.RenderParams{
-			C:         c,
-			Component: component,
-		})
-		content += `
-			<div id='modal-root' hx-swap-oob='true'></div>
-		`
+		content := ""
+
+		if isGitRepo {
+			// Since we're updating part of the modal with this endpoint, but we
+			// actually want to clear the modal, we just return bogus html for now,
+			// and then update the modal and the repo path input out of band
+			content += `<div></div>`
+
+			// Clears out the modal
+			content += `
+				<div id='modal-root' hx-swap-oob="true"></div>
+			`
+
+			component := ConfigSetupPage.RepoPath(ConfigSetupPage.RepoPathProps{
+				RepoPath:  repoPath,
+				OutOfBand: true,
+			})
+
+			// Updates the repo path form input in the original form
+			content += t.Render(t.RenderParams{
+				C:         c,
+				Component: component,
+			})
+		} else {
+			// If the repo isn't valid, display the Directory List form with an error
+			dirs := utils.GetDirs(repoPath)
+			component := ConfigSetupPage.DirectoryListForm(ConfigSetupPage.DirectoryListFormProps{
+				Dirs:    dirs,
+				BaseDir: repoPath,
+				Error:   "This is not a Git repo!",
+			})
+			content += t.Render(t.RenderParams{
+				C:         c,
+				Component: component,
+			})
+		}
 
 		return c.HTML(http.StatusOK, content)
 	})
@@ -146,8 +176,8 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		return c.HTML(http.StatusOK, content)
 	})
 
-	e.GET("/clear", func(c echo.Context) error {
-		return c.HTML(http.StatusOK, "")
+	e.GET("/clear-modal", func(c echo.Context) error {
+		return c.HTML(http.StatusOK, "<div id='modal-root'></div>")
 	})
 
 	// e.POST("/search-engineers", func(c echo.Context) error {

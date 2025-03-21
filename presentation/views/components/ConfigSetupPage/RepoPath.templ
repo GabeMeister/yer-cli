@@ -1,7 +1,8 @@
 package ConfigSetupPage
 
 type RepoPathProps struct {
-	RepoPath string
+	RepoPath  string
+	OutOfBand bool
 }
 
 func truncateRepoPath(path string) string {
@@ -16,7 +17,13 @@ func truncateRepoPath(path string) string {
 }
 
 templ RepoPath(props RepoPathProps) {
-	<div id="repo-path-section" class="w-full">
+	<div
+		id="repo-path-section"
+		class="w-full"
+		if props.OutOfBand {
+			hx-swap-oob="true"
+		}
+	>
 		if props.RepoPath == "" {
 			<button
 				class="btn"
@@ -33,8 +40,8 @@ templ RepoPath(props RepoPathProps) {
 				<i
 					class="fa-solid fa-pencil text-gray-400 hover:text-gray-500 duration-200 cursor-pointer"
 					hx-get="/dir-list-modal"
-					hx-target="body"
-					hx-swap="beforeend"
+					hx-target="#modal-root"
+					hx-swap="outerHTML"
 				></i>
 				<p class="text-lg">{ truncateRepoPath(props.RepoPath) }</p>
 				<input type="hidden" name="repo-path" value={ props.RepoPath }/>

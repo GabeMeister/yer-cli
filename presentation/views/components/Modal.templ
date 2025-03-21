@@ -8,7 +8,6 @@ type ModalProps struct {
 templ Modal(props ModalProps) {
 	<div
 		id="modal-root"
-		data-template-id="Modal"
 	>
 		//
 		// DARK BACKGROUND
@@ -33,7 +32,7 @@ templ Modal(props ModalProps) {
 					<h1 class="text-2xl">{ props.Title }</h1>
 					<i
 						class="fa-solid fa-xmark fa-lg cursor-pointer text-gray-400 hover:text-gray-500 duration-200"
-						hx-get="/clear"
+						hx-get="/clear-modal"
 						hx-target="#modal-root"
 						hx-swap="outerHTML"
 					></i>
@@ -48,7 +47,3 @@ templ Modal(props ModalProps) {
 }
 
 // TODO: someday add in "Escape" and click off of Modal functionality
-// hx-get="/clear"
-// hx-trigger="click, keyup[key=='Escape'] from:body"
-// hx-target={ fmt.Sprintf("#%s", id) }
-// hx-swap="outerHTML"
