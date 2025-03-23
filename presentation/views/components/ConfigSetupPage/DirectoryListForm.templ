@@ -27,9 +27,6 @@ templ DirectoryListForm(props DirectoryListFormProps) {
 			class="flex flex-col gap-6"
 		>
 			<div class="flex flex-col gap-2 w-full">
-				if props.Error != "" {
-					<h1>THERE IS AN ERROR { props.Error }</h1>
-				}
 				<label for="search-term">Filter Directories:</label>
 				<input
 					type="text"
@@ -49,14 +46,20 @@ templ DirectoryListForm(props DirectoryListFormProps) {
 				BaseDir: props.BaseDir,
 				Dirs:    props.Dirs,
 			})
-			<div>
+			<div class="flex flex-col gap-1">
 				<h1>Current Directory:</h1>
 				<div class="text-md font-normal text-gray-500 overflow-x-auto">{ props.BaseDir }</div>
+				if props.Error != "" {
+					<h1 class="text-red-500">Directory must contain a Git repo</h1>
+				}
 				<input type="hidden" value={ props.BaseDir } name="repo-path" id="repo-path"/>
 			</div>
 			<button
 				class="btn lg"
 				type="submit"
+				if props.Error != "" {
+					disabled
+				}
 			>
 				Select Current Directory
 			</button>

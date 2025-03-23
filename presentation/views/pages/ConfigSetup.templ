@@ -23,8 +23,8 @@ templ ConfigSetup(props ConfigSetupProps) {
 				<div class="bg-white w-1/3 min-w-[600px] max-w-[750px] p-12 rounded-md">
 					<form
 						hx-patch="/config-file"
-						hx-swap="innerHTML"
-						hx-target="#root"
+						hx-swap="outerHTML"
+						hx-target="#config-setup"
 						class="flex flex-col items-start gap-6"
 					>
 						<h1 class="h1">Config Setup</h1>
