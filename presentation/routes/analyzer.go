@@ -4,7 +4,6 @@ import (
 	"GabeMeister/yer-cli/analyzer"
 	"GabeMeister/yer-cli/utils"
 	"os"
-	"strings"
 	"time"
 
 	"GabeMeister/yer-cli/presentation/views/components/ConfigSetupPage"
@@ -136,11 +135,13 @@ func addAnalyzerRoutes(e *echo.Echo) {
 			})
 		} else {
 			// If the repo isn't valid, display the Directory List form with an error
-			dirs := utils.GetDirs(repoPath)
+			searchTerm := c.FormValue("search-term")
+			filteredDirs := utils.GetFilteredDirs(repoPath, searchTerm)
 			component := ConfigSetupPage.DirectoryListForm(ConfigSetupPage.DirectoryListFormProps{
-				Dirs:    dirs,
-				BaseDir: repoPath,
-				Error:   "This is not a Git repo!",
+				Dirs:       filteredDirs,
+				BaseDir:    repoPath,
+				Error:      "This is not a Git repo!",
+				SearchTerm: searchTerm,
 			})
 			content += t.Render(t.RenderParams{
 				C:         c,
@@ -153,16 +154,8 @@ func addAnalyzerRoutes(e *echo.Echo) {
 
 	e.GET("/filtered-dir-contents", func(c echo.Context) error {
 		searchTerm := c.FormValue("search-term")
-		searchTerm = strings.ToLower(searchTerm)
 		baseDir := c.FormValue("repo-path")
-
-		dirs := utils.GetDirs(baseDir)
-		filteredDirs := []string{}
-		for _, dir := range dirs {
-			if strings.Contains(strings.ToLower(dir), searchTerm) {
-				filteredDirs = append(filteredDirs, dir)
-			}
-		}
+		filteredDirs := utils.GetFilteredDirs(baseDir, searchTerm)
 
 		component := ConfigSetupPage.DirectoryList(ConfigSetupPage.DirectoryListProps{
 			BaseDir: baseDir,

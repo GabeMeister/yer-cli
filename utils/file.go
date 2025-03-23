@@ -43,3 +43,17 @@ func GetDirs(baseDir string) []string {
 
 	return dirs
 }
+
+func GetFilteredDirs(baseDir string, searchTerm string) []string {
+	searchTerm = strings.ToLower(searchTerm)
+	dirs := GetDirs(baseDir)
+	filteredDirs := []string{}
+
+	for _, dir := range dirs {
+		if strings.Contains(strings.ToLower(dir), searchTerm) {
+			filteredDirs = append(filteredDirs, dir)
+		}
+	}
+
+	return filteredDirs
+}
