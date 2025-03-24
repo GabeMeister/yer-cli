@@ -693,6 +693,10 @@ video {
   margin-bottom: 3rem;
 }
 
+.mb-3 {
+  margin-bottom: 0.75rem;
+}
+
 .ml-1 {
   margin-left: 0.25rem;
 }
@@ -956,6 +960,10 @@ video {
 
 .min-w-96 {
   min-width: 24rem;
+}
+
+.min-w-\[250px\] {
+  min-width: 250px;
 }
 
 .min-w-\[600px\] {
@@ -1520,6 +1528,10 @@ video {
   font-weight: 300;
 }
 
+.font-medium {
+  font-weight: 500;
+}
+
 .font-normal {
   font-weight: 400;
 }
@@ -1848,6 +1860,12 @@ video {
   opacity: 0.75;
 }
 
+.shadow-2xl {
+  --tw-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  --tw-shadow-colored: 0 25px 50px -12px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
 .outline-none {
   outline: 2px solid transparent;
   outline-offset: 2px;
@@ -1901,6 +1919,10 @@ video {
 
 .ease-in {
   transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
+}
+
+.ease-in-out {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .font-bitter {
@@ -2021,24 +2043,88 @@ video {
   font-weight: 700;
 }
 
+/*
+ * TOAST ANIMATION
+ */
+
 .toast {
-  animation: slide-in 0.3s ease-in forwards,
-    slide-out 0.5s ease-in forwards 2.5s;
+  animation: slide-in 0.4s cubic-bezier(0.25, 0.1, 0.25, 1) forwards,
+    bounce-in 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.1s forwards,
+    slide-out 0.5s ease-in-out forwards 3s;
+  transform-origin: left center;
 }
 
 /* Slide In Animation */
 
 @keyframes slide-in {
   from {
-    transform: translateX(-100%);
+    transform: translateX(-100%) scale(0.7);
     opacity: 0;
   }
 
+  to {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Bounce In Animation */
+
+@keyframes bounce-in {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Slide Out Animation */
+
+@keyframes slide-out {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateX(-100%) scale(0.7);
+  }
+}
+
+/* .toast {
+  animation: slide-in 0.3s ease-in forwards,
+    slide-out 0.5s ease-in forwards 2.5s;
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
   to {
     transform: translateX(0);
     opacity: 1;
   }
 }
+
+@keyframes slide-out {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+}
+*/
 
 @keyframes fade-in {
   0% {
@@ -2049,18 +2135,6 @@ video {
   100% {
     opacity: 1;
     visibility: visible;
-  }
-}
-
-@keyframes slide-out {
-  from {
-    opacity: 1;
-    transform: translateX(0);
-  }
-
-  to {
-    opacity: 0;
-    transform: translateX(-100%);
   }
 }
 

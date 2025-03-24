@@ -59,12 +59,59 @@
   @apply text-3xl font-bold;
 }
 
+/*
+ * TOAST ANIMATION
+ */
+
 .toast {
+  animation: slide-in 0.4s cubic-bezier(0.25, 0.1, 0.25, 1) forwards,
+    bounce-in 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.1s forwards,
+    slide-out 0.5s ease-in-out forwards 3s;
+  transform-origin: left center;
+}
+
+/* Slide In Animation */
+@keyframes slide-in {
+  from {
+    transform: translateX(-100%) scale(0.7);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Bounce In Animation */
+@keyframes bounce-in {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Slide Out Animation */
+@keyframes slide-out {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-100%) scale(0.7);
+  }
+}
+
+/* .toast {
   animation: slide-in 0.3s ease-in forwards,
     slide-out 0.5s ease-in forwards 2.5s;
 }
 
-/* Slide In Animation */
 @keyframes slide-in {
   from {
     transform: translateX(-100%);
@@ -76,6 +123,18 @@
   }
 }
 
+@keyframes slide-out {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+}
+*/
+
 @keyframes fade-in {
   0% {
     opacity: 0;
@@ -85,17 +144,6 @@
   100% {
     opacity: 1;
     visibility: visible;
-  }
-}
-
-@keyframes slide-out {
-  from {
-    opacity: 1;
-    transform: translateX(0);
-  }
-  to {
-    opacity: 0;
-    transform: translateX(-100%);
   }
 }
 

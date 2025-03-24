@@ -3,12 +3,15 @@ package pages
 import (
 	"GabeMeister/yer-cli/presentation/views/components"
 	"GabeMeister/yer-cli/presentation/views/components/ConfigSetupPage"
+	"fmt"
 )
 
 type ConfigSetupProps struct {
-	RecapName string
-	RepoPath  string
-	Toast     string
+	RecapName    string
+	RepoPath     string
+	Toast        string
+	Year         int
+	MasterBranch string
 
 	// AllEngineers            []string
 	// SelectedEngineers       []string
@@ -28,18 +31,38 @@ templ ConfigSetup(props ConfigSetupProps) {
 						class="flex flex-col items-start gap-6"
 					>
 						<h1 class="h1">Config Setup</h1>
-						<input
-							type="text"
-							class="text-input w-full"
-							placeholder="Recap Name"
-							name="recap-name"
-							id="recap-name"
-							value={ props.RecapName }
-							required
-						/>
-						@ConfigSetupPage.RepoPath(ConfigSetupPage.RepoPathProps{
-							RepoPath: props.RepoPath,
-						})
+						<div class="w-full">
+							<label for="recap-name" class="font-medium">Recap Name</label>
+							<input
+								type="text"
+								class="text-input w-full"
+								placeholder={ fmt.Sprintf("My Recap %d", props.Year) }
+								name="recap-name"
+								id="recap-name"
+								value={ props.RecapName }
+								required
+							/>
+						</div>
+						<div class="w-full">
+							<label class="font-medium">Repo File Path</label>
+							@ConfigSetupPage.RepoPath(ConfigSetupPage.RepoPathProps{
+								RepoPath: props.RepoPath,
+							})
+						</div>
+						if props.RepoPath  != "" {
+							<div class="w-full">
+								<label for="master-branch-name" class="font-medium">Branch to Analyze</label>
+								<input
+									type="text"
+									class="text-input w-full"
+									placeholder="master"
+									name="master-branch-name"
+									id="master-branch-name"
+									value={ props.MasterBranch }
+									required
+								/>
+							</div>
+						}
 						<button
 							class="btn lg w-full"
 						>
@@ -51,13 +74,9 @@ templ ConfigSetup(props ConfigSetupProps) {
 			</div>
 		</div>
 		if props.Toast != "" {
-			<div
-				id="toast"
-				class="toast fixed bottom-1 left-1 text-white"
-				hx-swap-oob="true"
-			>
-				{ props.Toast }
-			</div>
+			@components.Toast(components.ToastProps{
+				Message: props.Toast,
+			})
 		}
 	}
 }

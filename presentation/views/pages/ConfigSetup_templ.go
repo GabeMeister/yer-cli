@@ -11,12 +11,15 @@ import templruntime "github.com/a-h/templ/runtime"
 import (
 	"GabeMeister/yer-cli/presentation/views/components"
 	"GabeMeister/yer-cli/presentation/views/components/ConfigSetupPage"
+	"fmt"
 )
 
 type ConfigSetupProps struct {
-	RecapName string
-	RepoPath  string
-	Toast     string
+	RecapName    string
+	RepoPath     string
+	Toast        string
+	Year         int
+	MasterBranch string
 
 	// AllEngineers            []string
 	// SelectedEngineers       []string
@@ -57,20 +60,33 @@ func ConfigSetup(props ConfigSetupProps) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"config-setup\"><div class=\"bg-gray-800 flex justify-center items-center min-h-screen\"><div class=\"bg-white w-1/3 min-w-[600px] max-w-[750px] p-12 rounded-md\"><form hx-patch=\"/config-file\" hx-swap=\"outerHTML\" hx-target=\"#config-setup\" class=\"flex flex-col items-start gap-6\"><h1 class=\"h1\">Config Setup</h1><input type=\"text\" class=\"text-input w-full\" placeholder=\"Recap Name\" name=\"recap-name\" id=\"recap-name\" value=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"config-setup\"><div class=\"bg-gray-800 flex justify-center items-center min-h-screen\"><div class=\"bg-white w-1/3 min-w-[600px] max-w-[750px] p-12 rounded-md\"><form hx-patch=\"/config-file\" hx-swap=\"outerHTML\" hx-target=\"#config-setup\" class=\"flex flex-col items-start gap-6\"><h1 class=\"h1\">Config Setup</h1><div class=\"w-full\"><label for=\"recap-name\" class=\"font-medium\">Recap Name</label> <input type=\"text\" class=\"text-input w-full\" placeholder=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var3 string
-			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(props.RecapName)
+			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("My Recap %d", props.Year))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/ConfigSetup.templ`, Line: 37, Col: 30}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/ConfigSetup.templ`, Line: 39, Col: 60}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" required>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" name=\"recap-name\" id=\"recap-name\" value=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var4 string
+			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(props.RecapName)
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/ConfigSetup.templ`, Line: 42, Col: 31}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" required></div><div class=\"w-full\"><label class=\"font-medium\">Repo File Path</label>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -79,6 +95,29 @@ func ConfigSetup(props ConfigSetupProps) templ.Component {
 			}).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			if props.RepoPath != "" {
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"w-full\"><label for=\"master-branch-name\" class=\"font-medium\">Branch to Analyze</label> <input type=\"text\" class=\"text-input w-full\" placeholder=\"master\" name=\"master-branch-name\" id=\"master-branch-name\" value=\"")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				var templ_7745c5c3_Var5 string
+				templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(props.MasterBranch)
+				if templ_7745c5c3_Err != nil {
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/ConfigSetup.templ`, Line: 61, Col: 35}
+				}
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" required></div>")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<button class=\"btn lg w-full\">Save")
 			if templ_7745c5c3_Err != nil {
@@ -93,20 +132,9 @@ func ConfigSetup(props ConfigSetupProps) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			if props.Toast != "" {
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"toast\" class=\"toast fixed bottom-1 left-1 text-white\" hx-swap-oob=\"true\">")
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-				var templ_7745c5c3_Var4 string
-				templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(props.Toast)
-				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/ConfigSetup.templ`, Line: 59, Col: 17}
-				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div>")
+				templ_7745c5c3_Err = components.Toast(components.ToastProps{
+					Message: props.Toast,
+				}).Render(ctx, templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}

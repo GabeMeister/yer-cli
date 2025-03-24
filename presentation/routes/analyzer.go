@@ -32,11 +32,15 @@ func addAnalyzerRoutes(e *echo.Echo) {
 
 		config := analyzer.GetConfig(utils.DEFAULT_CONFIG_FILE)
 
+		year := time.Now().Year()
+
 		content := t.Render(t.RenderParams{
 			C: c,
 			Component: pages.ConfigSetup(pages.ConfigSetupProps{
-				RecapName: config.Repos[0].Name,
-				RepoPath:  config.Repos[0].Path,
+				RecapName:    config.Repos[0].Name,
+				RepoPath:     config.Repos[0].Path,
+				Year:         year,
+				MasterBranch: config.Repos[0].MasterBranchName,
 			}),
 		})
 
@@ -46,17 +50,23 @@ func addAnalyzerRoutes(e *echo.Echo) {
 	e.PATCH("/config-file", func(c echo.Context) error {
 		recapName := c.FormValue("recap-name")
 		repoPath := c.FormValue("repo-path")
+		masterBranchName := c.FormValue("master-branch-name")
 
 		config := analyzer.GetConfig(utils.DEFAULT_CONFIG_FILE)
 		config.Repos[0].Name = recapName
 		config.Repos[0].Path = repoPath
+		config.Repos[0].MasterBranchName = masterBranchName
 
 		analyzer.UpdateConfig(config)
 
+		year := time.Now().Year()
+
 		component := pages.ConfigSetup(pages.ConfigSetupProps{
-			RecapName: config.Repos[0].Name,
-			RepoPath:  config.Repos[0].Path,
-			Toast:     time.Now().Format("2006-01-02 15:04:05"),
+			RecapName:    config.Repos[0].Name,
+			RepoPath:     config.Repos[0].Path,
+			Toast:        "Saved!",
+			Year:         year,
+			MasterBranch: masterBranchName,
 		})
 		content := t.Render(t.RenderParams{
 			C:         c,
