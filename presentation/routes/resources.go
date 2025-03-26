@@ -39,6 +39,11 @@ func addResourceRoutes(e *echo.Echo, static embed.FS) {
 		return c.Blob(200, "text/css; charset=utf-8", data)
 	})
 
+	e.GET("/css/:name", func(c echo.Context) error {
+		data, _ := static.ReadFile(fmt.Sprintf("static/css/%s", c.Param("name")))
+		return c.Blob(200, "text/css", data)
+	})
+
 	e.GET("/images/:name", func(c echo.Context) error {
 		data, _ := static.ReadFile(fmt.Sprintf("static/images/%s", c.Param("name")))
 		// TODO: figure out how to return any kind of image

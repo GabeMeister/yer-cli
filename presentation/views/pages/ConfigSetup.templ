@@ -55,6 +55,9 @@ templ ConfigSetup(props ConfigSetupProps) {
 								Name: props.MasterBranch,
 							})
 						</div>
+						<div class="w-full">
+							<input id="input-tags" value="awesome,neat" autocomplete="off" placeholder="How cool is this?"/>
+						</div>
 						<button
 							class="btn lg w-full"
 						>
@@ -70,5 +73,6 @@ templ ConfigSetup(props ConfigSetupProps) {
 				Message: props.Toast,
 			})
 		}
+		<script src="/scripts/config-page.js"></script>
 	}
 }
