@@ -1,0 +1,21 @@
+package ConfigSetupPage 
+
+type MasterBranchInputProps struct {
+	Name      string
+	OutOfBand bool
+}
+
+templ MasterBranchInput(props MasterBranchInputProps) {
+	<input
+		if props.OutOfBand {
+			hx-swap-oob="true"
+		}
+		type="text"
+		class="text-input w-full"
+		placeholder="master"
+		name="master-branch-name"
+		id="master-branch-name"
+		value={ props.Name }
+		required
+	/>
+}

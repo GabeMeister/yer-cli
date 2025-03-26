@@ -49,20 +49,12 @@ templ ConfigSetup(props ConfigSetupProps) {
 								RepoPath: props.RepoPath,
 							})
 						</div>
-						if props.RepoPath  != "" {
-							<div class="w-full">
-								<label for="master-branch-name" class="font-medium">Branch to Analyze</label>
-								<input
-									type="text"
-									class="text-input w-full"
-									placeholder="master"
-									name="master-branch-name"
-									id="master-branch-name"
-									value={ props.MasterBranch }
-									required
-								/>
-							</div>
-						}
+						<div class="w-full">
+							<label for="master-branch-name" class="font-medium">Branch to Analyze</label>
+							@ConfigSetupPage.MasterBranchInput(ConfigSetupPage.MasterBranchInputProps{
+								Name: props.MasterBranch,
+							})
+						</div>
 						<button
 							class="btn lg w-full"
 						>

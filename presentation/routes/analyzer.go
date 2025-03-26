@@ -143,6 +143,17 @@ func addAnalyzerRoutes(e *echo.Echo) {
 				C:         c,
 				Component: component,
 			})
+
+			masterBranchName := analyzer.GetMasterBranchName(repoPath)
+			masterBranchInput := ConfigSetupPage.MasterBranchInput(ConfigSetupPage.MasterBranchInputProps{
+				Name:      masterBranchName,
+				OutOfBand: true,
+			})
+			content += t.Render(t.RenderParams{
+				C:         c,
+				Component: masterBranchInput,
+			})
+
 		} else {
 			// If the repo isn't valid, display the Directory List form with an error
 			searchTerm := c.FormValue("search-term")
