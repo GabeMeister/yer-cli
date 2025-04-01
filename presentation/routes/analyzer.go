@@ -4,6 +4,7 @@ import (
 	"GabeMeister/yer-cli/analyzer"
 	"GabeMeister/yer-cli/utils"
 	"os"
+	"strings"
 	"time"
 
 	"GabeMeister/yer-cli/presentation/views/components/ConfigSetupPage"
@@ -37,10 +38,11 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		content := t.Render(t.RenderParams{
 			C: c,
 			Component: pages.ConfigSetup(pages.ConfigSetupProps{
-				RecapName:    config.Repos[0].Name,
-				RepoPath:     config.Repos[0].Path,
-				Year:         year,
-				MasterBranch: config.Repos[0].MasterBranchName,
+				RecapName:             config.Repos[0].Name,
+				RepoPath:              config.Repos[0].Path,
+				Year:                  year,
+				MasterBranch:          config.Repos[0].MasterBranchName,
+				IncludeFileExtensions: strings.Join(config.Repos[0].IncludeFileExtensions, ","),
 			}),
 		})
 
@@ -51,22 +53,25 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		recapName := c.FormValue("recap-name")
 		repoPath := c.FormValue("repo-path")
 		masterBranchName := c.FormValue("master-branch-name")
+		includeFileExtensions := c.FormValue("include-file-extensions")
 
 		config := analyzer.GetConfig(utils.DEFAULT_CONFIG_FILE)
 		config.Repos[0].Name = recapName
 		config.Repos[0].Path = repoPath
 		config.Repos[0].MasterBranchName = masterBranchName
+		config.Repos[0].IncludeFileExtensions = strings.Split(includeFileExtensions, ",")
 
 		analyzer.UpdateConfig(config)
 
 		year := time.Now().Year()
 
 		component := pages.ConfigSetup(pages.ConfigSetupProps{
-			RecapName:    config.Repos[0].Name,
-			RepoPath:     config.Repos[0].Path,
-			Toast:        "Saved!",
-			Year:         year,
-			MasterBranch: masterBranchName,
+			RecapName:             config.Repos[0].Name,
+			RepoPath:              config.Repos[0].Path,
+			Toast:                 "Saved!",
+			Year:                  year,
+			MasterBranch:          masterBranchName,
+			IncludeFileExtensions: includeFileExtensions,
 		})
 		content := t.Render(t.RenderParams{
 			C:         c,
@@ -149,6 +154,8 @@ func addAnalyzerRoutes(e *echo.Echo) {
 				Name:      masterBranchName,
 				OutOfBand: true,
 			})
+
+			// Updates the master branch input
 			content += t.Render(t.RenderParams{
 				C:         c,
 				Component: masterBranchInput,

@@ -7,11 +7,12 @@ import (
 )
 
 type ConfigSetupProps struct {
-	RecapName    string
-	RepoPath     string
-	Toast        string
-	Year         int
-	MasterBranch string
+	RecapName             string
+	RepoPath              string
+	Toast                 string
+	Year                  int
+	MasterBranch          string
+	IncludeFileExtensions string
 
 	// AllEngineers            []string
 	// SelectedEngineers       []string
@@ -56,7 +57,14 @@ templ ConfigSetup(props ConfigSetupProps) {
 							})
 						</div>
 						<div class="w-full">
-							<input id="input-tags" value="awesome,neat" autocomplete="off" placeholder="How cool is this?"/>
+							<label for="include-file-extensions" class="font-medium">File Extensions To Include</label>
+							<input
+								id="include-file-extensions"
+								name="include-file-extensions"
+								value={ props.IncludeFileExtensions }
+								autocomplete="off"
+								placeholder="Enter programming languages"
+							/>
 						</div>
 						<button
 							class="btn lg w-full"
