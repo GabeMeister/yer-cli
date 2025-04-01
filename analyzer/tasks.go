@@ -244,6 +244,29 @@ func GetMasterBranchName(dir string) string {
 	return masterBranchName
 }
 
+func GetFileExtensionsInRepo(dir string) []string {
+	lsFilesCmd := exec.Command("git", "ls-files")
+	lsFilesCmd.Dir = dir
+	rawOutput, _ := lsFilesCmd.Output()
+	text := string(rawOutput)
+	lines := strings.Split(text, "\n")
+
+	extMap := make(map[string]bool)
+	for _, line := range lines {
+		fileExt := filepath.Ext(line)
+		if fileExt != "" {
+			extMap[fileExt] = true
+		}
+	}
+
+	fileExtensions := []string{}
+	for fileExt, _ := range extMap {
+		fileExtensions = append(fileExtensions, fileExt)
+	}
+
+	return fileExtensions
+}
+
 // A lot of times in repos, somehow the same user has two different git usernames
 // (for example, Gabe Jensen and GabeJensen). It could be because they changed
 // laptops, decided to change their user name randomly, etc. To make the stats

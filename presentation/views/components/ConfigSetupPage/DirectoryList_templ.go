@@ -8,9 +8,20 @@ package ConfigSetupPage
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
+import (
+	"fmt"
+	"path"
+)
+
 type DirectoryListProps struct {
 	BaseDir string
 	Dirs    []string
+}
+
+func getDirUrl(rootDir string, dir string) string {
+	fullDirPath := path.Join(rootDir, dir)
+
+	return fmt.Sprintf("/dir-list?dir=%s", fullDirPath)
 }
 
 func DirectoryList(props DirectoryListProps) templ.Component {
@@ -46,7 +57,7 @@ func DirectoryList(props DirectoryListProps) templ.Component {
 			var templ_7745c5c3_Var2 string
 			templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(getDirUrl(props.BaseDir, dir))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/ConfigSetupPage/DirectoryList.templ`, Line: 13, Col: 43}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/ConfigSetupPage/DirectoryList.templ`, Line: 24, Col: 43}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 			if templ_7745c5c3_Err != nil {
@@ -59,7 +70,7 @@ func DirectoryList(props DirectoryListProps) templ.Component {
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(dir)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/ConfigSetupPage/DirectoryList.templ`, Line: 19, Col: 10}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/ConfigSetupPage/DirectoryList.templ`, Line: 30, Col: 10}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {

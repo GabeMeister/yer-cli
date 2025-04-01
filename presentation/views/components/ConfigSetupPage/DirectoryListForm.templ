@@ -1,21 +1,10 @@
 package ConfigSetupPage 
 
-import (
-	"fmt"
-	"path"
-)
-
 type DirectoryListFormProps struct {
 	Dirs       []string
 	BaseDir    string
 	Error      string
 	SearchTerm string
-}
-
-func getDirUrl(rootDir string, dir string) string {
-	fullDirPath := path.Join(rootDir, dir)
-
-	return fmt.Sprintf("/dir-list?dir=%s", fullDirPath)
 }
 
 templ DirectoryListForm(props DirectoryListFormProps) {

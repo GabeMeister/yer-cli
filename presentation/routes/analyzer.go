@@ -161,6 +161,18 @@ func addAnalyzerRoutes(e *echo.Echo) {
 				Component: masterBranchInput,
 			})
 
+			fileExtensions := analyzer.GetFileExtensionsInRepo(repoPath)
+			fileExtInput := ConfigSetupPage.IncludeFileExtensions(ConfigSetupPage.IncludeFileExtensionsProps{
+				IncludeFileExtensions: strings.Join(fileExtensions, ","),
+				OutOfBand:             true,
+			})
+
+			// Updates their file extensions with what is in the repo
+			content += t.Render(t.RenderParams{
+				C:         c,
+				Component: fileExtInput,
+			})
+
 		} else {
 			// If the repo isn't valid, display the Directory List form with an error
 			searchTerm := c.FormValue("search-term")

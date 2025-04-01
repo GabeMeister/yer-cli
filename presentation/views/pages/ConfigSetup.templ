@@ -58,13 +58,9 @@ templ ConfigSetup(props ConfigSetupProps) {
 						</div>
 						<div class="w-full">
 							<label for="include-file-extensions" class="font-medium">File Extensions To Include</label>
-							<input
-								id="include-file-extensions"
-								name="include-file-extensions"
-								value={ props.IncludeFileExtensions }
-								autocomplete="off"
-								placeholder="Enter programming languages"
-							/>
+							@ConfigSetupPage.IncludeFileExtensions(ConfigSetupPage.IncludeFileExtensionsProps{
+								IncludeFileExtensions: props.IncludeFileExtensions,
+							})
 						</div>
 						<button
 							class="btn lg w-full"

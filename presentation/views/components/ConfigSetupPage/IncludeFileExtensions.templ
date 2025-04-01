@@ -1,0 +1,20 @@
+package ConfigSetupPage 
+
+type IncludeFileExtensionsProps struct {
+	// Comma-separated list
+	IncludeFileExtensions string
+	OutOfBand             bool
+}
+
+templ IncludeFileExtensions(props IncludeFileExtensionsProps) {
+	<input
+		if props.OutOfBand {
+			hx-swap-oob="true"
+		}
+		id="include-file-extensions"
+		name="include-file-extensions"
+		value={ props.IncludeFileExtensions }
+		autocomplete="off"
+		placeholder="Enter programming languages"
+	/>
+}
