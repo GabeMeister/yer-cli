@@ -1,0 +1,16 @@
+package pages 
+
+import "GabeMeister/yer-cli/presentation/views/components"
+
+type HxSwapOobExampleProps struct {
+	Animal string
+}
+
+templ HxSwapOobExample(props HxSwapOobExampleProps) {
+	<div>
+		@components.HxSwapOobExampleContent(components.HxSwapOobExampleContentProps{
+			Animal: props.Animal,
+		})
+		<script src="/scripts/hx-swap-oob-example.js"></script>
+	</div>
+}

@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"GabeMeister/yer-cli/presentation/views/components"
 	t "GabeMeister/yer-cli/presentation/views/template"
 	"net/http"
 	"os"
@@ -72,4 +73,31 @@ func addDebuggingRoutes(e *echo.Echo) {
 	e.GET("/fade-in-request", func(c echo.Context) error {
 		return c.HTML(http.StatusOK, "<div class='bg-green-400'>Hey there!</div>")
 	})
+
+	e.GET("/hx-swap-oob", func(c echo.Context) error {
+		component := pages.HxSwapOobExample(pages.HxSwapOobExampleProps{
+			Animal: "",
+		})
+		content := t.Render(t.RenderParams{
+			C:         c,
+			Component: component,
+		})
+
+		return c.HTML(http.StatusOK, content)
+	})
+
+	e.POST("/animals-example", func(c echo.Context) error {
+		animal := c.FormValue("animal")
+
+		component := components.HxSwapOobExampleContent(components.HxSwapOobExampleContentProps{
+			Animal: animal,
+		})
+		content := t.Render(t.RenderParams{
+			C:         c,
+			Component: component,
+		})
+
+		return c.HTML(http.StatusOK, content)
+	})
+
 }

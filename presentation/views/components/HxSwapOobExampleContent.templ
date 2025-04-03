@@ -1,0 +1,26 @@
+package components 
+
+type HxSwapOobExampleContentProps struct {
+	Animal string
+}
+
+templ HxSwapOobExampleContent(props HxSwapOobExampleContentProps) {
+	<div class="flex justify-between p-3" id="hx-swap-oob-example">
+		<form
+			class="flex flex-col w-1/2"
+			hx-post="/animals-example"
+			hx-swap="outerHTML"
+			hx-target="#hx-swap-oob-example"
+		>
+			<label for="animal">Enter animals:</label>
+			<input
+				type="text"
+				id="animal"
+				name="animal"
+			/>
+			<br/>
+			<button class="btn" type="submit">Submit</button>
+		</form>
+		<div>{ props.Animal }</div>
+	</div>
+}
