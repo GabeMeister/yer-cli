@@ -5,6 +5,7 @@ import (
 	t "GabeMeister/yer-cli/presentation/views/template"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"GabeMeister/yer-cli/presentation/views/pages"
@@ -87,10 +88,10 @@ func addDebuggingRoutes(e *echo.Echo) {
 	})
 
 	e.POST("/animals-example", func(c echo.Context) error {
-		animal := c.FormValue("animal")
+		formParams, _ := c.FormParams()
 
 		component := components.HxSwapOobExampleContent(components.HxSwapOobExampleContentProps{
-			Animal: animal,
+			Animal: strings.Join(formParams["animal"], ","),
 		})
 		content := t.Render(t.RenderParams{
 			C:         c,

@@ -33,14 +33,14 @@ func HxSwapOobExampleContent(props HxSwapOobExampleContentProps) templ.Component
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"flex justify-between p-3\" id=\"hx-swap-oob-example\"><form class=\"flex flex-col w-1/2\" hx-post=\"/animals-example\" hx-swap=\"outerHTML\" hx-target=\"#hx-swap-oob-example\"><label for=\"animal\">Enter animals:</label> <input type=\"text\" id=\"animal\" name=\"animal\"><br><button class=\"btn\" type=\"submit\">Submit</button></form><div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"flex justify-between p-3\" id=\"hx-swap-oob-example\"><form class=\"flex flex-col w-1/2\" hx-post=\"/animals-example\" hx-swap=\"outerHTML\" hx-target=\"#hx-swap-oob-example\"><label for=\"animal\">Enter animals:</label> <input class=\"h-9\" type=\"text\" id=\"animal\" name=\"animal\"><br><button class=\"btn\" type=\"submit\">Submit</button></form><div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(props.Animal)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/HxSwapOobExampleContent.templ`, Line: 24, Col: 21}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/HxSwapOobExampleContent.templ`, Line: 25, Col: 21}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
