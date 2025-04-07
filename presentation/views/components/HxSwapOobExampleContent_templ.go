@@ -10,6 +10,7 @@ import templruntime "github.com/a-h/templ/runtime"
 
 type HxSwapOobExampleContentProps struct {
 	Animal string
+	Food   string
 }
 
 func HxSwapOobExampleContent(props HxSwapOobExampleContentProps) templ.Component {
@@ -33,16 +34,55 @@ func HxSwapOobExampleContent(props HxSwapOobExampleContentProps) templ.Component
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"flex justify-between p-3\" id=\"hx-swap-oob-example\"><form class=\"flex flex-col w-1/2\" hx-post=\"/animals-example\" hx-swap=\"outerHTML\" hx-target=\"#hx-swap-oob-example\"><label for=\"animal\">Enter animals:</label> <input class=\"h-9\" type=\"text\" id=\"animal\" name=\"animal\"><br><button class=\"btn\" type=\"submit\">Submit</button></form><div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"flex justify-between p-3\" id=\"hx-swap-oob-example\"><form class=\"flex flex-col w-1/2\" hx-post=\"/animals-example\" hx-swap=\"outerHTML\" hx-target=\"#hx-swap-oob-example\"><label for=\"animal\">Enter animals:</label> <input data-tom-select=\"true\" class=\"h-9\" type=\"text\" id=\"animal\" name=\"animal\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(props.Animal)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/HxSwapOobExampleContent.templ`, Line: 25, Col: 21}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/HxSwapOobExampleContent.templ`, Line: 23, Col: 24}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><br><label for=\"food\">Enter food:</label> <input data-tom-select=\"true\" class=\"h-9\" type=\"text\" id=\"food\" name=\"food\" value=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var3 string
+		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(props.Food)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/HxSwapOobExampleContent.templ`, Line: 33, Col: 22}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><br><button class=\"btn\" type=\"submit\">Submit</button></form><div>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var4 string
+		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(props.Animal)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/HxSwapOobExampleContent.templ`, Line: 38, Col: 21}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var5 string
+		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(props.Food)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/HxSwapOobExampleContent.templ`, Line: 39, Col: 19}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

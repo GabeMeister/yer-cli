@@ -2,6 +2,7 @@ package components
 
 type HxSwapOobExampleContentProps struct {
 	Animal string
+	Food   string
 }
 
 templ HxSwapOobExampleContent(props HxSwapOobExampleContentProps) {
@@ -14,14 +15,27 @@ templ HxSwapOobExampleContent(props HxSwapOobExampleContentProps) {
 		>
 			<label for="animal">Enter animals:</label>
 			<input
+				data-tom-select="true"
 				class="h-9"
 				type="text"
 				id="animal"
 				name="animal"
+				value={ props.Animal }
+			/>
+			<br/>
+			<label for="food">Enter food:</label>
+			<input
+				data-tom-select="true"
+				class="h-9"
+				type="text"
+				id="food"
+				name="food"
+				value={ props.Food }
 			/>
 			<br/>
 			<button class="btn" type="submit">Submit</button>
 		</form>
 		<div>{ props.Animal }</div>
+		<div>{ props.Food }</div>
 	</div>
 }

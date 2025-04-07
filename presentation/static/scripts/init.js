@@ -1,6 +1,10 @@
 import { paintBarChart } from "./bar-chart.js";
 import { paintRacingBarChart } from "./racing-bar-chart.js";
 
+//
+// HELPER FUNCTIONS
+//
+
 function handleAnalyzeManuallyPageDragDrop(elem) {
   function updateHiddenInputs() {
     const left = [
@@ -69,9 +73,7 @@ function handleAnalyzeManuallyPageDragDrop(elem) {
   }
 }
 
-window.htmx.onLoad((elem) => {
-  handleAnalyzeManuallyPageDragDrop(elem);
-
+function handlePaintingBarCharts(elem) {
   const barChartElem = document.getElementById("container");
   const racingBarChartElem = document.getElementById(
     "racing-bar-chart-container"
@@ -83,7 +85,20 @@ window.htmx.onLoad((elem) => {
   } else if (racingBarChartElem !== null && !svgInPage) {
     paintRacingBarChart();
   }
+}
+
+//
+// HTMX LOAD
+//
+
+document.body.addEventListener("htmx:load", (elem) => {
+  handleAnalyzeManuallyPageDragDrop(elem);
+  handlePaintingBarCharts(elem);
 });
+
+//
+// KEYBOARD SHORTCUTS
+//
 
 window.addEventListener("keydown", (evt) => {
   if (evt.key === "ArrowLeft") {

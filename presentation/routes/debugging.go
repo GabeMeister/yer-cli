@@ -92,6 +92,7 @@ func addDebuggingRoutes(e *echo.Echo) {
 
 		component := components.HxSwapOobExampleContent(components.HxSwapOobExampleContentProps{
 			Animal: strings.Join(formParams["animal"], ","),
+			Food:   strings.Join(formParams["food"], ","),
 		})
 		content := t.Render(t.RenderParams{
 			C:         c,
