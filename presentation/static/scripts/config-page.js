@@ -1,6 +1,5 @@
 function initIncludeFileExtensionsInput() {
   const elem = document.querySelector("#include-file-extensions");
-  console.log("\n\n***** elem *****\n", elem.tomselect, "\n\n");
   if (!elem.tomselect) {
     new TomSelect("#include-file-extensions", {
       persist: false,
@@ -46,7 +45,7 @@ function initIncludeFileExtensionsInput() {
         { label: "PHP", value: "php-s" },
         { label: "PHP", value: "phar" },
         { label: "C", value: "c" },
-        { label: "C", value: "h" },
+        { label: "C Header", value: "h" },
         { label: "Go", value: "go" },
         { label: "Go", value: "mod" },
         { label: "Rust", value: "rs" },
@@ -320,7 +319,10 @@ function initIncludeFileExtensionsInput() {
   }
 }
 
-document.body.addEventListener("htmx:load", function (evt) {
-  console.log("\n\n***** htmx:load here *****\n", evt.target, "\n\n");
+document.body.addEventListener("htmx:afterSettle", function (evt) {
+  initIncludeFileExtensionsInput();
+});
+
+document.addEventListener("DOMContentLoaded", function (evt) {
   initIncludeFileExtensionsInput();
 });

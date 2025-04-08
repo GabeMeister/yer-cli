@@ -253,15 +253,17 @@ func GetFileExtensionsInRepo(dir string) []string {
 
 	extMap := make(map[string]bool)
 	for _, line := range lines {
-		fileExt := filepath.Ext(line)
+		fileExt := strings.ReplaceAll(filepath.Ext(line), ".", "")
 		if fileExt != "" {
 			extMap[fileExt] = true
 		}
 	}
 
 	fileExtensions := []string{}
-	for fileExt, _ := range extMap {
-		fileExtensions = append(fileExtensions, fileExt)
+	for fileExt := range extMap {
+		if slices.Contains(SUPPORTED_FILE_EXTENSIONS, fileExt) {
+			fileExtensions = append(fileExtensions, fileExt)
+		}
 	}
 
 	return fileExtensions

@@ -35,7 +35,7 @@ func IncludeFileExtensions(props IncludeFileExtensionsProps) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<input")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"include-file-extensions-container\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -45,20 +45,20 @@ func IncludeFileExtensions(props IncludeFileExtensionsProps) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" id=\"include-file-extensions\" name=\"include-file-extensions\" value=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("><input id=\"include-file-extensions\" name=\"include-file-extensions\" class=\"min-h-9\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(props.IncludeFileExtensions)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/ConfigSetupPage/IncludeFileExtensions.templ`, Line: 16, Col: 37}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/ConfigSetupPage/IncludeFileExtensions.templ`, Line: 20, Col: 38}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" autocomplete=\"off\" placeholder=\"Enter programming languages\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" autocomplete=\"off\" placeholder=\"Enter programming languages\"></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -7,14 +7,19 @@ type IncludeFileExtensionsProps struct {
 }
 
 templ IncludeFileExtensions(props IncludeFileExtensionsProps) {
-	<input
+	<div
+		id="include-file-extensions-container"
 		if props.OutOfBand {
 			hx-swap-oob="true"
 		}
-		id="include-file-extensions"
-		name="include-file-extensions"
-		value={ props.IncludeFileExtensions }
-		autocomplete="off"
-		placeholder="Enter programming languages"
-	/>
+	>
+		<input
+			id="include-file-extensions"
+			name="include-file-extensions"
+			class="min-h-9"
+			value={ props.IncludeFileExtensions }
+			autocomplete="off"
+			placeholder="Enter programming languages"
+		/>
+	</div>
 }
