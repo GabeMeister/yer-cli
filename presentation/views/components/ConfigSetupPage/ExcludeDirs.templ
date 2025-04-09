@@ -1,0 +1,26 @@
+package ConfigSetupPage 
+
+type ExcludeDirsProps struct {
+	ExcludeDirs string
+	OutOfBand   bool
+}
+
+templ ExcludeDirs(props ExcludeDirsProps) {
+	<div>
+		<div
+			id="exclude-dirs-container"
+			if props.OutOfBand {
+				hx-swap-oob="true"
+			}
+		>
+			<input
+				id="exclude-dirs"
+				name="exclude-dirs"
+				class="min-h-9"
+				value={ props.ExcludeDirs }
+				autocomplete="off"
+				placeholder="Enter directory"
+			/>
+		</div>
+	</div>
+}

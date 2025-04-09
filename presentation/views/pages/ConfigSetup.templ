@@ -13,6 +13,7 @@ type ConfigSetupProps struct {
 	Year                  int
 	MasterBranch          string
 	IncludeFileExtensions string
+	ExcludeDirs           string
 
 	// AllEngineers            []string
 	// SelectedEngineers       []string
@@ -57,9 +58,15 @@ templ ConfigSetup(props ConfigSetupProps) {
 							})
 						</div>
 						<div class="w-full">
-							<label for="include-file-extensions" class="font-medium">File Extensions To Include</label>
+							<label for="include-file-extensions" class="font-medium">File Extensions To Include in Recap</label>
 							@ConfigSetupPage.IncludeFileExtensions(ConfigSetupPage.IncludeFileExtensionsProps{
 								IncludeFileExtensions: props.IncludeFileExtensions,
+							})
+						</div>
+						<div class="w-full">
+							<label for="exclude-dirs" class="font-medium">Directories to Exclude from Recap</label>
+							@ConfigSetupPage.ExcludeDirs(ConfigSetupPage.ExcludeDirsProps{
+								ExcludeDirs: props.ExcludeDirs,
 							})
 						</div>
 						<button

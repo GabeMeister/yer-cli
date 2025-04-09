@@ -43,6 +43,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 				Year:                  year,
 				MasterBranch:          config.Repos[0].MasterBranchName,
 				IncludeFileExtensions: strings.Join(config.Repos[0].IncludeFileExtensions, ","),
+				ExcludeDirs:           strings.Join(config.Repos[0].ExcludeDirectories, ","),
 			}),
 		})
 
@@ -54,12 +55,14 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		repoPath := c.FormValue("repo-path")
 		masterBranchName := c.FormValue("master-branch-name")
 		includeFileExtensions := c.FormValue("include-file-extensions")
+		excludeDirs := c.FormValue("exclude-dirs")
 
 		config := analyzer.GetConfig(utils.DEFAULT_CONFIG_FILE)
 		config.Repos[0].Name = recapName
 		config.Repos[0].Path = repoPath
 		config.Repos[0].MasterBranchName = masterBranchName
 		config.Repos[0].IncludeFileExtensions = strings.Split(includeFileExtensions, ",")
+		config.Repos[0].ExcludeDirectories = strings.Split(excludeDirs, ",")
 
 		analyzer.UpdateConfig(config)
 
@@ -72,6 +75,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 			Year:                  year,
 			MasterBranch:          masterBranchName,
 			IncludeFileExtensions: includeFileExtensions,
+			ExcludeDirs:           excludeDirs,
 		})
 		content := t.Render(t.RenderParams{
 			C:         c,

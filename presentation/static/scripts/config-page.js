@@ -319,10 +319,27 @@ function initIncludeFileExtensionsInput() {
   }
 }
 
+function initExcludeDirsInput() {
+  const elem = document.querySelector("#exclude-dirs");
+  if (!elem.tomselect) {
+    new TomSelect("#exclude-dirs", {
+      create: true,
+      persist: false,
+      valueField: "value",
+      searchField: ["label", "value"],
+      onItemAdd: function () {
+        this.setTextboxValue("");
+      },
+    });
+  }
+}
+
 document.body.addEventListener("htmx:afterSettle", function (evt) {
   initIncludeFileExtensionsInput();
+  initExcludeDirsInput();
 });
 
 document.addEventListener("DOMContentLoaded", function (evt) {
   initIncludeFileExtensionsInput();
+  initExcludeDirsInput();
 });
