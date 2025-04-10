@@ -2,20 +2,31 @@ package ConfigSetupPage
 
 import components "GabeMeister/yer-cli/presentation/views/components"
 
-templ AllEngineersList(allEngineers []string) {
-	<div data-template-id="all-engineers-list">
+type AllAuthorsListProps struct {
+	AllAuthors []string
+	OutOfBand  bool
+}
+
+templ AllAuthorsList(props AllAuthorsListProps) {
+	<div
+		data-template-id="all-authors-list"
+		id="all-authors-list"
+		if props.OutOfBand {
+			hx-swap-oob="true"
+		}
+	>
 		<div id="left" class="sortable w-96 h-96 p-6 bg-gray-700">
-			for _, engineer := range allEngineers {
-				@components.DraggableText(engineer)
+			for _, author := range props.AllAuthors {
+				@components.DraggableText(author)
 			}
 			// For some reason, we HAVE to have a placeholder input that doesn't do
 			// anything in order to drag an item into a sortable with no items
 			<input type="hidden" name="ignore" class="h-0 w-0"/>
 			<input
 				type="hidden"
-				name="all-engineers"
-				id="all-engineers"
-				value={ GetCombinedValue(allEngineers) }
+				name="all-authors"
+				id="all-authors"
+				value={ GetCombinedValue(props.AllAuthors) }
 			/>
 		</div>
 	</div>

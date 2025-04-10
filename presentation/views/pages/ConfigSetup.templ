@@ -14,8 +14,9 @@ type ConfigSetupProps struct {
 	MasterBranch          string
 	IncludeFileExtensions string
 	ExcludeDirs           string
+	ExcludeFiles          string
+	AllAuthors            []string
 
-	// AllEngineers            []string
 	// SelectedEngineers       []string
 	// DuplicateEngineerGroups []analyzer.DuplicateEngineerGroup
 	// SearchText              string
@@ -67,6 +68,18 @@ templ ConfigSetup(props ConfigSetupProps) {
 							<label for="exclude-dirs" class="font-medium">Directories to Exclude from Recap</label>
 							@ConfigSetupPage.ExcludeDirs(ConfigSetupPage.ExcludeDirsProps{
 								ExcludeDirs: props.ExcludeDirs,
+							})
+						</div>
+						<div class="w-full">
+							<label for="exclude-files" class="font-medium">Files to Exclude from Recap</label>
+							@ConfigSetupPage.ExcludeFiles(ConfigSetupPage.ExcludeFilesProps{
+								ExcludeFiles: props.ExcludeFiles,
+							})
+						</div>
+						<div class="w-full">
+							This is the duplicate authors
+							@ConfigSetupPage.AllAuthorsList(ConfigSetupPage.AllAuthorsListProps{
+								AllAuthors: props.AllAuthors,
 							})
 						</div>
 						<button

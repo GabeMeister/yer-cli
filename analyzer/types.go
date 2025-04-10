@@ -19,6 +19,7 @@ type RepoConfig struct {
 	ExcludeFiles          []string                 `json:"exclude_files"`
 	ExcludeEngineers      []string                 `json:"exclude_engineers"`
 	DuplicateEngineers    []DuplicateEngineerGroup `json:"duplicate_engineers"`
+	AllAuthors            []string                 `json:"all_engineers"`
 	IncludeFileBlames     bool                     `json:"include_file_blames"`
 }
 

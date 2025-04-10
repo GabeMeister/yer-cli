@@ -644,6 +644,10 @@ video {
   top: 10rem;
 }
 
+.z-10 {
+  z-index: 10;
+}
+
 .m-12 {
   margin: 3rem;
 }
@@ -1967,6 +1971,10 @@ video {
 
 ::-webkit-scrollbar-thumb:hover {
   background-color: #a8bbbf;
+}
+
+.ts-dropdown {
+  z-index: auto !important;
 }
 
 .btn {

@@ -334,12 +334,29 @@ function initExcludeDirsInput() {
   }
 }
 
+function initExcludeFilesInput() {
+  const elem = document.querySelector("#exclude-files");
+  if (!elem.tomselect) {
+    new TomSelect("#exclude-files", {
+      create: true,
+      persist: false,
+      valueField: "value",
+      searchField: ["label", "value"],
+      onItemAdd: function () {
+        this.setTextboxValue("");
+      },
+    });
+  }
+}
+
 document.body.addEventListener("htmx:afterSettle", function (evt) {
   initIncludeFileExtensionsInput();
   initExcludeDirsInput();
+  initExcludeFilesInput();
 });
 
 document.addEventListener("DOMContentLoaded", function (evt) {
   initIncludeFileExtensionsInput();
   initExcludeDirsInput();
+  initExcludeFilesInput();
 });

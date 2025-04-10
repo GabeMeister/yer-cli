@@ -11,6 +11,7 @@ type ConfigFileOptions struct {
 	MasterBranchName       string
 	IncludedFileExtensions []string
 	ExcludedDirs           []string
+	AllAuthors             []string
 	DuplicateEngineers     []DuplicateEngineerGroup
 	IncludeFileBlames      bool
 }

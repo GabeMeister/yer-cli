@@ -29,6 +29,10 @@
   background-color: #a8bbbf;
 }
 
+.ts-control {
+  z-index: auto !important;
+}
+
 .btn {
   /* We include `relative` here to be able to show loading content within the
   button */

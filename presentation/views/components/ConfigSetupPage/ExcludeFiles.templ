@@ -1,0 +1,24 @@
+package ConfigSetupPage 
+
+type ExcludeFilesProps struct {
+	ExcludeFiles string
+	OutOfBand    bool
+}
+
+templ ExcludeFiles(props ExcludeFilesProps) {
+	<div
+		id="exclude-files-container"
+		if props.OutOfBand {
+			hx-swap-oob="true"
+		}
+	>
+		<input
+			id="exclude-files"
+			name="exclude-files"
+			class="min-h-9"
+			value={ props.ExcludeFiles }
+			autocomplete="off"
+			placeholder="Enter files"
+		/>
+	</div>
+}

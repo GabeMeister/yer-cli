@@ -26,6 +26,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 				MasterBranchName:       "",
 				IncludedFileExtensions: []string{},
 				ExcludedDirs:           []string{},
+				AllAuthors:             []string{},
 				DuplicateEngineers:     []analyzer.DuplicateEngineerGroup{},
 				IncludeFileBlames:      true,
 			})
@@ -42,8 +43,10 @@ func addAnalyzerRoutes(e *echo.Echo) {
 				RepoPath:              config.Repos[0].Path,
 				Year:                  year,
 				MasterBranch:          config.Repos[0].MasterBranchName,
+				AllAuthors:            config.Repos[0].AllAuthors,
 				IncludeFileExtensions: strings.Join(config.Repos[0].IncludeFileExtensions, ","),
 				ExcludeDirs:           strings.Join(config.Repos[0].ExcludeDirectories, ","),
+				ExcludeFiles:          strings.Join(config.Repos[0].ExcludeFiles, ","),
 			}),
 		})
 
@@ -56,6 +59,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		masterBranchName := c.FormValue("master-branch-name")
 		includeFileExtensions := c.FormValue("include-file-extensions")
 		excludeDirs := c.FormValue("exclude-dirs")
+		excludeFiles := c.FormValue("exclude-files")
 
 		config := analyzer.GetConfig(utils.DEFAULT_CONFIG_FILE)
 		config.Repos[0].Name = recapName
@@ -63,6 +67,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		config.Repos[0].MasterBranchName = masterBranchName
 		config.Repos[0].IncludeFileExtensions = strings.Split(includeFileExtensions, ",")
 		config.Repos[0].ExcludeDirectories = strings.Split(excludeDirs, ",")
+		config.Repos[0].ExcludeFiles = strings.Split(excludeFiles, ",")
 
 		analyzer.UpdateConfig(config)
 
@@ -76,6 +81,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 			MasterBranch:          masterBranchName,
 			IncludeFileExtensions: includeFileExtensions,
 			ExcludeDirs:           excludeDirs,
+			ExcludeFiles:          excludeFiles,
 		})
 		content := t.Render(t.RenderParams{
 			C:         c,
@@ -175,6 +181,18 @@ func addAnalyzerRoutes(e *echo.Echo) {
 			content += t.Render(t.RenderParams{
 				C:         c,
 				Component: fileExtInput,
+			})
+
+			authors := analyzer.GetAuthorsFromRepo(repoPath)
+			allAuthorsComponent := ConfigSetupPage.AllAuthorsList(ConfigSetupPage.AllAuthorsListProps{
+				AllAuthors: authors,
+				OutOfBand:  true,
+			})
+
+			// Updates their file extensions with what is in the repo
+			content += t.Render(t.RenderParams{
+				C:         c,
+				Component: allAuthorsComponent,
 			})
 
 		} else {
