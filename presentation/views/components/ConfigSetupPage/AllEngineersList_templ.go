@@ -46,7 +46,7 @@ func AllAuthorsList(props AllAuthorsListProps) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("><div id=\"left\" class=\"sortable w-96 h-96 p-6 bg-gray-700\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("><div id=\"left\" class=\"sortable h-96 p-6 bg-blue-200\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

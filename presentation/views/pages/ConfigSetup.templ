@@ -76,12 +76,17 @@ templ ConfigSetup(props ConfigSetupProps) {
 								ExcludeFiles: props.ExcludeFiles,
 							})
 						</div>
-						<div class="w-full">
-							This is the duplicate authors
-							@ConfigSetupPage.AllAuthorsList(ConfigSetupPage.AllAuthorsListProps{
-								AllAuthors: props.AllAuthors,
-							})
-						</div>
+						if len(props.AllAuthors) > 0 {
+							<div class="w-full">
+								<span class="font-medium">Group Duplicate Authors</span>
+								<div class="flex gap-2">
+									@ConfigSetupPage.AllAuthorsList(ConfigSetupPage.AllAuthorsListProps{
+										AllAuthors: props.AllAuthors,
+									})
+									@ConfigSetupPage.DuplicateAuthorsList([]string{"Gabe", "Zach", "Josh"})
+								</div>
+							</div>
+						}
 						<button
 							class="btn lg w-full"
 						>

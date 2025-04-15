@@ -27,7 +27,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 				IncludedFileExtensions: []string{},
 				ExcludedDirs:           []string{},
 				AllAuthors:             []string{},
-				DuplicateAuthors:     []analyzer.DuplicateAuthorGroup{},
+				DuplicateAuthors:       []analyzer.DuplicateAuthorGroup{},
 				IncludeFileBlames:      true,
 			})
 		}
@@ -39,11 +39,12 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		content := t.Render(t.RenderParams{
 			C: c,
 			Component: pages.ConfigSetup(pages.ConfigSetupProps{
-				RecapName:             config.Repos[0].Name,
-				RepoPath:              config.Repos[0].Path,
-				Year:                  year,
-				MasterBranch:          config.Repos[0].MasterBranchName,
-				AllAuthors:            config.Repos[0].AllAuthors,
+				RecapName:    config.Repos[0].Name,
+				RepoPath:     config.Repos[0].Path,
+				Year:         year,
+				MasterBranch: config.Repos[0].MasterBranchName,
+				AllAuthors:   []string{"Ezra", "Isaac", "Steve"},
+				// AllAuthors:            config.Repos[0].AllAuthors,
 				IncludeFileExtensions: strings.Join(config.Repos[0].IncludeFileExtensions, ","),
 				ExcludeDirs:           strings.Join(config.Repos[0].ExcludeDirectories, ","),
 				ExcludeFiles:          strings.Join(config.Repos[0].ExcludeFiles, ","),
@@ -82,6 +83,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 			IncludeFileExtensions: includeFileExtensions,
 			ExcludeDirs:           excludeDirs,
 			ExcludeFiles:          excludeFiles,
+			AllAuthors:            []string{"David"},
 		})
 		content := t.Render(t.RenderParams{
 			C:         c,

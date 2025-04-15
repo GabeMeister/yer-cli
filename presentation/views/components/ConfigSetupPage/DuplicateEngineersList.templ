@@ -4,7 +4,7 @@ import components "GabeMeister/yer-cli/presentation/views/components"
 
 templ DuplicateAuthorsList(selectedAuthors []string) {
 	<div class="flex flex-col">
-		<div id="right" class="sortable w-96 h-96 p-6 bg-gray-700">
+		<div class="sortable h-96 p-6 bg-yellow-300">
 			for _, author := range selectedAuthors {
 				@components.DraggableText(author)
 			}
@@ -21,7 +21,7 @@ templ DuplicateAuthorsList(selectedAuthors []string) {
 		<button
 			hx-post="/duplicate-group"
 			hx-target="#analyze-manually"
-			class={ "px-2 py-1 bg-white rounded-lg text-black m-4",
+			class={ "btn",
 					templ.KV("opacity-50 cursor-not-allowed", len(selectedAuthors) <= 1) }
 			disabled?={ len(selectedAuthors) <= 1 }
 			hx-include="#duplicate-authors, #all-authors"

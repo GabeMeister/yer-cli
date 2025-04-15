@@ -15,7 +15,7 @@ templ AllAuthorsList(props AllAuthorsListProps) {
 			hx-swap-oob="true"
 		}
 	>
-		<div id="left" class="sortable w-96 h-96 p-6 bg-gray-700">
+		<div id="left" class="sortable h-96 p-6 bg-blue-200">
 			for _, author := range props.AllAuthors {
 				@components.DraggableText(author)
 			}
