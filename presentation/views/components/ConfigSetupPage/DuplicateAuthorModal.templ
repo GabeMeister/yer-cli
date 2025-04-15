@@ -1,0 +1,18 @@
+package ConfigSetupPage 
+
+import "GabeMeister/yer-cli/presentation/views/components"
+
+type DuplicateAuthorModalProps struct {
+	UngroupedEngineers []string
+}
+
+templ DuplicateAuthorModal(props DuplicateAuthorModalProps) {
+	@components.Modal(components.ModalProps{
+		Id:    "duplicate-author-modal",
+		Title: "Duplicate Authors",
+	}) {
+		@DuplicateAuthorForm(DuplicateAuthorFormProps{
+			UngroupedEngineers: props.UngroupedEngineers,
+		})
+	}
+}

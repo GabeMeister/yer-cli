@@ -1,0 +1,41 @@
+package ConfigSetupPage 
+
+import (
+	"GabeMeister/yer-cli/analyzer"
+	"fmt"
+	"strings"
+)
+
+type DuplicateGroupBtnProps struct {
+	UngroupedAuthors string
+	DuplicateAuthors []analyzer.DuplicateAuthorGroup
+}
+
+func getDuplicateAuthorValue(group analyzer.DuplicateAuthorGroup) string {
+	return fmt.Sprintf("%s|%s", group.Real, strings.Join(group.Duplicates, ","))
+}
+
+templ DuplicateGroupBtn(props DuplicateGroupBtnProps) {
+	<input
+		id="ungrouped-authors"
+		type="hidden"
+		name="ungrouped-authors"
+		value={ props.UngroupedAuthors }
+	/>
+	for _, group := range props.DuplicateAuthors {
+		<input
+			id="duplicate-authors"
+			type="hidden"
+			name="duplicate-authors"
+			value={ getDuplicateAuthorValue(group) }
+		/>
+	}
+	<button
+		type="button"
+		class="btn"
+		hx-get="/duplicate-authors-modal"
+		hx-target="body"
+		hx-swap="beforeend"
+		hx-include="#ungrouped-authors,#duplicate-authors"
+	>+ Add New Duplicate Group</button>
+}

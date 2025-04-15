@@ -233,6 +233,19 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		return c.HTML(http.StatusOK, content)
 	})
 
+	e.GET("/duplicate-authors-modal", func(c echo.Context) error {
+		ungroupedAuthors := c.FormValue("ungrouped-authors")
+		duplicateAuthors := c.FormValue("duplicate-authors")
+
+		component := ConfigSetupPage.DuplicateAuthorModal(ConfigSetupPage.DuplicateAuthorModalProps{})
+		content := t.Render(t.RenderParams{
+			C:         c,
+			Component: component,
+		})
+
+		return c.HTML(http.StatusOK, content)
+	})
+
 	e.GET("/clear-modal", func(c echo.Context) error {
 		return c.HTML(http.StatusOK, "<div id='modal-root'></div>")
 	})
