@@ -25,8 +25,8 @@ type ConfigSetupProps struct {
 	ExcludeFiles          string
 	AllAuthors            []string
 
-	// SelectedEngineers       []string
-	// DuplicateEngineerGroups []analyzer.DuplicateEngineerGroup
+	// SelectedAuthors       []string
+	// DuplicateAuthorGroups []analyzer.DuplicateAuthorGroup
 	// SearchText              string
 }
 

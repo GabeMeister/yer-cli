@@ -10,11 +10,11 @@ import (
 )
 
 func getFileChangesChartData(recap analyzer.Recap) helpers.BarChartData {
-	barChartData := helpers.BarChartData{Data: []helpers.DataPoint{}, XAxisLabel: "Engineer", YAxisLabel: fmt.Sprintf("↑ Line Changes (%d)", analyzer.CURR_YEAR)}
+	barChartData := helpers.BarChartData{Data: []helpers.DataPoint{}, XAxisLabel: "Author", YAxisLabel: fmt.Sprintf("↑ Line Changes (%d)", analyzer.CURR_YEAR)}
 
-	for engineer, fileChanges := range recap.FileChangesByEngineerCurrYear {
+	for author, fileChanges := range recap.FileChangesByAuthorCurrYear {
 		barChartData.Data = append(barChartData.Data, helpers.DataPoint{
-			X: helpers.Truncate(engineer),
+			X: helpers.Truncate(author),
 			Y: fileChanges,
 		})
 	}
@@ -28,9 +28,9 @@ func getFileChangesChartData(recap analyzer.Recap) helpers.BarChartData {
 	return barChartData
 }
 
-templ FileChangesByEngineerCurrYear(recap analyzer.Recap) {
+templ FileChangesByAuthorCurrYear(recap analyzer.Recap) {
 	@components.Slide() {
 		<div id="container" data-value={ helpers.Json(getFileChangesChartData(recap)) }></div>
-		@components.NextButton(helpers.GetNextButtonLink("/file-changes-by-engineer-curr-year", recap))
+		@components.NextButton(helpers.GetNextButtonLink("/file-changes-by-author-curr-year", recap))
 	}
 }

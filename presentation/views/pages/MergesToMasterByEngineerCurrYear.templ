@@ -10,11 +10,11 @@ import (
 )
 
 func getMergesToMasterChartData(recap analyzer.Recap) helpers.BarChartData {
-	barChartData := helpers.BarChartData{Data: []helpers.DataPoint{}, XAxisLabel: "Engineer", YAxisLabel: fmt.Sprintf("↑ Merges (%d)", analyzer.CURR_YEAR)}
+	barChartData := helpers.BarChartData{Data: []helpers.DataPoint{}, XAxisLabel: "Author", YAxisLabel: fmt.Sprintf("↑ Merges (%d)", analyzer.CURR_YEAR)}
 
-	for engineer, merges := range recap.MergesToMasterByEngineerCurrYear {
+	for author, merges := range recap.MergesToMasterByAuthorCurrYear {
 		barChartData.Data = append(barChartData.Data, helpers.DataPoint{
-			X: helpers.Truncate(engineer),
+			X: helpers.Truncate(author),
 			Y: merges,
 		})
 	}
@@ -28,10 +28,10 @@ func getMergesToMasterChartData(recap analyzer.Recap) helpers.BarChartData {
 	return barChartData
 }
 
-templ MergesToMasterByEngineerCurrYear(recap analyzer.Recap) {
+templ MergesToMasterByAuthorCurrYear(recap analyzer.Recap) {
 	@components.Slide() {
 		<div id="container" data-value={ helpers.Json(getMergesToMasterChartData(recap)) }></div>
 		<div class="mt-12"></div>
-		@components.NextButton(helpers.GetNextButtonLink("/merges-to-master-by-engineer-curr-year", recap))
+		@components.NextButton(helpers.GetNextButtonLink("/merges-to-master-by-author-curr-year", recap))
 	}
 }

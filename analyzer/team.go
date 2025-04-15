@@ -5,103 +5,103 @@ import (
 	"time"
 )
 
-func GetNewEngineerCommitsCurrYear() []GitCommit {
+func GetNewAuthorCommitsCurrYear() []GitCommit {
 	pastCommits := getPastGitCommits()
 
 	// userName -> throwaway
-	engineersFromPast := make(map[string]int)
+	authorsFromPast := make(map[string]int)
 	for _, commit := range pastCommits {
-		engineersFromPast[commit.Author] = 1
+		authorsFromPast[commit.Author] = 1
 	}
 
 	currYearCommits := getCurrYearGitCommits()
 
 	// username -> bool on whether they have been processed or not
-	newEngineers := make(map[string]bool)
+	newAuthors := make(map[string]bool)
 	for _, commit := range currYearCommits {
-		if _, ok := engineersFromPast[commit.Author]; !ok {
-			newEngineers[commit.Author] = false
+		if _, ok := authorsFromPast[commit.Author]; !ok {
+			newAuthors[commit.Author] = false
 		}
 	}
 
-	newEngineerCommits := []GitCommit{}
+	newAuthorCommits := []GitCommit{}
 
 	for _, commit := range currYearCommits {
 		userName := commit.Author
-		processed, ok := newEngineers[userName]
+		processed, ok := newAuthors[userName]
 
 		if ok && !processed {
-			newEngineerCommits = append(newEngineerCommits, commit)
-			newEngineers[userName] = true
+			newAuthorCommits = append(newAuthorCommits, commit)
+			newAuthors[userName] = true
 		}
 	}
 
-	return newEngineerCommits
+	return newAuthorCommits
 }
 
-func GetEngineerCommitCountCurrYear() map[string]int {
+func GetAuthorCommitCountCurrYear() map[string]int {
 	commits := getGitCommits()
-	engineers := make(map[string]int)
+	authors := make(map[string]int)
 
 	for _, commit := range commits {
 		if utils.IsDateStrInYear(commit.Date, CURR_YEAR) {
 			userName := commit.Author
-			engineers[userName] += 1
+			authors[userName] += 1
 		}
 	}
 
-	return engineers
+	return authors
 }
 
-func GetEngineerCommitCountPrevYear() map[string]int {
+func GetAuthorCommitCountPrevYear() map[string]int {
 	commits := getGitCommits()
-	engineers := make(map[string]int)
+	authors := make(map[string]int)
 
 	for _, commit := range commits {
 		commitYear := utils.GetYearFromDateStr(commit.Date)
 
 		if commitYear < CURR_YEAR {
 			userName := commit.Author
-			engineers[userName] += 1
+			authors[userName] += 1
 		}
 	}
 
-	return engineers
+	return authors
 }
 
 func GetAllUsernames() []string {
-	engineers := GetEngineerCommitCountAllTime()
+	authors := GetAuthorCommitCountAllTime()
 
 	usernames := []string{}
-	for username := range engineers {
+	for username := range authors {
 		usernames = append(usernames, username)
 	}
 
 	return usernames
 }
 
-func GetEngineerCommitCountAllTime() map[string]int {
+func GetAuthorCommitCountAllTime() map[string]int {
 	commits := getGitCommits()
-	engineers := make(map[string]int)
+	authors := make(map[string]int)
 
 	for _, commit := range commits {
 		userName := commit.Author
-		engineers[userName] += 1
+		authors[userName] += 1
 	}
 
-	return engineers
+	return authors
 }
 
-func GetEngineerCountCurrYear() int {
-	engineers := GetEngineerCommitCountCurrYear()
+func GetAuthorCountCurrYear() int {
+	authors := GetAuthorCommitCountCurrYear()
 
-	return len(engineers)
+	return len(authors)
 }
 
-func GetEngineerCountAllTime() int {
-	engineers := GetEngineerCommitCountAllTime()
+func GetAuthorCountAllTime() int {
+	authors := GetAuthorCommitCountAllTime()
 
-	return len(engineers)
+	return len(authors)
 }
 
 // Example:
@@ -114,7 +114,7 @@ func GetEngineerCountAllTime() int {
 //
 // ]
 
-func GetEngineerCommitsOverTimeCurrYear() []TotalCommitCount {
+func GetAuthorCommitsOverTimeCurrYear() []TotalCommitCount {
 	dates := utils.GetDaysOfYear(CURR_YEAR)
 
 	// Create map of all possible dates this year
@@ -164,19 +164,19 @@ func GetEngineerCommitsOverTimeCurrYear() []TotalCommitCount {
 	return final
 }
 
-func GetEngineerFileChangesOverTimeCurrYear() []TotalFileChangeCount {
+func GetAuthorFileChangesOverTimeCurrYear() []TotalFileChangeCount {
 	if !HasPrevYearFileBlames() || !HasCurrYearFileBlames() {
 		return []TotalFileChangeCount{}
 	}
 
-	// engineer => line change count
+	// author => line change count
 	fileChangeTracker := make(map[string]int)
 
 	// Bucket file changes for all enginers in past
 	prevFileBlames := GetPrevYearFileBlames()
 	for _, fileBlame := range prevFileBlames {
-		for engineer, lineCount := range fileBlame.GitBlame {
-			fileChangeTracker[engineer] += lineCount
+		for author, lineCount := range fileBlame.GitBlame {
+			fileChangeTracker[author] += lineCount
 		}
 	}
 
@@ -230,7 +230,7 @@ type CommitList []string
 type AuthorCommitList map[string]CommitList
 type DayCommitListByAuthor map[string]AuthorCommitList
 
-func GetMostCommitsByEngineerCurrYear() MostSingleDayCommitsByEngineer {
+func GetMostCommitsByAuthorCurrYear() MostSingleDayCommitsByAuthor {
 	// Go from:
 
 	// [
@@ -289,7 +289,7 @@ func GetMostCommitsByEngineerCurrYear() MostSingleDayCommitsByEngineer {
 		commitListByDay[dateStr][author] = append(commitListByDay[dateStr][author], msg)
 	}
 
-	mostCommitsAuthor := MostSingleDayCommitsByEngineer{
+	mostCommitsAuthor := MostSingleDayCommitsByAuthor{
 		Username: "",
 		Date:     "2024-01-01",
 		Count:    0,
@@ -301,7 +301,7 @@ func GetMostCommitsByEngineerCurrYear() MostSingleDayCommitsByEngineer {
 
 		for author, commits := range currDay {
 			if len(commits) > mostCommitsAuthor.Count {
-				mostCommitsAuthor = MostSingleDayCommitsByEngineer{
+				mostCommitsAuthor = MostSingleDayCommitsByAuthor{
 					Username: author,
 					Date:     date,
 					Count:    len(commits),
@@ -314,19 +314,19 @@ func GetMostCommitsByEngineerCurrYear() MostSingleDayCommitsByEngineer {
 	return mostCommitsAuthor
 }
 
-func GetTotalLinesOfCodeInRepoByEngineer() map[string]int {
+func GetTotalLinesOfCodeInRepoByAuthor() map[string]int {
 	if !HasCurrYearFileBlames() {
 		return make(map[string]int)
 	}
 
-	engineerLineCountMap := make(map[string]int)
+	authorLineCountMap := make(map[string]int)
 
 	fileBlames := GetCurrYearFileBlames()
 	for _, fileBlame := range fileBlames {
-		for engineer, lineCount := range fileBlame.GitBlame {
-			engineerLineCountMap[engineer] += lineCount
+		for author, lineCount := range fileBlame.GitBlame {
+			authorLineCountMap[author] += lineCount
 		}
 	}
 
-	return engineerLineCountMap
+	return authorLineCountMap
 }

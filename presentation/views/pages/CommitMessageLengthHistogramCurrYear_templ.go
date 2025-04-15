@@ -18,7 +18,7 @@ import (
 func getCommitMessageLengthHistogramCurrYearChartData(recap analyzer.Recap) helpers.BarChartData {
 	barChartData := helpers.BarChartData{
 		Data:       []helpers.DataPoint{},
-		XAxisLabel: "Engineer",
+		XAxisLabel: "Author",
 		YAxisLabel: fmt.Sprintf("↑ Frequency (%d)", analyzer.CURR_YEAR),
 		XAxisMod:   25,
 	}

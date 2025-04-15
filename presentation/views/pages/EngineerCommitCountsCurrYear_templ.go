@@ -17,12 +17,12 @@ import (
 	"sort"
 )
 
-func getEngineerCommitCountsChartData(recap analyzer.Recap) helpers.BarChartData {
-	barChartData := helpers.BarChartData{Data: []helpers.DataPoint{}, XAxisLabel: "Engineer", YAxisLabel: fmt.Sprintf("↑ Commits (%d)", analyzer.CURR_YEAR)}
+func getAuthorCommitCountsChartData(recap analyzer.Recap) helpers.BarChartData {
+	barChartData := helpers.BarChartData{Data: []helpers.DataPoint{}, XAxisLabel: "Author", YAxisLabel: fmt.Sprintf("↑ Commits (%d)", analyzer.CURR_YEAR)}
 
-	for engineer, commitCount := range recap.EngineerCommitCountsCurrYear {
+	for author, commitCount := range recap.AuthorCommitCountsCurrYear {
 		barChartData.Data = append(barChartData.Data, helpers.DataPoint{
-			X: helpers.Truncate(engineer),
+			X: helpers.Truncate(author),
 			Y: commitCount,
 		})
 	}
@@ -36,7 +36,7 @@ func getEngineerCommitCountsChartData(recap analyzer.Recap) helpers.BarChartData
 	return barChartData
 }
 
-func EngineerCommitCountsCurrYear(recap analyzer.Recap) templ.Component {
+func AuthorCommitCountsCurrYear(recap analyzer.Recap) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -74,9 +74,9 @@ func EngineerCommitCountsCurrYear(recap analyzer.Recap) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var3 string
-			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(helpers.Json(getEngineerCommitCountsChartData(recap)))
+			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(helpers.Json(getAuthorCommitCountsChartData(recap)))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/EngineerCommitCountsCurrYear.templ`, Line: 33, Col: 88}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/EngineerCommitCountsCurrYear.templ`, Line: 33, Col: 86}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
@@ -86,7 +86,7 @@ func EngineerCommitCountsCurrYear(recap analyzer.Recap) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = components.NextButton(helpers.GetNextButtonLink("/engineer-commit-counts-curr-year", recap)).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = components.NextButton(helpers.GetNextButtonLink("/author-commit-counts-curr-year", recap)).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

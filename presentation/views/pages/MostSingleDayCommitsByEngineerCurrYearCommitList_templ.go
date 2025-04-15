@@ -14,7 +14,7 @@ import (
 	components "GabeMeister/yer-cli/presentation/views/components"
 )
 
-func MostSingleDayCommitsByEngineerCurrYearCommitList(recap analyzer.Recap) templ.Component {
+func MostSingleDayCommitsByAuthorCurrYearCommitList(recap analyzer.Recap) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -51,7 +51,7 @@ func MostSingleDayCommitsByEngineerCurrYearCommitList(recap analyzer.Recap) temp
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			for _, commit := range recap.MostSingleDayCommitsByEngineerCurrYear.Commits {
+			for _, commit := range recap.MostSingleDayCommitsByAuthorCurrYear.Commits {
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<li class=\"mt-3 font-mono text-wrap\">\"")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
@@ -74,7 +74,7 @@ func MostSingleDayCommitsByEngineerCurrYearCommitList(recap analyzer.Recap) temp
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = components.NextButton(helpers.GetNextButtonLink("/most-single-day-commits-by-engineer-curr-year-commit-list", recap)).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = components.NextButton(helpers.GetNextButtonLink("/most-single-day-commits-by-author-curr-year-commit-list", recap)).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

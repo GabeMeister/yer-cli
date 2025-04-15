@@ -6,10 +6,10 @@ import (
 	components "GabeMeister/yer-cli/presentation/views/components"
 )
 
-templ EngineerFileChangesOverTimeCurrYear(recap analyzer.Recap) {
+templ AuthorFileChangesOverTimeCurrYear(recap analyzer.Recap) {
 	@components.Slide() {
-		<div id="racing-bar-chart-container" data-value={ helpers.Json(recap.EngineerFileChangesOverTimeCurrYear) } class="p-12"></div>
+		<div id="racing-bar-chart-container" data-value={ helpers.Json(recap.AuthorFileChangesOverTimeCurrYear) } class="p-12"></div>
 		<div class="mt-12"></div>
-		@components.NextButton(helpers.GetNextButtonLink("/engineer-file-changes-over-time-curr-year", recap))
+		@components.NextButton(helpers.GetNextButtonLink("/author-file-changes-over-time-curr-year", recap))
 	}
 }

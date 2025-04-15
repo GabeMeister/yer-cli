@@ -12,7 +12,7 @@ type ConfigFileOptions struct {
 	IncludedFileExtensions []string
 	ExcludedDirs           []string
 	AllAuthors             []string
-	DuplicateEngineers     []DuplicateEngineerGroup
+	DuplicateAuthors     []DuplicateAuthorGroup
 	IncludeFileBlames      bool
 }
 
@@ -27,8 +27,8 @@ func InitConfig(options ConfigFileOptions) ConfigFile {
 				IncludeFileExtensions: options.IncludedFileExtensions,
 				ExcludeDirectories:    options.ExcludedDirs,
 				ExcludeFiles:          []string{},
-				ExcludeEngineers:      []string{},
-				DuplicateEngineers:    options.DuplicateEngineers,
+				ExcludeAuthors:      []string{},
+				DuplicateAuthors:    options.DuplicateAuthors,
 				IncludeFileBlames:     options.IncludeFileBlames,
 			},
 		},
@@ -43,10 +43,10 @@ func InitConfig(options ConfigFileOptions) ConfigFile {
 	return config
 }
 
-func updateDuplicateEngineers(path string, duplicateEngineers []DuplicateEngineerGroup) error {
+func updateDuplicateAuthors(path string, duplicateAuthors []DuplicateAuthorGroup) error {
 	// Update config, cause we wanna remember this for later
 	config := GetConfig(path)
-	config.Repos[0].DuplicateEngineers = duplicateEngineers
+	config.Repos[0].DuplicateAuthors = duplicateAuthors
 	SaveDataToFile(config, path)
 
 	// Also want to update the commits.json file, replacing the duplicate git

@@ -384,7 +384,7 @@ func checkoutRepoToCommitOrBranchName(config RepoConfig, commitOrBranchName stri
 }
 
 func GetRealAuthorName(config RepoConfig, authorName string) string {
-	for _, dupGroup := range config.DuplicateEngineers {
+	for _, dupGroup := range config.DuplicateAuthors {
 		for _, dup := range dupGroup.Duplicates {
 			if authorName == dup {
 				return dup

@@ -56,7 +56,7 @@ Press enter to continue...`)
 		MasterBranchName:       masterBranch,
 		IncludedFileExtensions: fileExtensions,
 		ExcludedDirs:           excludedDirs,
-		DuplicateEngineers:     []DuplicateEngineerGroup{},
+		DuplicateAuthors:     []DuplicateAuthorGroup{},
 		IncludeFileBlames:      includeFileBlames,
 	})
 	// For now, we're just handling 1, we can handle multiple repos in a
@@ -65,9 +65,9 @@ Press enter to continue...`)
 
 	gatherMetrics(config.Repos[0])
 
-	duplicateEngineers := getDuplicateUsers()
+	duplicateAuthors := getDuplicateUsers()
 
-	err := updateDuplicateEngineers(utils.DEFAULT_CONFIG_FILE, duplicateEngineers)
+	err := updateDuplicateAuthors(utils.DEFAULT_CONFIG_FILE, duplicateAuthors)
 	if err != nil {
 		panic(err)
 	}
@@ -101,7 +101,7 @@ Press enter to continue...`)
 	}
 
 	gatherMetrics(repoConfig)
-	updateDuplicateEngineers(path, repoConfig.DuplicateEngineers)
+	updateDuplicateAuthors(path, repoConfig.DuplicateAuthors)
 	calculateRecap(repoConfig)
 
 	return true
@@ -273,7 +273,7 @@ func GetFileExtensionsInRepo(dir string) []string {
 // (for example, Gabe Jensen and GabeJensen). It could be because they changed
 // laptops, decided to change their user name randomly, etc. To make the stats
 // more accurate, we "bucket" duplicate usernames into one.
-func getDuplicateUsers() []DuplicateEngineerGroup {
+func getDuplicateUsers() []DuplicateAuthorGroup {
 	// commits := getGitCommits()
 	// // Username -> int
 	// userMap := make(map[string]int)
@@ -322,7 +322,7 @@ func getDuplicateUsers() []DuplicateEngineerGroup {
 	// answer := strings.TrimSpace(text)
 
 	// if len(answer) > 0 && strings.ToLower(string(answer[0])) == "y" {
-	// 	duplicateEngineerMap := []DuplicateEngineerGroup{}
+	// 	duplicateAuthorMap := []DuplicateAuthorGroup{}
 
 	// 	for i := 0; i < 1000; i++ {
 	// 		fmt.Println()
@@ -357,7 +357,7 @@ func getDuplicateUsers() []DuplicateEngineerGroup {
 	// 		}
 	// 		realUsername := strings.TrimSpace(text)
 
-	// 		duplicateEngineerMap[duplicateUsername] = realUsername
+	// 		duplicateAuthorMap[duplicateUsername] = realUsername
 
 	// 		userNames = utils.Delete(userNames, func(item string) bool { return item == duplicateUsername })
 
@@ -370,13 +370,13 @@ func getDuplicateUsers() []DuplicateEngineerGroup {
 	// 		}
 	// 	}
 
-	// 	return duplicateEngineerMap
+	// 	return duplicateAuthorMap
 	// } else {
 	// 	return map[string]string{}
 	// }
 
 	// This function is going away so just put this here so things build
-	return []DuplicateEngineerGroup{}
+	return []DuplicateAuthorGroup{}
 }
 
 func gatherMetrics(config RepoConfig) {
@@ -448,34 +448,34 @@ func calculateRecap(config RepoConfig) {
 	numCommitsAllTime := GetNumCommitsAllTime()
 	numCommitsPrevYear := GetNumCommitsPrevYear()
 	numCommitsCurrYear := GetNumCommitsCurrYear()
-	newEngineerCommitsCurrYear := GetNewEngineerCommitsCurrYear()
-	newEngineerCountCurrYear := len(newEngineerCommitsCurrYear)
-	newEngineerListCurrYear := utils.Map(newEngineerCommitsCurrYear, func(commit GitCommit) string {
+	newAuthorCommitsCurrYear := GetNewAuthorCommitsCurrYear()
+	newAuthorCountCurrYear := len(newAuthorCommitsCurrYear)
+	newAuthorListCurrYear := utils.Map(newAuthorCommitsCurrYear, func(commit GitCommit) string {
 		return commit.Author
 	})
-	engineerCommitCountsCurrYear := GetEngineerCommitCountCurrYear()
-	engineerCommitCountsAllTime := GetEngineerCommitCountAllTime()
-	engineerCountCurrYear := GetEngineerCountCurrYear()
-	engineerCountAllTime := GetEngineerCountAllTime()
-	engineerCommitsOverTimeCurrYear := GetEngineerCommitsOverTimeCurrYear()
-	engineerFileChangesOverTimeCurrYear := GetEngineerFileChangesOverTimeCurrYear()
+	authorCommitCountsCurrYear := GetAuthorCommitCountCurrYear()
+	authorCommitCountsAllTime := GetAuthorCommitCountAllTime()
+	authorCountCurrYear := GetAuthorCountCurrYear()
+	authorCountAllTime := GetAuthorCountAllTime()
+	authorCommitsOverTimeCurrYear := GetAuthorCommitsOverTimeCurrYear()
+	authorFileChangesOverTimeCurrYear := GetAuthorFileChangesOverTimeCurrYear()
 	commitsByMonthCurrYear := GetCommitsByMonthCurrYear()
 	commitsByWeekDayCurrYear := GetCommitsByWeekDayCurrYear()
 	commitsByHourCurrYear := GetCommitsByHourCurrYear()
-	mostSingleDayCommitsByEngineerCurrYear := GetMostCommitsByEngineerCurrYear()
+	mostSingleDayCommitsByAuthorCurrYear := GetMostCommitsByAuthorCurrYear()
 	mostInsertionsInCommitCurrYear := GetMostInsertionsInCommitCurrYear()
 	mostDeletionsInCommitCurrYear := GetMostDeletionsInCommitCurrYear()
 	largestCommitMessageCurrYear := GetLargestCommitMessageCurrYear()
 	smallestCommitMessagesCurrYear := GetSmallestCommitMessagesCurrYear()
 	commitMessageHistogramCurrYear := GetCommitMessageHistogramCurrYear()
-	directPushesOnMasterByEngineerCurrYear := GetDirectPushesOnMasterByEngineerCurrYear()
-	mergesToMasterByEngineerCurrYear := GetMergesToMasterByEngineerCurrYear()
+	directPushesOnMasterByAuthorCurrYear := GetDirectPushesOnMasterByAuthorCurrYear()
+	mergesToMasterByAuthorCurrYear := GetMergesToMasterByAuthorCurrYear()
 	mostMergesInOneDayCurrYear := GetMostMergesInOneDayCurrYear()
 	avgMergesToMasterPerDayCurrYear := GetAvgMergesToMasterPerDayCurrYear()
-	fileChangesByEngineerCurrYear := GetFileChangesByEngineerCurrYear()
-	codeInsertionsByEngineerCurrYear := GetCodeInsertionsByEngineerCurrYear()
-	codeDeletionsByEngineerCurrYear := GetCodeDeletionsByEngineerCurrYear()
-	fileChangeRatioCurrYear := GetFileChangeRatio(codeInsertionsByEngineerCurrYear, codeDeletionsByEngineerCurrYear)
+	fileChangesByAuthorCurrYear := GetFileChangesByAuthorCurrYear()
+	codeInsertionsByAuthorCurrYear := GetCodeInsertionsByAuthorCurrYear()
+	codeDeletionsByAuthorCurrYear := GetCodeDeletionsByAuthorCurrYear()
+	fileChangeRatioCurrYear := GetFileChangeRatio(codeInsertionsByAuthorCurrYear, codeDeletionsByAuthorCurrYear)
 	commonlyChangedFiles := GetCommonlyChangedFiles()
 	fileCountPrevYear := GetFileCountPrevYear()
 	fileCountCurrYear := GetFileCountCurrYear()
@@ -483,7 +483,7 @@ func calculateRecap(config RepoConfig) {
 	smallestFilesCurrYear := GetSmallestFilesCurrYear()
 	totalLinesOfCodePrevYear := GetTotalLinesOfCodePrevYear()
 	totalLinesOfCodeCurrYear := GetTotalLinesOfCodeCurrYear()
-	totalLinesOfCodeInRepoByEngineer := GetTotalLinesOfCodeInRepoByEngineer()
+	totalLinesOfCodeInRepoByAuthor := GetTotalLinesOfCodeInRepoByAuthor()
 	sizeOfRepoByWeekCurrYear := GetSizeOfRepoByWeekCurrYear()
 
 	now := time.Now()
@@ -529,21 +529,21 @@ func calculateRecap(config RepoConfig) {
 		SizeOfRepoByWeekCurrYear:   sizeOfRepoByWeekCurrYear,
 
 		// Team
-		NewEngineerCommitsCurrYear:             newEngineerCommitsCurrYear,
-		NewEngineerCountCurrYear:               newEngineerCountCurrYear,
-		NewEngineerListCurrYear:                newEngineerListCurrYear,
-		EngineerCommitCountsCurrYear:           engineerCommitCountsCurrYear,
-		EngineerCommitCountsAllTime:            engineerCommitCountsAllTime,
-		EngineerCountCurrYear:                  engineerCountCurrYear,
-		EngineerCountAllTime:                   engineerCountAllTime,
-		EngineerCommitsOverTimeCurrYear:        engineerCommitsOverTimeCurrYear,
-		EngineerFileChangesOverTimeCurrYear:    engineerFileChangesOverTimeCurrYear,
-		MostSingleDayCommitsByEngineerCurrYear: mostSingleDayCommitsByEngineerCurrYear,
-		DirectPushesOnMasterByEngineerCurrYear: directPushesOnMasterByEngineerCurrYear,
-		MergesToMasterByEngineerCurrYear:       mergesToMasterByEngineerCurrYear,
-		FileChangesByEngineerCurrYear:          fileChangesByEngineerCurrYear,
-		FileChangeRatioByEngineerCurrYear:      fileChangeRatioCurrYear,
-		TotalLinesOfCodeInRepoByEngineer:       totalLinesOfCodeInRepoByEngineer,
+		NewAuthorCommitsCurrYear:             newAuthorCommitsCurrYear,
+		NewAuthorCountCurrYear:               newAuthorCountCurrYear,
+		NewAuthorListCurrYear:                newAuthorListCurrYear,
+		AuthorCommitCountsCurrYear:           authorCommitCountsCurrYear,
+		AuthorCommitCountsAllTime:            authorCommitCountsAllTime,
+		AuthorCountCurrYear:                  authorCountCurrYear,
+		AuthorCountAllTime:                   authorCountAllTime,
+		AuthorCommitsOverTimeCurrYear:        authorCommitsOverTimeCurrYear,
+		AuthorFileChangesOverTimeCurrYear:    authorFileChangesOverTimeCurrYear,
+		MostSingleDayCommitsByAuthorCurrYear: mostSingleDayCommitsByAuthorCurrYear,
+		DirectPushesOnMasterByAuthorCurrYear: directPushesOnMasterByAuthorCurrYear,
+		MergesToMasterByAuthorCurrYear:       mergesToMasterByAuthorCurrYear,
+		FileChangesByAuthorCurrYear:          fileChangesByAuthorCurrYear,
+		FileChangeRatioByAuthorCurrYear:      fileChangeRatioCurrYear,
+		TotalLinesOfCodeInRepoByAuthor:       totalLinesOfCodeInRepoByAuthor,
 	}
 	data, err := json.MarshalIndent(repoRecap, "", "  ")
 	if err != nil {

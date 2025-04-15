@@ -16,12 +16,12 @@ import (
 	"sort"
 )
 
-func getTotalLinesOfCodeInRepoByEngineerChartData(recap analyzer.Recap) helpers.BarChartData {
-	barChartData := helpers.BarChartData{Data: []helpers.DataPoint{}, XAxisLabel: "Engineer", YAxisLabel: "↑ Lines of Code"}
+func getTotalLinesOfCodeInRepoByAuthorChartData(recap analyzer.Recap) helpers.BarChartData {
+	barChartData := helpers.BarChartData{Data: []helpers.DataPoint{}, XAxisLabel: "Author", YAxisLabel: "↑ Lines of Code"}
 
-	for engineer, lines := range recap.TotalLinesOfCodeInRepoByEngineer {
+	for author, lines := range recap.TotalLinesOfCodeInRepoByAuthor {
 		barChartData.Data = append(barChartData.Data, helpers.DataPoint{
-			X: helpers.Truncate(engineer),
+			X: helpers.Truncate(author),
 			Y: lines,
 		})
 	}
@@ -35,7 +35,7 @@ func getTotalLinesOfCodeInRepoByEngineerChartData(recap analyzer.Recap) helpers.
 	return barChartData
 }
 
-func TotalLinesOfCodeInRepoByEngineer(recap analyzer.Recap) templ.Component {
+func TotalLinesOfCodeInRepoByAuthor(recap analyzer.Recap) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -73,9 +73,9 @@ func TotalLinesOfCodeInRepoByEngineer(recap analyzer.Recap) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var3 string
-			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(helpers.Json(getTotalLinesOfCodeInRepoByEngineerChartData(recap)))
+			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(helpers.Json(getTotalLinesOfCodeInRepoByAuthorChartData(recap)))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/TotalLinesOfCodeInRepoByEngineer.templ`, Line: 32, Col: 100}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/TotalLinesOfCodeInRepoByEngineer.templ`, Line: 32, Col: 98}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
@@ -85,7 +85,7 @@ func TotalLinesOfCodeInRepoByEngineer(recap analyzer.Recap) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = components.NextButton(helpers.GetNextButtonLink("/total-lines-of-code-in-repo-by-engineer", recap)).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = components.NextButton(helpers.GetNextButtonLink("/total-lines-of-code-in-repo-by-author", recap)).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

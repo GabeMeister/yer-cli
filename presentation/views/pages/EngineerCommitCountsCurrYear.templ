@@ -9,12 +9,12 @@ import (
 	"sort"
 )
 
-func getEngineerCommitCountsChartData(recap analyzer.Recap) helpers.BarChartData {
-	barChartData := helpers.BarChartData{Data: []helpers.DataPoint{}, XAxisLabel: "Engineer", YAxisLabel: fmt.Sprintf("↑ Commits (%d)", analyzer.CURR_YEAR)}
+func getAuthorCommitCountsChartData(recap analyzer.Recap) helpers.BarChartData {
+	barChartData := helpers.BarChartData{Data: []helpers.DataPoint{}, XAxisLabel: "Author", YAxisLabel: fmt.Sprintf("↑ Commits (%d)", analyzer.CURR_YEAR)}
 
-	for engineer, commitCount := range recap.EngineerCommitCountsCurrYear {
+	for author, commitCount := range recap.AuthorCommitCountsCurrYear {
 		barChartData.Data = append(barChartData.Data, helpers.DataPoint{
-			X: helpers.Truncate(engineer),
+			X: helpers.Truncate(author),
 			Y: commitCount,
 		})
 	}
@@ -28,10 +28,10 @@ func getEngineerCommitCountsChartData(recap analyzer.Recap) helpers.BarChartData
 	return barChartData
 }
 
-templ EngineerCommitCountsCurrYear(recap analyzer.Recap) {
+templ AuthorCommitCountsCurrYear(recap analyzer.Recap) {
 	@components.Slide() {
-		<div id="container" data-value={ helpers.Json(getEngineerCommitCountsChartData(recap)) }></div>
+		<div id="container" data-value={ helpers.Json(getAuthorCommitCountsChartData(recap)) }></div>
 		<div class="mt-12"></div>
-		@components.NextButton(helpers.GetNextButtonLink("/engineer-commit-counts-curr-year", recap))
+		@components.NextButton(helpers.GetNextButtonLink("/author-commit-counts-curr-year", recap))
 	}
 }

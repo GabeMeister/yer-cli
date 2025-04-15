@@ -9,13 +9,13 @@ import (
 
 var TABLE_OF_CONTENTS = []string{
 	"/",
-	"/new-engineer-count-curr-year/title",
-	"/new-engineer-count-curr-year",
-	"/new-engineer-list-curr-year",
-	"/engineer-count-curr-year/title",
-	"/engineer-count-curr-year",
-	"/engineer-count-all-time/title",
-	"/engineer-count-all-time",
+	"/new-author-count-curr-year/title",
+	"/new-author-count-curr-year",
+	"/new-author-list-curr-year",
+	"/author-count-curr-year/title",
+	"/author-count-curr-year",
+	"/author-count-all-time/title",
+	"/author-count-all-time",
 	"/file-count-prev-year/title",
 	"/file-count-prev-year",
 	"/file-count-curr-year/title",
@@ -32,14 +32,14 @@ var TABLE_OF_CONTENTS = []string{
 	"/total-lines-of-code-curr-year",
 	"/size-of-repo-by-week-curr-year/title",
 	"/size-of-repo-by-week-curr-year",
-	"/file-changes-by-engineer-curr-year/title",
-	"/file-changes-by-engineer-curr-year",
-	"/total-lines-of-code-in-repo-by-engineer/title",
-	"/total-lines-of-code-in-repo-by-engineer",
-	"/file-change-ratio-by-engineer-curr-year/title",
-	"/file-change-ratio-by-engineer-curr-year",
-	"/engineer-file-changes-over-time-curr-year/title",
-	"/engineer-file-changes-over-time-curr-year",
+	"/file-changes-by-author-curr-year/title",
+	"/file-changes-by-author-curr-year",
+	"/total-lines-of-code-in-repo-by-author/title",
+	"/total-lines-of-code-in-repo-by-author",
+	"/file-change-ratio-by-author-curr-year/title",
+	"/file-change-ratio-by-author-curr-year",
+	"/author-file-changes-over-time-curr-year/title",
+	"/author-file-changes-over-time-curr-year",
 	"/commonly-changed-files/title",
 	"/commonly-changed-files",
 	"/num-commits-prev-year/title",
@@ -48,21 +48,21 @@ var TABLE_OF_CONTENTS = []string{
 	"/num-commits-curr-year",
 	"/num-commits-all-time/title",
 	"/num-commits-all-time",
-	// "/engineer-commits-over-time-curr-year/title",
-	// "/engineer-commits-over-time-curr-year",
-	"/engineer-commit-counts-curr-year/title",
-	"/engineer-commit-counts-curr-year",
-	"/engineer-commit-counts-all-time/title",
-	"/engineer-commit-counts-all-time",
+	// "/author-commits-over-time-curr-year/title",
+	// "/author-commits-over-time-curr-year",
+	"/author-commit-counts-curr-year/title",
+	"/author-commit-counts-curr-year",
+	"/author-commit-counts-all-time/title",
+	"/author-commit-counts-all-time",
 	"/commits-by-month-curr-year/title",
 	"/commits-by-month-curr-year",
 	"/commits-by-weekday-curr-year/title",
 	"/commits-by-weekday-curr-year",
 	"/commits-by-hour-curr-year/title",
 	"/commits-by-hour-curr-year",
-	"/most-single-day-commits-by-engineer-curr-year/title",
-	"/most-single-day-commits-by-engineer-curr-year",
-	"/most-single-day-commits-by-engineer-curr-year-commit-list",
+	"/most-single-day-commits-by-author-curr-year/title",
+	"/most-single-day-commits-by-author-curr-year",
+	"/most-single-day-commits-by-author-curr-year-commit-list",
 	"/most-insertions-in-single-commit-curr-year/title",
 	"/most-insertions-in-single-commit-curr-year",
 	"/most-deletions-in-single-commit-curr-year/title",
@@ -77,10 +77,10 @@ var TABLE_OF_CONTENTS = []string{
 	"/shortest-commit-message-curr-year/1",
 	"/commit-message-length-histogram-curr-year/title",
 	"/commit-message-length-histogram-curr-year",
-	"/direct-pushes-on-master-by-engineer-curr-year/title",
-	"/direct-pushes-on-master-by-engineer-curr-year",
-	"/merges-to-master-by-engineer-curr-year/title",
-	"/merges-to-master-by-engineer-curr-year",
+	"/direct-pushes-on-master-by-author-curr-year/title",
+	"/direct-pushes-on-master-by-author-curr-year",
+	"/merges-to-master-by-author-curr-year/title",
+	"/merges-to-master-by-author-curr-year",
 	"/most-merges-in-one-day-curr-year/title",
 	"/most-merges-in-one-day-curr-year",
 	"/avg-merges-per-day-to-master-curr-year/title",
@@ -93,8 +93,8 @@ func GetTableOfContents(recap analyzer.Recap) []string {
 		return TABLE_OF_CONTENTS
 	} else {
 		pagesRequiringFileBlames := []string{
-			"/total-lines-of-code-in-repo-by-engineer/title",
-			"/total-lines-of-code-in-repo-by-engineer",
+			"/total-lines-of-code-in-repo-by-author/title",
+			"/total-lines-of-code-in-repo-by-author",
 			"/third-largest-file/title",
 			"/third-largest-file",
 			"/second-largest-file/title",
@@ -109,8 +109,8 @@ func GetTableOfContents(recap analyzer.Recap) []string {
 			"/total-lines-of-code-curr-year/title",
 			"/total-lines-of-code-curr-year",
 
-			"/engineer-file-changes-over-time-curr-year/title",
-			"/engineer-file-changes-over-time-curr-year",
+			"/author-file-changes-over-time-curr-year/title",
+			"/author-file-changes-over-time-curr-year",
 		}
 
 		return utils.Filter(TABLE_OF_CONTENTS, func(s string) bool {
@@ -127,12 +127,12 @@ func GetSingleYearRepoTableOfContents(recap analyzer.Recap) []string {
 		"/total-lines-of-code-prev-year",
 		"/num-commits-prev-year/title",
 		"/num-commits-prev-year",
-		"/new-engineer-count-curr-year/title",
-		"/new-engineer-count-curr-year",
-		"/engineer-commit-counts-curr-year/title",
-		"/engineer-commit-counts-curr-year",
-		"/engineer-count-curr-year/title",
-		"/engineer-count-curr-year",
+		"/new-author-count-curr-year/title",
+		"/new-author-count-curr-year",
+		"/author-commit-counts-curr-year/title",
+		"/author-commit-counts-curr-year",
+		"/author-count-curr-year/title",
+		"/author-count-curr-year",
 	}
 
 	// Single year repos can't involve anything with the previous year. But a lot
@@ -183,17 +183,17 @@ func GetTitleSlideData(page string, recap analyzer.Recap) TitleSlideData {
 	}
 
 	switch page {
-	case "new-engineer-count-curr-year":
-		data.Title = "New Engineer Count"
-		data.Description = fmt.Sprintf("New engineers in %d who committed to %s.", analyzer.CURR_YEAR, recap.Name)
+	case "new-author-count-curr-year":
+		data.Title = "New Author Count"
+		data.Description = fmt.Sprintf("New authors in %d who committed to %s.", analyzer.CURR_YEAR, recap.Name)
 
-	case "engineer-count-curr-year":
-		data.Title = "Total Engineer Count"
-		data.Description = fmt.Sprintf("Total number of engineers who committed to %s in %d.", recap.Name, analyzer.CURR_YEAR)
+	case "author-count-curr-year":
+		data.Title = "Total Author Count"
+		data.Description = fmt.Sprintf("Total number of authors who committed to %s in %d.", recap.Name, analyzer.CURR_YEAR)
 
-	case "engineer-count-all-time":
-		data.Title = "All Time Engineers"
-		data.Description = fmt.Sprintf("Total number of engineers who committed to %s, since the beginning.", recap.Name)
+	case "author-count-all-time":
+		data.Title = "All Time Authors"
+		data.Description = fmt.Sprintf("Total number of authors who committed to %s, since the beginning.", recap.Name)
 
 	case "file-count-prev-year":
 		data.Title = "Previous File Count"
@@ -227,17 +227,17 @@ func GetTitleSlideData(page string, recap analyzer.Recap) TitleSlideData {
 		data.Title = "Weekly Repo Size"
 		data.Description = fmt.Sprintf("Size of Repo by Week (%d)", analyzer.CURR_YEAR)
 
-	case "total-lines-of-code-in-repo-by-engineer":
+	case "total-lines-of-code-in-repo-by-author":
 		data.Title = "Total Lines of Code"
-		data.Description = fmt.Sprintf("The total number of lines of code in %s, categorized by engineer.", recap.Name)
+		data.Description = fmt.Sprintf("The total number of lines of code in %s, categorized by author.", recap.Name)
 
-	case "file-changes-by-engineer-curr-year":
+	case "file-changes-by-author-curr-year":
 		data.Title = fmt.Sprintf("Line Changes (%d)", analyzer.CURR_YEAR)
-		data.Description = fmt.Sprintf("The total number of line changes made in %d by engineer.", analyzer.CURR_YEAR)
+		data.Description = fmt.Sprintf("The total number of line changes made in %d by author.", analyzer.CURR_YEAR)
 
-	case "file-change-ratio-by-engineer-curr-year":
+	case "file-change-ratio-by-author-curr-year":
 		data.Title = "Line Change Ratios"
-		data.Description = fmt.Sprintf("The ratio of line insertions to deletions by engineer. A higher number means an engineer adds in more code to the repo than removes it. (%d)", analyzer.CURR_YEAR)
+		data.Description = fmt.Sprintf("The ratio of line insertions to deletions by author. A higher number means an author adds in more code to the repo than removes it. (%d)", analyzer.CURR_YEAR)
 
 	case "commonly-changed-files":
 		data.Title = "Commonly Changed Files"
@@ -245,31 +245,31 @@ func GetTitleSlideData(page string, recap analyzer.Recap) TitleSlideData {
 
 	case "num-commits-prev-year":
 		data.Title = fmt.Sprintf("Number of Commits (%d)", analyzer.PREV_YEAR)
-		data.Description = fmt.Sprintf("The total number of commits made by engineers last year (%d).", analyzer.PREV_YEAR)
+		data.Description = fmt.Sprintf("The total number of commits made by authors last year (%d).", analyzer.PREV_YEAR)
 
 	case "num-commits-curr-year":
 		data.Title = fmt.Sprintf("Number of Commits (%d)", analyzer.CURR_YEAR)
-		data.Description = fmt.Sprintf("The total number of commits made by engineers this year (%d).", analyzer.CURR_YEAR)
+		data.Description = fmt.Sprintf("The total number of commits made by authors this year (%d).", analyzer.CURR_YEAR)
 
 	case "num-commits-all-time":
 		data.Title = "Number of Commits (All Time)"
-		data.Description = "The total number of commits made by engineers, since the very beginning."
+		data.Description = "The total number of commits made by authors, since the very beginning."
 
-	case "engineer-commits-over-time-curr-year":
+	case "author-commits-over-time-curr-year":
 		data.Title = fmt.Sprintf("Commits Over Time (%d)", analyzer.CURR_YEAR)
-		data.Description = fmt.Sprintf("The number of commits made by each engineer, throughout the duration of %d.", analyzer.CURR_YEAR)
+		data.Description = fmt.Sprintf("The number of commits made by each author, throughout the duration of %d.", analyzer.CURR_YEAR)
 
-	case "engineer-file-changes-over-time-curr-year":
+	case "author-file-changes-over-time-curr-year":
 		data.Title = fmt.Sprintf("Line Changes Over Time (%d)", analyzer.CURR_YEAR)
-		data.Description = fmt.Sprintf("The number of line changes made by engineer, throughout the duration of %d.", analyzer.CURR_YEAR)
+		data.Description = fmt.Sprintf("The number of line changes made by author, throughout the duration of %d.", analyzer.CURR_YEAR)
 
-	case "engineer-commit-counts-curr-year":
+	case "author-commit-counts-curr-year":
 		data.Title = fmt.Sprintf("Commit Counts (%d)", analyzer.CURR_YEAR)
-		data.Description = fmt.Sprintf("The number of commits by each engineer in %d.", analyzer.CURR_YEAR)
+		data.Description = fmt.Sprintf("The number of commits by each author in %d.", analyzer.CURR_YEAR)
 
-	case "engineer-commit-counts-all-time":
+	case "author-commit-counts-all-time":
 		data.Title = "Commit Counts (All Time)"
-		data.Description = "The number of commits by each engineer, since the beginning."
+		data.Description = "The number of commits by each author, since the beginning."
 
 	case "commits-by-weekday-curr-year":
 		data.Title = "Commits by Weekday"
@@ -283,9 +283,9 @@ func GetTitleSlideData(page string, recap analyzer.Recap) TitleSlideData {
 		data.Title = "Commits by Month"
 		data.Description = fmt.Sprintf("Number of commits made each month of the year, throughout %d.", analyzer.CURR_YEAR)
 
-	case "most-single-day-commits-by-engineer-curr-year":
-		data.Title = "Most Single-Day Commits by Engineer"
-		data.Description = fmt.Sprintf("The most commits made in one day by an engineer in %d.", analyzer.CURR_YEAR)
+	case "most-single-day-commits-by-author-curr-year":
+		data.Title = "Most Single-Day Commits by Author"
+		data.Description = fmt.Sprintf("The most commits made in one day by an author in %d.", analyzer.CURR_YEAR)
 
 	case "most-insertions-in-single-commit-curr-year":
 		data.Title = "Most Code Added in Single Commit"
@@ -297,7 +297,7 @@ func GetTitleSlideData(page string, recap analyzer.Recap) TitleSlideData {
 
 	case "largest-commit-message-curr-year":
 		data.Title = "Largest Commit Message"
-		data.Description = fmt.Sprintf("Largest commit message written by an engineer in %d.", analyzer.CURR_YEAR)
+		data.Description = fmt.Sprintf("Largest commit message written by an author in %d.", analyzer.CURR_YEAR)
 
 	case "shortest-commit-message-curr-year":
 		data.Title = "Shortest Commit Message"
@@ -307,13 +307,13 @@ func GetTitleSlideData(page string, recap analyzer.Recap) TitleSlideData {
 		data.Title = "Commit Message Lengths"
 		data.Description = fmt.Sprintf("A histogram tracking the frequency of git commit message lengths in %d.", analyzer.CURR_YEAR)
 
-	case "direct-pushes-on-master-by-engineer-curr-year":
+	case "direct-pushes-on-master-by-author-curr-year":
 		data.Title = "Direct Pushes on Master"
-		data.Description = fmt.Sprintf("The number of direct pushes to master, by engineer, in %d.", analyzer.CURR_YEAR)
+		data.Description = fmt.Sprintf("The number of direct pushes to master, by author, in %d.", analyzer.CURR_YEAR)
 
-	case "merges-to-master-by-engineer-curr-year":
+	case "merges-to-master-by-author-curr-year":
 		data.Title = "Testing on Merge Requests"
-		data.Description = fmt.Sprintf("The engineers who tested and merged code the most in %d.", analyzer.CURR_YEAR)
+		data.Description = fmt.Sprintf("The authors who tested and merged code the most in %d.", analyzer.CURR_YEAR)
 
 	case "most-merges-in-one-day-curr-year":
 		data.Title = "Most Merges in One Day"

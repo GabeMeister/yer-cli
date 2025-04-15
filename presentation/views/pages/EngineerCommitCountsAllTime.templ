@@ -9,12 +9,12 @@ import (
 	"sort"
 )
 
-func getEngineerCommitCountsAllTimeChartData(recap analyzer.Recap) helpers.BarChartData {
-	barChartData := helpers.BarChartData{Data: []helpers.DataPoint{}, XAxisLabel: "Engineer", YAxisLabel: fmt.Sprintf("↑ Commits (All Time)")}
+func getAuthorCommitCountsAllTimeChartData(recap analyzer.Recap) helpers.BarChartData {
+	barChartData := helpers.BarChartData{Data: []helpers.DataPoint{}, XAxisLabel: "Author", YAxisLabel: fmt.Sprintf("↑ Commits (All Time)")}
 
-	for engineer, commitCount := range recap.EngineerCommitCountsAllTime {
+	for author, commitCount := range recap.AuthorCommitCountsAllTime {
 		barChartData.Data = append(barChartData.Data, helpers.DataPoint{
-			X: helpers.Truncate(engineer),
+			X: helpers.Truncate(author),
 			Y: commitCount,
 		})
 	}
@@ -28,10 +28,10 @@ func getEngineerCommitCountsAllTimeChartData(recap analyzer.Recap) helpers.BarCh
 	return barChartData
 }
 
-templ EngineerCommitCountsAllTime(recap analyzer.Recap) {
+templ AuthorCommitCountsAllTime(recap analyzer.Recap) {
 	@components.Slide() {
-		<div id="container" data-value={ helpers.Json(getEngineerCommitCountsAllTimeChartData(recap)) }></div>
+		<div id="container" data-value={ helpers.Json(getAuthorCommitCountsAllTimeChartData(recap)) }></div>
 		<div class="mt-12"></div>
-		@components.NextButton(helpers.GetNextButtonLink("/engineer-commit-counts-all-time", recap))
+		@components.NextButton(helpers.GetNextButtonLink("/author-commit-counts-all-time", recap))
 	}
 }

@@ -352,28 +352,28 @@ func GetCommitMessageHistogramCurrYear() []CommitMessageLengthFrequency {
 	return commitMessageLengths
 }
 
-func GetDirectPushesOnMasterByEngineerCurrYear() map[string]int {
+func GetDirectPushesOnMasterByAuthorCurrYear() map[string]int {
 	commits := getCurrYearDirectPushOnMasterCommits()
 
-	engineerToCommitMap := make(map[string]int)
+	authorToCommitMap := make(map[string]int)
 
 	for _, commit := range commits {
-		engineerToCommitMap[commit.Author] += 1
+		authorToCommitMap[commit.Author] += 1
 	}
 
-	return engineerToCommitMap
+	return authorToCommitMap
 }
 
-func GetMergesToMasterByEngineerCurrYear() map[string]int {
+func GetMergesToMasterByAuthorCurrYear() map[string]int {
 	commits := getCurrYearMergeGitCommits()
 
-	engineerToCommitMap := make(map[string]int)
+	authorToCommitMap := make(map[string]int)
 
 	for _, commit := range commits {
-		engineerToCommitMap[commit.Author] += 1
+		authorToCommitMap[commit.Author] += 1
 	}
 
-	return engineerToCommitMap
+	return authorToCommitMap
 }
 
 func GetMostMergesInOneDayCurrYear() MostMergesInOneDay {
@@ -419,7 +419,7 @@ func GetAvgMergesToMasterPerDayCurrYear() float64 {
 	return final
 }
 
-func GetFileChangesByEngineerCurrYear() map[string]int {
+func GetFileChangesByAuthorCurrYear() map[string]int {
 	commits := getCurrYearGitCommits()
 
 	authorInsertionsMap := make(map[string]int)
@@ -434,7 +434,7 @@ func GetFileChangesByEngineerCurrYear() map[string]int {
 	return authorInsertionsMap
 }
 
-func GetCodeInsertionsByEngineerCurrYear() map[string]int {
+func GetCodeInsertionsByAuthorCurrYear() map[string]int {
 	commits := getCurrYearGitCommits()
 
 	authorDeletionsMap := make(map[string]int)
@@ -448,7 +448,7 @@ func GetCodeInsertionsByEngineerCurrYear() map[string]int {
 	return authorDeletionsMap
 }
 
-func GetCodeDeletionsByEngineerCurrYear() map[string]int {
+func GetCodeDeletionsByAuthorCurrYear() map[string]int {
 	commits := getCurrYearGitCommits()
 
 	authorDeletionsMap := make(map[string]int)

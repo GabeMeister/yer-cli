@@ -14,7 +14,7 @@ import (
 	components "GabeMeister/yer-cli/presentation/views/components"
 )
 
-func EngineerCountAllTime(recap analyzer.Recap) templ.Component {
+func AuthorCountAllTime(recap analyzer.Recap) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -47,7 +47,7 @@ func EngineerCountAllTime(recap analyzer.Recap) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = components.BigNumber(recap.EngineerCountAllTime).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = components.BigNumber(recap.AuthorCountAllTime).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -55,7 +55,7 @@ func EngineerCountAllTime(recap analyzer.Recap) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = components.NextButton(helpers.GetNextButtonLink("/engineer-count-all-time", recap)).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = components.NextButton(helpers.GetNextButtonLink("/author-count-all-time", recap)).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

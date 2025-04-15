@@ -15,7 +15,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-var InitialEngineers = []string{"Kenny", "Kenny1", "Kenny2", "Isaac Neace", "Gabe Jensen", "ktrotter", "Kaleb Trotter", "Stephen Bremer", "Kenny Kline", "Ezra Youngren", "Isaac", "Steve Bremer"}
+var InitialAuthors = []string{"Kenny", "Kenny1", "Kenny2", "Isaac Neace", "Gabe Jensen", "ktrotter", "Kaleb Trotter", "Stephen Bremer", "Kenny Kline", "Ezra Youngren", "Isaac", "Steve Bremer"}
 
 func addAnalyzerRoutes(e *echo.Echo) {
 
@@ -27,7 +27,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 				IncludedFileExtensions: []string{},
 				ExcludedDirs:           []string{},
 				AllAuthors:             []string{},
-				DuplicateEngineers:     []analyzer.DuplicateEngineerGroup{},
+				DuplicateAuthors:     []analyzer.DuplicateAuthorGroup{},
 				IncludeFileBlames:      true,
 			})
 		}
@@ -235,22 +235,22 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		return c.HTML(http.StatusOK, "<div id='modal-root'></div>")
 	})
 
-	// e.POST("/search-engineers", func(c echo.Context) error {
+	// e.POST("/search-authors", func(c echo.Context) error {
 	// 	text := c.FormValue("filter-text")
 	// 	text = strings.ToLower(text)
 
-	// 	dupEngineersRaw := c.FormValue("duplicate-engineers")
-	// 	tempDupEngineers := strings.Split(dupEngineersRaw, ",")
+	// 	dupAuthorsRaw := c.FormValue("duplicate-authors")
+	// 	tempDupAuthors := strings.Split(dupAuthorsRaw, ",")
 
 	// 	matches := []string{}
-	// 	for _, engineer := range InitialEngineers {
-	// 		lowerCaseEngineer := strings.ToLower(engineer)
+	// 	for _, author := range InitialAuthors {
+	// 		lowerCaseAuthor := strings.ToLower(author)
 
-	// 		if strings.Contains(lowerCaseEngineer, text) && !slices.Contains(tempDupEngineers, engineer) {
-	// 			matches = append(matches, engineer)
+	// 		if strings.Contains(lowerCaseAuthor, text) && !slices.Contains(tempDupAuthors, author) {
+	// 			matches = append(matches, author)
 	// 		}
 	// 	}
-	// 	component := ConfigSetupPage.AllEngineersList(matches)
+	// 	component := ConfigSetupPage.AllAuthorsList(matches)
 	// 	content := t.Render(t.RenderParams{
 	// 		C:         c,
 	// 		Component: component,
@@ -261,25 +261,25 @@ func addAnalyzerRoutes(e *echo.Echo) {
 
 	// e.PATCH("/temp-duplicate-group", func(c echo.Context) error {
 
-	// 	leftItemsStr := c.FormValue("all-engineers")
+	// 	leftItemsStr := c.FormValue("all-authors")
 	// 	leftItems := strings.Split(leftItemsStr, ",")
 
-	// 	rightItemsStr := c.FormValue("duplicate-engineers")
+	// 	rightItemsStr := c.FormValue("duplicate-authors")
 	// 	rightItems := strings.Split(rightItemsStr, ",")
 
 	// 	filterText := c.FormValue("filter-text")
 
-	// 	allEngineers := lo.Filter(leftItems, func(engineer string, _ int) bool {
-	// 		return engineer != ""
+	// 	allAuthors := lo.Filter(leftItems, func(author string, _ int) bool {
+	// 		return author != ""
 	// 	})
 
-	// 	selectedEngineers := lo.Filter(rightItems, func(engineer string, _ int) bool {
-	// 		return engineer != ""
+	// 	selectedAuthors := lo.Filter(rightItems, func(author string, _ int) bool {
+	// 		return author != ""
 	// 	})
 
 	// 	config := analyzer.GetConfig("./config.json")
 
-	// 	component := pages.(allEngineers, selectedEngineers, config.Repos[0].DuplicateEngineers, filterText)
+	// 	component := pages.(allAuthors, selectedAuthors, config.Repos[0].DuplicateAuthors, filterText)
 	// 	content := t.Render(t.RenderParams{
 	// 		C:         c,
 	// 		Component: component,
@@ -289,18 +289,18 @@ func addAnalyzerRoutes(e *echo.Echo) {
 	// })
 
 	// 	e.POST("/duplicate-group", func(c echo.Context) error {
-	// 		duplicatesListRaw := c.FormValue("duplicate-engineers")
+	// 		duplicatesListRaw := c.FormValue("duplicate-authors")
 
-	// 		duplicateEngineers := strings.Split(duplicatesListRaw, ",")
+	// 		duplicateAuthors := strings.Split(duplicatesListRaw, ",")
 
 	// 		config := analyzer.GetConfig("./config.json")
-	// 		config.Repos[0].DuplicateEngineers = append(config.Repos[0].DuplicateEngineers, analyzer.DuplicateEngineerGroup{
-	// 			Real:       duplicateEngineers[0],
-	// 			Duplicates: duplicateEngineers[1:],
+	// 		config.Repos[0].DuplicateAuthors = append(config.Repos[0].DuplicateAuthors, analyzer.DuplicateAuthorGroup{
+	// 			Real:       duplicateAuthors[0],
+	// 			Duplicates: duplicateAuthors[1:],
 	// 		})
 
 	// 		allDups := make(map[string]bool)
-	// 		for _, dupGroup := range config.Repos[0].DuplicateEngineers {
+	// 		for _, dupGroup := range config.Repos[0].DuplicateAuthors {
 	// 			allDups[dupGroup.Real] = true
 
 	// 			for _, dup := range dupGroup.Duplicates {
@@ -308,10 +308,10 @@ func addAnalyzerRoutes(e *echo.Echo) {
 	// 			}
 	// 		}
 
-	// 		remainingEngineers := []string{}
-	// 		for _, engineer := range InitialEngineers {
-	// 			if _, found := allDups[engineer]; !found {
-	// 				remainingEngineers = append(remainingEngineers, engineer)
+	// 		remainingAuthors := []string{}
+	// 		for _, author := range InitialAuthors {
+	// 			if _, found := allDups[author]; !found {
+	// 				remainingAuthors = append(remainingAuthors, author)
 	// 			}
 	// 		}
 

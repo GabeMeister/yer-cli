@@ -24,7 +24,7 @@ func getSlideDate(dateStr string) string {
 	return t.Format("January 2, 2006")
 }
 
-func MostSingleDayCommitsByEngineerCurrYear(recap analyzer.Recap) templ.Component {
+func MostSingleDayCommitsByAuthorCurrYear(recap analyzer.Recap) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -62,9 +62,9 @@ func MostSingleDayCommitsByEngineerCurrYear(recap analyzer.Recap) templ.Componen
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var3 string
-			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(recap.MostSingleDayCommitsByEngineerCurrYear.Username)
+			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(recap.MostSingleDayCommitsByAuthorCurrYear.Username)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/MostSingleDayCommitsByEngineerCurrYear.templ`, Line: 21, Col: 108}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/MostSingleDayCommitsByEngineerCurrYear.templ`, Line: 21, Col: 106}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
@@ -74,7 +74,7 @@ func MostSingleDayCommitsByEngineerCurrYear(recap analyzer.Recap) templ.Componen
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = components.BigNumber(recap.MostSingleDayCommitsByEngineerCurrYear.Count).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = components.BigNumber(recap.MostSingleDayCommitsByAuthorCurrYear.Count).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -83,9 +83,9 @@ func MostSingleDayCommitsByEngineerCurrYear(recap analyzer.Recap) templ.Componen
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var4 string
-			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(getSlideDate(recap.MostSingleDayCommitsByEngineerCurrYear.Date))
+			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(getSlideDate(recap.MostSingleDayCommitsByAuthorCurrYear.Date))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/MostSingleDayCommitsByEngineerCurrYear.templ`, Line: 25, Col: 103}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/MostSingleDayCommitsByEngineerCurrYear.templ`, Line: 25, Col: 101}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {
@@ -95,7 +95,7 @@ func MostSingleDayCommitsByEngineerCurrYear(recap analyzer.Recap) templ.Componen
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = components.NextButton(helpers.GetNextButtonLink("/most-single-day-commits-by-engineer-curr-year", recap)).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = components.NextButton(helpers.GetNextButtonLink("/most-single-day-commits-by-author-curr-year", recap)).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

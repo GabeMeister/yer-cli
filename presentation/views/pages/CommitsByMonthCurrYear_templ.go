@@ -16,7 +16,7 @@ import (
 )
 
 func getCommitsByMonthCurrYearChartData(recap analyzer.Recap) helpers.BarChartData {
-	barChartData := helpers.BarChartData{Data: []helpers.DataPoint{}, XAxisLabel: "Engineer", YAxisLabel: fmt.Sprintf("↑ Commits (%d)", analyzer.CURR_YEAR)}
+	barChartData := helpers.BarChartData{Data: []helpers.DataPoint{}, XAxisLabel: "Author", YAxisLabel: fmt.Sprintf("↑ Commits (%d)", analyzer.CURR_YEAR)}
 
 	for _, month := range recap.CommitsByMonthCurrYear {
 		barChartData.Data = append(barChartData.Data, helpers.DataPoint{

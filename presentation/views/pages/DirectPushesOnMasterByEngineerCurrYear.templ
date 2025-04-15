@@ -10,11 +10,11 @@ import (
 )
 
 func getDirectPushesOnMasterChartData(recap analyzer.Recap) helpers.BarChartData {
-	barChartData := helpers.BarChartData{Data: []helpers.DataPoint{}, XAxisLabel: "Engineer", YAxisLabel: fmt.Sprintf("↑ # of Pushes (%d)", analyzer.CURR_YEAR)}
+	barChartData := helpers.BarChartData{Data: []helpers.DataPoint{}, XAxisLabel: "Author", YAxisLabel: fmt.Sprintf("↑ # of Pushes (%d)", analyzer.CURR_YEAR)}
 
-	for engineer, pushes := range recap.DirectPushesOnMasterByEngineerCurrYear {
+	for author, pushes := range recap.DirectPushesOnMasterByAuthorCurrYear {
 		barChartData.Data = append(barChartData.Data, helpers.DataPoint{
-			X: helpers.Truncate(engineer),
+			X: helpers.Truncate(author),
 			Y: pushes,
 		})
 	}
@@ -28,10 +28,10 @@ func getDirectPushesOnMasterChartData(recap analyzer.Recap) helpers.BarChartData
 	return barChartData
 }
 
-templ DirectPushesOnMasterByEngineerCurrYear(recap analyzer.Recap) {
+templ DirectPushesOnMasterByAuthorCurrYear(recap analyzer.Recap) {
 	@components.Slide() {
 		<div id="container" data-value={ helpers.Json(getDirectPushesOnMasterChartData(recap)) }></div>
 		<div class="mt-12"></div>
-		@components.NextButton(helpers.GetNextButtonLink("/direct-pushes-on-master-by-engineer-curr-year", recap))
+		@components.NextButton(helpers.GetNextButtonLink("/direct-pushes-on-master-by-author-curr-year", recap))
 	}
 }

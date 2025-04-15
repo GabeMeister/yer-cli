@@ -14,7 +14,7 @@ import (
 	components "GabeMeister/yer-cli/presentation/views/components"
 )
 
-func NewEngineerListCurrYear(recap analyzer.Recap) templ.Component {
+func NewAuthorListCurrYear(recap analyzer.Recap) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -51,25 +51,25 @@ func NewEngineerListCurrYear(recap analyzer.Recap) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			if len(recap.NewEngineerListCurrYear) < 1 {
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h1 class=\"text-5xl my-12 text-yellow-300 font-bold\">Literally no new engineers committed code.</h1>")
+			if len(recap.NewAuthorListCurrYear) < 1 {
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h1 class=\"text-5xl my-12 text-yellow-300 font-bold\">Literally no new authors committed code.</h1>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 			} else {
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h1 class=\"text-5xl my-12 text-yellow-300 font-bold\">New Engineers:</h1><div class=\"flex items-center justify-center flex-wrap w-3/4 text-3xl leading-loose\">")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h1 class=\"text-5xl my-12 text-yellow-300 font-bold\">New Authors:</h1><div class=\"flex items-center justify-center flex-wrap w-3/4 text-3xl leading-loose\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				for i, engineer := range recap.NewEngineerListCurrYear {
+				for i, author := range recap.NewAuthorListCurrYear {
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<span class=\"ml-3 inline-block\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 					var templ_7745c5c3_Var3 string
-					templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(engineer)
+					templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(author)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/NewEngineerListCurrYear.templ`, Line: 19, Col: 16}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/NewEngineerListCurrYear.templ`, Line: 19, Col: 14}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 					if templ_7745c5c3_Err != nil {
@@ -79,7 +79,7 @@ func NewEngineerListCurrYear(recap analyzer.Recap) templ.Component {
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					if i < len(recap.NewEngineerListCurrYear)-1 {
+					if i < len(recap.NewAuthorListCurrYear)-1 {
 						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<span class=\"text-yellow-300\">|</span>")
 						if templ_7745c5c3_Err != nil {
 							return templ_7745c5c3_Err
@@ -99,7 +99,7 @@ func NewEngineerListCurrYear(recap analyzer.Recap) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = components.NextButton(helpers.GetNextButtonLink("/new-engineer-list-curr-year", recap)).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = components.NextButton(helpers.GetNextButtonLink("/new-author-list-curr-year", recap)).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

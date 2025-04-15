@@ -10,11 +10,11 @@ import (
 )
 
 func getFileChangeRatioChartData(recap analyzer.Recap) helpers.BarChartFloatData {
-	barChartData := helpers.BarChartFloatData{Data: []helpers.FloatDataPoint{}, XAxisLabel: "Engineer", YAxisLabel: fmt.Sprintf("↑ Insertions/Deletions Ratio (%d)", analyzer.CURR_YEAR)}
+	barChartData := helpers.BarChartFloatData{Data: []helpers.FloatDataPoint{}, XAxisLabel: "Author", YAxisLabel: fmt.Sprintf("↑ Insertions/Deletions Ratio (%d)", analyzer.CURR_YEAR)}
 
-	for engineer, fileChangeRatio := range recap.FileChangeRatioByEngineerCurrYear {
+	for author, fileChangeRatio := range recap.FileChangeRatioByAuthorCurrYear {
 		barChartData.Data = append(barChartData.Data, helpers.FloatDataPoint{
-			X: helpers.Truncate(engineer),
+			X: helpers.Truncate(author),
 			Y: fileChangeRatio,
 		})
 	}
@@ -28,9 +28,9 @@ func getFileChangeRatioChartData(recap analyzer.Recap) helpers.BarChartFloatData
 	return barChartData
 }
 
-templ FileChangeRatioByEngineerCurrYear(recap analyzer.Recap) {
+templ FileChangeRatioByAuthorCurrYear(recap analyzer.Recap) {
 	@components.Slide() {
 		<div id="container" data-value={ helpers.Json(getFileChangeRatioChartData(recap)) }></div>
-		@components.NextButton(helpers.GetNextButtonLink("/file-change-ratio-by-engineer-curr-year", recap))
+		@components.NextButton(helpers.GetNextButtonLink("/file-change-ratio-by-author-curr-year", recap))
 	}
 }

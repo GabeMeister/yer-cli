@@ -18,11 +18,11 @@ import (
 )
 
 func getFileChangesChartData(recap analyzer.Recap) helpers.BarChartData {
-	barChartData := helpers.BarChartData{Data: []helpers.DataPoint{}, XAxisLabel: "Engineer", YAxisLabel: fmt.Sprintf("↑ Line Changes (%d)", analyzer.CURR_YEAR)}
+	barChartData := helpers.BarChartData{Data: []helpers.DataPoint{}, XAxisLabel: "Author", YAxisLabel: fmt.Sprintf("↑ Line Changes (%d)", analyzer.CURR_YEAR)}
 
-	for engineer, fileChanges := range recap.FileChangesByEngineerCurrYear {
+	for author, fileChanges := range recap.FileChangesByAuthorCurrYear {
 		barChartData.Data = append(barChartData.Data, helpers.DataPoint{
-			X: helpers.Truncate(engineer),
+			X: helpers.Truncate(author),
 			Y: fileChanges,
 		})
 	}
@@ -36,7 +36,7 @@ func getFileChangesChartData(recap analyzer.Recap) helpers.BarChartData {
 	return barChartData
 }
 
-func FileChangesByEngineerCurrYear(recap analyzer.Recap) templ.Component {
+func FileChangesByAuthorCurrYear(recap analyzer.Recap) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -86,7 +86,7 @@ func FileChangesByEngineerCurrYear(recap analyzer.Recap) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = components.NextButton(helpers.GetNextButtonLink("/file-changes-by-engineer-curr-year", recap)).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = components.NextButton(helpers.GetNextButtonLink("/file-changes-by-author-curr-year", recap)).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

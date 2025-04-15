@@ -24,18 +24,18 @@ function handleAnalyzeManuallyPageDragDrop(elem) {
     ];
 
     const leftHiddenInput = document.querySelector(
-      "input[name='all-engineers']"
+      "input[name='all-authors']"
     );
     leftHiddenInput.value = left.join(",");
 
     const rightHiddenInput = document.querySelector(
-      "input[name='duplicate-engineers']"
+      "input[name='duplicate-authors']"
     );
     rightHiddenInput.value = right.join(",");
 
     // Handle the other form for actually submitting the duplicate
     const duplicateEngineersHiddenInput = document.querySelector(
-      "input[name='duplicate-engineers']"
+      "input[name='duplicate-authors']"
     );
     duplicateEngineersHiddenInput.value = right.join(",");
   }

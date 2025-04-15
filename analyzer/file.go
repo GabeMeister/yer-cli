@@ -95,17 +95,17 @@ func GetCurrYearFileBlames() []FileBlame {
 	return fileBlames
 }
 
-func GetFileChangeRatio(insertionsByEngineer map[string]int, deletionsByEngineer map[string]int) map[string]float64 {
+func GetFileChangeRatio(insertionsByAuthor map[string]int, deletionsByAuthor map[string]int) map[string]float64 {
 	ratios := make(map[string]float64)
 
-	for engineer, insertionCount := range insertionsByEngineer {
+	for author, insertionCount := range insertionsByAuthor {
 		insertions := float64(insertionCount)
-		deletions := float64(deletionsByEngineer[engineer])
+		deletions := float64(deletionsByAuthor[author])
 
 		if deletions == 0 {
-			ratios[engineer] = 1
+			ratios[author] = 1
 		} else {
-			ratios[engineer] = insertions / deletions
+			ratios[author] = insertions / deletions
 		}
 	}
 

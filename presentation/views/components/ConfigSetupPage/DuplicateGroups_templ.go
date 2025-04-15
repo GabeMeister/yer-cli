@@ -10,7 +10,7 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import "GabeMeister/yer-cli/analyzer"
 
-func DuplicateGroups(duplicateEngineerGroups []analyzer.DuplicateEngineerGroup) templ.Component {
+func DuplicateGroups(duplicateAuthorGroups []analyzer.DuplicateAuthorGroup) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -35,13 +35,13 @@ func DuplicateGroups(duplicateEngineerGroups []analyzer.DuplicateEngineerGroup) 
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		if len(duplicateEngineerGroups) == 0 {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h1 class=\"mt-3\">No duplicate engineers found.</h1>")
+		if len(duplicateAuthorGroups) == 0 {
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h1 class=\"mt-3\">No duplicate authors found.</h1>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		} else {
-			for _, group := range duplicateEngineerGroups {
+			for _, group := range duplicateAuthorGroups {
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"w-1/3 p-3 m-6 bg-gray-700 flex justify-between\"><div class=\"flex flex-col gap-3 \"><div><div class=\"font-bold\">Real:</div><h1>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
@@ -78,7 +78,7 @@ func DuplicateGroups(duplicateEngineerGroups []analyzer.DuplicateEngineerGroup) 
 						return templ_7745c5c3_Err
 					}
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</ul></div></div><div class=\"cursor-pointer hover:text-blue-400\" hx-post=\"/\" hx-include=\"#all-engineers, #duplicate-engineers\">Edit</div></div>")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</ul></div></div><div class=\"cursor-pointer hover:text-blue-400\" hx-post=\"/\" hx-include=\"#all-authors, #duplicate-authors\">Edit</div></div>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}

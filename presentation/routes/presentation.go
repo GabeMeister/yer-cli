@@ -59,7 +59,7 @@ func addPresentationRoutes(e *echo.Echo) {
 		nextBtnUrl := helpers.GetNextButtonLink("/shortest-commit-message-curr-year/title", recap)
 		component := pages.Title(pages.TitleParams{
 			Title:       "Shortest Commit Messages",
-			Description: "The absolute shortest, low-effort commit messages engineers made this year.",
+			Description: "The absolute shortest, low-effort commit messages authors made this year.",
 			NextBtnUrl:  nextBtnUrl,
 		})
 		content := t.Render(t.RenderParams{
@@ -71,12 +71,12 @@ func addPresentationRoutes(e *echo.Echo) {
 
 	})
 
-	e.GET("/new-engineer-count-curr-year", func(c echo.Context) error {
+	e.GET("/new-author-count-curr-year", func(c echo.Context) error {
 		if !utils.HasRepoBeenAnalyzed() {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := pages.NewEngineerCountCurrYear(recap)
+		component := pages.NewAuthorCountCurrYear(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -85,12 +85,12 @@ func addPresentationRoutes(e *echo.Echo) {
 		return c.HTML(http.StatusOK, content)
 	})
 
-	e.GET("/new-engineer-list-curr-year", func(c echo.Context) error {
+	e.GET("/new-author-list-curr-year", func(c echo.Context) error {
 		if !utils.HasRepoBeenAnalyzed() {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := pages.NewEngineerListCurrYear(recap)
+		component := pages.NewAuthorListCurrYear(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -99,12 +99,12 @@ func addPresentationRoutes(e *echo.Echo) {
 		return c.HTML(http.StatusOK, content)
 	})
 
-	e.GET("/engineer-count-curr-year", func(c echo.Context) error {
+	e.GET("/author-count-curr-year", func(c echo.Context) error {
 		if !utils.HasRepoBeenAnalyzed() {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := pages.EngineerCountCurrYear(recap)
+		component := pages.AuthorCountCurrYear(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -113,12 +113,12 @@ func addPresentationRoutes(e *echo.Echo) {
 		return c.HTML(http.StatusOK, content)
 	})
 
-	e.GET("/engineer-count-all-time", func(c echo.Context) error {
+	e.GET("/author-count-all-time", func(c echo.Context) error {
 		if !utils.HasRepoBeenAnalyzed() {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := pages.EngineerCountAllTime(recap)
+		component := pages.AuthorCountAllTime(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -178,12 +178,12 @@ func addPresentationRoutes(e *echo.Echo) {
 		)
 	})
 
-	e.GET("/engineer-commits-over-time-curr-year", func(c echo.Context) error {
+	e.GET("/author-commits-over-time-curr-year", func(c echo.Context) error {
 		if !utils.HasRepoBeenAnalyzed() {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := pages.EngineerCommitsOverTimeCurrYear(recap)
+		component := pages.AuthorCommitsOverTimeCurrYear(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -195,12 +195,12 @@ func addPresentationRoutes(e *echo.Echo) {
 		)
 	})
 
-	e.GET("/engineer-file-changes-over-time-curr-year", func(c echo.Context) error {
+	e.GET("/author-file-changes-over-time-curr-year", func(c echo.Context) error {
 		if !utils.HasRepoBeenAnalyzed() {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := pages.EngineerFileChangesOverTimeCurrYear(recap)
+		component := pages.AuthorFileChangesOverTimeCurrYear(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -331,12 +331,12 @@ func addPresentationRoutes(e *echo.Echo) {
 		)
 	})
 
-	e.GET("/most-single-day-commits-by-engineer-curr-year", func(c echo.Context) error {
+	e.GET("/most-single-day-commits-by-author-curr-year", func(c echo.Context) error {
 		if !utils.HasRepoBeenAnalyzed() {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := pages.MostSingleDayCommitsByEngineerCurrYear(recap)
+		component := pages.MostSingleDayCommitsByAuthorCurrYear(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -348,12 +348,12 @@ func addPresentationRoutes(e *echo.Echo) {
 		)
 	})
 
-	e.GET("/most-single-day-commits-by-engineer-curr-year-commit-list", func(c echo.Context) error {
+	e.GET("/most-single-day-commits-by-author-curr-year-commit-list", func(c echo.Context) error {
 		if !utils.HasRepoBeenAnalyzed() {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := pages.MostSingleDayCommitsByEngineerCurrYearCommitList(recap)
+		component := pages.MostSingleDayCommitsByAuthorCurrYearCommitList(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -506,12 +506,12 @@ func addPresentationRoutes(e *echo.Echo) {
 		)
 	})
 
-	e.GET("/file-changes-by-engineer-curr-year", func(c echo.Context) error {
+	e.GET("/file-changes-by-author-curr-year", func(c echo.Context) error {
 		if !utils.HasRepoBeenAnalyzed() {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := pages.FileChangesByEngineerCurrYear(recap)
+		component := pages.FileChangesByAuthorCurrYear(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -523,12 +523,12 @@ func addPresentationRoutes(e *echo.Echo) {
 		)
 	})
 
-	e.GET("/file-change-ratio-by-engineer-curr-year", func(c echo.Context) error {
+	e.GET("/file-change-ratio-by-author-curr-year", func(c echo.Context) error {
 		if !utils.HasRepoBeenAnalyzed() {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := pages.FileChangeRatioByEngineerCurrYear(recap)
+		component := pages.FileChangeRatioByAuthorCurrYear(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -540,12 +540,12 @@ func addPresentationRoutes(e *echo.Echo) {
 		)
 	})
 
-	e.GET("/engineer-commit-counts-curr-year", func(c echo.Context) error {
+	e.GET("/author-commit-counts-curr-year", func(c echo.Context) error {
 		if !utils.HasRepoBeenAnalyzed() {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := pages.EngineerCommitCountsCurrYear(recap)
+		component := pages.AuthorCommitCountsCurrYear(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -557,12 +557,12 @@ func addPresentationRoutes(e *echo.Echo) {
 		)
 	})
 
-	e.GET("/engineer-commit-counts-all-time", func(c echo.Context) error {
+	e.GET("/author-commit-counts-all-time", func(c echo.Context) error {
 		if !utils.HasRepoBeenAnalyzed() {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := pages.EngineerCommitCountsAllTime(recap)
+		component := pages.AuthorCommitCountsAllTime(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -574,12 +574,12 @@ func addPresentationRoutes(e *echo.Echo) {
 		)
 	})
 
-	e.GET("/direct-pushes-on-master-by-engineer-curr-year", func(c echo.Context) error {
+	e.GET("/direct-pushes-on-master-by-author-curr-year", func(c echo.Context) error {
 		if !utils.HasRepoBeenAnalyzed() {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := pages.DirectPushesOnMasterByEngineerCurrYear(recap)
+		component := pages.DirectPushesOnMasterByAuthorCurrYear(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -591,12 +591,12 @@ func addPresentationRoutes(e *echo.Echo) {
 		)
 	})
 
-	e.GET("/merges-to-master-by-engineer-curr-year", func(c echo.Context) error {
+	e.GET("/merges-to-master-by-author-curr-year", func(c echo.Context) error {
 		if !utils.HasRepoBeenAnalyzed() {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := pages.MergesToMasterByEngineerCurrYear(recap)
+		component := pages.MergesToMasterByAuthorCurrYear(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -608,12 +608,12 @@ func addPresentationRoutes(e *echo.Echo) {
 		)
 	})
 
-	e.GET("/total-lines-of-code-in-repo-by-engineer", func(c echo.Context) error {
+	e.GET("/total-lines-of-code-in-repo-by-author", func(c echo.Context) error {
 		if !utils.HasRepoBeenAnalyzed() {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := pages.TotalLinesOfCodeInRepoByEngineer(recap)
+		component := pages.TotalLinesOfCodeInRepoByAuthor(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,

@@ -16,14 +16,14 @@ func getSlideDate(dateStr string) string {
 	return t.Format("January 2, 2006")
 }
 
-templ MostSingleDayCommitsByEngineerCurrYear(recap analyzer.Recap) {
+templ MostSingleDayCommitsByAuthorCurrYear(recap analyzer.Recap) {
 	@components.Slide() {
-		<div class="mt-6 text-2xl"><span class="font-bold">{ recap.MostSingleDayCommitsByEngineerCurrYear.Username }</span> committed </div>
+		<div class="mt-6 text-2xl"><span class="font-bold">{ recap.MostSingleDayCommitsByAuthorCurrYear.Username }</span> committed </div>
 		<div class="mt-6">
-			@components.BigNumber(recap.MostSingleDayCommitsByEngineerCurrYear.Count)
+			@components.BigNumber(recap.MostSingleDayCommitsByAuthorCurrYear.Count)
 		</div>
-		<div class="mt-6 text-2xl">times on { getSlideDate(recap.MostSingleDayCommitsByEngineerCurrYear.Date) }.</div>
+		<div class="mt-6 text-2xl">times on { getSlideDate(recap.MostSingleDayCommitsByAuthorCurrYear.Date) }.</div>
 		<div class="mt-12"></div>
-		@components.NextButton(helpers.GetNextButtonLink("/most-single-day-commits-by-engineer-curr-year", recap))
+		@components.NextButton(helpers.GetNextButtonLink("/most-single-day-commits-by-author-curr-year", recap))
 	}
 }

@@ -10,7 +10,7 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import components "GabeMeister/yer-cli/presentation/views/components"
 
-func DuplicateEngineersList(selectedEngineers []string) templ.Component {
+func DuplicateAuthorsList(selectedAuthors []string) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -35,20 +35,20 @@ func DuplicateEngineersList(selectedEngineers []string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		for _, engineer := range selectedEngineers {
-			templ_7745c5c3_Err = components.DraggableText(engineer).Render(ctx, templ_7745c5c3_Buffer)
+		for _, author := range selectedAuthors {
+			templ_7745c5c3_Err = components.DraggableText(author).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<input type=\"hidden\" name=\"ignore\" class=\"h-0 w-0\"> <input id=\"duplicate-engineers\" type=\"hidden\" name=\"duplicate-engineers\" value=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<input type=\"hidden\" name=\"ignore\" class=\"h-0 w-0\"> <input id=\"duplicate-authors\" type=\"hidden\" name=\"duplicate-authors\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
-		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(GetCombinedValue(selectedEngineers))
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(GetCombinedValue(selectedAuthors))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/ConfigSetupPage/DuplicateEngineersList.templ`, Line: 18, Col: 47}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/ConfigSetupPage/DuplicateEngineersList.templ`, Line: 18, Col: 45}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -59,7 +59,7 @@ func DuplicateEngineersList(selectedEngineers []string) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var3 = []any{"px-2 py-1 bg-white rounded-lg text-black m-4",
-			templ.KV("opacity-50 cursor-not-allowed", len(selectedEngineers) <= 1)}
+			templ.KV("opacity-50 cursor-not-allowed", len(selectedAuthors) <= 1)}
 		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var3...)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -81,13 +81,13 @@ func DuplicateEngineersList(selectedEngineers []string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		if len(selectedEngineers) <= 1 {
+		if len(selectedAuthors) <= 1 {
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" disabled")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" hx-include=\"#duplicate-engineers, #all-engineers\">Submit</button></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" hx-include=\"#duplicate-authors, #all-authors\">Submit</button></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
