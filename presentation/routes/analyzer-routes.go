@@ -3,6 +3,7 @@ package routes
 import (
 	"GabeMeister/yer-cli/analyzer"
 	"GabeMeister/yer-cli/utils"
+	"fmt"
 	"os"
 	"strings"
 	"time"
@@ -185,17 +186,18 @@ func addAnalyzerRoutes(e *echo.Echo) {
 				Component: fileExtInput,
 			})
 
-			authors := analyzer.GetAuthorsFromRepo(repoPath)
-			allAuthorsComponent := ConfigSetupPage.AllAuthorsList(ConfigSetupPage.AllAuthorsListProps{
-				AllAuthors: authors,
-				OutOfBand:  true,
-			})
+			authors := analyzer.GetAuthorsFromRepo(repoPath, masterBranchName)
+			fmt.Print("\n\n", "*** authors ***", "\n", authors, "\n\n\n")
+			// allAuthorsComponent := ConfigSetupPage.AllAuthorsList(ConfigSetupPage.AllAuthorsListProps{
+			// 	AllAuthors: authors,
+			// 	OutOfBand:  true,
+			// })
 
-			// Updates their file extensions with what is in the repo
-			content += t.Render(t.RenderParams{
-				C:         c,
-				Component: allAuthorsComponent,
-			})
+			// // Updates their file extensions with what is in the repo
+			// content += t.Render(t.RenderParams{
+			// 	C:         c,
+			// 	Component: allAuthorsComponent,
+			// })
 
 		} else {
 			// If the repo isn't valid, display the Directory List form with an error
@@ -235,7 +237,9 @@ func addAnalyzerRoutes(e *echo.Echo) {
 
 	e.GET("/duplicate-authors-modal", func(c echo.Context) error {
 		ungroupedAuthors := c.FormValue("ungrouped-authors")
+		fmt.Print("\n\n", "*** ungroupedAuthors ***", "\n", ungroupedAuthors, "\n\n\n")
 		duplicateAuthors := c.FormValue("duplicate-authors")
+		fmt.Print("\n\n", "*** duplicateAuthors ***", "\n", duplicateAuthors, "\n\n\n")
 
 		component := ConfigSetupPage.DuplicateAuthorModal(ConfigSetupPage.DuplicateAuthorModalProps{})
 		content := t.Render(t.RenderParams{

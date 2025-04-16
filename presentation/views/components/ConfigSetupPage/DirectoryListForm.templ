@@ -13,6 +13,7 @@ templ DirectoryListForm(props DirectoryListFormProps) {
 			hx-post="/repo-path"
 			hx-target="#dir-list-form"
 			hx-swap="outerHTML"
+			hx-indicator="#dir-list-form-loading-spinner"
 			class="flex flex-col gap-6"
 		>
 			<div class="flex flex-col gap-2 w-full">
@@ -52,6 +53,10 @@ templ DirectoryListForm(props DirectoryListFormProps) {
 			>
 				Select Current Directory
 			</button>
+			<div
+				class="htmx-indicator"
+				id="dir-list-form-loading-spinner"
+			>Loading...</div>
 		</form>
 	</div>
 }

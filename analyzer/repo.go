@@ -1,22 +1,35 @@
 package analyzer
 
 import (
+	"bytes"
 	"fmt"
 	"os/exec"
 	"strings"
 )
 
-func GetAuthorsFromRepo(dir string) []string {
-	gitCmd := exec.Command("git", "shortlog", "-s")
+func GetAuthorsFromRepo(dir string, branch string) []string {
+	gitCmd := exec.Command("git", "shortlog", branch, "-s")
 	gitCmd.Dir = dir
-	rawOutput, _ := gitCmd.Output()
 
-	text := string(rawOutput)
-	lines := strings.Split(text, "\n")
+	var stderr bytes.Buffer
+	gitCmd.Stderr = &stderr
 
-	for _, line := range lines {
-		fmt.Print("\n\n", "*** line ***", "\n", line, "\n\n\n")
+	rawOutput, err := gitCmd.Output()
+	if err != nil {
+		fmt.Println("Error running git command:", err)
+		fmt.Println("Stderr:", stderr.String())
+		return nil
 	}
 
-	return lines
+	text := string(rawOutput)
+	lines := strings.Split(strings.TrimSpace(text), "\n")
+
+	authors := []string{}
+	for _, line := range lines {
+		tokens := strings.Split(line, "\t")
+		authors = append(authors, tokens[1])
+	}
+
+	return authors
+
 }

@@ -79,14 +79,6 @@ templ ConfigSetup(props ConfigSetupProps) {
 						if len(props.AllAuthors) > 0 {
 							<div class="w-full">
 								<span class="font-medium">Group Duplicate Authors</span>
-								@ConfigSetupPage.DuplicateGroupBtn()
-								<button
-									type="button"
-									class="btn"
-									hx-get="/duplicate-group"
-									hx-target="body"
-									hx-swap="beforeend"
-								>+ Add New Duplicate Group</button>
 							</div>
 						}
 						<button
