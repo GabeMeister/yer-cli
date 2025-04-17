@@ -24,28 +24,42 @@ templ RepoPath(props RepoPathProps) {
 			hx-swap-oob="true"
 		}
 	>
-		if props.RepoPath == "" {
+		<label
+			for="repo-path"
+			class="font-medium"
+		>Repo File Path</label>
+		<div class="flex gap-3 items-center w-full">
+			// <i
+			// 	class="fa-solid fa-pencil text-gray-400 hover:text-gray-500 duration-200 cursor-pointer"
+			// 	hx-get="/dir-list-modal"
+			// 	hx-target="#modal-root"
+			// 	hx-swap="outerHTML"
+			// ></i>
+			// <p class="text-lg">{ truncateRepoPath(props.RepoPath) }</p>
+			<input
+				type="text"
+				class="text-input w-full"
+				placeholder="/path/to/my/repo"
+				id="repo-path"
+				name="repo-path"
+				value={ props.RepoPath }
+			/>
 			<button
-				class="btn"
+				class="btn w-64"
 				type="button"
 				hx-get="/dir-list-modal"
 				hx-target="body"
 				hx-swap="beforeend"
 			>
-				<i class="fa-solid fa-plus"></i>
-				<span>Add Repo</span>
+				<div class="flex gap-2 items-center justify-center">
+					<i class="fa-solid fa-folder-open"></i>
+					if props.RepoPath == "" {
+						<span>Browse</span>
+					} else {
+						<span>Edit Repo</span>
+					}
+				</div>
 			</button>
-		} else {
-			<div class="flex gap-3 items-center w-full">
-				<i
-					class="fa-solid fa-pencil text-gray-400 hover:text-gray-500 duration-200 cursor-pointer"
-					hx-get="/dir-list-modal"
-					hx-target="#modal-root"
-					hx-swap="outerHTML"
-				></i>
-				<p class="text-lg">{ truncateRepoPath(props.RepoPath) }</p>
-				<input type="hidden" name="repo-path" value={ props.RepoPath }/>
-			</div>
-		}
+		</div>
 	</div>
 }

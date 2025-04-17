@@ -26,8 +26,8 @@ templ DirectoryListForm(props DirectoryListFormProps) {
 					class="text-input w-full font-normal"
 					name="search-term"
 					hx-get="/filtered-dir-contents"
-					hx-include="#repo-path"
-					hx-trigger="input changed delay:500ms, keyup[key=='Enter'], load"
+					hx-include="#base-dir"
+					hx-trigger="input changed delay:500ms, keyup[key=='Enter']"
 					hx-target="#dir-list"
 					hx-swap="outerHTML"
 				/>
@@ -42,7 +42,12 @@ templ DirectoryListForm(props DirectoryListFormProps) {
 				if props.Error != "" {
 					<h1 class="text-red-500">Directory must contain a Git repo</h1>
 				}
-				<input type="hidden" value={ props.BaseDir } name="repo-path" id="repo-path"/>
+				<input
+					type="hidden"
+					value={ props.BaseDir }
+					name="base-dir"
+					id="base-dir"
+				/>
 			</div>
 			<button
 				class="btn lg"

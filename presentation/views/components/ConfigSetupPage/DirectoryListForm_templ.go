@@ -49,7 +49,7 @@ func DirectoryListForm(props DirectoryListFormProps) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" placeholder=\"Directory Name\" class=\"text-input w-full font-normal\" name=\"search-term\" hx-get=\"/filtered-dir-contents\" hx-include=\"#repo-path\" hx-trigger=\"input changed delay:500ms, keyup[key==&#39;Enter&#39;], load\" hx-target=\"#dir-list\" hx-swap=\"outerHTML\"></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" placeholder=\"Directory Name\" class=\"text-input w-full font-normal\" name=\"search-term\" hx-get=\"/filtered-dir-contents\" hx-include=\"#base-dir\" hx-trigger=\"input changed delay:500ms, keyup[key==&#39;Enter&#39;]\" hx-target=\"#dir-list\" hx-swap=\"outerHTML\"></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -90,13 +90,13 @@ func DirectoryListForm(props DirectoryListFormProps) templ.Component {
 		var templ_7745c5c3_Var4 string
 		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(props.BaseDir)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/ConfigSetupPage/DirectoryListForm.templ`, Line: 45, Col: 46}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/ConfigSetupPage/DirectoryListForm.templ`, Line: 47, Col: 26}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" name=\"repo-path\" id=\"repo-path\"></div><button class=\"btn lg\" type=\"submit\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" name=\"base-dir\" id=\"base-dir\"></div><button class=\"btn lg\" type=\"submit\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

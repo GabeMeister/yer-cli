@@ -2,6 +2,7 @@ package utils
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"path"
 	"strings"
@@ -46,7 +47,10 @@ func GetDirs(baseDir string) []string {
 
 func GetFilteredDirs(baseDir string, searchTerm string) []string {
 	searchTerm = strings.ToLower(searchTerm)
+	fmt.Print("\n\n", "*** searchTerm ***", "\n", searchTerm, "\n\n\n")
+	fmt.Print("\n\n", "*** baseDir ***", "\n", baseDir, "\n\n\n")
 	dirs := GetDirs(baseDir)
+	fmt.Print("\n\n", "*** dirs ***", "\n", dirs, "\n\n\n")
 	filteredDirs := []string{}
 
 	for _, dir := range dirs {

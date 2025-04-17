@@ -937,6 +937,10 @@ video {
   width: 1.25rem;
 }
 
+.w-64 {
+  width: 16rem;
+}
+
 .w-7 {
   width: 1.75rem;
 }
@@ -2199,6 +2203,10 @@ video {
 
 .fade-in.opacity-50 {
   animation: fade-in-animation-opacity-50 0.3s ease-in forwards;
+}
+
+.empty\:hidden:empty {
+  display: none;
 }
 
 .hover\:border-gray-500:hover {

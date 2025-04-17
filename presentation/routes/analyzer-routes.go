@@ -40,11 +40,11 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		content := t.Render(t.RenderParams{
 			C: c,
 			Component: pages.ConfigSetup(pages.ConfigSetupProps{
-				RecapName:    config.Repos[0].Name,
-				RepoPath:     config.Repos[0].Path,
-				Year:         year,
-				MasterBranch: config.Repos[0].MasterBranchName,
-				AllAuthors:   []string{"Ezra", "Isaac", "Steve"},
+				RecapName:        config.Repos[0].Name,
+				RepoPath:         config.Repos[0].Path,
+				Year:             year,
+				MasterBranch:     config.Repos[0].MasterBranchName,
+				UngroupedAuthors: []string{},
 				// AllAuthors:            config.Repos[0].AllAuthors,
 				IncludeFileExtensions: strings.Join(config.Repos[0].IncludeFileExtensions, ","),
 				ExcludeDirs:           strings.Join(config.Repos[0].ExcludeDirectories, ","),
@@ -84,7 +84,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 			IncludeFileExtensions: includeFileExtensions,
 			ExcludeDirs:           excludeDirs,
 			ExcludeFiles:          excludeFiles,
-			AllAuthors:            []string{"David"},
+			UngroupedAuthors:      []string{},
 		})
 		content := t.Render(t.RenderParams{
 			C:         c,
@@ -135,8 +135,8 @@ func addAnalyzerRoutes(e *echo.Echo) {
 	})
 
 	e.POST("/repo-path", func(c echo.Context) error {
-		repoPath := c.FormValue("repo-path")
-		isGitRepo := analyzer.IsValidGitRepo(repoPath)
+		baseDir := c.FormValue("base-dir")
+		isGitRepo := analyzer.IsValidGitRepo(baseDir)
 
 		content := ""
 
@@ -152,7 +152,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 			`
 
 			component := ConfigSetupPage.RepoPath(ConfigSetupPage.RepoPathProps{
-				RepoPath:  repoPath,
+				RepoPath:  baseDir,
 				OutOfBand: true,
 			})
 
@@ -162,7 +162,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 				Component: component,
 			})
 
-			masterBranchName := analyzer.GetMasterBranchName(repoPath)
+			masterBranchName := analyzer.GetMasterBranchName(baseDir)
 			masterBranchInput := ConfigSetupPage.MasterBranchInput(ConfigSetupPage.MasterBranchInputProps{
 				Name:      masterBranchName,
 				OutOfBand: true,
@@ -174,7 +174,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 				Component: masterBranchInput,
 			})
 
-			fileExtensions := analyzer.GetFileExtensionsInRepo(repoPath)
+			fileExtensions := analyzer.GetFileExtensionsInRepo(baseDir)
 			fileExtInput := ConfigSetupPage.IncludeFileExtensions(ConfigSetupPage.IncludeFileExtensionsProps{
 				IncludeFileExtensions: strings.Join(fileExtensions, ","),
 				OutOfBand:             true,
@@ -186,26 +186,26 @@ func addAnalyzerRoutes(e *echo.Echo) {
 				Component: fileExtInput,
 			})
 
-			authors := analyzer.GetAuthorsFromRepo(repoPath, masterBranchName)
+			authors := analyzer.GetAuthorsFromRepo(baseDir, masterBranchName)
 			fmt.Print("\n\n", "*** authors ***", "\n", authors, "\n\n\n")
-			// allAuthorsComponent := ConfigSetupPage.AllAuthorsList(ConfigSetupPage.AllAuthorsListProps{
-			// 	AllAuthors: authors,
-			// 	OutOfBand:  true,
-			// })
+			dupGroupsBtn := ConfigSetupPage.DuplicateGroupBtn(ConfigSetupPage.DuplicateGroupBtnProps{
+				UngroupedAuthors: authors,
+				OutOfBand:        true,
+			})
 
-			// // Updates their file extensions with what is in the repo
-			// content += t.Render(t.RenderParams{
-			// 	C:         c,
-			// 	Component: allAuthorsComponent,
-			// })
+			// Updates their file extensions with what is in the repo
+			content += t.Render(t.RenderParams{
+				C:         c,
+				Component: dupGroupsBtn,
+			})
 
 		} else {
 			// If the repo isn't valid, display the Directory List form with an error
 			searchTerm := c.FormValue("search-term")
-			filteredDirs := utils.GetFilteredDirs(repoPath, searchTerm)
+			filteredDirs := utils.GetFilteredDirs(baseDir, searchTerm)
 			component := ConfigSetupPage.DirectoryListForm(ConfigSetupPage.DirectoryListFormProps{
 				Dirs:       filteredDirs,
-				BaseDir:    repoPath,
+				BaseDir:    baseDir,
 				Error:      "This is not a Git repo!",
 				SearchTerm: searchTerm,
 			})
@@ -220,7 +220,11 @@ func addAnalyzerRoutes(e *echo.Echo) {
 
 	e.GET("/filtered-dir-contents", func(c echo.Context) error {
 		searchTerm := c.FormValue("search-term")
-		baseDir := c.FormValue("repo-path")
+		baseDir := c.FormValue("base-dir")
+		if baseDir == "" {
+			homeDir, _ := os.UserHomeDir()
+			baseDir = homeDir
+		}
 		filteredDirs := utils.GetFilteredDirs(baseDir, searchTerm)
 
 		component := ConfigSetupPage.DirectoryList(ConfigSetupPage.DirectoryListProps{

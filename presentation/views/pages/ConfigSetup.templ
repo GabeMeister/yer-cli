@@ -15,7 +15,7 @@ type ConfigSetupProps struct {
 	IncludeFileExtensions string
 	ExcludeDirs           string
 	ExcludeFiles          string
-	AllAuthors            []string
+	UngroupedAuthors      []string
 
 	// SelectedAuthors       []string
 	// DuplicateAuthorGroups []analyzer.DuplicateAuthorGroup
@@ -47,7 +47,6 @@ templ ConfigSetup(props ConfigSetupProps) {
 							/>
 						</div>
 						<div class="w-full">
-							<label class="font-medium">Repo File Path</label>
 							@ConfigSetupPage.RepoPath(ConfigSetupPage.RepoPathProps{
 								RepoPath: props.RepoPath,
 							})
@@ -76,11 +75,9 @@ templ ConfigSetup(props ConfigSetupProps) {
 								ExcludeFiles: props.ExcludeFiles,
 							})
 						</div>
-						if len(props.AllAuthors) > 0 {
-							<div class="w-full">
-								<span class="font-medium">Group Duplicate Authors</span>
-							</div>
-						}
+						@ConfigSetupPage.DuplicateGroupBtn(ConfigSetupPage.DuplicateGroupBtnProps{
+							UngroupedAuthors: props.UngroupedAuthors,
+						})
 						<button
 							class="btn lg w-full"
 						>
