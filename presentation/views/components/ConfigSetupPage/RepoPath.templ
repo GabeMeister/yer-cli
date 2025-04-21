@@ -45,11 +45,11 @@ templ RepoPath(props RepoPathProps) {
 				value={ props.RepoPath }
 			/>
 			<button
-				class="btn w-64"
+				class="btn w-40"
 				type="button"
 				hx-get="/dir-list-modal"
-				hx-target="body"
-				hx-swap="beforeend"
+				hx-target="#modal-root"
+				hx-swap="outerHTML"
 			>
 				<div class="flex gap-2 items-center justify-center">
 					<i class="fa-solid fa-folder-open"></i>

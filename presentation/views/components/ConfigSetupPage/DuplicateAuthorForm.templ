@@ -1,10 +1,48 @@
 package ConfigSetupPage 
 
+import "fmt"
+
 type DuplicateAuthorFormProps struct {
-	UngroupedEngineers []string
+	UngroupedAuthors []string
 }
 
 templ DuplicateAuthorForm(props DuplicateAuthorFormProps) {
-	// TODO: make this json stringified
-	<div>This is the form <pre></pre></div>
+	<div class="flex flex-col gap-3">
+		<h2 class="h2">Select authors that need to be grouped together:</h2>
+		<hr/>
+		<form
+			class="flex flex-col gap-3"
+			hx-post="/duplicate-author-grouping"
+		>
+			<div
+				class="max-h-[300px] overflow-y-scroll border border-gray-300 rounded-md p-3"
+			>
+				for idx, author := range props.UngroupedAuthors {
+					<div>
+						<input
+							type="checkbox"
+							name="author-marked-as-duplicate"
+							value={ author }
+							id={ fmt.Sprintf("author-%d", idx) }
+						/>
+						<label for={ fmt.Sprintf("author-%d", idx) }>
+							{ author }
+						</label>
+					</div>
+				}
+			</div>
+			<div>
+				<label for="real-name">Group above authors as:</label>
+				<input
+					type="text"
+					class="text-input w-full"
+					placeholder="Enter name to use"
+					required
+					id="real-name"
+					name="real-name"
+				/>
+			</div>
+			<button class="btn" type="submit">Submit</button>
+		</form>
+	</div>
 }

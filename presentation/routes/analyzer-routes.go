@@ -8,6 +8,7 @@ import (
 	"strings"
 	"time"
 
+	"GabeMeister/yer-cli/presentation/views/components"
 	"GabeMeister/yer-cli/presentation/views/components/ConfigSetupPage"
 	"GabeMeister/yer-cli/presentation/views/pages"
 	t "GabeMeister/yer-cli/presentation/views/template"
@@ -34,18 +35,27 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		}
 
 		config := analyzer.GetConfig(utils.DEFAULT_CONFIG_FILE)
+		repo := config.Repos[0]
+		var ungroupedAuthors []string
+		if repo.Path != "" && repo.MasterBranchName != "" {
+			duplicateAuthors := analyzer.GetDuplicateAuthorList(repo)
+			ungroupedAuthors = analyzer.GetAuthorsFromRepo(
+				repo.Path,
+				repo.MasterBranchName,
+				duplicateAuthors,
+			)
+		}
 
 		year := time.Now().Year()
 
 		content := t.Render(t.RenderParams{
 			C: c,
 			Component: pages.ConfigSetup(pages.ConfigSetupProps{
-				RecapName:        config.Repos[0].Name,
-				RepoPath:         config.Repos[0].Path,
-				Year:             year,
-				MasterBranch:     config.Repos[0].MasterBranchName,
-				UngroupedAuthors: []string{},
-				// AllAuthors:            config.Repos[0].AllAuthors,
+				RecapName:             config.Repos[0].Name,
+				RepoPath:              config.Repos[0].Path,
+				Year:                  year,
+				MasterBranch:          config.Repos[0].MasterBranchName,
+				UngroupedAuthors:      ungroupedAuthors,
 				IncludeFileExtensions: strings.Join(config.Repos[0].IncludeFileExtensions, ","),
 				ExcludeDirs:           strings.Join(config.Repos[0].ExcludeDirectories, ","),
 				ExcludeFiles:          strings.Join(config.Repos[0].ExcludeFiles, ","),
@@ -71,7 +81,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		config.Repos[0].ExcludeDirectories = strings.Split(excludeDirs, ",")
 		config.Repos[0].ExcludeFiles = strings.Split(excludeFiles, ",")
 
-		analyzer.UpdateConfig(config)
+		analyzer.SaveConfig(config)
 
 		year := time.Now().Year()
 
@@ -186,7 +196,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 				Component: fileExtInput,
 			})
 
-			authors := analyzer.GetAuthorsFromRepo(baseDir, masterBranchName)
+			authors := analyzer.GetAuthorsFromRepo(baseDir, masterBranchName, []string{})
 			fmt.Print("\n\n", "*** authors ***", "\n", authors, "\n\n\n")
 			dupGroupsBtn := ConfigSetupPage.DuplicateGroupBtn(ConfigSetupPage.DuplicateGroupBtnProps{
 				UngroupedAuthors: authors,
@@ -239,13 +249,35 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		return c.HTML(http.StatusOK, content)
 	})
 
-	e.GET("/duplicate-authors-modal", func(c echo.Context) error {
-		ungroupedAuthors := c.FormValue("ungrouped-authors")
-		fmt.Print("\n\n", "*** ungroupedAuthors ***", "\n", ungroupedAuthors, "\n\n\n")
-		duplicateAuthors := c.FormValue("duplicate-authors")
-		fmt.Print("\n\n", "*** duplicateAuthors ***", "\n", duplicateAuthors, "\n\n\n")
+	e.POST("/duplicate-authors-modal", func(c echo.Context) error {
+		formValues, _ := c.FormParams()
+		ungroupedAuthors := formValues["ungrouped-author"]
 
-		component := ConfigSetupPage.DuplicateAuthorModal(ConfigSetupPage.DuplicateAuthorModalProps{})
+		component := ConfigSetupPage.DuplicateAuthorModal(ConfigSetupPage.DuplicateAuthorModalProps{
+			UngroupedAuthors: ungroupedAuthors,
+		})
+		content := t.Render(t.RenderParams{
+			C:         c,
+			Component: component,
+		})
+
+		return c.HTML(http.StatusOK, content)
+	})
+
+	e.POST("/duplicate-author-grouping", func(c echo.Context) error {
+		formValues, _ := c.FormParams()
+		authorsMarkedAsDuplicate := formValues["author-marked-as-duplicate"]
+		realName := c.FormValue("real-name")
+
+		dupGroup := analyzer.DuplicateAuthorGroup{
+			Real:       realName,
+			Duplicates: authorsMarkedAsDuplicate,
+		}
+		config := analyzer.GetConfig(utils.DEFAULT_CONFIG_FILE)
+		config.Repos[0].DuplicateAuthors = append(config.Repos[0].DuplicateAuthors, dupGroup)
+		analyzer.SaveConfig(config)
+
+		component := components.EmptyDiv()
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,

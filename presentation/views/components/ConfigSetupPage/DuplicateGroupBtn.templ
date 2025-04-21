@@ -17,12 +17,6 @@ func getDuplicateAuthorValue(group analyzer.DuplicateAuthorGroup) string {
 }
 
 templ DuplicateGroupBtn(props DuplicateGroupBtnProps) {
-	// <input
-	// 	id="ungrouped-authors"
-	// 	type="hidden"
-	// 	name="ungrouped-authors"
-	// 	value={ props.UngroupedAuthors }
-	// />
 	// for _, group := range props.DuplicateAuthors {
 	// 	<input
 	// 		id="duplicate-authors"
@@ -31,27 +25,32 @@ templ DuplicateGroupBtn(props DuplicateGroupBtnProps) {
 	// 		value={ getDuplicateAuthorValue(group) }
 	// 	/>
 	// }
-	<div class="w-full empty:hidden">
-		<div
-			id="duplicate-groups-btn"
-			if props.OutOfBand {
-				hx-swap-oob="true"
+	<div
+		id="duplicate-groups-btn"
+		if props.OutOfBand {
+			hx-swap-oob="true"
+		}
+	>
+		<div class="font-medium">Group Duplicate Authors</div>
+		for _, ungroupedAuthor := range props.UngroupedAuthors {
+			<input
+				type="hidden"
+				name="ungrouped-author"
+				value={ ungroupedAuthor }
+			/>
+		}
+		<button
+			if len(props.UngroupedAuthors) == 0 {
+				disabled
 			}
-		>
-			if len(props.UngroupedAuthors) > 0 {
-				<div class="font-medium">Group Duplicate Authors</div>
-				for _, author := range props.UngroupedAuthors {
-					<span>{ author }</span>
-				}
-				<button
-					type="button"
-					class="btn"
-					hx-get="/duplicate-authors-modal"
-					hx-target="body"
-					hx-swap="beforeend"
-					hx-include="#ungrouped-authors,#duplicate-authors"
-				>+ Add New Duplicate Group</button>
+			type="button"
+			class="btn"
+			hx-post="/duplicate-authors-modal"
+			hx-target="#modal-root"
+			hx-swap="outerHTML"
+			if false {
+				hx-include="#ungrouped-authors"
 			}
-		</div>
+		>+ Add New Duplicate Group</button>
 	</div>
 }

@@ -2,9 +2,11 @@ package analyzer
 
 import (
 	"GabeMeister/yer-cli/utils"
+	"bytes"
 	"fmt"
 	"os/exec"
 	"regexp"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
@@ -411,4 +413,44 @@ func hasPrevYearCommits() bool {
 	commits := getPrevYearGitCommits()
 
 	return len(commits) > 0
+}
+
+func GetAuthorsFromRepo(dir string, branch string, ignoreAuthors []string) []string {
+	gitCmd := exec.Command("git", "shortlog", branch, "-s")
+	gitCmd.Dir = dir
+
+	var stderr bytes.Buffer
+	gitCmd.Stderr = &stderr
+
+	rawOutput, err := gitCmd.Output()
+	if err != nil {
+		fmt.Println("Error running git command:", err)
+		fmt.Println("Stderr:", stderr.String())
+		return nil
+	}
+
+	text := string(rawOutput)
+	lines := strings.Split(strings.TrimSpace(text), "\n")
+
+	authors := []string{}
+	for _, line := range lines {
+		tokens := strings.Split(line, "\t")
+		author := tokens[1]
+
+		if !slices.Contains(ignoreAuthors, author) {
+			authors = append(authors, tokens[1])
+		}
+	}
+
+	return authors
+
+}
+func GetDuplicateAuthorList(repo RepoConfig) []string {
+	duplicateAuthors := []string{}
+
+	for _, dupGroup := range repo.DuplicateAuthors {
+		duplicateAuthors = append(duplicateAuthors, dupGroup.Duplicates...)
+	}
+
+	return duplicateAuthors
 }

@@ -33,7 +33,9 @@ templ ConfigSetup(props ConfigSetupProps) {
 						hx-target="#config-setup"
 						class="flex flex-col items-start gap-6"
 					>
-						<h1 class="h1">Config Setup</h1>
+						<div class="flex justify-center w-full">
+							<h1 class="h1">Create Recap</h1>
+						</div>
 						<div class="w-full">
 							<label for="recap-name" class="font-medium">Recap Name</label>
 							<input
@@ -64,20 +66,24 @@ templ ConfigSetup(props ConfigSetupProps) {
 							})
 						</div>
 						<div class="w-full">
-							<label for="exclude-dirs" class="font-medium">Directories to Exclude from Recap</label>
-							@ConfigSetupPage.ExcludeDirs(ConfigSetupPage.ExcludeDirsProps{
-								ExcludeDirs: props.ExcludeDirs,
-							})
-						</div>
-						<div class="w-full">
 							<label for="exclude-files" class="font-medium">Files to Exclude from Recap</label>
 							@ConfigSetupPage.ExcludeFiles(ConfigSetupPage.ExcludeFilesProps{
 								ExcludeFiles: props.ExcludeFiles,
 							})
 						</div>
-						@ConfigSetupPage.DuplicateGroupBtn(ConfigSetupPage.DuplicateGroupBtnProps{
-							UngroupedAuthors: props.UngroupedAuthors,
-						})
+						<div class="w-full">
+							<label for="exclude-dirs" class="font-medium">Directories to Exclude from Recap</label>
+							@ConfigSetupPage.ExcludeDirs(ConfigSetupPage.ExcludeDirsProps{
+								ExcludeDirs: props.ExcludeDirs,
+							})
+						</div>
+						<div
+							class="w-full"
+						>
+							@ConfigSetupPage.DuplicateGroupBtn(ConfigSetupPage.DuplicateGroupBtnProps{
+								UngroupedAuthors: props.UngroupedAuthors,
+							})
+						</div>
 						<button
 							class="btn lg w-full"
 						>

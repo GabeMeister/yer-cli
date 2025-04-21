@@ -12,7 +12,7 @@ type ConfigFileOptions struct {
 	IncludedFileExtensions []string
 	ExcludedDirs           []string
 	AllAuthors             []string
-	DuplicateAuthors     []DuplicateAuthorGroup
+	DuplicateAuthors       []DuplicateAuthorGroup
 	IncludeFileBlames      bool
 }
 
@@ -27,8 +27,8 @@ func InitConfig(options ConfigFileOptions) ConfigFile {
 				IncludeFileExtensions: options.IncludedFileExtensions,
 				ExcludeDirectories:    options.ExcludedDirs,
 				ExcludeFiles:          []string{},
-				ExcludeAuthors:      []string{},
-				DuplicateAuthors:    options.DuplicateAuthors,
+				ExcludeAuthors:        []string{},
+				DuplicateAuthors:      options.DuplicateAuthors,
 				IncludeFileBlames:     options.IncludeFileBlames,
 			},
 		},
@@ -77,7 +77,7 @@ func GetConfig(path string) ConfigFile {
 	return data
 }
 
-func UpdateConfig(config ConfigFile) {
+func SaveConfig(config ConfigFile) {
 	SaveDataToFile(config, utils.DEFAULT_CONFIG_FILE)
 }
 

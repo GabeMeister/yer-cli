@@ -68,7 +68,7 @@ func RepoPath(props RepoPathProps) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"> <button class=\"btn w-64\" type=\"button\" hx-get=\"/dir-list-modal\" hx-target=\"body\" hx-swap=\"beforeend\"><div class=\"flex gap-2 items-center justify-center\"><i class=\"fa-solid fa-folder-open\"></i> ")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"> <button class=\"btn w-40\" type=\"button\" hx-get=\"/dir-list-modal\" hx-target=\"#modal-root\" hx-swap=\"outerHTML\"><div class=\"flex gap-2 items-center justify-center\"><i class=\"fa-solid fa-folder-open\"></i> ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

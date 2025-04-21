@@ -3,7 +3,7 @@ package ConfigSetupPage
 import "GabeMeister/yer-cli/presentation/views/components"
 
 type DuplicateAuthorModalProps struct {
-	UngroupedEngineers []string
+	UngroupedAuthors []string
 }
 
 templ DuplicateAuthorModal(props DuplicateAuthorModalProps) {
@@ -12,7 +12,7 @@ templ DuplicateAuthorModal(props DuplicateAuthorModalProps) {
 		Title: "Duplicate Authors",
 	}) {
 		@DuplicateAuthorForm(DuplicateAuthorFormProps{
-			UngroupedEngineers: props.UngroupedEngineers,
+			UngroupedAuthors: props.UngroupedAuthors,
 		})
 	}
 }
