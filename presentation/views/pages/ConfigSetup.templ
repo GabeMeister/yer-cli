@@ -1,6 +1,7 @@
 package pages
 
 import (
+	"GabeMeister/yer-cli/analyzer"
 	"GabeMeister/yer-cli/presentation/views/components"
 	"GabeMeister/yer-cli/presentation/views/components/ConfigSetupPage"
 	"fmt"
@@ -16,9 +17,9 @@ type ConfigSetupProps struct {
 	ExcludeDirs           string
 	ExcludeFiles          string
 	UngroupedAuthors      []string
+	DuplicateAuthorGroups []analyzer.DuplicateAuthorGroup
 
 	// SelectedAuthors       []string
-	// DuplicateAuthorGroups []analyzer.DuplicateAuthorGroup
 	// SearchText              string
 }
 
@@ -82,6 +83,7 @@ templ ConfigSetup(props ConfigSetupProps) {
 						>
 							@ConfigSetupPage.DuplicateGroupBtn(ConfigSetupPage.DuplicateGroupBtnProps{
 								UngroupedAuthors: props.UngroupedAuthors,
+								DuplicateAuthors: props.DuplicateAuthorGroups,
 							})
 						</div>
 						<button

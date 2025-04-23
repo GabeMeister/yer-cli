@@ -17,7 +17,7 @@ import (
 type DuplicateGroupBtnProps struct {
 	UngroupedAuthors []string
 	OutOfBand        bool
-	// DuplicateAuthors []analyzer.DuplicateAuthorGroup
+	DuplicateAuthors []analyzer.DuplicateAuthorGroup
 }
 
 func getDuplicateAuthorValue(group analyzer.DuplicateAuthorGroup) string {
@@ -59,17 +59,59 @@ func DuplicateGroupBtn(props DuplicateGroupBtnProps) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
+		for _, group := range props.DuplicateAuthors {
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div>Group: ")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var2 string
+			templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(group.Real)
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/ConfigSetupPage/DuplicateGroupBtn.templ`, Line: 28, Col: 27}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			for _, dup := range group.Duplicates {
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div>")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				var templ_7745c5c3_Var3 string
+				templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(dup)
+				if templ_7745c5c3_Err != nil {
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/ConfigSetupPage/DuplicateGroupBtn.templ`, Line: 30, Col: 14}
+				}
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div>")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" <br>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
 		for _, ungroupedAuthor := range props.UngroupedAuthors {
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<input type=\"hidden\" name=\"ungrouped-author\" value=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var2 string
-			templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(ungroupedAuthor)
+			var templ_7745c5c3_Var4 string
+			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(ungroupedAuthor)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/ConfigSetupPage/DuplicateGroupBtn.templ`, Line: 39, Col: 27}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/ConfigSetupPage/DuplicateGroupBtn.templ`, Line: 38, Col: 27}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -98,7 +140,7 @@ func DuplicateGroupBtn(props DuplicateGroupBtnProps) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(">+ Add New Duplicate Group</button></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(">+ Add Duplicate</button></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

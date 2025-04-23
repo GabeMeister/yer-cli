@@ -1,18 +1,28 @@
 package ConfigSetupPage 
 
-import "fmt"
+import (
+	"fmt"
+	"slices"
+)
 
 type DuplicateAuthorFormProps struct {
 	UngroupedAuthors []string
+	SelectedAuthors  []string
+	Errors           map[string]string
 }
 
 templ DuplicateAuthorForm(props DuplicateAuthorFormProps) {
-	<div class="flex flex-col gap-3">
+	<div
+		id="duplicate-authors-form"
+		class="flex flex-col gap-3"
+	>
 		<h2 class="h2">Select authors that need to be grouped together:</h2>
 		<hr/>
 		<form
 			class="flex flex-col gap-3"
 			hx-post="/duplicate-author-grouping"
+			hx-target="#duplicate-authors-form"
+			hx-swap="outerHTML"
 		>
 			<div
 				class="max-h-[300px] overflow-y-scroll border border-gray-300 rounded-md p-3"
@@ -23,6 +33,9 @@ templ DuplicateAuthorForm(props DuplicateAuthorFormProps) {
 							type="checkbox"
 							name="author-marked-as-duplicate"
 							value={ author }
+							if slices.Contains(props.SelectedAuthors, author) {
+								checked="true"
+							}
 							id={ fmt.Sprintf("author-%d", idx) }
 						/>
 						<label for={ fmt.Sprintf("author-%d", idx) }>
@@ -31,17 +44,29 @@ templ DuplicateAuthorForm(props DuplicateAuthorFormProps) {
 					</div>
 				}
 			</div>
+			if props.Errors["author-marked-as-duplicate"] != "" {
+				<span class="text-red-500">
+					{ props.Errors["author-marked-as-duplicate"] }
+				</span>
+			}
 			<div>
 				<label for="real-name">Group above authors as:</label>
 				<input
 					type="text"
 					class="text-input w-full"
 					placeholder="Enter name to use"
-					required
 					id="real-name"
 					name="real-name"
 				/>
+				if props.Errors["real-name"] != "" {
+					<span class="text-red-500">
+						{ props.Errors["real-name"] }
+					</span>
+				}
 			</div>
+			for _, author := range props.UngroupedAuthors {
+				<input type="hidden" name="ungrouped-author" value={ author }/>
+			}
 			<button class="btn" type="submit">Submit</button>
 		</form>
 	</div>

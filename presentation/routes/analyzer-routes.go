@@ -5,6 +5,7 @@ import (
 	"GabeMeister/yer-cli/utils"
 	"fmt"
 	"os"
+	"slices"
 	"strings"
 	"time"
 
@@ -56,6 +57,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 				Year:                  year,
 				MasterBranch:          config.Repos[0].MasterBranchName,
 				UngroupedAuthors:      ungroupedAuthors,
+				DuplicateAuthorGroups: repo.DuplicateAuthors,
 				IncludeFileExtensions: strings.Join(config.Repos[0].IncludeFileExtensions, ","),
 				ExcludeDirs:           strings.Join(config.Repos[0].ExcludeDirectories, ","),
 				ExcludeFiles:          strings.Join(config.Repos[0].ExcludeFiles, ","),
@@ -268,6 +270,38 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		formValues, _ := c.FormParams()
 		authorsMarkedAsDuplicate := formValues["author-marked-as-duplicate"]
 		realName := c.FormValue("real-name")
+		ungroupedAuthors := formValues["ungrouped-author"]
+
+		if realName == "" {
+			component := ConfigSetupPage.DuplicateAuthorForm(ConfigSetupPage.DuplicateAuthorFormProps{
+				UngroupedAuthors: ungroupedAuthors,
+				SelectedAuthors:  authorsMarkedAsDuplicate,
+				Errors: map[string]string{
+					"real-name": "Please enter the real name to use",
+				},
+			})
+			content := t.Render(t.RenderParams{
+				C:         c,
+				Component: component,
+			})
+
+			return c.HTML(http.StatusOK, content)
+		}
+
+		if len(authorsMarkedAsDuplicate) <= 1 {
+			component := ConfigSetupPage.DuplicateAuthorModal(ConfigSetupPage.DuplicateAuthorModalProps{
+				UngroupedAuthors: ungroupedAuthors,
+				Errors: map[string]string{
+					"author-marked-as-duplicate": "Please select at least 2 authors to group together",
+				},
+			})
+			content := t.Render(t.RenderParams{
+				C:         c,
+				Component: component,
+			})
+
+			return c.HTML(http.StatusOK, content)
+		}
 
 		dupGroup := analyzer.DuplicateAuthorGroup{
 			Real:       realName,
@@ -282,6 +316,25 @@ func addAnalyzerRoutes(e *echo.Echo) {
 			C:         c,
 			Component: component,
 		})
+
+		// Update the duplicate authors input
+		filteredUngroupedAuthors := []string{}
+		for _, ungroupedAuthor := range ungroupedAuthors {
+			if !slices.Contains(authorsMarkedAsDuplicate, ungroupedAuthor) {
+				filteredUngroupedAuthors = append(filteredUngroupedAuthors, ungroupedAuthor)
+			}
+		}
+		component = ConfigSetupPage.DuplicateGroupBtn(ConfigSetupPage.DuplicateGroupBtnProps{
+			UngroupedAuthors: filteredUngroupedAuthors,
+			OutOfBand:        true,
+			DuplicateAuthors: config.Repos[0].DuplicateAuthors,
+		})
+		content += t.Render(t.RenderParams{
+			C:         c,
+			Component: component,
+		})
+
+		content += "<div id='modal-root' hx-swap-oob='true'></div>"
 
 		return c.HTML(http.StatusOK, content)
 	})

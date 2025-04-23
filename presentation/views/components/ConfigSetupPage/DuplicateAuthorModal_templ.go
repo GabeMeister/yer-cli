@@ -12,6 +12,7 @@ import "GabeMeister/yer-cli/presentation/views/components"
 
 type DuplicateAuthorModalProps struct {
 	UngroupedAuthors []string
+	Errors           map[string]string
 }
 
 func DuplicateAuthorModal(props DuplicateAuthorModalProps) templ.Component {
@@ -49,6 +50,7 @@ func DuplicateAuthorModal(props DuplicateAuthorModalProps) templ.Component {
 			ctx = templ.InitializeContext(ctx)
 			templ_7745c5c3_Err = DuplicateAuthorForm(DuplicateAuthorFormProps{
 				UngroupedAuthors: props.UngroupedAuthors,
+				Errors:           props.Errors,
 			}).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err

@@ -9,6 +9,7 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 import (
+	"GabeMeister/yer-cli/analyzer"
 	"GabeMeister/yer-cli/presentation/views/components"
 	"GabeMeister/yer-cli/presentation/views/components/ConfigSetupPage"
 	"fmt"
@@ -24,9 +25,9 @@ type ConfigSetupProps struct {
 	ExcludeDirs           string
 	ExcludeFiles          string
 	UngroupedAuthors      []string
+	DuplicateAuthorGroups []analyzer.DuplicateAuthorGroup
 
 	// SelectedAuthors       []string
-	// DuplicateAuthorGroups []analyzer.DuplicateAuthorGroup
 	// SearchText              string
 }
 
@@ -70,7 +71,7 @@ func ConfigSetup(props ConfigSetupProps) templ.Component {
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("My Recap %d", props.Year))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/ConfigSetup.templ`, Line: 44, Col: 60}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/ConfigSetup.templ`, Line: 45, Col: 60}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
@@ -83,7 +84,7 @@ func ConfigSetup(props ConfigSetupProps) templ.Component {
 			var templ_7745c5c3_Var4 string
 			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(props.RecapName)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/ConfigSetup.templ`, Line: 47, Col: 31}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/ConfigSetup.templ`, Line: 48, Col: 31}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {
@@ -145,6 +146,7 @@ func ConfigSetup(props ConfigSetupProps) templ.Component {
 			}
 			templ_7745c5c3_Err = ConfigSetupPage.DuplicateGroupBtn(ConfigSetupPage.DuplicateGroupBtnProps{
 				UngroupedAuthors: props.UngroupedAuthors,
+				DuplicateAuthors: props.DuplicateAuthorGroups,
 			}).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err

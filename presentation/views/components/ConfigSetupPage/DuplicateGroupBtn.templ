@@ -9,7 +9,7 @@ import (
 type DuplicateGroupBtnProps struct {
 	UngroupedAuthors []string
 	OutOfBand        bool
-	// DuplicateAuthors []analyzer.DuplicateAuthorGroup
+	DuplicateAuthors []analyzer.DuplicateAuthorGroup
 }
 
 func getDuplicateAuthorValue(group analyzer.DuplicateAuthorGroup) string {
@@ -17,14 +17,6 @@ func getDuplicateAuthorValue(group analyzer.DuplicateAuthorGroup) string {
 }
 
 templ DuplicateGroupBtn(props DuplicateGroupBtnProps) {
-	// for _, group := range props.DuplicateAuthors {
-	// 	<input
-	// 		id="duplicate-authors"
-	// 		type="hidden"
-	// 		name="duplicate-authors"
-	// 		value={ getDuplicateAuthorValue(group) }
-	// 	/>
-	// }
 	<div
 		id="duplicate-groups-btn"
 		if props.OutOfBand {
@@ -32,6 +24,13 @@ templ DuplicateGroupBtn(props DuplicateGroupBtnProps) {
 		}
 	>
 		<div class="font-medium">Group Duplicate Authors</div>
+		for _, group := range props.DuplicateAuthors {
+			<div>Group: { group.Real }</div>
+			for _, dup := range group.Duplicates {
+				<div>{ dup }</div>
+			}
+			<br/>
+		}
 		for _, ungroupedAuthor := range props.UngroupedAuthors {
 			<input
 				type="hidden"
@@ -51,6 +50,6 @@ templ DuplicateGroupBtn(props DuplicateGroupBtnProps) {
 			if false {
 				hx-include="#ungrouped-authors"
 			}
-		>+ Add New Duplicate Group</button>
+		>+ Add Duplicate</button>
 	</div>
 }

@@ -4,6 +4,7 @@ import "GabeMeister/yer-cli/presentation/views/components"
 
 type DuplicateAuthorModalProps struct {
 	UngroupedAuthors []string
+	Errors           map[string]string
 }
 
 templ DuplicateAuthorModal(props DuplicateAuthorModalProps) {
@@ -13,6 +14,7 @@ templ DuplicateAuthorModal(props DuplicateAuthorModalProps) {
 	}) {
 		@DuplicateAuthorForm(DuplicateAuthorFormProps{
 			UngroupedAuthors: props.UngroupedAuthors,
+			Errors:           props.Errors,
 		})
 	}
 }
