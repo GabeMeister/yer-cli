@@ -64,7 +64,7 @@ func ConfigSetup(props ConfigSetupProps) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"config-setup\"><div class=\"bg-gray-800 flex justify-center items-center min-h-screen\"><div class=\"bg-white w-1/3 min-w-[600px] max-w-[750px] p-12 rounded-md\"><form hx-patch=\"/config-file\" hx-swap=\"outerHTML\" hx-target=\"#config-setup\" class=\"flex flex-col items-start gap-6\"><div class=\"flex justify-center w-full\"><h1 class=\"h1\">Create Recap</h1></div><div class=\"w-full\"><label for=\"recap-name\" class=\"font-medium\">Recap Name</label> <input type=\"text\" class=\"text-input w-full\" placeholder=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"config-setup\"><div class=\"bg-gray-800 flex justify-center items-start min-h-screen py-32\"><div class=\"bg-white w-1/3 min-w-[600px] max-w-[750px] p-12 rounded-md\"><form hx-patch=\"/config-file\" hx-swap=\"outerHTML\" hx-target=\"#config-setup\" class=\"flex flex-col items-start gap-6\"><div class=\"flex justify-center w-full\"><h1 class=\"h1\">Create Recap</h1></div><div class=\"w-full\"><label for=\"recap-name\" class=\"font-medium\">Recap Name</label> <input type=\"text\" class=\"text-input w-full\" placeholder=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

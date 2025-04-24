@@ -2,6 +2,8 @@ package ConfigSetupPage
 
 import (
 	"GabeMeister/yer-cli/analyzer"
+	"GabeMeister/yer-cli/presentation/helpers"
+	"GabeMeister/yer-cli/utils"
 	"fmt"
 	"strings"
 )
@@ -22,14 +24,30 @@ templ DuplicateGroupBtn(props DuplicateGroupBtnProps) {
 		if props.OutOfBand {
 			hx-swap-oob="true"
 		}
+		class="flex flex-col items-start gap-3"
 	>
 		<div class="font-medium">Group Duplicate Authors</div>
-		for _, group := range props.DuplicateAuthors {
-			<div>Group: { group.Real }</div>
-			for _, dup := range group.Duplicates {
-				<div>{ dup }</div>
-			}
-			<br/>
+		for idx, group := range props.DuplicateAuthors {
+			<div class="border border-gray-200 rounded-md p-3" id={ fmt.Sprintf("dup-group-%d", idx) }>
+				<div class="flex items-center gap-3">
+					<section>
+						<div>
+							<span class="font-medium">Group:</span> { group.Real }
+						</div>
+						<div class="text-gray-500">{ strings.Join(group.Duplicates, ", ") }</div>
+					</section>
+					<section>
+						<i
+							class="fa-solid fa-xmark text-gray-500 cursor-pointer"
+							hx-patch="/duplicate-author-grouping"
+							hx-target="#duplicate-groups-btn"
+							hx-vals={ utils.MustJSONStringify(
+								map[string]string{"dup-group-real-name-to-delete": group.Real}) }
+						></i>
+					</section>
+					<input type="hidden" name="dup-group" value={ helpers.MarshalDuplicateGroup(group) }/>
+				</div>
+			</div>
 		}
 		for _, ungroupedAuthor := range props.UngroupedAuthors {
 			<input
@@ -47,9 +65,8 @@ templ DuplicateGroupBtn(props DuplicateGroupBtnProps) {
 			hx-post="/duplicate-authors-modal"
 			hx-target="#modal-root"
 			hx-swap="outerHTML"
-			if false {
-				hx-include="#ungrouped-authors"
-			}
-		>+ Add Duplicate</button>
+		>
+			+ Add Duplicate
+		</button>
 	</div>
 }

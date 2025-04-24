@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 
+	"GabeMeister/yer-cli/presentation/helpers"
 	"GabeMeister/yer-cli/presentation/views/components"
 	"GabeMeister/yer-cli/presentation/views/components/ConfigSetupPage"
 	"GabeMeister/yer-cli/presentation/views/pages"
@@ -74,6 +75,13 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		includeFileExtensions := c.FormValue("include-file-extensions")
 		excludeDirs := c.FormValue("exclude-dirs")
 		excludeFiles := c.FormValue("exclude-files")
+		formParams, _ := c.FormParams()
+		marshaledDupGroups := formParams["dup-group"]
+		dupGroups := []analyzer.DuplicateAuthorGroup{}
+		for _, g := range marshaledDupGroups {
+			dupGroups = append(dupGroups, helpers.UnmarshalDuplicateGroup(g))
+		}
+		ungroupedAuthors := formParams["ungrouped-author"]
 
 		config := analyzer.GetConfig(utils.DEFAULT_CONFIG_FILE)
 		config.Repos[0].Name = recapName
@@ -82,6 +90,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		config.Repos[0].IncludeFileExtensions = strings.Split(includeFileExtensions, ",")
 		config.Repos[0].ExcludeDirectories = strings.Split(excludeDirs, ",")
 		config.Repos[0].ExcludeFiles = strings.Split(excludeFiles, ",")
+		config.Repos[0].DuplicateAuthors = dupGroups
 
 		analyzer.SaveConfig(config)
 
@@ -96,7 +105,8 @@ func addAnalyzerRoutes(e *echo.Echo) {
 			IncludeFileExtensions: includeFileExtensions,
 			ExcludeDirs:           excludeDirs,
 			ExcludeFiles:          excludeFiles,
-			UngroupedAuthors:      []string{},
+			UngroupedAuthors:      ungroupedAuthors,
+			DuplicateAuthorGroups: dupGroups,
 		})
 		content := t.Render(t.RenderParams{
 			C:         c,
@@ -335,6 +345,37 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		})
 
 		content += "<div id='modal-root' hx-swap-oob='true'></div>"
+
+		return c.HTML(http.StatusOK, content)
+	})
+
+	e.PATCH("/duplicate-author-grouping", func(c echo.Context) error {
+		dupGroupToDelete := c.FormValue("dup-group-real-name-to-delete")
+		formParams, _ := c.FormParams()
+		marshalledDupGroups := formParams["dup-group"]
+		ungroupedAuthors := formParams["ungrouped-author"]
+
+		dupGroups := []analyzer.DuplicateAuthorGroup{}
+		for _, marshaledDupGroup := range marshalledDupGroups {
+			dupGroup := helpers.UnmarshalDuplicateGroup(marshaledDupGroup)
+			if dupGroup.Real != dupGroupToDelete {
+				dupGroups = append(dupGroups, dupGroup)
+			} else {
+				// The authors of the deleted duplicate group now become ungrouped
+				ungroupedAuthors = append(ungroupedAuthors, dupGroup.Duplicates...)
+			}
+		}
+
+		component := ConfigSetupPage.DuplicateGroupBtn(ConfigSetupPage.DuplicateGroupBtnProps{
+			UngroupedAuthors: ungroupedAuthors,
+			DuplicateAuthors: dupGroups,
+		})
+		content := t.Render(t.RenderParams{
+			C:         c,
+			Component: component,
+		})
+
+		// TODO: fix bug with re-adding the same author and deleting
 
 		return c.HTML(http.StatusOK, content)
 	})
