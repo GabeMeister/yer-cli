@@ -86,6 +86,13 @@ templ ConfigSetup(props ConfigSetupProps) {
 								DuplicateAuthors: props.DuplicateAuthorGroups,
 							})
 						</div>
+						<div
+							class="w-full"
+						>
+							@ConfigSetupPage.ExcludeAuthors(ConfigSetupPage.ExcludeAuthorsProps{
+								Authors: []string{"renovate-bot", "bruce"},
+							})
+						</div>
 						<button
 							class="btn lg w-full"
 						>
