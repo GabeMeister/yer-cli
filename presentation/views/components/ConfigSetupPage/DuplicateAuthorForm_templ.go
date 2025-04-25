@@ -9,14 +9,17 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 import (
+	"GabeMeister/yer-cli/analyzer"
+	"GabeMeister/yer-cli/presentation/helpers"
 	"fmt"
 	"slices"
 )
 
 type DuplicateAuthorFormProps struct {
-	UngroupedAuthors []string
-	SelectedAuthors  []string
-	Errors           map[string]string
+	UngroupedAuthors  []string
+	ExistingDupGroups []analyzer.DuplicateAuthorGroup
+	SelectedAuthors   []string
+	Errors            map[string]string
 }
 
 func DuplicateAuthorForm(props DuplicateAuthorFormProps) templ.Component {
@@ -52,7 +55,7 @@ func DuplicateAuthorForm(props DuplicateAuthorFormProps) templ.Component {
 			var templ_7745c5c3_Var2 string
 			templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(author)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/ConfigSetupPage/DuplicateAuthorForm.templ`, Line: 35, Col: 21}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/ConfigSetupPage/DuplicateAuthorForm.templ`, Line: 38, Col: 21}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 			if templ_7745c5c3_Err != nil {
@@ -75,7 +78,7 @@ func DuplicateAuthorForm(props DuplicateAuthorFormProps) templ.Component {
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("author-%d", idx))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/ConfigSetupPage/DuplicateAuthorForm.templ`, Line: 39, Col: 41}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/ConfigSetupPage/DuplicateAuthorForm.templ`, Line: 42, Col: 41}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
@@ -88,7 +91,7 @@ func DuplicateAuthorForm(props DuplicateAuthorFormProps) templ.Component {
 			var templ_7745c5c3_Var4 string
 			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("author-%d", idx))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/ConfigSetupPage/DuplicateAuthorForm.templ`, Line: 41, Col: 48}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/ConfigSetupPage/DuplicateAuthorForm.templ`, Line: 44, Col: 48}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {
@@ -101,7 +104,7 @@ func DuplicateAuthorForm(props DuplicateAuthorFormProps) templ.Component {
 			var templ_7745c5c3_Var5 string
 			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(author)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/ConfigSetupPage/DuplicateAuthorForm.templ`, Line: 42, Col: 15}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/ConfigSetupPage/DuplicateAuthorForm.templ`, Line: 45, Col: 15}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 			if templ_7745c5c3_Err != nil {
@@ -124,7 +127,7 @@ func DuplicateAuthorForm(props DuplicateAuthorFormProps) templ.Component {
 			var templ_7745c5c3_Var6 string
 			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(props.Errors["author-marked-as-duplicate"])
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/ConfigSetupPage/DuplicateAuthorForm.templ`, Line: 49, Col: 49}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/ConfigSetupPage/DuplicateAuthorForm.templ`, Line: 52, Col: 49}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 			if templ_7745c5c3_Err != nil {
@@ -147,7 +150,7 @@ func DuplicateAuthorForm(props DuplicateAuthorFormProps) templ.Component {
 			var templ_7745c5c3_Var7 string
 			templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(props.Errors["real-name"])
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/ConfigSetupPage/DuplicateAuthorForm.templ`, Line: 63, Col: 33}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/ConfigSetupPage/DuplicateAuthorForm.templ`, Line: 66, Col: 33}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 			if templ_7745c5c3_Err != nil {
@@ -170,9 +173,28 @@ func DuplicateAuthorForm(props DuplicateAuthorFormProps) templ.Component {
 			var templ_7745c5c3_Var8 string
 			templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(author)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/ConfigSetupPage/DuplicateAuthorForm.templ`, Line: 68, Col: 63}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/ConfigSetupPage/DuplicateAuthorForm.templ`, Line: 71, Col: 63}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"> ")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		for _, dupGroup := range props.ExistingDupGroups {
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<input type=\"hidden\" name=\"existing-dup-group\" value=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var9 string
+			templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(helpers.MarshalDuplicateGroup(dupGroup))
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/ConfigSetupPage/DuplicateAuthorForm.templ`, Line: 74, Col: 98}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

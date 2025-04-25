@@ -264,9 +264,15 @@ func addAnalyzerRoutes(e *echo.Echo) {
 	e.POST("/duplicate-authors-modal", func(c echo.Context) error {
 		formValues, _ := c.FormParams()
 		ungroupedAuthors := formValues["ungrouped-author"]
+		existingDupGroupsRaw := formValues["dup-group"]
+		existingDupGroups := []analyzer.DuplicateAuthorGroup{}
+		for _, dupGroupRaw := range existingDupGroupsRaw {
+			existingDupGroups = append(existingDupGroups, helpers.UnmarshalDuplicateGroup(dupGroupRaw))
+		}
 
 		component := ConfigSetupPage.DuplicateAuthorModal(ConfigSetupPage.DuplicateAuthorModalProps{
-			UngroupedAuthors: ungroupedAuthors,
+			UngroupedAuthors:  ungroupedAuthors,
+			ExistingDupGroups: existingDupGroups,
 		})
 		content := t.Render(t.RenderParams{
 			C:         c,
@@ -279,13 +285,19 @@ func addAnalyzerRoutes(e *echo.Echo) {
 	e.POST("/duplicate-author-grouping", func(c echo.Context) error {
 		formValues, _ := c.FormParams()
 		authorsMarkedAsDuplicate := formValues["author-marked-as-duplicate"]
+		existingDupGroupsRaw := formValues["existing-dup-group"]
+		existingDupGroups := []analyzer.DuplicateAuthorGroup{}
+		for _, dupGroupRaw := range existingDupGroupsRaw {
+			existingDupGroups = append(existingDupGroups, helpers.UnmarshalDuplicateGroup(dupGroupRaw))
+		}
 		realName := c.FormValue("real-name")
 		ungroupedAuthors := formValues["ungrouped-author"]
 
 		if realName == "" {
 			component := ConfigSetupPage.DuplicateAuthorForm(ConfigSetupPage.DuplicateAuthorFormProps{
-				UngroupedAuthors: ungroupedAuthors,
-				SelectedAuthors:  authorsMarkedAsDuplicate,
+				UngroupedAuthors:  ungroupedAuthors,
+				ExistingDupGroups: existingDupGroups,
+				SelectedAuthors:   authorsMarkedAsDuplicate,
 				Errors: map[string]string{
 					"real-name": "Please enter the real name to use",
 				},
@@ -300,7 +312,8 @@ func addAnalyzerRoutes(e *echo.Echo) {
 
 		if len(authorsMarkedAsDuplicate) <= 1 {
 			component := ConfigSetupPage.DuplicateAuthorModal(ConfigSetupPage.DuplicateAuthorModalProps{
-				UngroupedAuthors: ungroupedAuthors,
+				UngroupedAuthors:  ungroupedAuthors,
+				ExistingDupGroups: existingDupGroups,
 				Errors: map[string]string{
 					"author-marked-as-duplicate": "Please select at least 2 authors to group together",
 				},
@@ -312,14 +325,6 @@ func addAnalyzerRoutes(e *echo.Echo) {
 
 			return c.HTML(http.StatusOK, content)
 		}
-
-		dupGroup := analyzer.DuplicateAuthorGroup{
-			Real:       realName,
-			Duplicates: authorsMarkedAsDuplicate,
-		}
-		config := analyzer.GetConfig(utils.DEFAULT_CONFIG_FILE)
-		config.Repos[0].DuplicateAuthors = append(config.Repos[0].DuplicateAuthors, dupGroup)
-		analyzer.SaveConfig(config)
 
 		component := components.EmptyDiv()
 		content := t.Render(t.RenderParams{
@@ -334,10 +339,16 @@ func addAnalyzerRoutes(e *echo.Echo) {
 				filteredUngroupedAuthors = append(filteredUngroupedAuthors, ungroupedAuthor)
 			}
 		}
+
+		dupGroup := analyzer.DuplicateAuthorGroup{
+			Real:       realName,
+			Duplicates: authorsMarkedAsDuplicate,
+		}
+		existingDupGroups = append(existingDupGroups, dupGroup)
 		component = ConfigSetupPage.DuplicateGroupBtn(ConfigSetupPage.DuplicateGroupBtnProps{
-			UngroupedAuthors: filteredUngroupedAuthors,
 			OutOfBand:        true,
-			DuplicateAuthors: config.Repos[0].DuplicateAuthors,
+			UngroupedAuthors: filteredUngroupedAuthors,
+			DuplicateAuthors: existingDupGroups,
 		})
 		content += t.Render(t.RenderParams{
 			C:         c,

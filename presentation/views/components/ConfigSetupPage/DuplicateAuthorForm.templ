@@ -1,14 +1,17 @@
 package ConfigSetupPage 
 
 import (
+	"GabeMeister/yer-cli/analyzer"
+	"GabeMeister/yer-cli/presentation/helpers"
 	"fmt"
 	"slices"
 )
 
 type DuplicateAuthorFormProps struct {
-	UngroupedAuthors []string
-	SelectedAuthors  []string
-	Errors           map[string]string
+	UngroupedAuthors  []string
+	ExistingDupGroups []analyzer.DuplicateAuthorGroup
+	SelectedAuthors   []string
+	Errors            map[string]string
 }
 
 templ DuplicateAuthorForm(props DuplicateAuthorFormProps) {
@@ -66,6 +69,9 @@ templ DuplicateAuthorForm(props DuplicateAuthorFormProps) {
 			</div>
 			for _, author := range props.UngroupedAuthors {
 				<input type="hidden" name="ungrouped-author" value={ author }/>
+			}
+			for _, dupGroup := range props.ExistingDupGroups {
+				<input type="hidden" name="existing-dup-group" value={ helpers.MarshalDuplicateGroup(dupGroup) }/>
 			}
 			<button class="btn" type="submit">Submit</button>
 		</form>

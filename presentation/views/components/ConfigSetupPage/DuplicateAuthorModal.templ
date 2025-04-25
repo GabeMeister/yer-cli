@@ -1,10 +1,14 @@
 package ConfigSetupPage 
 
-import "GabeMeister/yer-cli/presentation/views/components"
+import (
+	"GabeMeister/yer-cli/analyzer"
+	"GabeMeister/yer-cli/presentation/views/components"
+)
 
 type DuplicateAuthorModalProps struct {
-	UngroupedAuthors []string
-	Errors           map[string]string
+	UngroupedAuthors  []string
+	ExistingDupGroups []analyzer.DuplicateAuthorGroup
+	Errors            map[string]string
 }
 
 templ DuplicateAuthorModal(props DuplicateAuthorModalProps) {
@@ -13,8 +17,9 @@ templ DuplicateAuthorModal(props DuplicateAuthorModalProps) {
 		Title: "Duplicate Authors",
 	}) {
 		@DuplicateAuthorForm(DuplicateAuthorFormProps{
-			UngroupedAuthors: props.UngroupedAuthors,
-			Errors:           props.Errors,
+			UngroupedAuthors:  props.UngroupedAuthors,
+			ExistingDupGroups: props.ExistingDupGroups,
+			Errors:            props.Errors,
 		})
 	}
 }
