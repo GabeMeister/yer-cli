@@ -1,16 +1,24 @@
 package ConfigSetupPage 
 
 type ExcludeAuthorsProps struct {
-	Authors []string
+	Authors   string
+	OutOfBand bool
 }
 
 templ ExcludeAuthors(props ExcludeAuthorsProps) {
 	<div
-		id="exclude-authors"
-	>
-		<div class="font-medium">Exclude Authors</div>
-		for _, author := range props.Authors {
-			<div>{ author }</div>
+		id="exclude-authors-container"
+		if props.OutOfBand {
+			hx-swap-oob="true"
 		}
+	>
+		<input
+			id="exclude-authors"
+			name="exclude-authors"
+			class="min-h-9"
+			value={ props.Authors }
+			autocomplete="off"
+			placeholder="Enter authors to exclude"
+		/>
 	</div>
 }

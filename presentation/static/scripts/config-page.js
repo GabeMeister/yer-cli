@@ -349,14 +349,31 @@ function initExcludeFilesInput() {
   }
 }
 
+function initExcludeAuthorsInput() {
+  const elem = document.querySelector("#exclude-authors");
+  if (!elem.tomselect) {
+    new TomSelect("#exclude-authors", {
+      create: true,
+      persist: false,
+      valueField: "value",
+      searchField: ["label", "value"],
+      onItemAdd: function () {
+        this.setTextboxValue("");
+      },
+    });
+  }
+}
+
 document.body.addEventListener("htmx:afterSettle", function (evt) {
   initIncludeFileExtensionsInput();
   initExcludeDirsInput();
   initExcludeFilesInput();
+  initExcludeAuthorsInput();
 });
 
 document.addEventListener("DOMContentLoaded", function (evt) {
   initIncludeFileExtensionsInput();
   initExcludeDirsInput();
   initExcludeFilesInput();
+  initExcludeAuthorsInput();
 });

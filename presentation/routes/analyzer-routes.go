@@ -30,6 +30,8 @@ func addAnalyzerRoutes(e *echo.Echo) {
 				MasterBranchName:       "",
 				IncludedFileExtensions: []string{},
 				ExcludedDirs:           []string{},
+				ExcludedFiles:          []string{},
+				ExcludedAuthors:        []string{},
 				AllAuthors:             []string{},
 				DuplicateAuthors:       []analyzer.DuplicateAuthorGroup{},
 				IncludeFileBlames:      true,
@@ -62,6 +64,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 				IncludeFileExtensions: strings.Join(config.Repos[0].IncludeFileExtensions, ","),
 				ExcludeDirs:           strings.Join(config.Repos[0].ExcludeDirectories, ","),
 				ExcludeFiles:          strings.Join(config.Repos[0].ExcludeFiles, ","),
+				ExcludeAuthors:        strings.Join(config.Repos[0].ExcludeAuthors, ","),
 			}),
 		})
 
@@ -75,6 +78,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		includeFileExtensions := c.FormValue("include-file-extensions")
 		excludeDirs := c.FormValue("exclude-dirs")
 		excludeFiles := c.FormValue("exclude-files")
+		excludeAuthors := c.FormValue("exclude-authors")
 		formParams, _ := c.FormParams()
 		marshaledDupGroups := formParams["dup-group"]
 		dupGroups := []analyzer.DuplicateAuthorGroup{}
@@ -90,6 +94,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		config.Repos[0].IncludeFileExtensions = strings.Split(includeFileExtensions, ",")
 		config.Repos[0].ExcludeDirectories = strings.Split(excludeDirs, ",")
 		config.Repos[0].ExcludeFiles = strings.Split(excludeFiles, ",")
+		config.Repos[0].ExcludeAuthors = strings.Split(excludeAuthors, ",")
 		config.Repos[0].DuplicateAuthors = dupGroups
 
 		analyzer.SaveConfig(config)
@@ -105,6 +110,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 			IncludeFileExtensions: includeFileExtensions,
 			ExcludeDirs:           excludeDirs,
 			ExcludeFiles:          excludeFiles,
+			ExcludeAuthors:        excludeAuthors,
 			UngroupedAuthors:      ungroupedAuthors,
 			DuplicateAuthorGroups: dupGroups,
 		})
