@@ -1,7 +1,12 @@
 package components 
 
 templ Link(href string) {
-	<a hx-get={ href } hx-push-url="true" hx-target="body" class="text-blue-400 text-lg">
+	<a
+		hx-get={ href }
+		hx-push-url="true"
+		hx-target="body"
+		class="text-blue-400 hover:text-blue-500 duration-200 text-lg cursor-pointer"
+	>
 		{ children... }
 	</a>
 }

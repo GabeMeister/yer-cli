@@ -19,15 +19,19 @@ type ConfigSetupProps struct {
 	ExcludeAuthors        string
 	UngroupedAuthors      []string
 	DuplicateAuthorGroups []analyzer.DuplicateAuthorGroup
-
-	// SelectedAuthors       []string
-	// SearchText              string
 }
 
 templ ConfigSetup(props ConfigSetupProps) {
 	@components.Page() {
-		<div id="config-setup">
-			<div class="bg-gray-800 flex justify-center items-start min-h-screen py-32">
+		<div id="config-setup" class="flex flex-row min-h-screen w-screen">
+			<div class="w-64 bg-white-200">
+				@components.Link("/create-recap?new=true") {
+					<div class="flex justify-center p-3">
+						+ Create New Recap
+					</div>
+				}
+			</div>
+			<div class="bg-gray-800 flex justify-center items-start min-h-screen py-32 grow">
 				<div class="bg-white w-1/3 min-w-[600px] max-w-[750px] p-12 rounded-md">
 					<form
 						hx-patch="/config-file"

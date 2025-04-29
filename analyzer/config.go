@@ -20,11 +20,11 @@ type ConfigFileOptions struct {
 
 func InitConfig(options ConfigFileOptions) ConfigFile {
 	config := ConfigFile{
+		Name:    "",
+		Version: "0.0.1",
 		Repos: []RepoConfig{
 			{
-				Version:               "0.0.1",
 				Path:                  options.RepoDir,
-				Name:                  "",
 				MasterBranchName:      options.MasterBranchName,
 				IncludeFileExtensions: options.IncludedFileExtensions,
 				ExcludeDirectories:    options.ExcludedDirs,

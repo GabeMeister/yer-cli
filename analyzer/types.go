@@ -1,7 +1,9 @@
 package analyzer
 
 type ConfigFile struct {
-	Repos []RepoConfig `json:"repos"`
+	Name    string       `json:"name"`
+	Version string       `json:"version"`
+	Repos   []RepoConfig `json:"repos"`
 }
 
 type DuplicateAuthorGroup struct {
@@ -10,17 +12,16 @@ type DuplicateAuthorGroup struct {
 }
 
 type RepoConfig struct {
-	Version               string                   `json:"version"`
-	Name                  string                   `json:"name"`
-	MasterBranchName      string                   `json:"master_branch_name"`
-	Path                  string                   `json:"path"`
-	IncludeFileExtensions []string                 `json:"include_file_extensions"`
-	ExcludeDirectories    []string                 `json:"exclude_directories"`
-	ExcludeFiles          []string                 `json:"exclude_files"`
-	ExcludeAuthors      []string                 `json:"exclude_authors"`
-	DuplicateAuthors    []DuplicateAuthorGroup `json:"duplicate_authors"`
-	AllAuthors            []string                 `json:"all_authors"`
-	IncludeFileBlames     bool                     `json:"include_file_blames"`
+	Id                    int                    `json:"id"`
+	Path                  string                 `json:"path"`
+	MasterBranchName      string                 `json:"master_branch_name"`
+	IncludeFileExtensions []string               `json:"include_file_extensions"`
+	ExcludeDirectories    []string               `json:"exclude_directories"`
+	ExcludeFiles          []string               `json:"exclude_files"`
+	ExcludeAuthors        []string               `json:"exclude_authors"`
+	DuplicateAuthors      []DuplicateAuthorGroup `json:"duplicate_authors"`
+	AllAuthors            []string               `json:"all_authors"`
+	IncludeFileBlames     bool                   `json:"include_file_blames"`
 }
 
 type FileChange struct {
@@ -99,21 +100,21 @@ type Recap struct {
 	SizeOfRepoByWeekCurrYear   []RepoSizeTimeStamp `json:"size_of_repo_by_week_curr_year"`
 
 	// Team
-	NewAuthorCommitsCurrYear             []GitCommit                    `json:"new_author_commits_curr_year"`
-	NewAuthorCountCurrYear               int                            `json:"new_author_count_curr_year"`
-	NewAuthorListCurrYear                []string                       `json:"new_author_list_curr_year"`
-	AuthorCommitCountsCurrYear           map[string]int                 `json:"author_commit_counts_curr_year"`
-	AuthorCommitCountsAllTime            map[string]int                 `json:"author_commit_counts_all_time"`
-	AuthorCountCurrYear                  int                            `json:"author_count_curr_year"`
-	AuthorCountAllTime                   int                            `json:"author_count_all_time"`
-	AuthorCommitsOverTimeCurrYear        []TotalCommitCount             `json:"author_commits_over_time_curr_year"`
-	AuthorFileChangesOverTimeCurrYear    []TotalFileChangeCount         `json:"author_file_changes_over_time_curr_year"`
+	NewAuthorCommitsCurrYear             []GitCommit                  `json:"new_author_commits_curr_year"`
+	NewAuthorCountCurrYear               int                          `json:"new_author_count_curr_year"`
+	NewAuthorListCurrYear                []string                     `json:"new_author_list_curr_year"`
+	AuthorCommitCountsCurrYear           map[string]int               `json:"author_commit_counts_curr_year"`
+	AuthorCommitCountsAllTime            map[string]int               `json:"author_commit_counts_all_time"`
+	AuthorCountCurrYear                  int                          `json:"author_count_curr_year"`
+	AuthorCountAllTime                   int                          `json:"author_count_all_time"`
+	AuthorCommitsOverTimeCurrYear        []TotalCommitCount           `json:"author_commits_over_time_curr_year"`
+	AuthorFileChangesOverTimeCurrYear    []TotalFileChangeCount       `json:"author_file_changes_over_time_curr_year"`
 	MostSingleDayCommitsByAuthorCurrYear MostSingleDayCommitsByAuthor `json:"most_single_day_commits_by_author_curr_year"`
-	DirectPushesOnMasterByAuthorCurrYear map[string]int                 `json:"direct_pushes_on_master_by_author_curr_year"`
-	MergesToMasterByAuthorCurrYear       map[string]int                 `json:"merges_to_master_by_author_curr_year"`
-	FileChangesByAuthorCurrYear          map[string]int                 `json:"file_changes_by_author_curr_year"`
-	FileChangeRatioByAuthorCurrYear      map[string]float64             `json:"file_change_ratio_by_author_curr_year"`
-	TotalLinesOfCodeInRepoByAuthor       map[string]int                 `json:"total_lines_of_code_in_repo_by_author"`
+	DirectPushesOnMasterByAuthorCurrYear map[string]int               `json:"direct_pushes_on_master_by_author_curr_year"`
+	MergesToMasterByAuthorCurrYear       map[string]int               `json:"merges_to_master_by_author_curr_year"`
+	FileChangesByAuthorCurrYear          map[string]int               `json:"file_changes_by_author_curr_year"`
+	FileChangeRatioByAuthorCurrYear      map[string]float64           `json:"file_change_ratio_by_author_curr_year"`
+	TotalLinesOfCodeInRepoByAuthor       map[string]int               `json:"total_lines_of_code_in_repo_by_author"`
 }
 
 // Example: { date: '2023-01-03T08:00:00.000Z', name: 'Steve Bremer', value: 24 },

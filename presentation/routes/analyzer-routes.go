@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"slices"
+	"strconv"
 	"strings"
 	"time"
 
@@ -39,7 +40,58 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		}
 
 		config := analyzer.GetConfig(utils.DEFAULT_CONFIG_FILE)
-		repo := config.Repos[0]
+
+		var id int
+		var err error
+		idParam := c.QueryParam("id")
+		if idParam == "" {
+			// Default to just the first repo in the config file
+			id = config.Repos[0].Id
+		}
+
+		id, err = strconv.Atoi(idParam)
+		if err != nil {
+			panic(err)
+		}
+
+		found := false
+		for _, repo := range config.Repos {
+			if repo.Id == id {
+				found = true
+				break
+			}
+		}
+
+		if !found {
+			panic("Repo id not found in config")
+		}
+
+		url := fmt.Sprintf("/edit-recap?id=%s", idParam)
+		c.Redirect(301, url)
+
+		return nil
+	})
+
+	e.GET("/edit-recap", func(c echo.Context) error {
+		idParam := c.QueryParam("id")
+		id, err := strconv.Atoi(idParam)
+		if err != nil {
+			panic(err)
+		}
+
+		config := analyzer.GetConfig(utils.DEFAULT_CONFIG_FILE)
+		var repo analyzer.RepoConfig
+		for _, r := range config.Repos {
+			if r.Id == id {
+				repo = r
+				break
+			}
+		}
+
+		if repo.Id == 0 {
+			panic(fmt.Sprintf("Could not find repo matching id %d", id))
+		}
+
 		var ungroupedAuthors []string
 		if repo.Path != "" && repo.MasterBranchName != "" {
 			duplicateAuthors := analyzer.GetDuplicateAuthorList(repo)
@@ -55,16 +107,16 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		content := t.Render(t.RenderParams{
 			C: c,
 			Component: pages.ConfigSetup(pages.ConfigSetupProps{
-				RecapName:             config.Repos[0].Name,
-				RepoPath:              config.Repos[0].Path,
+				RecapName:             config.Name,
+				RepoPath:              repo.Path,
 				Year:                  year,
-				MasterBranch:          config.Repos[0].MasterBranchName,
+				MasterBranch:          repo.MasterBranchName,
 				UngroupedAuthors:      ungroupedAuthors,
 				DuplicateAuthorGroups: repo.DuplicateAuthors,
-				IncludeFileExtensions: strings.Join(config.Repos[0].IncludeFileExtensions, ","),
-				ExcludeDirs:           strings.Join(config.Repos[0].ExcludeDirectories, ","),
-				ExcludeFiles:          strings.Join(config.Repos[0].ExcludeFiles, ","),
-				ExcludeAuthors:        strings.Join(config.Repos[0].ExcludeAuthors, ","),
+				IncludeFileExtensions: strings.Join(repo.IncludeFileExtensions, ","),
+				ExcludeDirs:           strings.Join(repo.ExcludeDirectories, ","),
+				ExcludeFiles:          strings.Join(repo.ExcludeFiles, ","),
+				ExcludeAuthors:        strings.Join(repo.ExcludeAuthors, ","),
 			}),
 		})
 
@@ -88,7 +140,8 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		ungroupedAuthors := formParams["ungrouped-author"]
 
 		config := analyzer.GetConfig(utils.DEFAULT_CONFIG_FILE)
-		config.Repos[0].Name = recapName
+		// TODO: finish this
+		config.Name = recapName
 		config.Repos[0].Path = repoPath
 		config.Repos[0].MasterBranchName = masterBranchName
 		config.Repos[0].IncludeFileExtensions = strings.Split(includeFileExtensions, ",")
@@ -391,8 +444,6 @@ func addAnalyzerRoutes(e *echo.Echo) {
 			C:         c,
 			Component: component,
 		})
-
-		// TODO: fix bug with re-adding the same author and deleting
 
 		return c.HTML(http.StatusOK, content)
 	})
