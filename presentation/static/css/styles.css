@@ -1108,10 +1108,6 @@ video {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-.grid-cols-\[1fr_minmax\(1024px\2c 1440px\)_1fr\] {
-  grid-template-columns: 1fr minmax(1024px,1440px) 1fr;
-}
-
 .flex-row {
   flex-direction: row;
 }
@@ -2296,14 +2292,4 @@ video {
 .focus\:border-gray-500:focus {
   --tw-border-opacity: 1;
   border-color: rgb(107 114 128 / var(--tw-border-opacity));
-}
-
-@media (min-width: 1024px) {
-  .lg\:block {
-    display: block;
-  }
-
-  .lg\:hidden {
-    display: none;
-  }
 }

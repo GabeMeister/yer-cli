@@ -56,7 +56,7 @@ Press enter to continue...`)
 		MasterBranchName:       masterBranch,
 		IncludedFileExtensions: fileExtensions,
 		ExcludedDirs:           excludedDirs,
-		DuplicateAuthors:     []DuplicateAuthorGroup{},
+		DuplicateAuthors:       []DuplicateAuthorGroup{},
 		IncludeFileBlames:      includeFileBlames,
 	})
 	// For now, we're just handling 1, we can handle multiple repos in a
@@ -497,7 +497,7 @@ func calculateRecap(config RepoConfig) {
 	repoRecap := Recap{
 		// Metadata
 		Version:            "0.0.1",
-		Name:               config.Name,
+		Name:               config.Path,
 		DateAnalyzed:       isoDateString,
 		IsMultiYearRepo:    isMultiYearRepo,
 		IncludesFileBlames: config.IncludeFileBlames,
@@ -643,8 +643,8 @@ func isValidConfig(path string) bool {
 		return false
 	}
 
-	if repoConfig.Name == "" {
-		fmt.Println("Missing `name` in the config file.")
+	if repoConfig.Path == "" {
+		fmt.Println("Missing `path` in the config file.")
 		return false
 	}
 

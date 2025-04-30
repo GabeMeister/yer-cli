@@ -32,17 +32,6 @@ func addDebuggingRoutes(e *echo.Echo) {
 		return c.HTML(http.StatusOK, content)
 	})
 
-	e.GET("/test", func(c echo.Context) error {
-		component := pages.Test()
-
-		content := t.Render(t.RenderParams{
-			C:         c,
-			Component: component,
-		})
-
-		return c.HTML(http.StatusOK, content)
-	})
-
 	e.POST("/example", func(c echo.Context) error {
 		time.Sleep(700 * time.Millisecond)
 

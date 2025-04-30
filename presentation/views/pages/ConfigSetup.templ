@@ -8,6 +8,7 @@ import (
 )
 
 type ConfigSetupProps struct {
+	Id                    int
 	RecapName             string
 	RepoPath              string
 	Toast                 string
@@ -19,15 +20,19 @@ type ConfigSetupProps struct {
 	ExcludeAuthors        string
 	UngroupedAuthors      []string
 	DuplicateAuthorGroups []analyzer.DuplicateAuthorGroup
+	RepoConfigList        []analyzer.RepoConfig
 }
 
 templ ConfigSetup(props ConfigSetupProps) {
 	@components.Page() {
 		<div id="config-setup" class="flex flex-row min-h-screen w-screen">
 			<div class="w-64 bg-white-200">
+				for _, config := range props.RepoConfigList {
+					<div>{ config.Path }</div>
+				}
 				@components.Link("/create-recap?new=true") {
 					<div class="flex justify-center p-3">
-						+ Create New Recap
+						+ Add Repo
 					</div>
 				}
 			</div>
@@ -41,18 +46,6 @@ templ ConfigSetup(props ConfigSetupProps) {
 					>
 						<div class="flex justify-center w-full">
 							<h1 class="h1">Create Recap</h1>
-						</div>
-						<div class="w-full">
-							<label for="recap-name" class="font-medium">Recap Name</label>
-							<input
-								type="text"
-								class="text-input w-full"
-								placeholder={ fmt.Sprintf("My Recap %d", props.Year) }
-								name="recap-name"
-								id="recap-name"
-								value={ props.RecapName }
-								required
-							/>
 						</div>
 						<div class="w-full">
 							@ConfigSetupPage.RepoPath(ConfigSetupPage.RepoPathProps{
@@ -99,6 +92,7 @@ templ ConfigSetup(props ConfigSetupProps) {
 								Authors: props.ExcludeAuthors,
 							})
 						</div>
+						<input type="hidden" name="id" value={ fmt.Sprintf("%d", props.Id) }/>
 						<button
 							class="btn lg w-full"
 						>

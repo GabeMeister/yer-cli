@@ -1,0 +1,45 @@
+package pages 
+
+import (
+	"GabeMeister/yer-cli/presentation/views/components"
+	"fmt"
+	"time"
+)
+
+templ CreateRecap() {
+	@components.Page() {
+		<div id="create-recap" class="flex flex-row min-h-screen w-screen">
+			<div class="bg-gray-800 flex justify-center items-start min-h-screen py-32 grow">
+				<div class="bg-white w-1/3 min-w-[600px] max-w-[750px] p-12 rounded-md">
+					<form
+						hx-post="/create-recap"
+						hx-swap="innerHTML"
+						hx-target="#root"
+						class="flex flex-col items-start gap-6"
+					>
+						<div class="flex justify-center w-full">
+							<h1 class="h1">Create Recap</h1>
+						</div>
+						<div class="w-full">
+							<label for="recap-name" class="font-medium">Recap Name</label>
+							<input
+								type="text"
+								class="text-input w-full"
+								placeholder={ fmt.Sprintf("My Recap %d", time.Now().Year()) }
+								name="recap-name"
+								id="recap-name"
+								required
+							/>
+						</div>
+						<button
+							class="btn lg w-full"
+						>
+							Create
+							@components.LoadingSpinner()
+						</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	}
+}

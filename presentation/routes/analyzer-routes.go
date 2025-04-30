@@ -37,46 +37,40 @@ func addAnalyzerRoutes(e *echo.Echo) {
 				DuplicateAuthors:       []analyzer.DuplicateAuthorGroup{},
 				IncludeFileBlames:      true,
 			})
-		}
 
+			content := t.Render(t.RenderParams{
+				C:         c,
+				Component: pages.CreateRecap(),
+			})
+
+			return c.HTML(http.StatusOK, content)
+		} else {
+			config := analyzer.GetConfig(utils.DEFAULT_CONFIG_FILE)
+
+			url := fmt.Sprintf("/add-repo?id=%d", config.Repos[0].Id)
+			c.Redirect(301, url)
+
+			return nil
+		}
+	})
+
+	e.POST("/create-recap", func(c echo.Context) error {
 		config := analyzer.GetConfig(utils.DEFAULT_CONFIG_FILE)
+		recapName := helpers.MustGetFormValue(c, "recap-name")
 
-		var id int
-		var err error
-		idParam := c.QueryParam("id")
-		if idParam == "" {
-			// Default to just the first repo in the config file
-			id = config.Repos[0].Id
-		}
+		config.Name = recapName
+		analyzer.SaveConfig(config)
 
-		id, err = strconv.Atoi(idParam)
-		if err != nil {
-			panic(err)
-		}
-
-		found := false
-		for _, repo := range config.Repos {
-			if repo.Id == id {
-				found = true
-				break
-			}
-		}
-
-		if !found {
-			panic("Repo id not found in config")
-		}
-
-		url := fmt.Sprintf("/edit-recap?id=%s", idParam)
+		url := fmt.Sprintf("/add-repo?id=%d", config.Repos[0].Id)
 		c.Redirect(301, url)
 
 		return nil
 	})
 
-	e.GET("/edit-recap", func(c echo.Context) error {
-		idParam := c.QueryParam("id")
-		id, err := strconv.Atoi(idParam)
+	e.GET("/add-repo", func(c echo.Context) error {
+		id, err := helpers.GetIntQueryParam(c, "id")
 		if err != nil {
-			panic(err)
+			return RenderErrorMessage(c, err)
 		}
 
 		config := analyzer.GetConfig(utils.DEFAULT_CONFIG_FILE)
@@ -124,6 +118,11 @@ func addAnalyzerRoutes(e *echo.Echo) {
 	})
 
 	e.PATCH("/config-file", func(c echo.Context) error {
+		repoIdParam := c.FormValue("id")
+		repoId, err := strconv.Atoi(repoIdParam)
+		if err != nil {
+			panic(fmt.Sprintf("Repo ID param is not a number: %s", repoIdParam))
+		}
 		recapName := c.FormValue("recap-name")
 		repoPath := c.FormValue("repo-path")
 		masterBranchName := c.FormValue("master-branch-name")
@@ -140,22 +139,35 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		ungroupedAuthors := formParams["ungrouped-author"]
 
 		config := analyzer.GetConfig(utils.DEFAULT_CONFIG_FILE)
-		// TODO: finish this
+
+		var repo *analyzer.RepoConfig
+		for _, r := range config.Repos {
+
+			if r.Id == repoId {
+				repo = &r
+				break
+			}
+		}
+
+		if repo.Id == 0 {
+			panic("Could not find correct repo to patch in config file")
+		}
+
 		config.Name = recapName
-		config.Repos[0].Path = repoPath
-		config.Repos[0].MasterBranchName = masterBranchName
-		config.Repos[0].IncludeFileExtensions = strings.Split(includeFileExtensions, ",")
-		config.Repos[0].ExcludeDirectories = strings.Split(excludeDirs, ",")
-		config.Repos[0].ExcludeFiles = strings.Split(excludeFiles, ",")
-		config.Repos[0].ExcludeAuthors = strings.Split(excludeAuthors, ",")
-		config.Repos[0].DuplicateAuthors = dupGroups
+		repo.Path = repoPath
+		repo.MasterBranchName = masterBranchName
+		repo.IncludeFileExtensions = strings.Split(includeFileExtensions, ",")
+		repo.ExcludeDirectories = strings.Split(excludeDirs, ",")
+		repo.ExcludeFiles = strings.Split(excludeFiles, ",")
+		repo.ExcludeAuthors = strings.Split(excludeAuthors, ",")
+		repo.DuplicateAuthors = dupGroups
 
 		analyzer.SaveConfig(config)
 
 		year := time.Now().Year()
 
 		component := pages.ConfigSetup(pages.ConfigSetupProps{
-			RecapName:             config.Repos[0].Name,
+			RecapName:             config.Name,
 			RepoPath:              config.Repos[0].Path,
 			Toast:                 "Saved!",
 			Year:                  year,

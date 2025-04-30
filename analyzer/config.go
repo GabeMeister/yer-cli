@@ -24,6 +24,7 @@ func InitConfig(options ConfigFileOptions) ConfigFile {
 		Version: "0.0.1",
 		Repos: []RepoConfig{
 			{
+				Id:                    1,
 				Path:                  options.RepoDir,
 				MasterBranchName:      options.MasterBranchName,
 				IncludeFileExtensions: options.IncludedFileExtensions,
@@ -84,7 +85,7 @@ func SaveConfig(config ConfigFile) {
 }
 
 func DoesConfigExist(path string) bool {
-	_, err := os.ReadFile(path)
+	data, err := os.ReadFile(path)
 
-	return err == nil
+	return err == nil && len(data) > 0
 }
