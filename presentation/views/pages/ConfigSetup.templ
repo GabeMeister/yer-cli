@@ -27,8 +27,20 @@ templ ConfigSetup(props ConfigSetupProps) {
 	@components.Page() {
 		<div id="config-setup" class="flex flex-row min-h-screen w-screen">
 			<div class="w-64 bg-white-200">
+				<h1 class="h1 p-3">{ props.RecapName }</h1>
 				for _, config := range props.RepoConfigList {
-					<div>{ config.Path }</div>
+					<ul class="text-gray-500">
+						<li class="p-3 px-6">
+							<a hx-get="#" class="flex gap-2 items-center">
+								<i class="fa-solid fa-database"></i>
+								if config.Path != "" {
+									<span>{ config.Path }</span>
+								} else {
+									<span>New Repo</span>
+								}
+							</a>
+						</li>
+					</ul>
 				}
 				@components.Link("/create-recap?new=true") {
 					<div class="flex justify-center p-3">
@@ -45,7 +57,7 @@ templ ConfigSetup(props ConfigSetupProps) {
 						class="flex flex-col items-start gap-6"
 					>
 						<div class="flex justify-center w-full">
-							<h1 class="h1">Create Recap</h1>
+							<h1 class="h1">Add Repo</h1>
 						</div>
 						<div class="w-full">
 							@ConfigSetupPage.RepoPath(ConfigSetupPage.RepoPathProps{
@@ -108,6 +120,5 @@ templ ConfigSetup(props ConfigSetupProps) {
 				Message: props.Toast,
 			})
 		}
-		<script src="/scripts/config-page.js"></script>
 	}
 }

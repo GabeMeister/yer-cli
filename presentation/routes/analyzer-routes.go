@@ -25,6 +25,7 @@ var InitialAuthors = []string{"Kenny", "Kenny1", "Kenny2", "Isaac Neace", "Gabe 
 func addAnalyzerRoutes(e *echo.Echo) {
 
 	e.GET("/create-recap", func(c echo.Context) error {
+		fmt.Print("\n\n", "*** here ***", "\n", "\n\n\n")
 		if !analyzer.DoesConfigExist(utils.DEFAULT_CONFIG_FILE) {
 			analyzer.InitConfig(analyzer.ConfigFileOptions{
 				RepoDir:                "",
@@ -73,6 +74,11 @@ func addAnalyzerRoutes(e *echo.Echo) {
 			return RenderErrorMessage(c, err)
 		}
 
+		if !analyzer.DoesConfigExist(utils.DEFAULT_CONFIG_FILE) {
+			c.Redirect(301, "/create-recap")
+			return nil
+		}
+
 		config := analyzer.GetConfig(utils.DEFAULT_CONFIG_FILE)
 		var repo analyzer.RepoConfig
 		for _, r := range config.Repos {
@@ -111,6 +117,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 				ExcludeDirs:           strings.Join(repo.ExcludeDirectories, ","),
 				ExcludeFiles:          strings.Join(repo.ExcludeFiles, ","),
 				ExcludeAuthors:        strings.Join(repo.ExcludeAuthors, ","),
+				RepoConfigList:        config.Repos,
 			}),
 		})
 
@@ -280,7 +287,6 @@ func addAnalyzerRoutes(e *echo.Echo) {
 			})
 
 			authors := analyzer.GetAuthorsFromRepo(baseDir, masterBranchName, []string{})
-			fmt.Print("\n\n", "*** authors ***", "\n", authors, "\n\n\n")
 			dupGroupsBtn := ConfigSetupPage.DuplicateGroupBtn(ConfigSetupPage.DuplicateGroupBtnProps{
 				UngroupedAuthors: authors,
 				OutOfBand:        true,

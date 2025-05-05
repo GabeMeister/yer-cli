@@ -364,16 +364,22 @@ function initExcludeAuthorsInput() {
   }
 }
 
-document.body.addEventListener("htmx:afterSettle", function (evt) {
+function refreshConfigPage() {
   initIncludeFileExtensionsInput();
   initExcludeDirsInput();
   initExcludeFilesInput();
   initExcludeAuthorsInput();
+}
+
+document.addEventListener("htmx:afterSettle", function (evt) {
+  console.log("\n\n***** here it is *****\n", window.location.pathname, "\n\n");
+  if (window.location.pathname === "/add-repo") {
+    refreshConfigPage();
+  }
 });
 
 document.addEventListener("DOMContentLoaded", function (evt) {
-  initIncludeFileExtensionsInput();
-  initExcludeDirsInput();
-  initExcludeFilesInput();
-  initExcludeAuthorsInput();
+  if (window.location.pathname === "/add-repo") {
+    refreshConfigPage();
+  }
 });

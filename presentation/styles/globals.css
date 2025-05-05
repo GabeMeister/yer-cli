@@ -36,7 +36,7 @@
 .btn {
   /* We include `relative` here to be able to show loading content within the
   button */
-  @apply px-3 py-2 relative rounded-md text-white bg-sky-600 hover:bg-sky-700 duration-200;
+  @apply px-3 py-1 relative rounded-md text-white bg-sky-600 hover:bg-sky-700 duration-200;
 }
 
 .btn.red {
