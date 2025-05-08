@@ -119,6 +119,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		content := t.Render(t.RenderParams{
 			C: c,
 			Component: pages.ConfigSetup(pages.ConfigSetupProps{
+				Id:                    repo.Id,
 				RecapName:             config.Name,
 				RepoPath:              repo.Path,
 				Year:                  year,
@@ -158,19 +159,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		ungroupedAuthors := formParams["ungrouped-author"]
 
 		config := analyzer.GetConfig(utils.DEFAULT_CONFIG_FILE)
-
-		var repo *analyzer.RepoConfig
-		for _, r := range config.Repos {
-
-			if r.Id == repoId {
-				repo = &r
-				break
-			}
-		}
-
-		if repo.Id == 0 {
-			panic("Could not find correct repo to patch in config file")
-		}
+		repo := analyzer.MustGetRepoConfig(config, repoId)
 
 		config.Name = recapName
 		repo.Path = repoPath
@@ -186,8 +175,10 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		year := time.Now().Year()
 
 		component := pages.ConfigSetup(pages.ConfigSetupProps{
+			Id:                    repo.Id,
+			RepoConfigList:        config.Repos,
 			RecapName:             config.Name,
-			RepoPath:              config.Repos[0].Path,
+			RepoPath:              repo.Path,
 			Toast:                 "Saved!",
 			Year:                  year,
 			MasterBranch:          masterBranchName,
@@ -204,6 +195,20 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		})
 
 		return c.HTML(http.StatusOK, content)
+	})
+
+	e.PATCH("/repo-config/delete", func(c echo.Context) error {
+		repoIdParam := c.FormValue("id")
+		repoId, err := strconv.Atoi(repoIdParam)
+		if err != nil {
+			panic(fmt.Sprintf("Repo ID param is not a number: %s", repoIdParam))
+		}
+
+		config := analyzer.GetConfig(utils.DEFAULT_CONFIG_FILE)
+		config = analyzer.RemoveRepoFromConfig(config, repoId)
+		analyzer.SaveConfig(config)
+
+		return c.HTML(http.StatusOK, "")
 	})
 
 	e.GET("/dir-list-modal", func(c echo.Context) error {

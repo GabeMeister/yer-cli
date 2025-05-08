@@ -28,24 +28,38 @@ templ ConfigSetup(props ConfigSetupProps) {
 		<div id="config-setup" class="flex flex-row min-h-screen w-screen">
 			<div class="w-64 bg-white-200">
 				<h1 class="h1 p-3">{ props.RecapName }</h1>
-				for _, config := range props.RepoConfigList {
-					<ul class="text-gray-500">
-						<li class="p-3 px-6">
+				<ul class="text-gray-500">
+					for _, config := range props.RepoConfigList {
+						<li
+							class="p-3 px-6 flex gap-3 justify-between items-center"
+							id={ fmt.Sprintf("repo-link-%d", config.Id) }
+						>
 							@components.Link(fmt.Sprintf("/add-repo?id=%d", config.Id)) {
 								<span
 									class="flex gap-2 items-center cursor-pointer"
 								>
 									<i class="fa-solid fa-database"></i>
-									if config.Path != "" {
-										<span>{ config.Path }</span>
-									} else {
-										<span class="font-bold">New Repo</span>
-									}
+									<span
+										class={ templ.KV("font-bold", config.Id == props.Id) }
+									>
+										if config.Path != "" {
+											{ config.Path }
+										} else {
+											{ "New Repo" }
+										}
+									</span>
 								</span>
 							}
+							<i
+								class="fa-solid fa-xmark text-red-400 hover:text-red-500 duration-200 cursor-pointer"
+								hx-patch="/repo-config/delete"
+								hx-vals={ fmt.Sprintf("{\"id\":\"%d\"}", config.Id) }
+								hx-swap="outerHTML"
+								hx-target={ fmt.Sprintf("#repo-link-%d", config.Id) }
+							></i>
 						</li>
-					</ul>
-				}
+					}
+				</ul>
 				@components.Link("/add-repo?new=true") {
 					<div class="flex justify-center p-3">
 						+ Add Repo

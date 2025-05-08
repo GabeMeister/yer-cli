@@ -105,6 +105,44 @@ func GetConfig(path string) ConfigFile {
 	return data
 }
 
+func RemoveRepoFromConfig(config ConfigFile, repoId int) ConfigFile {
+	repoIdx := GetRepoIndex(config, repoId)
+	config.Repos = append(config.Repos[:repoIdx], config.Repos[repoIdx+1:]...)
+
+	return config
+}
+
+func GetRepoIndex(config ConfigFile, repoId int) int {
+	index := -1
+
+	for idx, r := range config.Repos {
+
+		if r.Id == repoId {
+			index = idx
+			break
+		}
+	}
+
+	return index
+}
+
+func MustGetRepoConfig(config ConfigFile, repoId int) *RepoConfig {
+	var repo *RepoConfig
+	for _, r := range config.Repos {
+
+		if r.Id == repoId {
+			repo = &r
+			break
+		}
+	}
+
+	if repo.Id == 0 {
+		panic("Could not find correct repo to patch in config file")
+	}
+
+	return repo
+}
+
 func SaveConfig(config ConfigFile) {
 	SaveDataToFile(config, utils.DEFAULT_CONFIG_FILE)
 }
