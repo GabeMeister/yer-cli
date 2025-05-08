@@ -69,17 +69,29 @@ func addAnalyzerRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/add-repo", func(c echo.Context) error {
-		id, err := helpers.GetIntQueryParam(c, "id")
-		if err != nil {
-			return RenderErrorMessage(c, err)
-		}
-
 		if !analyzer.DoesConfigExist(utils.DEFAULT_CONFIG_FILE) {
 			c.Redirect(301, "/create-recap")
 			return nil
 		}
 
 		config := analyzer.GetConfig(utils.DEFAULT_CONFIG_FILE)
+
+		newParam := c.QueryParam("new")
+
+		if newParam == "true" {
+			config = analyzer.AddRepoConfig(config)
+			newRepoId := config.Repos[len(config.Repos)-1].Id
+			analyzer.SaveConfig(config)
+
+			c.Redirect(301, fmt.Sprintf("/add-repo?id=%d", newRepoId))
+			return nil
+		}
+
+		id, err := helpers.GetIntQueryParam(c, "id")
+		if err != nil {
+			return RenderErrorMessage(c, err)
+		}
+
 		var repo analyzer.RepoConfig
 		for _, r := range config.Repos {
 			if r.Id == id {

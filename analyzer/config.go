@@ -46,6 +46,31 @@ func InitConfig(options ConfigFileOptions) ConfigFile {
 	return config
 }
 
+func AddRepoConfig(config ConfigFile) ConfigFile {
+	// Find the largest id
+	largestId := 1
+	for _, repoConfig := range config.Repos {
+		if repoConfig.Id > largestId {
+			largestId = repoConfig.Id
+		}
+	}
+
+	newRepoConfig := RepoConfig{
+		Id:                    largestId + 1,
+		Path:                  "",
+		MasterBranchName:      "",
+		IncludeFileExtensions: []string{},
+		ExcludeDirectories:    []string{},
+		ExcludeFiles:          []string{},
+		ExcludeAuthors:        []string{},
+		DuplicateAuthors:      []DuplicateAuthorGroup{},
+		IncludeFileBlames:     false,
+	}
+	config.Repos = append(config.Repos, newRepoConfig)
+
+	return config
+}
+
 func updateDuplicateAuthors(path string, duplicateAuthors []DuplicateAuthorGroup) error {
 	// Update config, cause we wanna remember this for later
 	config := GetConfig(path)

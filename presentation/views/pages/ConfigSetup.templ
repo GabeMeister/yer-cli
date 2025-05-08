@@ -31,18 +31,22 @@ templ ConfigSetup(props ConfigSetupProps) {
 				for _, config := range props.RepoConfigList {
 					<ul class="text-gray-500">
 						<li class="p-3 px-6">
-							<a hx-get="#" class="flex gap-2 items-center">
-								<i class="fa-solid fa-database"></i>
-								if config.Path != "" {
-									<span>{ config.Path }</span>
-								} else {
-									<span>New Repo</span>
-								}
-							</a>
+							@components.Link(fmt.Sprintf("/add-repo?id=%d", config.Id)) {
+								<span
+									class="flex gap-2 items-center cursor-pointer"
+								>
+									<i class="fa-solid fa-database"></i>
+									if config.Path != "" {
+										<span>{ config.Path }</span>
+									} else {
+										<span class="font-bold">New Repo</span>
+									}
+								</span>
+							}
 						</li>
 					</ul>
 				}
-				@components.Link("/create-recap?new=true") {
+				@components.Link("/add-repo?new=true") {
 					<div class="flex justify-center p-3">
 						+ Add Repo
 					</div>
