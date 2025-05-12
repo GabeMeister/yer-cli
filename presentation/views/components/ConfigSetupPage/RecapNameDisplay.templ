@@ -1,0 +1,29 @@
+package ConfigSetupPage 
+
+import "GabeMeister/yer-cli/utils"
+
+type RecapNameDisplayProps struct {
+	RecapName string
+}
+
+templ RecapNameDisplay(props RecapNameTextboxProps) {
+	<div
+		id="recap-name-display"
+		class="p-3 flex items-center gap-2"
+	>
+		<i
+			class="fa-solid fa-pencil text-gray-500 cursor-pointer"
+			hx-get="/recap-name-textbox"
+			hx-vals={ utils.MustJSONStringify(map[string]string{"recap-name": props.RecapName}) }
+			hx-target="#recap-name-display"
+			hx-swap="outerHTML"
+		></i>
+		<h1 class="h1">
+			if props.RecapName == "" {
+				Untitled Recap
+			} else {
+				{ props.RecapName }
+			}
+		</h1>
+	</div>
+}

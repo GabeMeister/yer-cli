@@ -27,8 +27,10 @@ type ConfigSetupProps struct {
 templ ConfigSetup(props ConfigSetupProps) {
 	@components.Page() {
 		<div id="config-setup" class="flex flex-row min-h-screen w-screen">
-			<div class="w-64 bg-white-200">
-				<h1 class="h1 p-3">{ props.RecapName }</h1>
+			<div class="w-72 bg-white-200">
+				@ConfigSetupPage.RecapNameDisplay(ConfigSetupPage.RecapNameTextboxProps{
+					RecapName: props.RecapName,
+				})
 				<ul class="text-gray-500">
 					for _, config := range props.RepoConfigList {
 						<li
@@ -39,7 +41,13 @@ templ ConfigSetup(props ConfigSetupProps) {
 								<span
 									class="flex gap-2 items-center cursor-pointer"
 								>
-									<i class="fa-solid fa-database"></i>
+									<i
+										class={
+											"fa-solid",
+											templ.KV("fa-database", config.Id != props.Id),
+											templ.KV("fa-pencil", config.Id == props.Id),
+										}
+									></i>
 									<span
 										class={ templ.KV("font-bold", config.Id == props.Id), templ.KV("italic", config.Path == "") }
 									>

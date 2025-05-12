@@ -1,0 +1,24 @@
+package ConfigSetupPage 
+
+type RecapNameTextboxProps struct {
+	RecapName string
+}
+
+templ RecapNameTextbox(props RecapNameTextboxProps) {
+	<div class="flex gap-2 items-center p-3" id="recap-name-textbox">
+		<form
+			hx-patch="/recap-name"
+			hx-target="#recap-name-textbox"
+			hx-swap="outerHTML"
+		>
+			<input
+				class="text-input w-40"
+				placeholder="Enter recap name"
+				name="recap-name"
+				id="recap-name"
+				value={ props.RecapName }
+			/>
+			<button class="btn">Save</button>
+		</form>
+	</div>
+}

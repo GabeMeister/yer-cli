@@ -77,5 +77,5 @@ var SUPPORTED_FILE_EXTENSIONS = []string{
 	"aplf", "aplo", "apln", "aplc", "xslt", "xsl", "ksh", "qs", "vala", "vapi", "sml", "sig",
 	"fun", "bal", "res", "resi", "io", "red", "reds", "factor", "icl", "dcl", "dylan", "dyl",
 	"intr", "als", "agda", "lagda", "idr", "lidr", "coq", "wl", "nb", "wls", "odin", "ls",
-	"livescript", "moo", "e", "ace", "pike", "pmod", "jse",
+	"livescript", "moo", "e", "ace", "pike", "pmod", "jse", "yml", "yaml", "md",
 }

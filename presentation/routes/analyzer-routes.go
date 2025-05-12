@@ -484,6 +484,38 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		return c.HTML(http.StatusOK, content)
 	})
 
+	e.GET("/recap-name-textbox", func(c echo.Context) error {
+		recapName := c.FormValue("recap-name")
+		component := ConfigSetupPage.RecapNameTextbox(ConfigSetupPage.RecapNameTextboxProps{
+			RecapName: recapName,
+		})
+		content := t.Render(t.RenderParams{
+			C:         c,
+			Component: component,
+		})
+
+		return c.HTML(http.StatusOK, content)
+	})
+
+	e.PATCH("/recap-name", func(c echo.Context) error {
+		recapName := c.FormValue("recap-name")
+
+		config := analyzer.MustGetConfig(utils.DEFAULT_CONFIG_FILE)
+		config.Name = recapName
+		analyzer.SaveConfig(config)
+
+		component := ConfigSetupPage.RecapNameDisplay(ConfigSetupPage.RecapNameTextboxProps{
+			RecapName: recapName,
+		})
+		content := t.Render(t.RenderParams{
+			C:         c,
+			Component: component,
+		})
+
+		return c.HTML(http.StatusOK, content)
+
+	})
+
 	e.GET("/clear-modal", func(c echo.Context) error {
 		return c.HTML(http.StatusOK, "<div id='modal-root'></div>")
 	})

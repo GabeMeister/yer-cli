@@ -295,6 +295,9 @@ function initIncludeFileExtensionsInput() {
         { label: "Pike", value: "pmod" },
         { label: "JScript", value: "js" },
         { label: "JScript", value: "jse" },
+        { label: "Yaml", value: "yml" },
+        { label: "Yaml", value: "yaml" },
+        { label: "Markdown", value: "md" },
       ],
       render: {
         option: function (data, escape) {
