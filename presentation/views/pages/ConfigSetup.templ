@@ -5,6 +5,7 @@ import (
 	"GabeMeister/yer-cli/presentation/views/components"
 	"GabeMeister/yer-cli/presentation/views/components/ConfigSetupPage"
 	"fmt"
+	"path/filepath"
 )
 
 type ConfigSetupProps struct {
@@ -40,10 +41,10 @@ templ ConfigSetup(props ConfigSetupProps) {
 								>
 									<i class="fa-solid fa-database"></i>
 									<span
-										class={ templ.KV("font-bold", config.Id == props.Id) }
+										class={ templ.KV("font-bold", config.Id == props.Id), templ.KV("italic", config.Path == "") }
 									>
 										if config.Path != "" {
-											{ config.Path }
+											{ filepath.Base(config.Path) }
 										} else {
 											{ "New Repo" }
 										}
@@ -126,7 +127,7 @@ templ ConfigSetup(props ConfigSetupProps) {
 						<button
 							class="btn lg w-full"
 						>
-							Save
+							Save Repo
 							@components.LoadingSpinner()
 						</button>
 					</form>

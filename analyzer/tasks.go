@@ -83,7 +83,7 @@ func AnalyzeWithConfig(path string) bool {
 		return false
 	}
 
-	config := GetConfig(path)
+	config := MustGetConfig(path)
 
 	// For now, we're just handling 1 repo at a time
 	repoConfig := config.Repos[0]

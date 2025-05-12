@@ -372,7 +372,6 @@ function refreshConfigPage() {
 }
 
 document.addEventListener("htmx:afterSettle", function (evt) {
-  console.log("\n\n***** here it is *****\n", window.location.pathname, "\n\n");
   if (window.location.pathname === "/add-repo") {
     refreshConfigPage();
   }

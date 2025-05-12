@@ -73,7 +73,7 @@ func AddRepoConfig(config ConfigFile) ConfigFile {
 
 func updateDuplicateAuthors(path string, duplicateAuthors []DuplicateAuthorGroup) error {
 	// Update config, cause we wanna remember this for later
-	config := GetConfig(path)
+	config := MustGetConfig(path)
 	config.Repos[0].DuplicateAuthors = duplicateAuthors
 	SaveDataToFile(config, path)
 
@@ -90,7 +90,7 @@ func updateDuplicateAuthors(path string, duplicateAuthors []DuplicateAuthorGroup
 	return nil
 }
 
-func GetConfig(path string) ConfigFile {
+func MustGetConfig(path string) ConfigFile {
 	bytes, err := os.ReadFile(path)
 	if err != nil {
 		panic(err)
@@ -126,12 +126,12 @@ func GetRepoIndex(config ConfigFile, repoId int) int {
 	return index
 }
 
-func MustGetRepoConfig(config ConfigFile, repoId int) *RepoConfig {
-	var repo *RepoConfig
+func MustGetRepoConfig(config ConfigFile, repoId int) RepoConfig {
+	var repo RepoConfig
 	for _, r := range config.Repos {
 
 		if r.Id == repoId {
-			repo = &r
+			repo = r
 			break
 		}
 	}

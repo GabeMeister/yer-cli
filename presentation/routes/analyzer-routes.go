@@ -46,7 +46,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 
 			return c.HTML(http.StatusOK, content)
 		} else {
-			config := analyzer.GetConfig(utils.DEFAULT_CONFIG_FILE)
+			config := analyzer.MustGetConfig(utils.DEFAULT_CONFIG_FILE)
 
 			url := fmt.Sprintf("/add-repo?id=%d", config.Repos[0].Id)
 			c.Redirect(301, url)
@@ -56,7 +56,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 	})
 
 	e.POST("/create-recap", func(c echo.Context) error {
-		config := analyzer.GetConfig(utils.DEFAULT_CONFIG_FILE)
+		config := analyzer.MustGetConfig(utils.DEFAULT_CONFIG_FILE)
 		recapName := helpers.MustGetFormValue(c, "recap-name")
 
 		config.Name = recapName
@@ -74,7 +74,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 			return nil
 		}
 
-		config := analyzer.GetConfig(utils.DEFAULT_CONFIG_FILE)
+		config := analyzer.MustGetConfig(utils.DEFAULT_CONFIG_FILE)
 
 		newParam := c.QueryParam("new")
 
@@ -143,7 +143,6 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		if err != nil {
 			panic(fmt.Sprintf("Repo ID param is not a number: %s", repoIdParam))
 		}
-		recapName := c.FormValue("recap-name")
 		repoPath := c.FormValue("repo-path")
 		masterBranchName := c.FormValue("master-branch-name")
 		includeFileExtensions := c.FormValue("include-file-extensions")
@@ -158,10 +157,10 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		}
 		ungroupedAuthors := formParams["ungrouped-author"]
 
-		config := analyzer.GetConfig(utils.DEFAULT_CONFIG_FILE)
+		config := analyzer.MustGetConfig(utils.DEFAULT_CONFIG_FILE)
 		repo := analyzer.MustGetRepoConfig(config, repoId)
+		repoIdx := analyzer.GetRepoIndex(config, repo.Id)
 
-		config.Name = recapName
 		repo.Path = repoPath
 		repo.MasterBranchName = masterBranchName
 		repo.IncludeFileExtensions = strings.Split(includeFileExtensions, ",")
@@ -169,6 +168,8 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		repo.ExcludeFiles = strings.Split(excludeFiles, ",")
 		repo.ExcludeAuthors = strings.Split(excludeAuthors, ",")
 		repo.DuplicateAuthors = dupGroups
+
+		config.Repos[repoIdx] = repo
 
 		analyzer.SaveConfig(config)
 
@@ -204,7 +205,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 			panic(fmt.Sprintf("Repo ID param is not a number: %s", repoIdParam))
 		}
 
-		config := analyzer.GetConfig(utils.DEFAULT_CONFIG_FILE)
+		config := analyzer.MustGetConfig(utils.DEFAULT_CONFIG_FILE)
 		config = analyzer.RemoveRepoFromConfig(config, repoId)
 		analyzer.SaveConfig(config)
 
@@ -212,7 +213,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/dir-list-modal", func(c echo.Context) error {
-		config := analyzer.GetConfig(utils.DEFAULT_CONFIG_FILE)
+		config := analyzer.MustGetConfig(utils.DEFAULT_CONFIG_FILE)
 		baseDir, _ := os.UserHomeDir()
 		if len(config.Repos) > 0 && config.Repos[0].Path != "" {
 			baseDir = config.Repos[0].Path
