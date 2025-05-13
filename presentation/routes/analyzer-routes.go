@@ -25,7 +25,6 @@ var InitialAuthors = []string{"Kenny", "Kenny1", "Kenny2", "Isaac Neace", "Gabe 
 func addAnalyzerRoutes(e *echo.Echo) {
 
 	e.GET("/create-recap", func(c echo.Context) error {
-		fmt.Print("\n\n", "*** here ***", "\n", "\n\n\n")
 		if !analyzer.DoesConfigExist(utils.DEFAULT_CONFIG_FILE) {
 			analyzer.InitConfig(analyzer.ConfigFileOptions{
 				RepoDir:                "",
@@ -70,11 +69,19 @@ func addAnalyzerRoutes(e *echo.Echo) {
 
 	e.GET("/add-repo", func(c echo.Context) error {
 		if !analyzer.DoesConfigExist(utils.DEFAULT_CONFIG_FILE) {
+			// If there's no config, redirect
 			c.Redirect(301, "/create-recap")
 			return nil
 		}
 
 		config := analyzer.MustGetConfig(utils.DEFAULT_CONFIG_FILE)
+
+		if len(config.Repos) == 0 {
+			// If there's no repos, then the easiest thing to do is just to restart
+			// the whole process
+			c.Redirect(301, "/create-recap")
+			return nil
+		}
 
 		newParam := c.QueryParam("new")
 
@@ -92,17 +99,12 @@ func addAnalyzerRoutes(e *echo.Echo) {
 			return RenderErrorMessage(c, err)
 		}
 
-		var repo analyzer.RepoConfig
-		for _, r := range config.Repos {
-			if r.Id == id {
-				repo = r
-				break
-			}
+		repoIdx := analyzer.GetRepoIndex(config, id)
+		if repoIdx == -1 {
+			return RenderMessage(c, "Couldn't find correct repo to edit. Please restart setup process by visiting `/create-recap")
 		}
 
-		if repo.Id == 0 {
-			panic(fmt.Sprintf("Could not find repo matching id %d", id))
-		}
+		repo := config.Repos[repoIdx]
 
 		var ungroupedAuthors []string
 		if repo.Path != "" && repo.MasterBranchName != "" {
@@ -209,14 +211,18 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		config = analyzer.RemoveRepoFromConfig(config, repoId)
 		analyzer.SaveConfig(config)
 
-		return c.HTML(http.StatusOK, "")
+		redirectUrl := fmt.Sprintf("/add-repo?id=%d", config.Repos[0].Id)
+
+		c.Response().Header().Set("HX-Redirect", redirectUrl)
+
+		return c.NoContent(http.StatusOK)
 	})
 
 	e.GET("/dir-list-modal", func(c echo.Context) error {
-		config := analyzer.MustGetConfig(utils.DEFAULT_CONFIG_FILE)
-		baseDir, _ := os.UserHomeDir()
-		if len(config.Repos) > 0 && config.Repos[0].Path != "" {
-			baseDir = config.Repos[0].Path
+		baseDir := c.FormValue("base-dir")
+		if baseDir == "" {
+			homeDir, _ := os.UserHomeDir()
+			baseDir = homeDir
 		}
 		dirs := utils.GetDirs(baseDir)
 

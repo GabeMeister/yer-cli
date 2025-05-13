@@ -45,7 +45,7 @@ templ ConfigSetup(props ConfigSetupProps) {
 										class={
 											"fa-solid",
 											templ.KV("fa-database", config.Id != props.Id),
-											templ.KV("fa-pencil", config.Id == props.Id),
+											templ.KV("fa-gears", config.Id == props.Id),
 										}
 									></i>
 									<span
@@ -59,13 +59,15 @@ templ ConfigSetup(props ConfigSetupProps) {
 									</span>
 								</span>
 							}
-							<i
-								class="fa-solid fa-xmark text-red-400 hover:text-red-500 duration-200 cursor-pointer"
-								hx-patch="/repo-config/delete"
-								hx-vals={ fmt.Sprintf("{\"id\":\"%d\"}", config.Id) }
-								hx-swap="outerHTML"
-								hx-target={ fmt.Sprintf("#repo-link-%d", config.Id) }
-							></i>
+							if len(props.RepoConfigList) > 1 {
+								<i
+									class="fa-solid fa-xmark text-red-400 hover:text-red-500 duration-200 cursor-pointer"
+									hx-patch="/repo-config/delete"
+									hx-vals={ fmt.Sprintf("{\"id\":\"%d\"}", config.Id) }
+									hx-swap="outerHTML"
+									hx-target={ fmt.Sprintf("#repo-link-%d", config.Id) }
+								></i>
+							}
 						</li>
 					}
 				</ul>

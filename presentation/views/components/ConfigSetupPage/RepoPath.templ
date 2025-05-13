@@ -1,5 +1,7 @@
 package ConfigSetupPage
 
+import "GabeMeister/yer-cli/utils"
+
 type RepoPathProps struct {
 	RepoPath  string
 	OutOfBand bool
@@ -29,27 +31,13 @@ templ RepoPath(props RepoPathProps) {
 			class="font-medium"
 		>Repo File Path</label>
 		<div class="flex gap-3 items-center w-full">
-			// <i
-			// 	class="fa-solid fa-pencil text-gray-400 hover:text-gray-500 duration-200 cursor-pointer"
-			// 	hx-get="/dir-list-modal"
-			// 	hx-target="#modal-root"
-			// 	hx-swap="outerHTML"
-			// ></i>
-			// <p class="text-lg">{ truncateRepoPath(props.RepoPath) }</p>
-			<input
-				type="text"
-				class="text-input w-full"
-				placeholder="/path/to/my/repo"
-				id="repo-path"
-				name="repo-path"
-				value={ props.RepoPath }
-			/>
 			<button
 				class="btn w-40"
 				type="button"
 				hx-get="/dir-list-modal"
 				hx-target="#modal-root"
 				hx-swap="outerHTML"
+				hx-vals={ utils.MustJSONStringify(map[string]string{"base-dir": props.RepoPath}) }
 			>
 				<div class="flex gap-2 items-center justify-center">
 					<i class="fa-solid fa-folder-open"></i>
@@ -60,6 +48,17 @@ templ RepoPath(props RepoPathProps) {
 					}
 				</div>
 			</button>
+			if props.RepoPath != "" {
+				<input
+					type="text"
+					class="text-input w-full"
+					placeholder="/path/to/my/repo"
+					id="repo-path"
+					name="repo-path"
+					value={ props.RepoPath }
+					readonly
+				/>
+			}
 		</div>
 	</div>
 }

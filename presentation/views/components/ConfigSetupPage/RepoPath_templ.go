@@ -8,6 +8,8 @@ package ConfigSetupPage
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
+import "GabeMeister/yer-cli/utils"
+
 type RepoPathProps struct {
 	RepoPath  string
 	OutOfBand bool
@@ -55,20 +57,20 @@ func RepoPath(props RepoPathProps) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("><label for=\"repo-path\" class=\"font-medium\">Repo File Path</label><div class=\"flex gap-3 items-center w-full\"><input type=\"text\" class=\"text-input w-full\" placeholder=\"/path/to/my/repo\" id=\"repo-path\" name=\"repo-path\" value=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("><label for=\"repo-path\" class=\"font-medium\">Repo File Path</label><div class=\"flex gap-3 items-center w-full\"><button class=\"btn w-40\" type=\"button\" hx-get=\"/dir-list-modal\" hx-target=\"#modal-root\" hx-swap=\"outerHTML\" hx-vals=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
-		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(props.RepoPath)
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(utils.MustJSONStringify(map[string]string{"base-dir": props.RepoPath}))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/ConfigSetupPage/RepoPath.templ`, Line: 45, Col: 26}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/ConfigSetupPage/RepoPath.templ`, Line: 40, Col: 84}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"> <button class=\"btn w-40\" type=\"button\" hx-get=\"/dir-list-modal\" hx-target=\"#modal-root\" hx-swap=\"outerHTML\"><div class=\"flex gap-2 items-center justify-center\"><i class=\"fa-solid fa-folder-open\"></i> ")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><div class=\"flex gap-2 items-center justify-center\"><i class=\"fa-solid fa-folder-open\"></i> ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -83,7 +85,30 @@ func RepoPath(props RepoPathProps) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></button></div></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></button> ")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if props.RepoPath != "" {
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<input type=\"text\" class=\"text-input w-full\" placeholder=\"/path/to/my/repo\" id=\"repo-path\" name=\"repo-path\" value=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var3 string
+			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(props.RepoPath)
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/ConfigSetupPage/RepoPath.templ`, Line: 58, Col: 27}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" readonly>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

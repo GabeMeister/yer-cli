@@ -17,3 +17,13 @@ func RenderErrorMessage(c echo.Context, err error) error {
 	})
 	return c.HTML(http.StatusOK, content)
 }
+
+func RenderMessage(c echo.Context, msg string) error {
+	content := template.Render(template.RenderParams{
+		C: c,
+		Component: components.ErrorMessage(components.ErrorMessageProps{
+			Msg: msg,
+		}),
+	})
+	return c.HTML(http.StatusOK, content)
+}
