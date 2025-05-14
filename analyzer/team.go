@@ -164,7 +164,7 @@ func GetAuthorCommitsOverTimeCurrYear() []TotalCommitCount {
 	return final
 }
 
-func GetAuthorFileChangesOverTimeCurrYear() []TotalFileChangeCount {
+func GetAuthorFileChangesOverTimeCurrYear(config RepoConfig) []TotalFileChangeCount {
 	if !HasPrevYearFileBlames() || !HasCurrYearFileBlames() {
 		return []TotalFileChangeCount{}
 	}
@@ -189,7 +189,7 @@ func GetAuthorFileChangesOverTimeCurrYear() []TotalFileChangeCount {
 	}
 
 	// Get current year commits, and bucket them under whatever date they fall on
-	commits := getCurrYearGitCommits()
+	commits := getCurrYearGitCommits(config)
 	for _, commit := range commits {
 		commitDate, err := time.Parse("Mon Jan 2 15:04:05 2006 -0700", commit.Date)
 		if err != nil {

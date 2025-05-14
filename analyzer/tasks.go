@@ -85,24 +85,24 @@ func AnalyzeWithConfig(path string) bool {
 
 	config := MustGetConfig(path)
 
-	// For now, we're just handling 1 repo at a time
-	repoConfig := config.Repos[0]
-
-	// Check if repo is "clean" (on master branch, and no unstaged changes)
-	if !isRepoClean(repoConfig.Path, repoConfig.MasterBranchName) {
-		fmt.Println(`
+	for _, repoConfig := range config.Repos {
+		// Check if repo is "clean" (on master branch, and no unstaged changes)
+		if !isRepoClean(repoConfig.Path, repoConfig.MasterBranchName) {
+			fmt.Println(`
 This tool will inspect your git repo at various commits.
 Please make sure your repo is on master (or main), 
 and there are no unstaged changes before continuing.
 
 Press enter to continue...`)
-		reader := bufio.NewReader(os.Stdin)
-		reader.ReadString('\n')
-	}
+			reader := bufio.NewReader(os.Stdin)
+			reader.ReadString('\n')
+		}
 
-	gatherMetrics(repoConfig)
-	updateDuplicateAuthors(path, repoConfig.DuplicateAuthors)
-	calculateRecap(repoConfig)
+		gatherMetrics(repoConfig)
+		updateDuplicateAuthors(path, repoConfig.DuplicateAuthors)
+		calculateRecap(repoConfig)
+
+	}
 
 	return true
 }
@@ -392,17 +392,22 @@ func gatherMetrics(config RepoConfig) {
 	pullRepo(config.Path)
 
 	commits := getCommitsFromGitLogs(config, false)
-	SaveDataToFile(commits, utils.COMMITS_FILE)
+	commitsFileName := GetCommitsFile(config)
+	SaveDataToFile(commits, commitsFileName)
 
 	mergeCommits := getCommitsFromGitLogs(config, true)
-	SaveDataToFile(mergeCommits, utils.MERGE_COMMITS_FILE)
+	mergeCommitsFileName := GetMergeCommitsFile(config)
+	SaveDataToFile(mergeCommits, mergeCommitsFileName)
 
 	directPushToMasterCommits := getDirectPushToMasterCommitsCurrYear(config)
-	SaveDataToFile(directPushToMasterCommits, utils.DIRECT_PUSH_ON_MASTER_COMMITS_FILE)
+	directPushFileName := GetDirectPushesFile(config)
+	SaveDataToFile(directPushToMasterCommits, directPushFileName)
+
+	utils.Pause()
 
 	// Prev year files (if possible)
-	if hasPrevYearCommits() {
-		lastCommitPrevYear := getLastCommitPrevYear()
+	if hasPrevYearCommits(config) {
+		lastCommitPrevYear := getLastCommitPrevYear(config)
 		fmt.Println("Analyzing last year's repo...")
 		prevYearErr := checkoutRepoToCommitOrBranchName(config, lastCommitPrevYear.Commit)
 		if prevYearErr != nil {
@@ -444,10 +449,10 @@ func calculateRecap(config RepoConfig) {
 	s.Suffix = " Calculating repo stats..."
 	s.Start()
 
-	isMultiYearRepo := GetIsMultiYearRepo()
-	numCommitsAllTime := GetNumCommitsAllTime()
-	numCommitsPrevYear := GetNumCommitsPrevYear()
-	numCommitsCurrYear := GetNumCommitsCurrYear()
+	isMultiYearRepo := GetIsMultiYearRepo(config)
+	numCommitsAllTime := GetNumCommitsAllTime(config)
+	numCommitsPrevYear := GetNumCommitsPrevYear(config)
+	numCommitsCurrYear := GetNumCommitsCurrYear(config)
 	newAuthorCommitsCurrYear := GetNewAuthorCommitsCurrYear()
 	newAuthorCountCurrYear := len(newAuthorCommitsCurrYear)
 	newAuthorListCurrYear := utils.Map(newAuthorCommitsCurrYear, func(commit GitCommit) string {
@@ -459,24 +464,24 @@ func calculateRecap(config RepoConfig) {
 	authorCountAllTime := GetAuthorCountAllTime()
 	authorCommitsOverTimeCurrYear := GetAuthorCommitsOverTimeCurrYear()
 	authorFileChangesOverTimeCurrYear := GetAuthorFileChangesOverTimeCurrYear()
-	commitsByMonthCurrYear := GetCommitsByMonthCurrYear()
-	commitsByWeekDayCurrYear := GetCommitsByWeekDayCurrYear()
-	commitsByHourCurrYear := GetCommitsByHourCurrYear()
+	commitsByMonthCurrYear := GetCommitsByMonthCurrYear(config)
+	commitsByWeekDayCurrYear := GetCommitsByWeekDayCurrYear(config)
+	commitsByHourCurrYear := GetCommitsByHourCurrYear(config)
 	mostSingleDayCommitsByAuthorCurrYear := GetMostCommitsByAuthorCurrYear()
-	mostInsertionsInCommitCurrYear := GetMostInsertionsInCommitCurrYear()
-	mostDeletionsInCommitCurrYear := GetMostDeletionsInCommitCurrYear()
-	largestCommitMessageCurrYear := GetLargestCommitMessageCurrYear()
-	smallestCommitMessagesCurrYear := GetSmallestCommitMessagesCurrYear()
-	commitMessageHistogramCurrYear := GetCommitMessageHistogramCurrYear()
+	mostInsertionsInCommitCurrYear := GetMostInsertionsInCommitCurrYear(config)
+	mostDeletionsInCommitCurrYear := GetMostDeletionsInCommitCurrYear(config)
+	largestCommitMessageCurrYear := GetLargestCommitMessageCurrYear(config)
+	smallestCommitMessagesCurrYear := GetSmallestCommitMessagesCurrYear(config)
+	commitMessageHistogramCurrYear := GetCommitMessageHistogramCurrYear(config)
 	directPushesOnMasterByAuthorCurrYear := GetDirectPushesOnMasterByAuthorCurrYear()
 	mergesToMasterByAuthorCurrYear := GetMergesToMasterByAuthorCurrYear()
 	mostMergesInOneDayCurrYear := GetMostMergesInOneDayCurrYear()
 	avgMergesToMasterPerDayCurrYear := GetAvgMergesToMasterPerDayCurrYear()
-	fileChangesByAuthorCurrYear := GetFileChangesByAuthorCurrYear()
-	codeInsertionsByAuthorCurrYear := GetCodeInsertionsByAuthorCurrYear()
-	codeDeletionsByAuthorCurrYear := GetCodeDeletionsByAuthorCurrYear()
+	fileChangesByAuthorCurrYear := GetFileChangesByAuthorCurrYear(config)
+	codeInsertionsByAuthorCurrYear := GetCodeInsertionsByAuthorCurrYear(config)
+	codeDeletionsByAuthorCurrYear := GetCodeDeletionsByAuthorCurrYear(config)
 	fileChangeRatioCurrYear := GetFileChangeRatio(codeInsertionsByAuthorCurrYear, codeDeletionsByAuthorCurrYear)
-	commonlyChangedFiles := GetCommonlyChangedFiles()
+	commonlyChangedFiles := GetCommonlyChangedFiles(config)
 	fileCountPrevYear := GetFileCountPrevYear()
 	fileCountCurrYear := GetFileCountCurrYear()
 	largestFilesCurrYear := GetLargestFilesCurrYear()
@@ -484,7 +489,7 @@ func calculateRecap(config RepoConfig) {
 	totalLinesOfCodePrevYear := GetTotalLinesOfCodePrevYear()
 	totalLinesOfCodeCurrYear := GetTotalLinesOfCodeCurrYear()
 	totalLinesOfCodeInRepoByAuthor := GetTotalLinesOfCodeInRepoByAuthor()
-	sizeOfRepoByWeekCurrYear := GetSizeOfRepoByWeekCurrYear()
+	sizeOfRepoByWeekCurrYear := GetSizeOfRepoByWeekCurrYear(config)
 
 	now := time.Now()
 	isoDateString := now.Format(time.RFC3339)

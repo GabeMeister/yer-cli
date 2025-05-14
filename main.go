@@ -3,6 +3,7 @@ package main
 import (
 	"GabeMeister/yer-cli/analyzer"
 	"GabeMeister/yer-cli/presentation"
+	"GabeMeister/yer-cli/utils"
 	"errors"
 	"flag"
 	"fmt"
@@ -11,12 +12,12 @@ import (
 )
 
 var help = flag.Bool("h", false, "Print help menu")
-var analyzeRepo = flag.Bool("a", false, "Analyze repo and gather stats")
-var configFile = flag.String("c", "", "Specify config file to analyze with. (see https://yearendrecap.com/help#config)")
-var view = flag.Bool("v", false, "View stats in a local presentation")
+var setupConfig = flag.Bool("s", false, "Setup a new Year End Recap configuration")
+var analyzeRepo = flag.Bool("a", false, "Analyze repo(s) to gather highly amusing Git stats")
+var view = flag.Bool("v", false, "View highly amusing Git stats")
 
 // var upload = flag.Bool("u", false, "Upload stats to the cloud, to be viewed anywhere")
-var test = flag.Bool("t", false, "pls ignore")
+var test = flag.Bool("t", false, "Run test")
 
 func init() {
 	flag.Parse()
@@ -39,11 +40,11 @@ func main() {
 
 	if *help {
 		printHelp()
-	} else if *analyzeRepo {
+	} else if *setupConfig {
 		presentation.RunAnalyzeManuallyPage()
-	} else if *configFile != "" {
-		fmt.Println("Analyzing using config...")
-		result := analyzer.AnalyzeWithConfig(*configFile)
+	} else if *analyzeRepo {
+		fmt.Println("Analyzing...")
+		result := analyzer.AnalyzeWithConfig(utils.DEFAULT_CONFIG_FILE)
 		if result {
 			fmt.Printf("\nDone! View stats by running the following command:\n\n./year-end-recap -v\n\n")
 		} else {

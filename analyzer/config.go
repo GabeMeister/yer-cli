@@ -79,13 +79,13 @@ func updateDuplicateAuthors(path string, duplicateAuthors []DuplicateAuthorGroup
 
 	// Also want to update the commits.json file, replacing the duplicate git
 	// usernames with the real ones
-	commits := getGitCommits()
+	commits := getGitCommits(config.Repos[0])
 
 	for i := range commits {
 		realUsername := GetRealAuthorName(config.Repos[0], commits[i].Author)
 		commits[i].Author = realUsername
 	}
-	SaveDataToFile(commits, utils.COMMITS_FILE)
+	SaveDataToFile(commits, utils.COMMITS_FILE_TEMPLATE)
 
 	return nil
 }

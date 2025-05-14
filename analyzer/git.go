@@ -123,7 +123,7 @@ func getCommitsFromGitLogs(config RepoConfig, mergeCommits bool) []GitCommit {
 
 func getDirectPushToMasterCommitsCurrYear(config RepoConfig) []GitCommit {
 	path := config.Path
-	commits := getCurrYearGitCommits()
+	commits := getCurrYearGitCommits(config)
 
 	args := []string{
 		"git",
@@ -361,8 +361,8 @@ func GetFileBlameSummary(config RepoConfig, files []string) []FileBlame {
 	return fileBlames
 }
 
-func getLastCommitPrevYear() GitCommit {
-	commits := getPrevYearGitCommits()
+func getLastCommitPrevYear(config RepoConfig) GitCommit {
+	commits := getPrevYearGitCommits(config)
 	lastIdx := len(commits) - 1
 
 	return commits[lastIdx]
@@ -409,8 +409,8 @@ func pullRepo(dir string) {
 	pullcmd.Output()
 }
 
-func hasPrevYearCommits() bool {
-	commits := getPrevYearGitCommits()
+func hasPrevYearCommits(config RepoConfig) bool {
+	commits := getPrevYearGitCommits(config)
 
 	return len(commits) > 0
 }

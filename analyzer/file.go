@@ -6,8 +6,21 @@ import (
 	"fmt"
 	"math"
 	"os"
+	"path/filepath"
 	"sort"
 )
+
+func GetCommitsFile(config RepoConfig) string {
+	return fmt.Sprintf(utils.COMMITS_FILE_TEMPLATE, filepath.Base(config.Path))
+}
+
+func GetMergeCommitsFile(config RepoConfig) string {
+	return fmt.Sprintf(utils.MERGE_COMMITS_FILE_TEMPLATE, filepath.Base(config.Path))
+}
+
+func GetDirectPushesFile(config RepoConfig) string {
+	return fmt.Sprintf(utils.DIRECT_PUSH_ON_MASTER_COMMITS_FILE_TEMPLATE, filepath.Base(config.Path))
+}
 
 func SaveDataToFile(data any, path string) {
 	rawData, err := json.MarshalIndent(data, "", "  ")
@@ -119,8 +132,8 @@ func GetFileChangeRatio(insertionsByAuthor map[string]int, deletionsByAuthor map
 	return ratios
 }
 
-func GetCommonlyChangedFiles() []FileChangeCount {
-	commits := getCurrYearGitCommits()
+func GetCommonlyChangedFiles(config RepoConfig) []FileChangeCount {
+	commits := getCurrYearGitCommits(config)
 	fileChangeTracker := make(map[string]int)
 
 	for _, commit := range commits {
@@ -228,8 +241,8 @@ func GetTotalLinesOfCodeCurrYear() int {
 	return total
 }
 
-func GetSizeOfRepoByWeekCurrYear() []RepoSizeTimeStamp {
-	commits := getCurrYearGitCommits()
+func GetSizeOfRepoByWeekCurrYear(config RepoConfig) []RepoSizeTimeStamp {
+	commits := getCurrYearGitCommits(config)
 	weeks := utils.GetWeeksOfYear()
 
 	weekCommitsMap := make(map[int][]GitCommit)
