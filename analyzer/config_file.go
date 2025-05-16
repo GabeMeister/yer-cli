@@ -18,6 +18,12 @@ type ConfigFileOptions struct {
 	IncludeFileBlames      bool
 }
 
+type ConfigFile struct {
+	Name    string       `json:"name"`
+	Version string       `json:"version"`
+	Repos   []RepoConfig `json:"repos"`
+}
+
 func InitConfig(options ConfigFileOptions) ConfigFile {
 	config := ConfigFile{
 		Name:    "",

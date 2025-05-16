@@ -14,7 +14,7 @@ import (
 var help = flag.Bool("h", false, "Print help menu")
 var setupConfig = flag.Bool("s", false, "Setup a new Year End Recap configuration")
 var analyzeRepo = flag.Bool("a", false, "Analyze repo(s) to gather highly amusing Git stats")
-var view = flag.Bool("v", false, "View highly amusing Git stats")
+var view = flag.Bool("v", false, "View your highly amusing Git stats")
 
 // var upload = flag.Bool("u", false, "Upload stats to the cloud, to be viewed anywhere")
 var test = flag.Bool("t", false, "Run test")
@@ -41,17 +41,16 @@ func main() {
 	if *help {
 		printHelp()
 	} else if *setupConfig {
-		presentation.RunAnalyzeManuallyPage()
+		presentation.RunCreateRecapPage()
 	} else if *analyzeRepo {
 		fmt.Println("Analyzing...")
-		result := analyzer.AnalyzeWithConfig(utils.DEFAULT_CONFIG_FILE)
+		result := analyzer.AnalyzeRepos(utils.DEFAULT_CONFIG_FILE)
 		if result {
 			fmt.Printf("\nDone! View stats by running the following command:\n\n./year-end-recap -v\n\n")
 		} else {
 			fmt.Println("Failed to analyze repo. Please try again!")
 		}
 	} else if *view {
-		fmt.Println("Setting up local web server...")
 		presentation.RunPresentationPage()
 	} else if *test {
 		runTest()

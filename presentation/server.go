@@ -12,7 +12,7 @@ import (
 //go:embed static/*
 var static embed.FS
 
-func RunAnalyzeManuallyPage() {
+func RunCreateRecapPage() {
 	godotenv.Load()
 
 	e := echo.New()

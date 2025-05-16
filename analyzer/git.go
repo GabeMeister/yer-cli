@@ -445,6 +445,7 @@ func GetAuthorsFromRepo(dir string, branch string, ignoreAuthors []string) []str
 	return authors
 
 }
+
 func GetDuplicateAuthorList(repo RepoConfig) []string {
 	duplicateAuthors := []string{}
 

@@ -17,73 +17,13 @@ import (
 	input_autocomplete "github.com/JoaoDanielRufino/go-input-autocomplete"
 )
 
-func AnalyzeManually() bool {
-	var dir string
-
-	for isValid := false; !isValid; isValid = IsValidGitRepo(dir) {
-		dir = readDir()
-	}
-
-	masterBranch := GetMasterBranchName(dir)
-
-	// Check if repo is "clean" (on master branch, and no unstaged changes)
-	if !isRepoClean(dir, masterBranch) {
-		fmt.Println(`
-This tool will inspect your git repo at various commits.
-Please make sure your repo is on master (or main), 
-and there are no unstaged changes before continuing.
-
-Press enter to continue...`)
-		reader := bufio.NewReader(os.Stdin)
-		reader.ReadString('\n')
-	}
-
-	var fileExtensions []string
-
-	for isValid := false; !isValid; isValid = areFileExtensionsValid(fileExtensions) {
-		fileExtensions = getFileExtensions()
-	}
-
-	includeFileBlames := getShouldIncludeFileBlames()
-
-	var excludedDirs []string
-	for isValid := false; !isValid; isValid = areExcludedDirsValid(excludedDirs) {
-		excludedDirs = getExcludedDirs()
-	}
-
-	config := InitConfig(ConfigFileOptions{
-		RepoDir:                dir,
-		MasterBranchName:       masterBranch,
-		IncludedFileExtensions: fileExtensions,
-		ExcludedDirs:           excludedDirs,
-		DuplicateAuthors:       []DuplicateAuthorGroup{},
-		IncludeFileBlames:      includeFileBlames,
-	})
-	// For now, we're just handling 1, we can handle multiple repos in a
-	// concurrent way later
-	repoConfig := config.Repos[0]
-
-	gatherMetrics(config.Repos[0])
-
-	duplicateAuthors := getDuplicateUsers()
-
-	err := updateDuplicateAuthors(utils.DEFAULT_CONFIG_FILE, duplicateAuthors)
-	if err != nil {
-		panic(err)
-	}
-
-	calculateRecap(repoConfig)
-
-	return true
-}
-
-func AnalyzeWithConfig(path string) bool {
-	configValid := isValidConfig(path)
+func AnalyzeRepos(configFilePath string) bool {
+	configValid := isValidConfig(configFilePath)
 	if !configValid {
 		return false
 	}
 
-	config := MustGetConfig(path)
+	config := MustGetConfig(configFilePath)
 
 	for _, repoConfig := range config.Repos {
 		// Check if repo is "clean" (on master branch, and no unstaged changes)
@@ -99,9 +39,8 @@ Press enter to continue...`)
 		}
 
 		gatherMetrics(repoConfig)
-		updateDuplicateAuthors(path, repoConfig.DuplicateAuthors)
+		updateDuplicateAuthors(configFilePath, repoConfig.DuplicateAuthors)
 		calculateRecap(repoConfig)
-
 	}
 
 	return true
@@ -379,47 +318,47 @@ func getDuplicateUsers() []DuplicateAuthorGroup {
 	return []DuplicateAuthorGroup{}
 }
 
-func gatherMetrics(config RepoConfig) {
-	stashRepo(config.Path)
+func gatherMetrics(r RepoConfig) {
+	stashRepo(r.Path)
 
-	currYearErr := checkoutRepoToCommitOrBranchName(config, config.MasterBranchName)
+	currYearErr := checkoutRepoToCommitOrBranchName(r, r.MasterBranchName)
 	if currYearErr != nil {
 		fmt.Println("Unable to git checkout repo to the latest commit")
 		panic(currYearErr)
 	}
 
 	// We want the latest changes
-	pullRepo(config.Path)
+	pullRepo(r.Path)
 
-	commits := getCommitsFromGitLogs(config, false)
-	commitsFileName := GetCommitsFile(config)
+	commits := getCommitsFromGitLogs(r, false)
+	commitsFileName := r.GetCommitsFile()
 	SaveDataToFile(commits, commitsFileName)
 
-	mergeCommits := getCommitsFromGitLogs(config, true)
-	mergeCommitsFileName := GetMergeCommitsFile(config)
+	mergeCommits := getCommitsFromGitLogs(r, true)
+	mergeCommitsFileName := r.GetMergeCommitsFile()
 	SaveDataToFile(mergeCommits, mergeCommitsFileName)
 
-	directPushToMasterCommits := getDirectPushToMasterCommitsCurrYear(config)
-	directPushFileName := GetDirectPushesFile(config)
+	directPushToMasterCommits := getDirectPushToMasterCommitsCurrYear(r)
+	directPushFileName := r.GetDirectPushesFile()
 	SaveDataToFile(directPushToMasterCommits, directPushFileName)
 
 	utils.Pause()
 
 	// Prev year files (if possible)
-	if hasPrevYearCommits(config) {
-		lastCommitPrevYear := getLastCommitPrevYear(config)
+	if hasPrevYearCommits(r) {
+		lastCommitPrevYear := getLastCommitPrevYear(r)
 		fmt.Println("Analyzing last year's repo...")
-		prevYearErr := checkoutRepoToCommitOrBranchName(config, lastCommitPrevYear.Commit)
+		prevYearErr := checkoutRepoToCommitOrBranchName(r, lastCommitPrevYear.Commit)
 		if prevYearErr != nil {
 			fmt.Println("Unable to git checkout repo to last year's files")
 			panic(prevYearErr)
 		}
 
-		prevYearFiles := getRepoFiles(config, lastCommitPrevYear.Commit)
+		prevYearFiles := getRepoFiles(r, lastCommitPrevYear.Commit)
 		SaveDataToFile(prevYearFiles, utils.PREV_YEAR_FILE_LIST_FILE)
 
-		if config.IncludeFileBlames {
-			prevYearBlames := GetFileBlameSummary(config, prevYearFiles)
+		if r.IncludeFileBlames {
+			prevYearBlames := GetFileBlameSummary(r, prevYearFiles)
 			SaveDataToFile(prevYearBlames, utils.PREV_YEAR_FILE_BLAMES_FILE)
 		}
 	}
@@ -427,17 +366,17 @@ func gatherMetrics(config RepoConfig) {
 	// Curr year files
 	fmt.Println("Analyzing this year's repo...")
 
-	currYearErr = checkoutRepoToCommitOrBranchName(config, config.MasterBranchName)
+	currYearErr = checkoutRepoToCommitOrBranchName(r, r.MasterBranchName)
 	if currYearErr != nil {
 		fmt.Println("Unable to git checkout repo back to the latest commit")
 		panic(currYearErr)
 	}
 
-	currYearFiles := getRepoFiles(config, config.MasterBranchName)
+	currYearFiles := getRepoFiles(r, r.MasterBranchName)
 	SaveDataToFile(currYearFiles, utils.CURR_YEAR_FILE_LIST_FILE)
 
-	if config.IncludeFileBlames {
-		currYearBlames := GetFileBlameSummary(config, currYearFiles)
+	if r.IncludeFileBlames {
+		currYearBlames := GetFileBlameSummary(r, currYearFiles)
 		SaveDataToFile(currYearBlames, utils.CURR_YEAR_FILE_BLAMES_FILE)
 	}
 }

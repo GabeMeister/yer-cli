@@ -1,5 +1,6 @@
 .vscode/
 tmp/
+tmp_cli/
 config.json
 builds/
 main
