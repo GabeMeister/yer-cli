@@ -3,8 +3,11 @@ package analyzer
 import (
 	"GabeMeister/yer-cli/utils"
 	"bytes"
+	"errors"
 	"fmt"
+	"os"
 	"os/exec"
+	"path/filepath"
 	"regexp"
 	"slices"
 	"sort"
@@ -12,14 +15,14 @@ import (
 	"strings"
 )
 
-func getCommitsFromGitLogs(config RepoConfig, mergeCommits bool) []GitCommit {
+func getCommitsFromGitLogs(r RepoConfig, mergeCommits bool) []GitCommit {
 	s := GetSpinner()
 
 	fmt.Println()
 	s.Suffix = " Retrieving git logs..."
 	s.Start()
 
-	path := config.Path
+	path := r.Path
 	args := []string{
 		"git",
 		"log",
@@ -28,7 +31,7 @@ func getCommitsFromGitLogs(config RepoConfig, mergeCommits bool) []GitCommit {
 	if mergeCommits {
 		args = append(args, "--merges")
 		args = append(args, "--first-parent")
-		args = append(args, config.MasterBranchName)
+		args = append(args, r.MasterBranchName)
 	} else {
 		args = append(args, "--no-merges")
 	}
@@ -111,7 +114,7 @@ func getCommitsFromGitLogs(config RepoConfig, mergeCommits bool) []GitCommit {
 	s.Stop()
 
 	if !mergeCommits {
-		fileChangeSummary := getFileChangeSummary(config)
+		fileChangeSummary := getFileChangeSummary(r)
 
 		for i := range commits {
 			commits[i].FileChanges = fileChangeSummary[commits[i].Commit]
@@ -121,9 +124,9 @@ func getCommitsFromGitLogs(config RepoConfig, mergeCommits bool) []GitCommit {
 	return commits
 }
 
-func getDirectPushToMasterCommitsCurrYear(config RepoConfig) []GitCommit {
-	path := config.Path
-	commits := getCurrYearGitCommits(config)
+func getDirectPushToMasterCommitsCurrYear(r RepoConfig) []GitCommit {
+	path := r.Path
+	commits := getCurrYearGitCommits(r)
 
 	args := []string{
 		"git",
@@ -131,7 +134,7 @@ func getDirectPushToMasterCommitsCurrYear(config RepoConfig) []GitCommit {
 		"--no-merges",
 		"--reverse",
 		"--first-parent",
-		config.MasterBranchName,
+		r.MasterBranchName,
 		"--format=%H",
 	}
 
@@ -175,12 +178,12 @@ func isFileChangeLine(line string) bool {
 	return emailRegex.MatchString(line)
 }
 
-func getFileChangeSummary(config RepoConfig) map[string][]FileChange {
+func getFileChangeSummary(r RepoConfig) map[string][]FileChange {
 	s := GetSpinner()
 	s.Suffix = " Retrieving line changes..."
 	s.Start()
 
-	path := config.Path
+	path := r.Path
 	cmd := exec.Command(
 		"git",
 		"log",
@@ -211,7 +214,7 @@ func getFileChangeSummary(config RepoConfig) map[string][]FileChange {
 			// We found a new commit, so we need to add the previous commit in and
 			// reset the temp variables
 			if currHash != "" {
-				currFileChanges = filterToOnlyIncludedFiles(config, currFileChanges)
+				currFileChanges = filterToOnlyIncludedFiles(r, currFileChanges)
 
 				fileChangeMap[currHash] = currFileChanges
 				currHash = ""
@@ -248,11 +251,11 @@ func getFileChangeSummary(config RepoConfig) map[string][]FileChange {
 
 }
 
-func filterToOnlyIncludedFiles(config RepoConfig, fileChanges []FileChange) []FileChange {
+func filterToOnlyIncludedFiles(r RepoConfig, fileChanges []FileChange) []FileChange {
 	filteredFileChanges := utils.Filter(fileChanges, func(c FileChange) bool {
 		fileExt := utils.GetFileExtension(c.FilePath)
 
-		return utils.Includes(config.IncludeFileExtensions, func(ext string) bool {
+		return utils.Includes(r.IncludeFileExtensions, func(ext string) bool {
 			return fileExt == ext
 		})
 	})
@@ -260,7 +263,7 @@ func filterToOnlyIncludedFiles(config RepoConfig, fileChanges []FileChange) []Fi
 	return filteredFileChanges
 }
 
-func getRepoFiles(config RepoConfig, commitOrBranchName string) []string {
+func (r *RepoConfig) getRepoFiles(commitOrBranchName string) []string {
 	args := []string{
 		"git",
 		"ls-tree",
@@ -270,7 +273,7 @@ func getRepoFiles(config RepoConfig, commitOrBranchName string) []string {
 	}
 
 	cmd := exec.Command(args[0], args[1:]...)
-	cmd.Dir = config.Path
+	cmd.Dir = r.Path
 
 	rawOutput, err := cmd.Output()
 	if err != nil {
@@ -285,7 +288,7 @@ func getRepoFiles(config RepoConfig, commitOrBranchName string) []string {
 	// to exclude
 	for _, file := range files {
 		fileExtension := utils.GetFileExtension(file)
-		validFileExtension := utils.Includes(config.IncludeFileExtensions, func(ext string) bool {
+		validFileExtension := utils.Includes(r.IncludeFileExtensions, func(ext string) bool {
 			return fileExtension == ext
 		})
 
@@ -293,7 +296,7 @@ func getRepoFiles(config RepoConfig, commitOrBranchName string) []string {
 			continue
 		}
 
-		isExcludedFile := utils.Includes(config.ExcludeDirectories, func(dir string) bool {
+		isExcludedFile := utils.Includes(r.ExcludeDirectories, func(dir string) bool {
 			return strings.HasPrefix(file, dir)
 		})
 
@@ -307,7 +310,7 @@ func getRepoFiles(config RepoConfig, commitOrBranchName string) []string {
 	return includedFiles
 }
 
-func GetFileBlameSummary(config RepoConfig, files []string) []FileBlame {
+func GetFileBlameSummary(r RepoConfig, files []string) []FileBlame {
 	s := GetSpinner()
 	fmt.Println()
 	s.Suffix = " Analyzing Git blames..."
@@ -326,7 +329,7 @@ func GetFileBlameSummary(config RepoConfig, files []string) []FileBlame {
 		}
 
 		cmd := exec.Command(args[0], args[1:]...)
-		cmd.Dir = config.Path
+		cmd.Dir = r.Path
 
 		rawOutput, err := cmd.Output()
 		if err != nil {
@@ -341,7 +344,7 @@ func GetFileBlameSummary(config RepoConfig, files []string) []FileBlame {
 		authors := utils.Map(lines, func(line string) string {
 			authorName := strings.ReplaceAll(line, "committer ", "")
 
-			return GetRealAuthorName(config, authorName)
+			return GetRealAuthorName(r, authorName)
 		})
 
 		authorLineCountMap := make(map[string]int)
@@ -361,21 +364,21 @@ func GetFileBlameSummary(config RepoConfig, files []string) []FileBlame {
 	return fileBlames
 }
 
-func getLastCommitPrevYear(config RepoConfig) GitCommit {
-	commits := getPrevYearGitCommits(config)
+func (r *RepoConfig) getLastCommitPrevYear() GitCommit {
+	commits := r.getPrevYearGitCommits()
 	lastIdx := len(commits) - 1
 
 	return commits[lastIdx]
 }
 
-func checkoutRepoToCommitOrBranchName(config RepoConfig, commitOrBranchName string) error {
+func (r *RepoConfig) checkoutRepoToCommitOrBranchName(commitOrBranch string) error {
 	args := []string{
 		"git",
 		"checkout",
-		commitOrBranchName,
+		commitOrBranch,
 	}
 	cmd := exec.Command(args[0], args[1:]...)
-	cmd.Dir = config.Path
+	cmd.Dir = r.Path
 
 	_, err := cmd.Output()
 	if err != nil {
@@ -385,8 +388,8 @@ func checkoutRepoToCommitOrBranchName(config RepoConfig, commitOrBranchName stri
 	return nil
 }
 
-func GetRealAuthorName(config RepoConfig, authorName string) string {
-	for _, dupGroup := range config.DuplicateAuthors {
+func GetRealAuthorName(r RepoConfig, authorName string) string {
+	for _, dupGroup := range r.DuplicateAuthors {
 		for _, dup := range dupGroup.Duplicates {
 			if authorName == dup {
 				return dup
@@ -409,8 +412,8 @@ func pullRepo(dir string) {
 	pullcmd.Output()
 }
 
-func hasPrevYearCommits(config RepoConfig) bool {
-	commits := getPrevYearGitCommits(config)
+func (r *RepoConfig) hasPrevYearCommits() bool {
+	commits := r.getPrevYearGitCommits()
 
 	return len(commits) > 0
 }
@@ -454,4 +457,25 @@ func GetDuplicateAuthorList(repo RepoConfig) []string {
 	}
 
 	return duplicateAuthors
+}
+
+func IsValidGitRepo(dir string) bool {
+	_, fileErr := os.Stat(dir)
+
+	if errors.Is(fileErr, os.ErrNotExist) {
+		fmt.Println("Directory not found, please try again.")
+		return false
+	} else if errors.Is(fileErr, os.ErrPermission) {
+		fmt.Println("Unable to access directory, make sure it has proper permissions and try again.")
+		return false
+	} else {
+		gitDirPath := filepath.Join(dir, ".git")
+		_, gitDirErr := os.Stat(gitDirPath)
+		if errors.Is(gitDirErr, os.ErrNotExist) {
+			fmt.Println("No Git repo found in specified directory. Please try again.")
+			return false
+		}
+	}
+
+	return true
 }

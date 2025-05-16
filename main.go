@@ -3,7 +3,6 @@ package main
 import (
 	"GabeMeister/yer-cli/analyzer"
 	"GabeMeister/yer-cli/presentation"
-	"GabeMeister/yer-cli/utils"
 	"errors"
 	"flag"
 	"fmt"
@@ -42,9 +41,10 @@ func main() {
 		printHelp()
 	} else if *setupConfig {
 		presentation.RunCreateRecapPage()
+		fmt.Println("\n\nComplete! Now run `./year-end-recap -a` to analyze your repos\n\n")
 	} else if *analyzeRepo {
 		fmt.Println("Analyzing...")
-		result := analyzer.AnalyzeRepos(utils.DEFAULT_CONFIG_FILE)
+		result := analyzer.AnalyzeRepos()
 		if result {
 			fmt.Printf("\nDone! View stats by running the following command:\n\n./year-end-recap -v\n\n")
 		} else {

@@ -5,9 +5,7 @@ import (
 	"os"
 )
 
-type FileHandler struct{}
-
-func (f *FileHandler) SaveDataToFile(data any, path string) {
+func SaveDataToFile(data any, path string) {
 	rawData, err := json.MarshalIndent(data, "", "  ")
 	if err != nil {
 		panic(err)
@@ -17,4 +15,14 @@ func (f *FileHandler) SaveDataToFile(data any, path string) {
 	if fileErr != nil {
 		panic(fileErr)
 	}
+}
+
+func IsFileReadable(path string) bool {
+	file, err := os.OpenFile(path, os.O_RDONLY, 0)
+	if err != nil {
+		return false
+	}
+	file.Close()
+
+	return true
 }
