@@ -367,7 +367,7 @@ function initExcludeAuthorsInput() {
   }
 }
 
-function refreshConfigPage() {
+function closeTab() {
   initIncludeFileExtensionsInput();
   initExcludeDirsInput();
   initExcludeFilesInput();
@@ -376,12 +376,12 @@ function refreshConfigPage() {
 
 document.addEventListener("htmx:afterSettle", function (evt) {
   if (window.location.pathname === "/add-repo") {
-    refreshConfigPage();
+    closeTab();
   }
 });
 
 document.addEventListener("DOMContentLoaded", function (evt) {
   if (window.location.pathname === "/add-repo") {
-    refreshConfigPage();
+    closeTab();
   }
 });
