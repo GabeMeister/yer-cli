@@ -1,7 +1,6 @@
 package analyzer
 
 import (
-	"GabeMeister/yer-cli/utils"
 	"encoding/json"
 	"os"
 )
@@ -47,15 +46,15 @@ func InitConfig(options ConfigFileOptions) ConfigFile {
 		panic(err)
 	}
 
-	os.WriteFile(utils.DEFAULT_CONFIG_FILE, data, 0644)
+	os.WriteFile(DEFAULT_CONFIG_FILE, data, 0644)
 
 	return config
 }
 
-func AddRepoConfig(config ConfigFile) ConfigFile {
+func (c *ConfigFile) AddNewRepoConfig() *RepoConfig {
 	// Find the largest id
 	largestId := 1
-	for _, repoConfig := range config.Repos {
+	for _, repoConfig := range c.Repos {
 		if repoConfig.Id > largestId {
 			largestId = repoConfig.Id
 		}
@@ -72,26 +71,27 @@ func AddRepoConfig(config ConfigFile) ConfigFile {
 		DuplicateAuthors:      []DuplicateAuthorGroup{},
 		IncludeFileBlames:     false,
 	}
-	config.Repos = append(config.Repos, newRepoConfig)
+	c.Repos = append(c.Repos, newRepoConfig)
 
-	return config
+	return &newRepoConfig
 }
 
-func updateDuplicateAuthors(path string, duplicateAuthors []DuplicateAuthorGroup) error {
+func (c *ConfigFile) updateDuplicateAuthors(r *RepoConfig, duplicateAuthors []DuplicateAuthorGroup) error {
+	repoIdx := c.GetRepoIndex(r.Id)
+
 	// Update config, cause we wanna remember this for later
-	config := MustGetConfig(path)
-	config.Repos[0].DuplicateAuthors = duplicateAuthors
-	SaveDataToFile(config, path)
+	c.Repos[repoIdx].DuplicateAuthors = duplicateAuthors
+	SaveDataToFile(c, DEFAULT_CONFIG_FILE)
 
 	// Also want to update the commits.json file, replacing the duplicate git
 	// usernames with the real ones
-	commits := getGitCommits(config.Repos[0])
+	commits := r.getGitCommits()
 
 	for i := range commits {
-		realUsername := GetRealAuthorName(config.Repos[0], commits[i].Author)
+		realUsername := GetRealAuthorName(c.Repos[repoIdx], commits[i].Author)
 		commits[i].Author = realUsername
 	}
-	SaveDataToFile(commits, utils.COMMITS_FILE_TEMPLATE)
+	SaveDataToFile(commits, r.GetCommitsFile())
 
 	return nil
 }
@@ -111,17 +111,17 @@ func MustGetConfig(path string) ConfigFile {
 	return data
 }
 
-func RemoveRepoFromConfig(config ConfigFile, repoId int) ConfigFile {
-	repoIdx := GetRepoIndex(config, repoId)
-	config.Repos = append(config.Repos[:repoIdx], config.Repos[repoIdx+1:]...)
+func RemoveRepoFromConfig(c ConfigFile, repoId int) ConfigFile {
+	repoIdx := c.GetRepoIndex(repoId)
+	c.Repos = append(c.Repos[:repoIdx], c.Repos[repoIdx+1:]...)
 
-	return config
+	return c
 }
 
-func GetRepoIndex(config ConfigFile, repoId int) int {
+func (c *ConfigFile) GetRepoIndex(repoId int) int {
 	index := -1
 
-	for idx, r := range config.Repos {
+	for idx, r := range c.Repos {
 
 		if r.Id == repoId {
 			index = idx
@@ -150,7 +150,7 @@ func MustGetRepoConfig(config ConfigFile, repoId int) RepoConfig {
 }
 
 func SaveConfig(config ConfigFile) {
-	SaveDataToFile(config, utils.DEFAULT_CONFIG_FILE)
+	SaveDataToFile(config, DEFAULT_CONFIG_FILE)
 }
 
 func DoesConfigExist(path string) bool {

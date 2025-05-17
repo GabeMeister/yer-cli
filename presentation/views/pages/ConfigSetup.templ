@@ -86,7 +86,11 @@ templ ConfigSetup(props ConfigSetupProps) {
 						class="flex flex-col items-start gap-6"
 					>
 						<div class="flex justify-center w-full">
-							<h1 class="h1">Add Repo</h1>
+							if props.RepoPath == "" {
+								<h1 class="h1">Add Repo</h1>
+							} else {
+								<h1 class="h1">Edit Repo</h1>
+							}
 						</div>
 						<div class="w-full">
 							@ConfigSetupPage.RepoPath(ConfigSetupPage.RepoPathProps{

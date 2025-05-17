@@ -1,7 +1,6 @@
 package analyzer
 
 import (
-	"GabeMeister/yer-cli/utils"
 	"encoding/json"
 	"os"
 )
@@ -58,11 +57,11 @@ type Recap struct {
 }
 
 func GetRecap() (Recap, error) {
-	if !utils.HasRepoBeenAnalyzed() {
+	if !HasRecapBeenRan() {
 		return Recap{}, os.ErrNotExist
 	}
 
-	data, err := os.ReadFile(utils.RECAP_FILE)
+	data, err := os.ReadFile(RECAP_FILE)
 	if err != nil {
 		panic(err)
 	}

@@ -2,7 +2,6 @@ package routes
 
 import (
 	"GabeMeister/yer-cli/analyzer"
-	"GabeMeister/yer-cli/utils"
 	"net/http"
 	"strconv"
 
@@ -17,7 +16,7 @@ func addPresentationRoutes(e *echo.Echo) {
 	recap, _ := analyzer.GetRecap()
 
 	e.GET("/", func(c echo.Context) error {
-		if !utils.HasRepoBeenAnalyzed() {
+		if !analyzer.HasRecapBeenRan() {
 			return t.RenderRepoNotFound(c)
 		}
 
@@ -31,7 +30,7 @@ func addPresentationRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/:page/title", func(c echo.Context) error {
-		if !utils.HasRepoBeenAnalyzed() {
+		if !analyzer.HasRecapBeenRan() {
 			return t.RenderRepoNotFound(c)
 		}
 
@@ -52,7 +51,7 @@ func addPresentationRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/shortest-commit-message-curr-year/title", func(c echo.Context) error {
-		if !utils.HasRepoBeenAnalyzed() {
+		if !analyzer.HasRecapBeenRan() {
 			return t.RenderRepoNotFound(c)
 		}
 
@@ -72,7 +71,7 @@ func addPresentationRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/new-author-count-curr-year", func(c echo.Context) error {
-		if !utils.HasRepoBeenAnalyzed() {
+		if !analyzer.HasRecapBeenRan() {
 			return t.RenderRepoNotFound(c)
 		}
 
@@ -86,7 +85,7 @@ func addPresentationRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/new-author-list-curr-year", func(c echo.Context) error {
-		if !utils.HasRepoBeenAnalyzed() {
+		if !analyzer.HasRecapBeenRan() {
 			return t.RenderRepoNotFound(c)
 		}
 
@@ -100,7 +99,7 @@ func addPresentationRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/author-count-curr-year", func(c echo.Context) error {
-		if !utils.HasRepoBeenAnalyzed() {
+		if !analyzer.HasRecapBeenRan() {
 			return t.RenderRepoNotFound(c)
 		}
 
@@ -114,7 +113,7 @@ func addPresentationRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/author-count-all-time", func(c echo.Context) error {
-		if !utils.HasRepoBeenAnalyzed() {
+		if !analyzer.HasRecapBeenRan() {
 			return t.RenderRepoNotFound(c)
 		}
 
@@ -128,7 +127,7 @@ func addPresentationRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/num-commits-prev-year", func(c echo.Context) error {
-		if !utils.HasRepoBeenAnalyzed() {
+		if !analyzer.HasRecapBeenRan() {
 			return t.RenderRepoNotFound(c)
 		}
 
@@ -145,7 +144,7 @@ func addPresentationRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/num-commits-curr-year", func(c echo.Context) error {
-		if !utils.HasRepoBeenAnalyzed() {
+		if !analyzer.HasRecapBeenRan() {
 			return t.RenderRepoNotFound(c)
 		}
 
@@ -162,7 +161,7 @@ func addPresentationRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/num-commits-all-time", func(c echo.Context) error {
-		if !utils.HasRepoBeenAnalyzed() {
+		if !analyzer.HasRecapBeenRan() {
 			return t.RenderRepoNotFound(c)
 		}
 
@@ -179,7 +178,7 @@ func addPresentationRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/author-commits-over-time-curr-year", func(c echo.Context) error {
-		if !utils.HasRepoBeenAnalyzed() {
+		if !analyzer.HasRecapBeenRan() {
 			return t.RenderRepoNotFound(c)
 		}
 
@@ -196,7 +195,7 @@ func addPresentationRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/author-file-changes-over-time-curr-year", func(c echo.Context) error {
-		if !utils.HasRepoBeenAnalyzed() {
+		if !analyzer.HasRecapBeenRan() {
 			return t.RenderRepoNotFound(c)
 		}
 
@@ -213,7 +212,7 @@ func addPresentationRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/file-count-prev-year", func(c echo.Context) error {
-		if !utils.HasRepoBeenAnalyzed() {
+		if !analyzer.HasRecapBeenRan() {
 			return t.RenderRepoNotFound(c)
 		}
 
@@ -230,7 +229,7 @@ func addPresentationRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/file-count-curr-year", func(c echo.Context) error {
-		if !utils.HasRepoBeenAnalyzed() {
+		if !analyzer.HasRecapBeenRan() {
 			return t.RenderRepoNotFound(c)
 		}
 
@@ -247,7 +246,7 @@ func addPresentationRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/third-largest-file", func(c echo.Context) error {
-		if !utils.HasRepoBeenAnalyzed() {
+		if !analyzer.HasRecapBeenRan() {
 			return t.RenderRepoNotFound(c)
 		}
 
@@ -264,7 +263,7 @@ func addPresentationRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/second-largest-file", func(c echo.Context) error {
-		if !utils.HasRepoBeenAnalyzed() {
+		if !analyzer.HasRecapBeenRan() {
 			return t.RenderRepoNotFound(c)
 		}
 
@@ -281,7 +280,7 @@ func addPresentationRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/largest-file", func(c echo.Context) error {
-		if !utils.HasRepoBeenAnalyzed() {
+		if !analyzer.HasRecapBeenRan() {
 			return t.RenderRepoNotFound(c)
 		}
 
@@ -298,7 +297,7 @@ func addPresentationRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/total-lines-of-code-prev-year", func(c echo.Context) error {
-		if !utils.HasRepoBeenAnalyzed() {
+		if !analyzer.HasRecapBeenRan() {
 			return t.RenderRepoNotFound(c)
 		}
 
@@ -315,7 +314,7 @@ func addPresentationRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/total-lines-of-code-curr-year", func(c echo.Context) error {
-		if !utils.HasRepoBeenAnalyzed() {
+		if !analyzer.HasRecapBeenRan() {
 			return t.RenderRepoNotFound(c)
 		}
 
@@ -332,7 +331,7 @@ func addPresentationRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/most-single-day-commits-by-author-curr-year", func(c echo.Context) error {
-		if !utils.HasRepoBeenAnalyzed() {
+		if !analyzer.HasRecapBeenRan() {
 			return t.RenderRepoNotFound(c)
 		}
 
@@ -349,7 +348,7 @@ func addPresentationRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/most-single-day-commits-by-author-curr-year-commit-list", func(c echo.Context) error {
-		if !utils.HasRepoBeenAnalyzed() {
+		if !analyzer.HasRecapBeenRan() {
 			return t.RenderRepoNotFound(c)
 		}
 
@@ -366,7 +365,7 @@ func addPresentationRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/most-insertions-in-single-commit-curr-year", func(c echo.Context) error {
-		if !utils.HasRepoBeenAnalyzed() {
+		if !analyzer.HasRecapBeenRan() {
 			return t.RenderRepoNotFound(c)
 		}
 
@@ -383,7 +382,7 @@ func addPresentationRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/most-deletions-in-single-commit-curr-year", func(c echo.Context) error {
-		if !utils.HasRepoBeenAnalyzed() {
+		if !analyzer.HasRecapBeenRan() {
 			return t.RenderRepoNotFound(c)
 		}
 
@@ -400,7 +399,7 @@ func addPresentationRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/largest-commit-message-curr-year", func(c echo.Context) error {
-		if !utils.HasRepoBeenAnalyzed() {
+		if !analyzer.HasRecapBeenRan() {
 			return t.RenderRepoNotFound(c)
 		}
 
@@ -417,7 +416,7 @@ func addPresentationRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/shortest-commit-message-curr-year/:index", func(c echo.Context) error {
-		if !utils.HasRepoBeenAnalyzed() {
+		if !analyzer.HasRecapBeenRan() {
 			return t.RenderRepoNotFound(c)
 		}
 
@@ -439,7 +438,7 @@ func addPresentationRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/most-merges-in-one-day-curr-year", func(c echo.Context) error {
-		if !utils.HasRepoBeenAnalyzed() {
+		if !analyzer.HasRecapBeenRan() {
 			return t.RenderRepoNotFound(c)
 		}
 
@@ -456,7 +455,7 @@ func addPresentationRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/most-merges-in-one-day-commit-messages-curr-year", func(c echo.Context) error {
-		if !utils.HasRepoBeenAnalyzed() {
+		if !analyzer.HasRecapBeenRan() {
 			return t.RenderRepoNotFound(c)
 		}
 
@@ -473,7 +472,7 @@ func addPresentationRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/avg-merges-per-day-to-master-curr-year", func(c echo.Context) error {
-		if !utils.HasRepoBeenAnalyzed() {
+		if !analyzer.HasRecapBeenRan() {
 			return t.RenderRepoNotFound(c)
 		}
 
@@ -490,7 +489,7 @@ func addPresentationRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/size-of-repo-by-week-curr-year", func(c echo.Context) error {
-		if !utils.HasRepoBeenAnalyzed() {
+		if !analyzer.HasRecapBeenRan() {
 			return t.RenderRepoNotFound(c)
 		}
 
@@ -507,7 +506,7 @@ func addPresentationRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/file-changes-by-author-curr-year", func(c echo.Context) error {
-		if !utils.HasRepoBeenAnalyzed() {
+		if !analyzer.HasRecapBeenRan() {
 			return t.RenderRepoNotFound(c)
 		}
 
@@ -524,7 +523,7 @@ func addPresentationRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/file-change-ratio-by-author-curr-year", func(c echo.Context) error {
-		if !utils.HasRepoBeenAnalyzed() {
+		if !analyzer.HasRecapBeenRan() {
 			return t.RenderRepoNotFound(c)
 		}
 
@@ -541,7 +540,7 @@ func addPresentationRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/author-commit-counts-curr-year", func(c echo.Context) error {
-		if !utils.HasRepoBeenAnalyzed() {
+		if !analyzer.HasRecapBeenRan() {
 			return t.RenderRepoNotFound(c)
 		}
 
@@ -558,7 +557,7 @@ func addPresentationRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/author-commit-counts-all-time", func(c echo.Context) error {
-		if !utils.HasRepoBeenAnalyzed() {
+		if !analyzer.HasRecapBeenRan() {
 			return t.RenderRepoNotFound(c)
 		}
 
@@ -575,7 +574,7 @@ func addPresentationRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/direct-pushes-on-master-by-author-curr-year", func(c echo.Context) error {
-		if !utils.HasRepoBeenAnalyzed() {
+		if !analyzer.HasRecapBeenRan() {
 			return t.RenderRepoNotFound(c)
 		}
 
@@ -592,7 +591,7 @@ func addPresentationRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/merges-to-master-by-author-curr-year", func(c echo.Context) error {
-		if !utils.HasRepoBeenAnalyzed() {
+		if !analyzer.HasRecapBeenRan() {
 			return t.RenderRepoNotFound(c)
 		}
 
@@ -609,7 +608,7 @@ func addPresentationRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/total-lines-of-code-in-repo-by-author", func(c echo.Context) error {
-		if !utils.HasRepoBeenAnalyzed() {
+		if !analyzer.HasRecapBeenRan() {
 			return t.RenderRepoNotFound(c)
 		}
 
@@ -626,7 +625,7 @@ func addPresentationRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/commits-by-month-curr-year", func(c echo.Context) error {
-		if !utils.HasRepoBeenAnalyzed() {
+		if !analyzer.HasRecapBeenRan() {
 			return t.RenderRepoNotFound(c)
 		}
 
@@ -643,7 +642,7 @@ func addPresentationRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/commits-by-weekday-curr-year", func(c echo.Context) error {
-		if !utils.HasRepoBeenAnalyzed() {
+		if !analyzer.HasRecapBeenRan() {
 			return t.RenderRepoNotFound(c)
 		}
 
@@ -660,7 +659,7 @@ func addPresentationRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/commits-by-hour-curr-year", func(c echo.Context) error {
-		if !utils.HasRepoBeenAnalyzed() {
+		if !analyzer.HasRecapBeenRan() {
 			return t.RenderRepoNotFound(c)
 		}
 
@@ -677,7 +676,7 @@ func addPresentationRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/commit-message-length-histogram-curr-year", func(c echo.Context) error {
-		if !utils.HasRepoBeenAnalyzed() {
+		if !analyzer.HasRecapBeenRan() {
 			return t.RenderRepoNotFound(c)
 		}
 
@@ -694,7 +693,7 @@ func addPresentationRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/commonly-changed-files", func(c echo.Context) error {
-		if !utils.HasRepoBeenAnalyzed() {
+		if !analyzer.HasRecapBeenRan() {
 			return t.RenderRepoNotFound(c)
 		}
 
@@ -711,7 +710,7 @@ func addPresentationRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/end", func(c echo.Context) error {
-		if !utils.HasRepoBeenAnalyzed() {
+		if !analyzer.HasRecapBeenRan() {
 			return t.RenderRepoNotFound(c)
 		}
 

@@ -12,7 +12,7 @@ import (
 )
 
 /*
- * COMMITS
+ * COMMIT GETTERS
  */
 
 func (r *RepoConfig) getGitCommits() []GitCommit {
@@ -127,7 +127,7 @@ func (r *RepoConfig) getCurrYearDirectPushOnMasterCommits() []GitCommit {
 }
 
 /*
- * COMMIT METRICS
+ * COMMIT STATS
  */
 
 func (r *RepoConfig) GetIsMultiYearRepo() bool {
@@ -143,7 +143,7 @@ func (r *RepoConfig) GetNumCommitsAllTime() int {
 	return len(commits)
 }
 
-func GetNumCommitsPrevYear(r RepoConfig) int {
+func (r *RepoConfig) GetNumCommitsPrevYear() int {
 	commits := r.getGitCommits()
 	prevYearCommits := utils.Filter(commits, func(c GitCommit) bool {
 		d, err := time.Parse("Mon Jan 2 15:04:05 2006 -0700", c.Date)
@@ -157,7 +157,7 @@ func GetNumCommitsPrevYear(r RepoConfig) int {
 	return len(prevYearCommits)
 }
 
-func GetNumCommitsCurrYear(r RepoConfig) int {
+func (r *RepoConfig) GetNumCommitsCurrYear() int {
 	commits := r.getGitCommits()
 	prevYearCommits := utils.Filter(commits, func(c GitCommit) bool {
 		d, err := time.Parse("Mon Jan 2 15:04:05 2006 -0700", c.Date)
@@ -171,7 +171,7 @@ func GetNumCommitsCurrYear(r RepoConfig) int {
 	return len(prevYearCommits)
 }
 
-func GetNumCommitsInPast(r RepoConfig) int {
+func (r *RepoConfig) GetNumCommitsInPast() int {
 	commits := r.getGitCommits()
 	prevYearCommits := utils.Filter(commits, func(c GitCommit) bool {
 		d, err := time.Parse("Mon Jan 2 15:04:05 2006 -0700", c.Date)
@@ -185,7 +185,7 @@ func GetNumCommitsInPast(r RepoConfig) int {
 	return len(prevYearCommits)
 }
 
-func GetCommitsByMonthCurrYear(r RepoConfig) []CommitMonth {
+func (r *RepoConfig) GetCommitsByMonthCurrYear() []CommitMonth {
 	commits := r.getCurrYearGitCommits()
 
 	monthMap := make(map[string]int)
@@ -211,7 +211,7 @@ func GetCommitsByMonthCurrYear(r RepoConfig) []CommitMonth {
 	return commitMonths
 }
 
-func GetCommitsByWeekDayCurrYear(r RepoConfig) []CommitWeekDay {
+func (r *RepoConfig) GetCommitsByWeekDayCurrYear() []CommitWeekDay {
 	commits := r.getCurrYearGitCommits()
 
 	weekDayMap := make(map[string]int)
@@ -237,7 +237,7 @@ func GetCommitsByWeekDayCurrYear(r RepoConfig) []CommitWeekDay {
 	return commitWeekDays
 }
 
-func GetCommitsByHourCurrYear(r RepoConfig) []CommitHour {
+func (r *RepoConfig) GetCommitsByHourCurrYear() []CommitHour {
 	commits := r.getCurrYearGitCommits()
 
 	hourMap := make(map[int]int)
@@ -263,7 +263,7 @@ func GetCommitsByHourCurrYear(r RepoConfig) []CommitHour {
 	return commitHours
 }
 
-func GetMostInsertionsInCommitCurrYear(r RepoConfig) GitCommit {
+func (r *RepoConfig) GetMostInsertionsInCommitCurrYear() GitCommit {
 	commits := r.getCurrYearGitCommits()
 
 	mostInsertionsCommit := commits[0]
@@ -284,7 +284,7 @@ func GetMostInsertionsInCommitCurrYear(r RepoConfig) GitCommit {
 	return mostInsertionsCommit
 }
 
-func GetMostDeletionsInCommitCurrYear(r RepoConfig) GitCommit {
+func (r *RepoConfig) GetMostDeletionsInCommitCurrYear() GitCommit {
 	commits := r.getCurrYearGitCommits()
 
 	mostDeletionsCommit := commits[0]
@@ -305,7 +305,7 @@ func GetMostDeletionsInCommitCurrYear(r RepoConfig) GitCommit {
 	return mostDeletionsCommit
 }
 
-func GetLargestCommitMessageCurrYear(r RepoConfig) GitCommit {
+func (r *RepoConfig) GetLargestCommitMessageCurrYear() GitCommit {
 	commits := r.getCurrYearGitCommits()
 
 	largestLengthCommit := commits[0]
@@ -319,7 +319,7 @@ func GetLargestCommitMessageCurrYear(r RepoConfig) GitCommit {
 	return largestLengthCommit
 }
 
-func GetSmallestCommitMessagesCurrYear(r RepoConfig) []GitCommit {
+func (r *RepoConfig) GetSmallestCommitMessagesCurrYear() []GitCommit {
 	commits := r.getCurrYearGitCommits()
 
 	sort.Slice(commits, func(i int, j int) bool {
@@ -329,7 +329,7 @@ func GetSmallestCommitMessagesCurrYear(r RepoConfig) []GitCommit {
 	return commits[0:5]
 }
 
-func GetCommitMessageHistogramCurrYear(r RepoConfig) []CommitMessageLengthFrequency {
+func (r *RepoConfig) GetCommitMessageHistogramCurrYear() []CommitMessageLengthFrequency {
 	commits := r.getCurrYearGitCommits()
 
 	lengthFrequencyMap := make(map[int]int)
@@ -443,7 +443,7 @@ func (r *RepoConfig) GetFileChangesByAuthorCurrYear() map[string]int {
 	return authorInsertionsMap
 }
 
-func GetCodeInsertionsByAuthorCurrYear(r RepoConfig) map[string]int {
+func (r *RepoConfig) GetCodeInsertionsByAuthorCurrYear() map[string]int {
 	commits := r.getCurrYearGitCommits()
 
 	authorDeletionsMap := make(map[string]int)
@@ -457,7 +457,7 @@ func GetCodeInsertionsByAuthorCurrYear(r RepoConfig) map[string]int {
 	return authorDeletionsMap
 }
 
-func GetCodeDeletionsByAuthorCurrYear(r RepoConfig) map[string]int {
+func (r *RepoConfig) GetCodeDeletionsByAuthorCurrYear() map[string]int {
 	commits := r.getCurrYearGitCommits()
 
 	authorDeletionsMap := make(map[string]int)
@@ -472,7 +472,7 @@ func GetCodeDeletionsByAuthorCurrYear(r RepoConfig) map[string]int {
 }
 
 /*
- * TEAM METRICS
+ * TEAM STATS
  */
 
 func (r *RepoConfig) GetNewAuthorCommitsCurrYear() []GitCommit {
@@ -633,7 +633,7 @@ func (r *RepoConfig) GetAuthorCommitsOverTimeCurrYear() []TotalCommitCount {
 	return final
 }
 
-func GetAuthorFileChangesOverTimeCurrYear(r RepoConfig) []TotalFileChangeCount {
+func (r *RepoConfig) GetAuthorFileChangesOverTimeCurrYear() []TotalFileChangeCount {
 	if !r.HasPrevYearFileBlames() || !r.HasCurrYearFileBlames() {
 		return []TotalFileChangeCount{}
 	}
@@ -797,7 +797,7 @@ func (r *RepoConfig) GetTotalLinesOfCodeInRepoByAuthor() map[string]int {
 }
 
 /*
- * FILE METRICS
+ * FILE STATS
  */
 
 func (r *RepoConfig) GetPrevYearFileList() []string {
@@ -874,7 +874,7 @@ func (r *RepoConfig) GetCurrYearFileBlames() []FileBlame {
 	return fileBlames
 }
 
-func GetFileChangeRatio(insertionsByAuthor map[string]int, deletionsByAuthor map[string]int) map[string]float64 {
+func (r *RepoConfig) GetFileChangeRatio(insertionsByAuthor map[string]int, deletionsByAuthor map[string]int) map[string]float64 {
 	ratios := make(map[string]float64)
 
 	for author, insertionCount := range insertionsByAuthor {
@@ -898,7 +898,7 @@ func GetFileChangeRatio(insertionsByAuthor map[string]int, deletionsByAuthor map
 	return ratios
 }
 
-func GetCommonlyChangedFiles(r RepoConfig) []FileChangeCount {
+func (r *RepoConfig) GetCommonlyChangedFiles() []FileChangeCount {
 	commits := r.getCurrYearGitCommits()
 	fileChangeTracker := make(map[string]int)
 
@@ -1007,7 +1007,7 @@ func (r *RepoConfig) GetTotalLinesOfCodeCurrYear() int {
 	return total
 }
 
-func GetSizeOfRepoByWeekCurrYear(r RepoConfig) []RepoSizeTimeStamp {
+func (r *RepoConfig) GetSizeOfRepoByWeekCurrYear() []RepoSizeTimeStamp {
 	commits := r.getCurrYearGitCommits()
 	weeks := utils.GetWeeksOfYear()
 

@@ -25,7 +25,7 @@ var InitialAuthors = []string{"Kenny", "Kenny1", "Kenny2", "Isaac Neace", "Gabe 
 func addAnalyzerRoutes(e *echo.Echo) {
 
 	e.GET("/create-recap", func(c echo.Context) error {
-		if !analyzer.DoesConfigExist(utils.DEFAULT_CONFIG_FILE) {
+		if !analyzer.DoesConfigExist(analyzer.DEFAULT_CONFIG_FILE) {
 			analyzer.InitConfig(analyzer.ConfigFileOptions{
 				RepoDir:                "",
 				MasterBranchName:       "",
@@ -45,7 +45,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 
 			return c.HTML(http.StatusOK, content)
 		} else {
-			config := analyzer.MustGetConfig(utils.DEFAULT_CONFIG_FILE)
+			config := analyzer.MustGetConfig(analyzer.DEFAULT_CONFIG_FILE)
 
 			url := fmt.Sprintf("/add-repo?id=%d", config.Repos[0].Id)
 			c.Redirect(301, url)
@@ -55,7 +55,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 	})
 
 	e.POST("/create-recap", func(c echo.Context) error {
-		config := analyzer.MustGetConfig(utils.DEFAULT_CONFIG_FILE)
+		config := analyzer.MustGetConfig(analyzer.DEFAULT_CONFIG_FILE)
 		recapName := helpers.MustGetFormValue(c, "recap-name")
 
 		config.Name = recapName
@@ -68,13 +68,13 @@ func addAnalyzerRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/add-repo", func(c echo.Context) error {
-		if !analyzer.DoesConfigExist(utils.DEFAULT_CONFIG_FILE) {
+		if !analyzer.DoesConfigExist(analyzer.DEFAULT_CONFIG_FILE) {
 			// If there's no config, redirect
 			c.Redirect(301, "/create-recap")
 			return nil
 		}
 
-		config := analyzer.MustGetConfig(utils.DEFAULT_CONFIG_FILE)
+		config := analyzer.MustGetConfig(analyzer.DEFAULT_CONFIG_FILE)
 
 		if len(config.Repos) == 0 {
 			// If there's no repos, then the easiest thing to do is just to restart
@@ -86,11 +86,11 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		newParam := c.QueryParam("new")
 
 		if newParam == "true" {
-			config = analyzer.AddRepoConfig(config)
-			newRepoId := config.Repos[len(config.Repos)-1].Id
+			newRepo := config.AddNewRepoConfig()
+			fmt.Print("\n\n", "*** config ***", "\n", config, "\n\n\n")
 			analyzer.SaveConfig(config)
 
-			c.Redirect(301, fmt.Sprintf("/add-repo?id=%d", newRepoId))
+			c.Redirect(301, fmt.Sprintf("/add-repo?id=%d", newRepo.Id))
 			return nil
 		}
 
@@ -99,7 +99,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 			return RenderErrorMessage(c, err)
 		}
 
-		repoIdx := analyzer.GetRepoIndex(config, id)
+		repoIdx := config.GetRepoIndex(id)
 		if repoIdx == -1 {
 			return RenderMessage(c, "Couldn't find correct repo to edit. Please restart setup process by visiting `/create-recap")
 		}
@@ -159,9 +159,9 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		}
 		ungroupedAuthors := formParams["ungrouped-author"]
 
-		config := analyzer.MustGetConfig(utils.DEFAULT_CONFIG_FILE)
+		config := analyzer.MustGetConfig(analyzer.DEFAULT_CONFIG_FILE)
 		repo := analyzer.MustGetRepoConfig(config, repoId)
-		repoIdx := analyzer.GetRepoIndex(config, repo.Id)
+		repoIdx := config.GetRepoIndex(repo.Id)
 
 		repo.Path = repoPath
 		repo.MasterBranchName = masterBranchName
@@ -207,7 +207,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 			panic(fmt.Sprintf("Repo ID param is not a number: %s", repoIdParam))
 		}
 
-		config := analyzer.MustGetConfig(utils.DEFAULT_CONFIG_FILE)
+		config := analyzer.MustGetConfig(analyzer.DEFAULT_CONFIG_FILE)
 		config = analyzer.RemoveRepoFromConfig(config, repoId)
 		analyzer.SaveConfig(config)
 
@@ -506,7 +506,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 	e.PATCH("/recap-name", func(c echo.Context) error {
 		recapName := c.FormValue("recap-name")
 
-		config := analyzer.MustGetConfig(utils.DEFAULT_CONFIG_FILE)
+		config := analyzer.MustGetConfig(analyzer.DEFAULT_CONFIG_FILE)
 		config.Name = recapName
 		analyzer.SaveConfig(config)
 

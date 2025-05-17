@@ -126,7 +126,7 @@ func getCommitsFromGitLogs(r RepoConfig, mergeCommits bool) []GitCommit {
 
 func getDirectPushToMasterCommitsCurrYear(r RepoConfig) []GitCommit {
 	path := r.Path
-	commits := getCurrYearGitCommits(r)
+	commits := r.getCurrYearGitCommits()
 
 	args := []string{
 		"git",
@@ -478,4 +478,52 @@ func IsValidGitRepo(dir string) bool {
 	}
 
 	return true
+}
+
+func HasRecapBeenRan() bool {
+	_, fileErr := os.Stat(RECAP_FILE)
+
+	return !errors.Is(fileErr, os.ErrNotExist)
+}
+
+func GetMasterBranchName(dir string) string {
+	masterBranchCmd := exec.Command("git", "branch", "-r")
+	masterBranchCmd.Dir = dir
+	rawOutput, _ := masterBranchCmd.Output()
+	text := string(rawOutput)
+	lines := strings.Split(text, "\n")
+	idx := slices.IndexFunc(lines, func(line string) bool {
+		return strings.Contains(line, "origin/HEAD")
+	})
+	masterBranchLine := lines[idx]
+
+	masterBranchName := strings.ReplaceAll(masterBranchLine, "origin/HEAD -> origin/", "")
+	masterBranchName = strings.TrimSpace(masterBranchName)
+
+	return masterBranchName
+}
+
+func GetFileExtensionsInRepo(dir string) []string {
+	lsFilesCmd := exec.Command("git", "ls-files")
+	lsFilesCmd.Dir = dir
+	rawOutput, _ := lsFilesCmd.Output()
+	text := string(rawOutput)
+	lines := strings.Split(text, "\n")
+
+	extMap := make(map[string]bool)
+	for _, line := range lines {
+		fileExt := strings.ReplaceAll(filepath.Ext(line), ".", "")
+		if fileExt != "" {
+			extMap[fileExt] = true
+		}
+	}
+
+	fileExtensions := []string{}
+	for fileExt := range extMap {
+		if slices.Contains(SUPPORTED_FILE_EXTENSIONS, fileExt) {
+			fileExtensions = append(fileExtensions, fileExt)
+		}
+	}
+
+	return fileExtensions
 }

@@ -255,7 +255,22 @@ func ConfigSetup(props ConfigSetupProps) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"bg-gray-800 flex justify-center items-start min-h-screen py-32 grow\"><div class=\"bg-white w-1/3 min-w-[600px] max-w-[750px] p-12 rounded-md\"><form hx-patch=\"/config-file\" hx-swap=\"outerHTML\" hx-target=\"#config-setup\" class=\"flex flex-col items-start gap-6\"><div class=\"flex justify-center w-full\"><h1 class=\"h1\">Add Repo</h1></div><div class=\"w-full\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"bg-gray-800 flex justify-center items-start min-h-screen py-32 grow\"><div class=\"bg-white w-1/3 min-w-[600px] max-w-[750px] p-12 rounded-md\"><form hx-patch=\"/config-file\" hx-swap=\"outerHTML\" hx-target=\"#config-setup\" class=\"flex flex-col items-start gap-6\"><div class=\"flex justify-center w-full\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			if props.RepoPath == "" {
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h1 class=\"h1\">Add Repo</h1>")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+			} else {
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h1 class=\"h1\">Edit Repo</h1>")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"w-full\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -333,7 +348,7 @@ func ConfigSetup(props ConfigSetupProps) templ.Component {
 			var templ_7745c5c3_Var14 string
 			templ_7745c5c3_Var14, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%d", props.Id))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/ConfigSetup.templ`, Line: 136, Col: 72}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/ConfigSetup.templ`, Line: 140, Col: 72}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var14))
 			if templ_7745c5c3_Err != nil {
