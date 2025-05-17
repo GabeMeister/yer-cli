@@ -55,16 +55,16 @@ func addAnalyzerRoutes(e *echo.Echo) {
 	})
 
 	e.POST("/create-recap", func(c echo.Context) error {
-		config := analyzer.MustGetConfig(analyzer.DEFAULT_CONFIG_FILE)
+		configFile := analyzer.MustGetConfig(analyzer.DEFAULT_CONFIG_FILE)
 		recapName := helpers.MustGetFormValue(c, "recap-name")
 
-		config.Name = recapName
-		analyzer.SaveConfig(config)
+		configFile.Name = recapName
+		configFile.Save()
 
-		url := fmt.Sprintf("/add-repo?id=%d", config.Repos[0].Id)
-		c.Redirect(301, url)
+		url := fmt.Sprintf("/add-repo?id=%d", configFile.Repos[0].Id)
+		c.Response().Header().Set("HX-Redirect", url)
 
-		return nil
+		return c.HTML(http.StatusOK, "")
 	})
 
 	e.GET("/add-repo", func(c echo.Context) error {
@@ -87,8 +87,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 
 		if newParam == "true" {
 			newRepo := config.AddNewRepoConfig()
-			fmt.Print("\n\n", "*** config ***", "\n", config, "\n\n\n")
-			analyzer.SaveConfig(config)
+			config.Save()
 
 			c.Redirect(301, fmt.Sprintf("/add-repo?id=%d", newRepo.Id))
 			return nil
@@ -173,7 +172,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 
 		config.Repos[repoIdx] = repo
 
-		analyzer.SaveConfig(config)
+		config.Save()
 
 		year := time.Now().Year()
 
@@ -209,7 +208,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 
 		config := analyzer.MustGetConfig(analyzer.DEFAULT_CONFIG_FILE)
 		config = analyzer.RemoveRepoFromConfig(config, repoId)
-		analyzer.SaveConfig(config)
+		config.Save()
 
 		redirectUrl := fmt.Sprintf("/add-repo?id=%d", config.Repos[0].Id)
 
@@ -508,7 +507,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 
 		config := analyzer.MustGetConfig(analyzer.DEFAULT_CONFIG_FILE)
 		config.Name = recapName
-		analyzer.SaveConfig(config)
+		config.Save()
 
 		component := ConfigSetupPage.RecapNameDisplay(ConfigSetupPage.RecapNameTextboxProps{
 			RecapName: recapName,

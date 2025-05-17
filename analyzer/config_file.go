@@ -149,12 +149,19 @@ func MustGetRepoConfig(config ConfigFile, repoId int) RepoConfig {
 	return repo
 }
 
-func SaveConfig(config ConfigFile) {
-	SaveDataToFile(config, DEFAULT_CONFIG_FILE)
+func (c *ConfigFile) Save() {
+	SaveDataToFile(c, DEFAULT_CONFIG_FILE)
 }
 
 func DoesConfigExist(path string) bool {
 	data, err := os.ReadFile(path)
 
-	return err == nil && len(data) > 0
+	if err == nil && len(data) > 0 {
+		config := MustGetConfig(path)
+		if config.Name != "" {
+			return true
+		}
+	}
+
+	return false
 }
