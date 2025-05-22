@@ -29,7 +29,7 @@ func FinishSetup() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"p-24 bg-gray-800 text-white h-screen flex flex-col items-center gap-12\"><h1 class=\"h1\">Setup Finished!</h1><p>Please close this tab and go back to your terminal to analyze your repos.</p></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"p-24 bg-gray-800 text-white h-screen flex flex-col items-center gap-12\"><h1 class=\"h1\">Setup Finished! <i class=\"fa fa-check\"></i></h1><p class=\"text-lg\">Please close this tab and go back to your terminal to analyze your repos.</p></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
