@@ -19,7 +19,7 @@ func (r *RepoConfig) getCommitsFromGitLogs(mergeCommits bool) []GitCommit {
 	s := GetSpinner()
 
 	fmt.Println()
-	s.Suffix = " Retrieving git logs..."
+	s.Suffix = fmt.Sprintf(" Retrieving git logs for %s...", r.GetName())
 	s.Start()
 
 	path := r.Path
@@ -49,7 +49,7 @@ func (r *RepoConfig) getCommitsFromGitLogs(mergeCommits bool) []GitCommit {
 
 	output := string(rawOutput)
 
-	s.Suffix = " Analyzing git logs..."
+	s.Suffix = fmt.Sprintf(" Analyzing git logs for %s...", r.GetName())
 
 	lines := strings.Split(output, "\n")
 
@@ -180,7 +180,7 @@ func isFileChangeLine(line string) bool {
 
 func (r *RepoConfig) getFileChangeSummary() map[string][]FileChange {
 	s := GetSpinner()
-	s.Suffix = " Retrieving line changes..."
+	s.Suffix = fmt.Sprintf(" Retrieving line changes for %s...", r.GetName())
 	s.Start()
 
 	path := r.Path
@@ -201,7 +201,7 @@ func (r *RepoConfig) getFileChangeSummary() map[string][]FileChange {
 
 	output := string(rawOutput)
 
-	s.Suffix = " Analyzing line changes..."
+	s.Suffix = fmt.Sprintf(" Analyzing line changes for %s...", r.GetName())
 
 	lines := strings.Split(output, "\n")
 	fileChangeMap := make(map[string][]FileChange)
@@ -287,10 +287,13 @@ func (r *RepoConfig) getRepoFiles(commitOrBranchName string) []string {
 	// Filter to just files that we want to include and filter out files we want
 	// to exclude
 	for _, file := range files {
+		fmt.Print("\n\n", "*** file ***", "\n", file, "\n\n\n")
 		fileExtension := utils.GetFileExtension(file)
+		fmt.Print("\n\n", "*** fileExtension ***", "\n", fileExtension, "\n\n\n")
 		validFileExtension := utils.Includes(r.IncludeFileExtensions, func(ext string) bool {
 			return fileExtension == ext
 		})
+		fmt.Print("\n\n", "*** validFileExtension ***", "\n", validFileExtension, "\n\n\n")
 
 		if !validFileExtension {
 			continue
@@ -299,6 +302,7 @@ func (r *RepoConfig) getRepoFiles(commitOrBranchName string) []string {
 		isExcludedFile := utils.Includes(r.ExcludeDirectories, func(dir string) bool {
 			return strings.HasPrefix(file, dir)
 		})
+		fmt.Print("\n\n", "*** isExcludedFile ***", "\n", isExcludedFile, "\n\n\n")
 
 		if isExcludedFile {
 			continue
@@ -307,13 +311,15 @@ func (r *RepoConfig) getRepoFiles(commitOrBranchName string) []string {
 		includedFiles = append(includedFiles, file)
 	}
 
+	fmt.Print("\n\n", "*** includedFiles ***", "\n", includedFiles, "\n\n\n")
+
 	return includedFiles
 }
 
-func GetFileBlameSummary(r RepoConfig, files []string) []FileBlame {
+func (r *RepoConfig) GetFileBlameSummary(files []string) []FileBlame {
 	s := GetSpinner()
 	fmt.Println()
-	s.Suffix = " Analyzing Git blames..."
+	s.Suffix = fmt.Sprintf(" Analyzing Git blames for %s...", r.GetName())
 	s.Start()
 
 	fileBlames := []FileBlame{}
@@ -344,7 +350,7 @@ func GetFileBlameSummary(r RepoConfig, files []string) []FileBlame {
 		authors := utils.Map(lines, func(line string) string {
 			authorName := strings.ReplaceAll(line, "committer ", "")
 
-			return GetRealAuthorName(r, authorName)
+			return r.GetRealAuthorName(authorName)
 		})
 
 		authorLineCountMap := make(map[string]int)
@@ -388,7 +394,7 @@ func (r *RepoConfig) checkoutRepoToCommitOrBranchName(commitOrBranch string) err
 	return nil
 }
 
-func GetRealAuthorName(r RepoConfig, authorName string) string {
+func (r *RepoConfig) GetRealAuthorName(authorName string) string {
 	for _, dupGroup := range r.DuplicateAuthors {
 		for _, dup := range dupGroup.Duplicates {
 			if authorName == dup {
@@ -481,7 +487,7 @@ func IsValidGitRepo(dir string) bool {
 }
 
 func HasRecapBeenRan() bool {
-	_, fileErr := os.Stat(RECAP_FILE)
+	_, fileErr := os.Stat(RECAP_FILE_TEMPLATE)
 
 	return !errors.Is(fileErr, os.ErrNotExist)
 }

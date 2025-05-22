@@ -56,12 +56,12 @@ type Recap struct {
 	TotalLinesOfCodeInRepoByAuthor       map[string]int               `json:"total_lines_of_code_in_repo_by_author"`
 }
 
-func GetRecap() (Recap, error) {
+func GetRepoRecap() (Recap, error) {
 	if !HasRecapBeenRan() {
 		return Recap{}, os.ErrNotExist
 	}
 
-	data, err := os.ReadFile(RECAP_FILE)
+	data, err := os.ReadFile(RECAP_FILE_TEMPLATE)
 	if err != nil {
 		panic(err)
 	}

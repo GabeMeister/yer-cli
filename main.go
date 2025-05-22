@@ -43,7 +43,6 @@ func main() {
 		presentation.RunCreateRecapPage()
 		fmt.Print("\n\nComplete! Now run `./year-end-recap -a` to analyze your repos\n\n")
 	} else if *analyzeRepo {
-		fmt.Println("Analyzing...")
 		result := analyzer.AnalyzeRepos()
 		if result {
 			fmt.Printf("\nDone! View stats by running the following command:\n\n./year-end-recap -v\n\n")

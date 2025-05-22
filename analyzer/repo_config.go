@@ -50,3 +50,11 @@ func (r *RepoConfig) GetCurrYearFileListFile() string {
 func (r *RepoConfig) GetCurrYearFileBlamesFile() string {
 	return fmt.Sprintf(CURR_YEAR_FILE_BLAMES_FILE, filepath.Base(r.Path))
 }
+
+func (r *RepoConfig) GetRecapFile() string {
+	return fmt.Sprintf(RECAP_FILE_TEMPLATE, filepath.Base(r.Path))
+}
+
+func (r *RepoConfig) GetName() string {
+	return filepath.Base(r.Path)
+}

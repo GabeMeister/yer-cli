@@ -13,7 +13,7 @@ import (
 )
 
 func addPresentationRoutes(e *echo.Echo) {
-	recap, _ := analyzer.GetRecap()
+	recap, _ := analyzer.GetRepoRecap()
 
 	e.GET("/", func(c echo.Context) error {
 		if !analyzer.HasRecapBeenRan() {

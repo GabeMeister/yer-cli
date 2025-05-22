@@ -25,18 +25,22 @@ func AnalyzeRepos() bool {
 		// Check if repo is "clean" (on master branch, and no unstaged changes)
 		if !isRepoClean(r.Path, r.MasterBranchName) {
 			fmt.Println(`
-This tool will inspect your git repo at various commits.
+This tool will inspect your git repo(s) at various commits.
 Please make sure your repo is on master (or main), 
 and there are no unstaged changes before continuing.
 
 Press enter to continue...`)
 			reader := bufio.NewReader(os.Stdin)
 			reader.ReadString('\n')
-		}
 
-		gatherMetrics(r)
-		config.updateDuplicateAuthors(&r, r.DuplicateAuthors)
-		calculateRecap(r)
+			break
+		}
+	}
+
+	for _, r := range config.Repos {
+		gatherMetrics(&r)
+		config.updateDuplicateAuthors(&r)
+		calculateRecap(&r)
 	}
 
 	return true
@@ -67,7 +71,7 @@ func isRepoClean(dir string, masterBranch string) bool {
 	return len(statusOutput) == 0
 }
 
-func gatherMetrics(r RepoConfig) {
+func gatherMetrics(r *RepoConfig) {
 	stashRepo(r.Path)
 
 	currYearErr := r.checkoutRepoToCommitOrBranchName(r.MasterBranchName)
@@ -94,7 +98,7 @@ func gatherMetrics(r RepoConfig) {
 	// Prev year files (if possible)
 	if r.hasPrevYearCommits() {
 		lastCommitPrevYear := r.getLastCommitPrevYear()
-		fmt.Println("Analyzing last year's repo...")
+		fmt.Printf("Analyzing last year's repo for %s...", r.GetName())
 		prevYearErr := r.checkoutRepoToCommitOrBranchName(lastCommitPrevYear.Commit)
 		if prevYearErr != nil {
 			fmt.Println("Unable to git checkout repo to last year's files")
@@ -105,13 +109,13 @@ func gatherMetrics(r RepoConfig) {
 		SaveDataToFile(prevYearFiles, r.GetPrevYearFileListFile())
 
 		if r.AnalyzeFileBlames {
-			prevYearBlames := GetFileBlameSummary(r, prevYearFiles)
+			prevYearBlames := r.GetFileBlameSummary(prevYearFiles)
 			SaveDataToFile(prevYearBlames, r.GetPrevYearFileBlamesFile())
 		}
 	}
 
 	// Curr year files
-	fmt.Println("Analyzing this year's repo...")
+	fmt.Printf("Analyzing this year's repo for %s...\n", r.GetName())
 
 	currYearErr = r.checkoutRepoToCommitOrBranchName(r.MasterBranchName)
 	if currYearErr != nil {
@@ -120,19 +124,20 @@ func gatherMetrics(r RepoConfig) {
 	}
 
 	currYearFiles := r.getRepoFiles(r.MasterBranchName)
+	fmt.Print("\n\n", "*** currYearFiles ***", "\n", currYearFiles, "\n\n\n")
 	SaveDataToFile(currYearFiles, r.GetCurrYearFileListFile())
 
 	if r.AnalyzeFileBlames {
-		currYearBlames := GetFileBlameSummary(r, currYearFiles)
+		currYearBlames := r.GetFileBlameSummary(currYearFiles)
 		SaveDataToFile(currYearBlames, r.GetCurrYearFileBlamesFile())
 	}
 }
 
-func calculateRecap(r RepoConfig) {
+func calculateRecap(r *RepoConfig) {
 	s := GetSpinner()
 
 	fmt.Println()
-	s.Suffix = " Calculating repo stats..."
+	s.Suffix = fmt.Sprintf(" Calculating repo stats for %s...", r.GetName())
 	s.Start()
 
 	isMultiYearRepo := r.GetIsMultiYearRepo()
@@ -179,6 +184,9 @@ func calculateRecap(r RepoConfig) {
 
 	now := time.Now()
 	isoDateString := now.Format(time.RFC3339)
+
+	fmt.Print("\n\n", "*** fileCountCurrYear ***", "\n", fileCountCurrYear, "\n\n\n")
+	fmt.Print("\n\n", "*** fileCountPrevYear ***", "\n", fileCountPrevYear, "\n\n\n")
 
 	fileCountPercentDifference := (float64(fileCountCurrYear) - float64(fileCountPrevYear)) / float64(fileCountPrevYear)
 	if math.IsNaN(fileCountPercentDifference) {
@@ -236,12 +244,9 @@ func calculateRecap(r RepoConfig) {
 		FileChangeRatioByAuthorCurrYear:      fileChangeRatioCurrYear,
 		TotalLinesOfCodeInRepoByAuthor:       totalLinesOfCodeInRepoByAuthor,
 	}
-	data, err := json.MarshalIndent(repoRecap, "", "  ")
-	if err != nil {
-		panic(err)
-	}
 
-	os.WriteFile(RECAP_FILE, data, 0644)
+	repoRecapFile := r.GetRecapFile()
+	SaveDataToFile(repoRecap, repoRecapFile)
 
 	s.Stop()
 }

@@ -946,8 +946,10 @@ func (r *RepoConfig) GetLargestFilesCurrYear() []FileSize {
 		return fileBlames[i].LineCount > fileBlames[j].LineCount
 	})
 
+	fileRangeMax := math.Min(float64(len(fileBlames)), 10)
+
 	fileSizes := []FileSize{}
-	for _, fileBlame := range fileBlames[0:10] {
+	for _, fileBlame := range fileBlames[0:int(fileRangeMax)] {
 		fileSizes = append(fileSizes, FileSize{
 			File:      fileBlame.File,
 			LineCount: fileBlame.LineCount,
@@ -968,8 +970,10 @@ func (r *RepoConfig) GetSmallestFilesCurrYear() []FileSize {
 		return fileBlames[i].LineCount < fileBlames[j].LineCount
 	})
 
+	fileRangeMax := math.Min(float64(len(fileBlames)), 10)
+
 	fileSizes := []FileSize{}
-	for _, fileBlame := range fileBlames[0:10] {
+	for _, fileBlame := range fileBlames[0:int(fileRangeMax)] {
 		fileSizes = append(fileSizes, FileSize{
 			File:      fileBlame.File,
 			LineCount: fileBlame.LineCount,

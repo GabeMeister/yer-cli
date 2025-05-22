@@ -76,11 +76,11 @@ func (c *ConfigFile) AddNewRepoConfig() *RepoConfig {
 	return &newRepoConfig
 }
 
-func (c *ConfigFile) updateDuplicateAuthors(r *RepoConfig, duplicateAuthors []DuplicateAuthorGroup) error {
+func (c *ConfigFile) updateDuplicateAuthors(r *RepoConfig) error {
 	repoIdx := c.GetRepoIndex(r.Id)
 
 	// Update config, cause we wanna remember this for later
-	c.Repos[repoIdx].DuplicateAuthors = duplicateAuthors
+	c.Repos[repoIdx].DuplicateAuthors = r.DuplicateAuthors
 	SaveDataToFile(c, DEFAULT_CONFIG_FILE)
 
 	// Also want to update the commits.json file, replacing the duplicate git
@@ -88,7 +88,7 @@ func (c *ConfigFile) updateDuplicateAuthors(r *RepoConfig, duplicateAuthors []Du
 	commits := r.getGitCommits()
 
 	for i := range commits {
-		realUsername := GetRealAuthorName(c.Repos[repoIdx], commits[i].Author)
+		realUsername := c.Repos[repoIdx].GetRealAuthorName(commits[i].Author)
 		commits[i].Author = realUsername
 	}
 	SaveDataToFile(commits, r.GetCommitsFile())
