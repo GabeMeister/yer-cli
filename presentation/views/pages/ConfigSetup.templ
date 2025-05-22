@@ -22,6 +22,7 @@ type ConfigSetupProps struct {
 	UngroupedAuthors      []string
 	DuplicateAuthorGroups []analyzer.DuplicateAuthorGroup
 	RepoConfigList        []analyzer.RepoConfig
+	AnalyzeFileBlames     bool
 }
 
 templ ConfigSetup(props ConfigSetupProps) {
@@ -136,6 +137,20 @@ templ ConfigSetup(props ConfigSetupProps) {
 							@ConfigSetupPage.ExcludeAuthors(ConfigSetupPage.ExcludeAuthorsProps{
 								Authors: props.ExcludeAuthors,
 							})
+						</div>
+						<div
+							class="w-full"
+						>
+							<input
+								type="checkbox"
+								name="analyze-file-blames"
+								id="analyze-file-blames"
+								checked?={ props.AnalyzeFileBlames }
+							/>
+							<label
+								for="analyze-file-blames"
+								class="font-medium"
+							>Include Advanced File Analysis for this Repo</label>
 						</div>
 						<input type="hidden" name="id" value={ fmt.Sprintf("%d", props.Id) }/>
 						<button

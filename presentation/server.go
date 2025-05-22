@@ -21,7 +21,7 @@ func RunCreateRecapPage() {
 
 	routes.Init(e, static)
 
-	fmt.Println("\nTo create a new Year End Recap, browse to http://localhost:4000/create-recap")
+	fmt.Println("\nTo setup your Year End Recap, browse to http://localhost:4000/create-recap")
 	e.Logger.Fatal(e.Start(":4000"))
 }
 

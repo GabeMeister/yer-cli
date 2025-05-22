@@ -79,19 +79,17 @@ func gatherMetrics(r RepoConfig) {
 	// We want the latest changes
 	pullRepo(r.Path)
 
-	commits := getCommitsFromGitLogs(r, false)
+	commits := r.getCommitsFromGitLogs(false)
 	commitsFileName := r.GetCommitsFile()
 	SaveDataToFile(commits, commitsFileName)
 
-	mergeCommits := getCommitsFromGitLogs(r, true)
+	mergeCommits := r.getCommitsFromGitLogs(true)
 	mergeCommitsFileName := r.GetMergeCommitsFile()
 	SaveDataToFile(mergeCommits, mergeCommitsFileName)
 
-	directPushToMasterCommits := getDirectPushToMasterCommitsCurrYear(r)
+	directPushToMasterCommits := r.getDirectPushToMasterCommitsCurrYear()
 	directPushFileName := r.GetDirectPushesFile()
 	SaveDataToFile(directPushToMasterCommits, directPushFileName)
-
-	utils.Pause()
 
 	// Prev year files (if possible)
 	if r.hasPrevYearCommits() {
@@ -106,7 +104,7 @@ func gatherMetrics(r RepoConfig) {
 		prevYearFiles := r.getRepoFiles(lastCommitPrevYear.Commit)
 		SaveDataToFile(prevYearFiles, r.GetPrevYearFileListFile())
 
-		if r.IncludeFileBlames {
+		if r.AnalyzeFileBlames {
 			prevYearBlames := GetFileBlameSummary(r, prevYearFiles)
 			SaveDataToFile(prevYearBlames, r.GetPrevYearFileBlamesFile())
 		}
@@ -124,7 +122,7 @@ func gatherMetrics(r RepoConfig) {
 	currYearFiles := r.getRepoFiles(r.MasterBranchName)
 	SaveDataToFile(currYearFiles, r.GetCurrYearFileListFile())
 
-	if r.IncludeFileBlames {
+	if r.AnalyzeFileBlames {
 		currYearBlames := GetFileBlameSummary(r, currYearFiles)
 		SaveDataToFile(currYearBlames, r.GetCurrYearFileBlamesFile())
 	}
@@ -193,7 +191,7 @@ func calculateRecap(r RepoConfig) {
 		Name:               r.Path,
 		DateAnalyzed:       isoDateString,
 		IsMultiYearRepo:    isMultiYearRepo,
-		IncludesFileBlames: r.IncludeFileBlames,
+		IncludesFileBlames: r.AnalyzeFileBlames,
 
 		// Commits
 		NumCommitsAllTime:               numCommitsAllTime,

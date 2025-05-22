@@ -37,7 +37,7 @@ func InitConfig(options ConfigFileOptions) ConfigFile {
 				ExcludeFiles:          []string{},
 				ExcludeAuthors:        []string{},
 				DuplicateAuthors:      options.DuplicateAuthors,
-				IncludeFileBlames:     options.IncludeFileBlames,
+				AnalyzeFileBlames:     options.IncludeFileBlames,
 			},
 		},
 	}
@@ -69,7 +69,7 @@ func (c *ConfigFile) AddNewRepoConfig() *RepoConfig {
 		ExcludeFiles:          []string{},
 		ExcludeAuthors:        []string{},
 		DuplicateAuthors:      []DuplicateAuthorGroup{},
-		IncludeFileBlames:     false,
+		AnalyzeFileBlames:     false,
 	}
 	c.Repos = append(c.Repos, newRepoConfig)
 

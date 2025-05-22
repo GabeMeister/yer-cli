@@ -150,6 +150,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		excludeDirs := c.FormValue("exclude-dirs")
 		excludeFiles := c.FormValue("exclude-files")
 		excludeAuthors := c.FormValue("exclude-authors")
+		analyzeFileBlames := c.FormValue("analyze-file-blames") == "on"
 		formParams, _ := c.FormParams()
 		marshaledDupGroups := formParams["dup-group"]
 		dupGroups := []analyzer.DuplicateAuthorGroup{}
@@ -169,6 +170,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		repo.ExcludeFiles = strings.Split(excludeFiles, ",")
 		repo.ExcludeAuthors = strings.Split(excludeAuthors, ",")
 		repo.DuplicateAuthors = dupGroups
+		repo.AnalyzeFileBlames = analyzeFileBlames
 
 		config.Repos[repoIdx] = repo
 
@@ -190,6 +192,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 			ExcludeAuthors:        excludeAuthors,
 			UngroupedAuthors:      ungroupedAuthors,
 			DuplicateAuthorGroups: dupGroups,
+			AnalyzeFileBlames:     analyzeFileBlames,
 		})
 		content := t.Render(t.RenderParams{
 			C:         c,

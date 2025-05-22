@@ -15,7 +15,7 @@ import (
 	"strings"
 )
 
-func getCommitsFromGitLogs(r RepoConfig, mergeCommits bool) []GitCommit {
+func (r *RepoConfig) getCommitsFromGitLogs(mergeCommits bool) []GitCommit {
 	s := GetSpinner()
 
 	fmt.Println()
@@ -114,7 +114,7 @@ func getCommitsFromGitLogs(r RepoConfig, mergeCommits bool) []GitCommit {
 	s.Stop()
 
 	if !mergeCommits {
-		fileChangeSummary := getFileChangeSummary(r)
+		fileChangeSummary := r.getFileChangeSummary()
 
 		for i := range commits {
 			commits[i].FileChanges = fileChangeSummary[commits[i].Commit]
@@ -124,7 +124,7 @@ func getCommitsFromGitLogs(r RepoConfig, mergeCommits bool) []GitCommit {
 	return commits
 }
 
-func getDirectPushToMasterCommitsCurrYear(r RepoConfig) []GitCommit {
+func (r *RepoConfig) getDirectPushToMasterCommitsCurrYear() []GitCommit {
 	path := r.Path
 	commits := r.getCurrYearGitCommits()
 
@@ -178,7 +178,7 @@ func isFileChangeLine(line string) bool {
 	return emailRegex.MatchString(line)
 }
 
-func getFileChangeSummary(r RepoConfig) map[string][]FileChange {
+func (r *RepoConfig) getFileChangeSummary() map[string][]FileChange {
 	s := GetSpinner()
 	s.Suffix = " Retrieving line changes..."
 	s.Start()
@@ -214,7 +214,7 @@ func getFileChangeSummary(r RepoConfig) map[string][]FileChange {
 			// We found a new commit, so we need to add the previous commit in and
 			// reset the temp variables
 			if currHash != "" {
-				currFileChanges = filterToOnlyIncludedFiles(r, currFileChanges)
+				currFileChanges = r.filterToOnlyIncludedFiles(currFileChanges)
 
 				fileChangeMap[currHash] = currFileChanges
 				currHash = ""
@@ -251,7 +251,7 @@ func getFileChangeSummary(r RepoConfig) map[string][]FileChange {
 
 }
 
-func filterToOnlyIncludedFiles(r RepoConfig, fileChanges []FileChange) []FileChange {
+func (r *RepoConfig) filterToOnlyIncludedFiles(fileChanges []FileChange) []FileChange {
 	filteredFileChanges := utils.Filter(fileChanges, func(c FileChange) bool {
 		fileExt := utils.GetFileExtension(c.FilePath)
 
