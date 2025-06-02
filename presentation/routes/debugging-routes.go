@@ -3,8 +3,8 @@ package routes
 import (
 	"GabeMeister/yer-cli/presentation/views/components"
 	t "GabeMeister/yer-cli/presentation/views/template"
+	"GabeMeister/yer-cli/utils"
 	"net/http"
-	"os"
 	"strings"
 	"time"
 
@@ -14,11 +14,10 @@ import (
 )
 
 func addDebuggingRoutes(e *echo.Echo) {
-	isDevMode := os.Getenv("DEV_MODE") == "true"
 
 	e.GET("/env", func(c echo.Context) error {
 		text := "Production"
-		if isDevMode {
+		if utils.IsDevMode() {
 			text = "Development"
 		}
 

@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"GabeMeister/yer-cli/utils"
 	"embed"
 	"fmt"
 	"log"
@@ -10,8 +11,6 @@ import (
 )
 
 func addResourceRoutes(e *echo.Echo, static embed.FS) {
-	isDevMode := os.Getenv("DEV_MODE") == "true"
-
 	e.GET("/favicon.ico", func(c echo.Context) error {
 		data, _ := static.ReadFile("static/images/favicon.ico")
 		return c.Blob(200, "image/x-icon", data)
@@ -29,7 +28,7 @@ func addResourceRoutes(e *echo.Echo, static embed.FS) {
 		// Directly read from the file on disk when developing, so we can get the
 		// fast hot module reloading for style tweaks, instead of fully rebuilding
 		// the whole go app every time
-		if isDevMode {
+		if utils.IsDevMode() {
 			data, err = os.ReadFile("presentation/static/css/styles.css")
 			if err != nil {
 				log.Fatal(err)

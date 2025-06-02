@@ -18,9 +18,11 @@ import (
 func (r *RepoConfig) getCommitsFromGitLogs(mergeCommits bool) []GitCommit {
 	s := GetSpinner()
 
-	fmt.Println()
-	s.Suffix = fmt.Sprintf(" Retrieving git logs for %s...", r.GetName())
-	s.Start()
+	utils.PrintProgress(s, fmt.Sprintf("Retrieving git logs for %s...", r.GetName()))
+
+	if !utils.IsDevMode() {
+		s.Start()
+	}
 
 	path := r.Path
 	args := []string{
@@ -49,7 +51,7 @@ func (r *RepoConfig) getCommitsFromGitLogs(mergeCommits bool) []GitCommit {
 
 	output := string(rawOutput)
 
-	s.Suffix = fmt.Sprintf(" Analyzing git logs for %s...", r.GetName())
+	utils.PrintProgress(s, fmt.Sprintf("Analyzing git logs for %s...", r.GetName()))
 
 	lines := strings.Split(output, "\n")
 
@@ -180,8 +182,10 @@ func isFileChangeLine(line string) bool {
 
 func (r *RepoConfig) getFileChangeSummary() map[string][]FileChange {
 	s := GetSpinner()
-	s.Suffix = fmt.Sprintf(" Retrieving line changes for %s...", r.GetName())
-	s.Start()
+	utils.PrintProgress(s, fmt.Sprintf("Retrieving line changes for %s...", r.GetName()))
+	if !utils.IsDevMode() {
+		s.Start()
+	}
 
 	path := r.Path
 	cmd := exec.Command(
@@ -201,7 +205,7 @@ func (r *RepoConfig) getFileChangeSummary() map[string][]FileChange {
 
 	output := string(rawOutput)
 
-	s.Suffix = fmt.Sprintf(" Analyzing line changes for %s...", r.GetName())
+	utils.PrintProgress(s, fmt.Sprintf("Analyzing line changes for %s...", r.GetName()))
 
 	lines := strings.Split(output, "\n")
 	fileChangeMap := make(map[string][]FileChange)
@@ -282,18 +286,18 @@ func (r *RepoConfig) getRepoFiles(commitOrBranchName string) []string {
 
 	output := string(rawOutput)
 	files := strings.Split(output, "\n")
+	fmt.Print("\n\n", "*** files ***", "\n", files, "\n\n\n")
 	includedFiles := []string{}
+
+	utils.Pause("\n\n", "*** r.IncludeFileExtensions ***", "\n", r.IncludeFileExtensions, "\n\n\n")
 
 	// Filter to just files that we want to include and filter out files we want
 	// to exclude
 	for _, file := range files {
-		fmt.Print("\n\n", "*** file ***", "\n", file, "\n\n\n")
 		fileExtension := utils.GetFileExtension(file)
-		fmt.Print("\n\n", "*** fileExtension ***", "\n", fileExtension, "\n\n\n")
 		validFileExtension := utils.Includes(r.IncludeFileExtensions, func(ext string) bool {
 			return fileExtension == ext
 		})
-		fmt.Print("\n\n", "*** validFileExtension ***", "\n", validFileExtension, "\n\n\n")
 
 		if !validFileExtension {
 			continue
@@ -311,22 +315,23 @@ func (r *RepoConfig) getRepoFiles(commitOrBranchName string) []string {
 		includedFiles = append(includedFiles, file)
 	}
 
-	fmt.Print("\n\n", "*** includedFiles ***", "\n", includedFiles, "\n\n\n")
-
 	return includedFiles
 }
 
 func (r *RepoConfig) GetFileBlameSummary(files []string) []FileBlame {
 	s := GetSpinner()
 	fmt.Println()
-	s.Suffix = fmt.Sprintf(" Analyzing Git blames for %s...", r.GetName())
-	s.Start()
+	utils.PrintProgress(s, fmt.Sprintf("Analyzing Git blames for %s...", r.GetName()))
+
+	if !utils.IsDevMode() {
+		s.Start()
+	}
 
 	fileBlames := []FileBlame{}
 	totalFiles := len(files)
 
 	for idx, file := range files {
-		s.Suffix = fmt.Sprintf(" Processed %d/%d files. (currently on %s)...", idx, totalFiles, file)
+		utils.PrintProgress(s, fmt.Sprintf("Processed %d/%d files. (currently on %s)...", idx, totalFiles, file))
 		args := []string{
 			"git",
 			"blame",

@@ -124,7 +124,6 @@ func gatherMetrics(r *RepoConfig) {
 	}
 
 	currYearFiles := r.getRepoFiles(r.MasterBranchName)
-	fmt.Print("\n\n", "*** currYearFiles ***", "\n", currYearFiles, "\n\n\n")
 	SaveDataToFile(currYearFiles, r.GetCurrYearFileListFile())
 
 	if r.AnalyzeFileBlames {
@@ -137,8 +136,11 @@ func calculateRecap(r *RepoConfig) {
 	s := GetSpinner()
 
 	fmt.Println()
-	s.Suffix = fmt.Sprintf(" Calculating repo stats for %s...", r.GetName())
-	s.Start()
+	utils.PrintProgress(s, fmt.Sprintf("Calculating repo stats for %s...", r.GetName()))
+
+	if !utils.IsDevMode() {
+		s.Start()
+	}
 
 	isMultiYearRepo := r.GetIsMultiYearRepo()
 	numCommitsAllTime := r.GetNumCommitsAllTime()
