@@ -24,3 +24,17 @@ func UnmarshalDuplicateGroup(dupGroupStr string) analyzer.DuplicateAuthorGroup {
 	}
 
 }
+
+func MarshalStrSlice(s []string) string {
+	return strings.Join(s, ",")
+}
+
+func UnmarshalStrSlice(val string) []string {
+	values := strings.Split(val, ",")
+
+	if len(values) == 1 && values[0] == "" {
+		return []string{}
+	}
+
+	return values
+}

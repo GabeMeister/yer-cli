@@ -146,10 +146,10 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		}
 		repoPath := c.FormValue("repo-path")
 		masterBranchName := c.FormValue("master-branch-name")
-		includeFileExtensions := c.FormValue("include-file-extensions")
-		excludeDirs := c.FormValue("exclude-dirs")
-		excludeFiles := c.FormValue("exclude-files")
-		excludeAuthors := c.FormValue("exclude-authors")
+		includeFileExtensions := helpers.UnmarshalStrSlice(c.FormValue("include-file-extensions"))
+		excludeDirs := helpers.UnmarshalStrSlice(c.FormValue("exclude-dirs"))
+		excludeFiles := helpers.UnmarshalStrSlice(c.FormValue("exclude-files"))
+		excludeAuthors := helpers.UnmarshalStrSlice(c.FormValue("exclude-authors"))
 		analyzeFileBlames := c.FormValue("analyze-file-blames") == "on"
 		formParams, _ := c.FormParams()
 		marshaledDupGroups := formParams["dup-group"]
@@ -165,10 +165,10 @@ func addAnalyzerRoutes(e *echo.Echo) {
 
 		repo.Path = repoPath
 		repo.MasterBranchName = masterBranchName
-		repo.IncludeFileExtensions = strings.Split(includeFileExtensions, ",")
-		repo.ExcludeDirectories = strings.Split(excludeDirs, ",")
-		repo.ExcludeFiles = strings.Split(excludeFiles, ",")
-		repo.ExcludeAuthors = strings.Split(excludeAuthors, ",")
+		repo.IncludeFileExtensions = includeFileExtensions
+		repo.ExcludeDirectories = excludeDirs
+		repo.ExcludeFiles = excludeFiles
+		repo.ExcludeAuthors = excludeAuthors
 		repo.DuplicateAuthors = dupGroups
 		repo.AnalyzeFileBlames = analyzeFileBlames
 
@@ -186,10 +186,10 @@ func addAnalyzerRoutes(e *echo.Echo) {
 			Toast:                 "Saved!",
 			Year:                  year,
 			MasterBranch:          masterBranchName,
-			IncludeFileExtensions: includeFileExtensions,
-			ExcludeDirs:           excludeDirs,
-			ExcludeFiles:          excludeFiles,
-			ExcludeAuthors:        excludeAuthors,
+			IncludeFileExtensions: helpers.MarshalStrSlice(includeFileExtensions),
+			ExcludeDirs:           helpers.MarshalStrSlice(excludeDirs),
+			ExcludeFiles:          helpers.MarshalStrSlice(excludeFiles),
+			ExcludeAuthors:        helpers.MarshalStrSlice(excludeAuthors),
 			UngroupedAuthors:      ungroupedAuthors,
 			DuplicateAuthorGroups: dupGroups,
 			AnalyzeFileBlames:     analyzeFileBlames,
