@@ -20,7 +20,7 @@ type RepoConfig struct {
 	ExcludeAuthors        []string               `json:"exclude_authors"`
 	DuplicateAuthors      []DuplicateAuthorGroup `json:"duplicate_authors"`
 	AllAuthors            []string               `json:"all_authors"`
-	AnalyzeFileBlames     bool                   `json:"include_file_blames"`
+	AnalyzeFileBlames     bool                   `json:"analyze_file_blames"`
 }
 
 func (r *RepoConfig) GetCommitsFile() string {

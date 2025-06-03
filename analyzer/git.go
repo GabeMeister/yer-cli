@@ -286,10 +286,7 @@ func (r *RepoConfig) getRepoFiles(commitOrBranchName string) []string {
 
 	output := string(rawOutput)
 	files := strings.Split(output, "\n")
-	fmt.Print("\n\n", "*** files ***", "\n", files, "\n\n\n")
 	includedFiles := []string{}
-
-	utils.Pause("\n\n", "*** r.IncludeFileExtensions ***", "\n", r.IncludeFileExtensions, "\n\n\n")
 
 	// Filter to just files that we want to include and filter out files we want
 	// to exclude
@@ -306,7 +303,6 @@ func (r *RepoConfig) getRepoFiles(commitOrBranchName string) []string {
 		isExcludedFile := utils.Includes(r.ExcludeDirectories, func(dir string) bool {
 			return strings.HasPrefix(file, dir)
 		})
-		fmt.Print("\n\n", "*** isExcludedFile ***", "\n", isExcludedFile, "\n\n\n")
 
 		if isExcludedFile {
 			continue

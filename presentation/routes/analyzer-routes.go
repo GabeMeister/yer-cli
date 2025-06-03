@@ -132,6 +132,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 				ExcludeFiles:          strings.Join(repo.ExcludeFiles, ","),
 				ExcludeAuthors:        strings.Join(repo.ExcludeAuthors, ","),
 				RepoConfigList:        config.Repos,
+				AnalyzeFileBlames:     repo.AnalyzeFileBlames,
 			}),
 		})
 
