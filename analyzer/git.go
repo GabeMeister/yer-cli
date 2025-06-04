@@ -327,7 +327,7 @@ func (r *RepoConfig) GetFileBlameSummary(files []string) []FileBlame {
 	totalFiles := len(files)
 
 	for idx, file := range files {
-		utils.PrintProgress(s, fmt.Sprintf("Processed %d/%d files. (currently on %s)...", idx, totalFiles, file))
+		utils.PrintProgress(s, fmt.Sprintf("Processing file %d/%d. (currently on %s)...", idx+1, totalFiles, file))
 		args := []string{
 			"git",
 			"blame",
@@ -346,10 +346,10 @@ func (r *RepoConfig) GetFileBlameSummary(files []string) []FileBlame {
 		output := string(rawOutput)
 		lines := strings.Split(output, "\n")
 		lines = utils.Filter(lines, func(line string) bool {
-			return strings.HasPrefix(line, "committer ")
+			return strings.HasPrefix(line, "author ")
 		})
 		authors := utils.Map(lines, func(line string) string {
-			authorName := strings.ReplaceAll(line, "committer ", "")
+			authorName := strings.ReplaceAll(line, "author ", "")
 
 			return r.GetRealAuthorName(authorName)
 		})
