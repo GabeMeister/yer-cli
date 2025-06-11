@@ -43,7 +43,9 @@ Press enter to continue...`)
 		calculateRecap(&r)
 	}
 
-	return true
+	err := config.CalculateMultiRepoRecap()
+
+	return err != nil
 }
 
 func isRepoClean(dir string, masterBranch string) bool {

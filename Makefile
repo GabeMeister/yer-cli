@@ -27,3 +27,12 @@ live/sync_assets:
 # Start all 5 watch processes in parallel.
 live: 
 	make -j4 live/templ live/server live/tailwind live/sync_assets
+
+backup:
+	cp ./config.json ./configs/$(filter-out $@,$(MAKECMDGOALS)).json
+
+load:
+	cp ./configs/$(filter-out $@,$(MAKECMDGOALS)).json ./config.json
+
+%:
+	@:
