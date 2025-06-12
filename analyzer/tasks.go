@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-func AnalyzeRepos() bool {
+func AnalyzeRepos(calculateOnly bool) bool {
 	configValid := isValidConfig(DEFAULT_CONFIG_FILE)
 	if !configValid {
 		return false
@@ -38,14 +38,16 @@ Press enter to continue...`)
 	}
 
 	for _, r := range config.Repos {
-		gatherMetrics(&r)
-		config.updateDuplicateAuthors(&r)
+		if !calculateOnly {
+			gatherMetrics(&r)
+			config.updateDuplicateAuthors(&r)
+		}
 		calculateRecap(&r)
 	}
 
 	err := config.CalculateMultiRepoRecap()
 
-	return err != nil
+	return err == nil
 }
 
 func isRepoClean(dir string, masterBranch string) bool {

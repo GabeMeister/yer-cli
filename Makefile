@@ -34,5 +34,8 @@ backup:
 load:
 	cp ./configs/$(filter-out $@,$(MAKECMDGOALS)).json ./config.json
 
+new:
+	cp /dev/null ./config.json 
+
 %:
 	@:

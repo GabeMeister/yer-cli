@@ -2,7 +2,6 @@ package analyzer
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 )
 
@@ -53,7 +52,6 @@ func InitConfig(options ConfigFileOptions) ConfigFile {
 }
 
 func (c *ConfigFile) AddNewRepoConfig() *RepoConfig {
-	fmt.Print("\n\n", "*** c2 ***", "\n", c, "\n\n\n")
 	// Find the largest id
 	largestId := 1
 	for _, repoConfig := range c.Repos {
@@ -79,8 +77,9 @@ func (c *ConfigFile) AddNewRepoConfig() *RepoConfig {
 }
 
 func (c *ConfigFile) CalculateMultiRepoRecap() error {
-	// Read all repo recap files in /tmp dir
-	fmt.Print("\n\n", "*** here! ***", "\n", "\n\n\n")
+	// Verify that all recap files exist, according to what's in the config
+	// Read all recap files into memory
+
 	return nil
 }
 

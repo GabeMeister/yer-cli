@@ -60,10 +60,9 @@ type TotalFileChangeCount struct {
 	Value int    `json:"value"`
 }
 
-type CommitMessageLengthFrequency struct {
-	Length    int `json:"length"`
-	Frequency int `json:"frequency"`
-}
+// First number: length
+// Second number: frequency
+type CommitMessageLengthFrequency [2]int
 
 type MostMergesInOneDay struct {
 	Count   int         `json:"count"`

@@ -31,8 +31,10 @@ func main() {
 	var view = flag.Bool("v", false, "View your highly amusing Git stats")
 
 	var test *bool
+	var calculateOnly *bool
 	if utils.IsDevMode() {
 		test = flag.Bool("t", false, "Run test")
+		calculateOnly = flag.Bool("c", false, "Just run calculations while analyzing, and skip gathering metrics")
 	}
 
 	flag.Parse()
@@ -48,7 +50,7 @@ func main() {
 		presentation.RunCreateRecapPage()
 		fmt.Print("\n\nComplete! Now run `./year-end-recap -a` to analyze your repos\n\n")
 	} else if *analyzeRepo {
-		result := analyzer.AnalyzeRepos()
+		result := analyzer.AnalyzeRepos(*calculateOnly)
 		if result {
 			fmt.Printf("\nDone! View stats by running the following command:\n\n./year-end-recap -v\n\n")
 		} else {

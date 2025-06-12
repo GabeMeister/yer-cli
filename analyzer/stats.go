@@ -348,17 +348,19 @@ func (r *RepoConfig) GetCommitMessageHistogramCurrYear() []CommitMessageLengthFr
 		}
 	}
 
-	commitMessageLengths := make([]CommitMessageLengthFrequency, maxLength+1)
-	for i := range maxLength + 1 {
-		commitMessageLengths[i].Length = i
-	}
+	// Index of the array represents the length, and each value is the frequency
+	messageLengthFrequencies := []CommitMessageLengthFrequency{}
 
 	for length, frequency := range lengthFrequencyMap {
-		commitMessageLengths[length].Length = length
-		commitMessageLengths[length].Frequency = frequency
+		messageLengthFrequencies = append(messageLengthFrequencies, CommitMessageLengthFrequency{length, frequency})
 	}
 
-	return commitMessageLengths
+	// Sort by length
+	sort.Slice(messageLengthFrequencies, func(i, j int) bool {
+		return messageLengthFrequencies[i][0] < messageLengthFrequencies[j][0]
+	})
+
+	return messageLengthFrequencies
 }
 
 func (r *RepoConfig) GetDirectPushesOnMasterByAuthorCurrYear() map[string]int {

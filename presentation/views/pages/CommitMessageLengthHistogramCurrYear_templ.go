@@ -23,18 +23,24 @@ func getCommitMessageLengthHistogramCurrYearChartData(recap analyzer.Recap) help
 		XAxisMod:   25,
 	}
 
-	largest := len(recap.CommitMessageHistogramCurrYear)
+	largestLength := recap.CommitMessageHistogramCurrYear[len(recap.CommitMessageHistogramCurrYear)][0]
 
 	// Cap the largest to 300 so the chart isn't ridiculously skinny bars
-	if largest > 300 {
-		largest = 300
+	if largestLength > 300 {
+		largestLength = 300
 	}
 
-	for _, month := range recap.CommitMessageHistogramCurrYear[0:largest] {
-		barChartData.Data = append(barChartData.Data, helpers.DataPoint{
-			X: fmt.Sprintf("%d", month.Length),
-			Y: month.Frequency,
-		})
+	for _, message := range recap.CommitMessageHistogramCurrYear {
+		length := message[0]
+		frequency := message[1]
+
+		if length < largestLength {
+
+			barChartData.Data = append(barChartData.Data, helpers.DataPoint{
+				X: fmt.Sprintf("%d", length),
+				Y: frequency,
+			})
+		}
 	}
 
 	return barChartData
@@ -80,7 +86,7 @@ func CommitMessageLengthHistogramCurrYear(recap analyzer.Recap) templ.Component 
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(helpers.Json(getCommitMessageLengthHistogramCurrYearChartData(recap)))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/CommitMessageLengthHistogramCurrYear.templ`, Line: 37, Col: 104}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/CommitMessageLengthHistogramCurrYear.templ`, Line: 43, Col: 104}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
