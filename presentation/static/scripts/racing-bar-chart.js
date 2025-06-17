@@ -63,7 +63,7 @@ export async function paintRacingBarChart() {
 
   const names = new Set(commitsOverTime.map((d) => d.name));
 
-  // Rank all the companies for one particular day
+  // Rank all the authors for one particular day
   // value: (name: string) => number
   function rank(value) {
     const data = Array.from(names, (name) => ({

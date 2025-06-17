@@ -488,7 +488,7 @@ func IsValidGitRepo(dir string) bool {
 }
 
 func HasRecapBeenRan() bool {
-	_, fileErr := os.Stat(RECAP_FILE_TEMPLATE)
+	_, fileErr := os.Stat(fmt.Sprintf(RECAP_FILE_TEMPLATE, "rb-frontend"))
 
 	return !errors.Is(fileErr, os.ErrNotExist)
 }

@@ -159,7 +159,6 @@ func calculateRecap(r *RepoConfig) {
 	authorCommitCountsAllTime := r.GetAuthorCommitCountAllTime()
 	authorCountCurrYear := r.GetAuthorCountCurrYear()
 	authorCountAllTime := r.GetAuthorCountAllTime()
-	authorCommitsOverTimeCurrYear := r.GetAuthorCommitsOverTimeCurrYear()
 	authorFileChangesOverTimeCurrYear := r.GetAuthorFileChangesOverTimeCurrYear()
 	commitsByMonthCurrYear := r.GetCommitsByMonthCurrYear()
 	commitsByWeekDayCurrYear := r.GetCommitsByWeekDayCurrYear()
@@ -238,7 +237,6 @@ func calculateRecap(r *RepoConfig) {
 		AuthorCommitCountsAllTime:            authorCommitCountsAllTime,
 		AuthorCountCurrYear:                  authorCountCurrYear,
 		AuthorCountAllTime:                   authorCountAllTime,
-		AuthorCommitsOverTimeCurrYear:        authorCommitsOverTimeCurrYear,
 		AuthorFileChangesOverTimeCurrYear:    authorFileChangesOverTimeCurrYear,
 		MostSingleDayCommitsByAuthorCurrYear: mostSingleDayCommitsByAuthorCurrYear,
 		DirectPushesOnMasterByAuthorCurrYear: directPushesOnMasterByAuthorCurrYear,

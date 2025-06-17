@@ -651,9 +651,12 @@ func (r *RepoConfig) GetAuthorFileChangesOverTimeCurrYear() []TotalFileChangeCou
 		}
 	}
 
+	// e.g. [ '2025-01-01', '2025-01-02', ... ]
 	dates := utils.GetDaysOfYear(CURR_YEAR)
 
 	// Create map of all possible dates this year
+	// date -> slice of GitCommit
+	// 	e.g. 2025-01-02 -> [{ Commit: "29jf382gh892j38", ... }, { ... }, ...]
 	dateMap := make(map[string][]GitCommit)
 	for _, d := range dates {
 		dateMap[d] = nil

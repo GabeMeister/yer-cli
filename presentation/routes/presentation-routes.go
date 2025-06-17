@@ -2,6 +2,7 @@ package routes
 
 import (
 	"GabeMeister/yer-cli/analyzer"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -19,6 +20,7 @@ func addPresentationRoutes(e *echo.Echo) {
 		if !analyzer.HasRecapBeenRan() {
 			return t.RenderRepoNotFound(c)
 		}
+		fmt.Print("\n\n", "*** here ***", "\n", "\n\n\n")
 
 		component := pages.Intro(recap)
 		content := t.Render(t.RenderParams{
@@ -166,23 +168,6 @@ func addPresentationRoutes(e *echo.Echo) {
 		}
 
 		component := pages.NumCommitsAllTime(recap)
-		content := t.Render(t.RenderParams{
-			C:         c,
-			Component: component,
-		})
-
-		return c.HTML(
-			http.StatusOK,
-			content,
-		)
-	})
-
-	e.GET("/author-commits-over-time-curr-year", func(c echo.Context) error {
-		if !analyzer.HasRecapBeenRan() {
-			return t.RenderRepoNotFound(c)
-		}
-
-		component := pages.AuthorCommitsOverTimeCurrYear(recap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,

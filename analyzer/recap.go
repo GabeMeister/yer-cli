@@ -2,6 +2,7 @@ package analyzer
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 )
 
@@ -61,7 +62,7 @@ func GetRepoRecap() (Recap, error) {
 		return Recap{}, os.ErrNotExist
 	}
 
-	data, err := os.ReadFile(RECAP_FILE_TEMPLATE)
+	data, err := os.ReadFile(fmt.Sprintf(RECAP_FILE_TEMPLATE, "rb-frontend"))
 	if err != nil {
 		panic(err)
 	}
