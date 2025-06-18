@@ -686,15 +686,23 @@ func (r *RepoConfig) GetAuthorFileChangesOverTimeCurrYear() []TotalFileChangeCou
 			}
 		}
 
-		for userName, numFileChanges := range fileChangeTracker {
-			final = append(final, TotalFileChangeCount{
-				Name:  userName,
-				Date:  dateStr,
-				Value: numFileChanges,
-			})
-
+		uniqAuthorMap := make(map[string]bool)
+		for _, commit := range commitsOnDay {
+			uniqAuthorMap[commit.Author] = true
+		}
+		uniqueAuthors := []string{}
+		for author := range uniqAuthorMap {
+			uniqueAuthors = append(uniqueAuthors, author)
 		}
 
+		// Add entries for ONLY the authors that actually committed on this day
+		for _, author := range uniqueAuthors {
+			final = append(final, TotalFileChangeCount{
+				Name:  author,
+				Date:  dateStr,
+				Value: fileChangeTracker[author],
+			})
+		}
 	}
 
 	return final
