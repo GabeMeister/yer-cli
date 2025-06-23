@@ -49,7 +49,7 @@ func expandData(recap analyzer.Recap) []analyzer.FileChangeDay {
 			}
 
 			// Store it off so we remember for future days
-			fileChangeTracker[key] = fileChangeAmt
+			fileChangeTracker[author] = fileChangeAmt
 
 			expandedFileChanges = append(expandedFileChanges, analyzer.FileChangeDay{
 				Name:  author,

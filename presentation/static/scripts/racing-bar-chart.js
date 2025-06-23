@@ -23,7 +23,7 @@ export async function paintRacingBarChart() {
   // The amount of "chunks" to break up the year values (we use linear interpolation)
   const k = 5;
 
-  const LOOP_DELAY_IN_MS = 5;
+  const LOOP_DELAY_IN_MS = 15;
 
   // Duration of how long it takes to swap two rows (in ms)
   const duration = 250;
