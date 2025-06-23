@@ -12,7 +12,7 @@ function delay(ms) {
 
 export async function paintRacingBarChart() {
   const elem = document.querySelector("#racing-bar-chart-container");
-  const commitsOverTime = JSON.parse(elem.getAttribute("data-value"));
+  const dataOverTime = JSON.parse(elem.getAttribute("data-value"));
 
   // Declare the chart dimensions and margins.
   const width = 1200;
@@ -52,7 +52,7 @@ export async function paintRacingBarChart() {
    */
   const datevalues = Array.from(
     d3.rollup(
-      commitsOverTime,
+      dataOverTime,
       ([d]) => d.value,
       (d) => +new Date(d.date),
       (d) => d.name
@@ -61,7 +61,7 @@ export async function paintRacingBarChart() {
     .map(([date, data]) => [new Date(date), data])
     .sort(([a], [b]) => d3.ascending(a, b));
 
-  const names = new Set(commitsOverTime.map((d) => d.name));
+  const names = new Set(dataOverTime.map((d) => d.name));
 
   // Rank all the authors for one particular day
   // value: (name: string) => number
@@ -94,7 +94,9 @@ export async function paintRacingBarChart() {
             [ [Date(), Map(name, value)], [Date(), Map(name, value)] ],
           ]
        */
+    console.log("\n\n***** datevalues *****\n", datevalues, "\n\n");
     const pairs = d3.pairs(datevalues);
+    console.log("\n\n***** pairs *****\n", pairs, "\n\n");
 
     for ([[ka, a], [kb, b]] of pairs) {
       for (let i = 0; i < k; ++i) {
@@ -140,9 +142,9 @@ export async function paintRacingBarChart() {
   const color = () => {
     const scale = d3.scaleOrdinal(d3.schemeTableau10);
 
-    if (commitsOverTime.some((d) => d["category"] !== undefined)) {
+    if (dataOverTime.some((d) => d["category"] !== undefined)) {
       const categoryByName = new Map(
-        commitsOverTime.map((d) => [d.name, d["category"]])
+        dataOverTime.map((d) => [d.name, d["category"]])
       );
       scale.domain(Array.from(categoryByName.values()));
 

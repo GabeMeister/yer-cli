@@ -2,7 +2,6 @@ package routes
 
 import (
 	"GabeMeister/yer-cli/analyzer"
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -20,7 +19,6 @@ func addPresentationRoutes(e *echo.Echo) {
 		if !analyzer.HasRecapBeenRan() {
 			return t.RenderRepoNotFound(c)
 		}
-		fmt.Print("\n\n", "*** here ***", "\n", "\n\n\n")
 
 		component := pages.Intro(recap)
 		content := t.Render(t.RenderParams{

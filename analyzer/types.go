@@ -51,13 +51,20 @@ type TotalCommitCount struct {
 	Value int    `json:"value"`
 }
 
-// Example: { date: '2023-01-03T08:00:00.000Z', name: 'Steve Bremer', value: 2400 },
+// Example:
+// {
+//   "2024-01-01|Kenny": 29838,
+//   "2024-01-02|Isaac": 29838,
+//   ...
+// }
+
 // Used for Author Commits Over Time racing bar chart
-type TotalFileChangeCount struct {
-	// ISO Date string
-	Date  string `json:"date"`
+type TotalFileChangeCount map[string]int
+
+type FileChangeDay struct {
 	Name  string `json:"name"`
 	Value int    `json:"value"`
+	Date  string `json:"date"`
 }
 
 // First number: length

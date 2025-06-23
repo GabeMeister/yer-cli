@@ -12,7 +12,55 @@ import (
 	"GabeMeister/yer-cli/analyzer"
 	helpers "GabeMeister/yer-cli/presentation/helpers"
 	components "GabeMeister/yer-cli/presentation/views/components"
+	"GabeMeister/yer-cli/utils"
+	"fmt"
 )
+
+// The racing bar chart js requires that every author has an entry for every
+// day, even if they didn't have any commits for that day
+func expandData(recap analyzer.Recap) []analyzer.FileChangeDay {
+	totalFileChangesPrevYear := recap.AuthorTotalFileChangesPrevYear
+	fileChanges := recap.AuthorFileChangesOverTimeCurrYear
+	allAuthors := recap.AllAuthors
+	// e.g. [ '2025-01-01', '2025-01-02', ... ]
+	dates := utils.GetDaysOfYear(analyzer.CURR_YEAR)
+
+	// A map that just "keeps track" of the number of file changes each author has
+	// as we iterate over each day. Used in case an author doesn't do any file
+	// changes on a particular day
+	fileChangeTracker := totalFileChangesPrevYear
+	expandedFileChanges := []analyzer.FileChangeDay{}
+
+	// For every date AND for every author, there needs to be an entry. Even if an
+	// author doesn't commit anything for a particular day
+	for _, date := range dates {
+		for _, author := range allAuthors {
+			var fileChangeAmt int
+
+			key := fmt.Sprintf("%s|%s", date, author)
+			val, found := fileChanges[key]
+
+			if found {
+				fileChangeAmt = val
+			} else {
+				// Use the previous day's file changes if no file changes were found for
+				// this date
+				fileChangeAmt = fileChangeTracker[author]
+			}
+
+			// Store it off so we remember for future days
+			fileChangeTracker[key] = fileChangeAmt
+
+			expandedFileChanges = append(expandedFileChanges, analyzer.FileChangeDay{
+				Name:  author,
+				Value: fileChangeAmt,
+				Date:  date,
+			})
+		}
+	}
+
+	return expandedFileChanges
+}
 
 func AuthorFileChangesOverTimeCurrYear(recap analyzer.Recap) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
@@ -52,9 +100,9 @@ func AuthorFileChangesOverTimeCurrYear(recap analyzer.Recap) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var3 string
-			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(helpers.Json(recap.AuthorFileChangesOverTimeCurrYear))
+			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(helpers.Json(expandData(recap)))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/EngineerFileChangesOverTimeCurrYear.templ`, Line: 11, Col: 105}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/EngineerFileChangesOverTimeCurrYear.templ`, Line: 59, Col: 83}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {

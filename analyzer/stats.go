@@ -635,9 +635,26 @@ func (r *RepoConfig) GetAuthorCommitsOverTimeCurrYear() []TotalCommitCount {
 	return final
 }
 
-func (r *RepoConfig) GetAuthorFileChangesOverTimeCurrYear() []TotalFileChangeCount {
+func (r *RepoConfig) GetAllAuthorsList() []string {
+	allAuthorsMap := make(map[string]bool)
+
+	if r.hasPrevYearCommits() {
+		for _, commit := range r.getPrevYearGitCommits() {
+			allAuthorsMap[commit.Author] = true
+		}
+	}
+
+	for _, commit := range r.getCurrYearGitCommits() {
+		allAuthorsMap[commit.Author] = true
+	}
+
+	return utils.MapKeysToSlice(allAuthorsMap)
+}
+
+// Used mainly as initial starting data for author file changes over time
+func (r *RepoConfig) GetAuthorTotalFileChangesPrevYear() map[string]int {
 	if !r.HasPrevYearFileBlames() || !r.HasCurrYearFileBlames() {
-		return []TotalFileChangeCount{}
+		return make(map[string]int)
 	}
 
 	// author => line change count
@@ -650,6 +667,17 @@ func (r *RepoConfig) GetAuthorFileChangesOverTimeCurrYear() []TotalFileChangeCou
 			fileChangeTracker[author] += lineCount
 		}
 	}
+
+	return fileChangeTracker
+}
+
+func (r *RepoConfig) GetAuthorFileChangesOverTimeCurrYear() TotalFileChangeCount {
+	if !r.HasPrevYearFileBlames() || !r.HasCurrYearFileBlames() {
+		return make(TotalFileChangeCount)
+	}
+
+	// author => line change count
+	fileChangeTracker := r.GetAuthorTotalFileChangesPrevYear()
 
 	// e.g. [ '2025-01-01', '2025-01-02', ... ]
 	dates := utils.GetDaysOfYear(CURR_YEAR)
@@ -674,7 +702,12 @@ func (r *RepoConfig) GetAuthorFileChangesOverTimeCurrYear() []TotalFileChangeCou
 		dateMap[commitDateStr] = append(dateMap[commitDateStr], commit)
 	}
 
-	final := []TotalFileChangeCount{}
+	// {
+	//   "2024-01-01|Kenny": 29838,
+	//   "2024-01-02|Isaac": 29838,
+	//	 ...
+	// }
+	final := make(TotalFileChangeCount)
 
 	for _, dateStr := range dates {
 		commitsOnDay := dateMap[dateStr]
@@ -697,11 +730,8 @@ func (r *RepoConfig) GetAuthorFileChangesOverTimeCurrYear() []TotalFileChangeCou
 
 		// Add entries for ONLY the authors that actually committed on this day
 		for _, author := range uniqueAuthors {
-			final = append(final, TotalFileChangeCount{
-				Name:  author,
-				Date:  dateStr,
-				Value: fileChangeTracker[author],
-			})
+			key := fmt.Sprintf("%s|%s", dateStr, author)
+			final[key] = fileChangeTracker[author]
 		}
 	}
 

@@ -40,6 +40,7 @@ type Recap struct {
 	SizeOfRepoByWeekCurrYear   []RepoSizeTimeStamp `json:"size_of_repo_by_week_curr_year"`
 
 	// Team
+	AllAuthors                           []string                     `json:"all_authors"`
 	NewAuthorCommitsCurrYear             []GitCommit                  `json:"new_author_commits_curr_year"`
 	NewAuthorCountCurrYear               int                          `json:"new_author_count_curr_year"`
 	NewAuthorListCurrYear                []string                     `json:"new_author_list_curr_year"`
@@ -47,8 +48,8 @@ type Recap struct {
 	AuthorCommitCountsAllTime            map[string]int               `json:"author_commit_counts_all_time"`
 	AuthorCountCurrYear                  int                          `json:"author_count_curr_year"`
 	AuthorCountAllTime                   int                          `json:"author_count_all_time"`
-	AuthorCommitsOverTimeCurrYear        []TotalCommitCount           `json:"author_commits_over_time_curr_year"`
-	AuthorFileChangesOverTimeCurrYear    []TotalFileChangeCount       `json:"author_file_changes_over_time_curr_year"`
+	AuthorTotalFileChangesPrevYear       map[string]int               `json:"author_total_file_changes_prev_year"`
+	AuthorFileChangesOverTimeCurrYear    TotalFileChangeCount         `json:"author_file_changes_over_time_curr_year"`
 	MostSingleDayCommitsByAuthorCurrYear MostSingleDayCommitsByAuthor `json:"most_single_day_commits_by_author_curr_year"`
 	DirectPushesOnMasterByAuthorCurrYear map[string]int               `json:"direct_pushes_on_master_by_author_curr_year"`
 	MergesToMasterByAuthorCurrYear       map[string]int               `json:"merges_to_master_by_author_curr_year"`
