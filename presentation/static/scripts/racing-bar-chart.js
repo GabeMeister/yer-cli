@@ -94,9 +94,7 @@ export async function paintRacingBarChart() {
             [ [Date(), Map(name, value)], [Date(), Map(name, value)] ],
           ]
        */
-    console.log("\n\n***** datevalues *****\n", datevalues, "\n\n");
     const pairs = d3.pairs(datevalues);
-    console.log("\n\n***** pairs *****\n", pairs, "\n\n");
 
     for ([[ka, a], [kb, b]] of pairs) {
       for (let i = 0; i < k; ++i) {

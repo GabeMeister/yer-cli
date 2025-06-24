@@ -102,7 +102,7 @@ func gatherMetrics(r *RepoConfig) {
 	// Prev year files (if possible)
 	if r.hasPrevYearCommits() {
 		lastCommitPrevYear := r.getLastCommitPrevYear()
-		fmt.Printf("Analyzing last year's repo for %s...", r.GetName())
+		fmt.Printf("Analyzing last year's repo for %s...\n", r.GetName())
 		prevYearErr := r.checkoutRepoToCommitOrBranchName(lastCommitPrevYear.Commit)
 		if prevYearErr != nil {
 			fmt.Println("Unable to git checkout repo to last year's files")

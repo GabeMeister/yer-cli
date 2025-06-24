@@ -651,6 +651,17 @@ func (r *RepoConfig) GetAllAuthorsList() []string {
 	return utils.MapKeysToSlice(allAuthorsMap)
 }
 
+func (r *RepoConfig) GetInitialAuthorFileChangeMap() map[string]int {
+	allAuthors := r.GetAllAuthorsList()
+	authorsMap := make(map[string]int)
+
+	for _, a := range allAuthors {
+		authorsMap[a] = 0
+	}
+
+	return authorsMap
+}
+
 // Used mainly as initial starting data for author file changes over time
 func (r *RepoConfig) GetAuthorTotalFileChangesPrevYear() map[string]int {
 	if !r.HasPrevYearFileBlames() || !r.HasCurrYearFileBlames() {
@@ -672,12 +683,9 @@ func (r *RepoConfig) GetAuthorTotalFileChangesPrevYear() map[string]int {
 }
 
 func (r *RepoConfig) GetAuthorFileChangesOverTimeCurrYear() TotalFileChangeCount {
-	if !r.HasPrevYearFileBlames() || !r.HasCurrYearFileBlames() {
-		return make(TotalFileChangeCount)
-	}
-
+	// Make map out of all authors
 	// author => line change count
-	fileChangeTracker := r.GetAuthorTotalFileChangesPrevYear()
+	fileChangeTracker := r.GetInitialAuthorFileChangeMap()
 
 	// e.g. [ '2025-01-01', '2025-01-02', ... ]
 	dates := utils.GetDaysOfYear(CURR_YEAR)

@@ -414,6 +414,7 @@ func stashRepo(dir string) {
 }
 
 func pullRepo(dir string) {
+	fmt.Println("Running git pull on repo...")
 	pullcmd := exec.Command("git", "pull")
 	pullcmd.Dir = dir
 	pullcmd.Output()
@@ -488,9 +489,18 @@ func IsValidGitRepo(dir string) bool {
 }
 
 func HasRecapBeenRan() bool {
-	_, fileErr := os.Stat(fmt.Sprintf(RECAP_FILE_TEMPLATE, "rb-frontend"))
+	files, err := os.ReadDir("tmp")
+	if err != nil {
+		return false
+	}
 
-	return !errors.Is(fileErr, os.ErrNotExist)
+	for _, file := range files {
+		if !file.IsDir() && strings.HasSuffix(file.Name(), "_recap.json") {
+			return true
+		}
+	}
+
+	return false
 }
 
 func GetMasterBranchName(dir string) string {

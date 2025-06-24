@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strings"
 )
 
 type Recap struct {
@@ -63,7 +64,21 @@ func GetRepoRecap() (Recap, error) {
 		return Recap{}, os.ErrNotExist
 	}
 
-	data, err := os.ReadFile(fmt.Sprintf(RECAP_FILE_TEMPLATE, "rb-frontend"))
+	files, err := os.ReadDir("tmp")
+	if err != nil {
+		fmt.Println("Unable to read tmp directory to get repo recap", err)
+		os.Exit(1)
+	}
+
+	var recapFile string
+
+	for _, file := range files {
+		if !file.IsDir() && strings.HasSuffix(file.Name(), "_recap.json") {
+			recapFile = file.Name()
+		}
+	}
+
+	data, err := os.ReadFile(fmt.Sprintf("./tmp/%s", recapFile))
 	if err != nil {
 		panic(err)
 	}
