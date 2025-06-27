@@ -17,11 +17,13 @@ func formatRecapDate(isoString string) string {
 }
 
 templ Intro(recap analyzer.Recap) {
-	<div class="flex flex-col justify-center items-center min-h-screen">
-		<div class="text-8xl font-bold text-yellow-300">{ recap.Name }</div>
-		@components.HelpText() {
-			<span>Analyzed on { formatRecapDate(recap.DateAnalyzed) }</span>
-		}
-		@components.NextButton(helpers.GetNextButtonLink("/", recap))
-	</div>
+	@components.Slide() {
+		<div class="flex flex-col justify-center items-center min-h-screen">
+			<div class="text-8xl font-bold text-yellow-300">{ recap.Name }</div>
+			@components.HelpText() {
+				<span>Analyzed on { formatRecapDate(recap.DateAnalyzed) }</span>
+			}
+			@components.NextButton(helpers.GetNextButtonLink("/", recap))
+		</div>
+	}
 }

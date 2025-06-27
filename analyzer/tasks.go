@@ -9,6 +9,7 @@ import (
 	"math"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 	"time"
 )
@@ -192,7 +193,10 @@ func calculateRecap(r *RepoConfig) {
 	now := time.Now()
 	isoDateString := now.Format(time.RFC3339)
 
-	fileCountPercentDifference := (float64(fileCountCurrYear) - float64(fileCountPrevYear)) / float64(fileCountPrevYear)
+	var fileCountPercentDifference float64
+	if fileCountPrevYear != 0 {
+		fileCountPercentDifference = (float64(fileCountCurrYear) - float64(fileCountPrevYear)) / float64(fileCountPrevYear)
+	}
 	if math.IsNaN(fileCountPercentDifference) {
 		panic("File count percent difference is NaN!")
 	}
@@ -200,7 +204,8 @@ func calculateRecap(r *RepoConfig) {
 	repoRecap := Recap{
 		// Metadata
 		Version:            "0.0.1",
-		Name:               r.Path,
+		Name:               filepath.Base(r.Path),
+		Directory:          r.Path,
 		DateAnalyzed:       isoDateString,
 		IsMultiYearRepo:    isMultiYearRepo,
 		IncludesFileBlames: r.AnalyzeFileBlames,

@@ -975,6 +975,10 @@ func (r *RepoConfig) GetCommonlyChangedFiles() []FileChangeCount {
 }
 
 func (r *RepoConfig) GetFileCountPrevYear() int {
+	if !r.hasPrevYearCommits() {
+		return 0
+	}
+
 	files := r.GetPrevYearFileList()
 
 	return len(files)

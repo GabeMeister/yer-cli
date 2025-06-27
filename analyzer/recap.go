@@ -10,6 +10,7 @@ import (
 type Recap struct {
 	Version            string `json:"version"`
 	Name               string `json:"name"`
+	Directory          string `json:"directory"`
 	DateAnalyzed       string `json:"date_analyzed"`
 	IsMultiYearRepo    bool   `json:"is_multi_year_repo"`
 	IncludesFileBlames bool   `json:"includes_file_blames"`
@@ -77,6 +78,9 @@ func GetRepoRecap() (Recap, error) {
 			recapFile = file.Name()
 		}
 	}
+
+	// Set to temporary recap files
+	// recapFile = "demo-stack_recap.json"
 
 	data, err := os.ReadFile(fmt.Sprintf("./tmp/%s", recapFile))
 	if err != nil {

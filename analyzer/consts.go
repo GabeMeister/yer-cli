@@ -7,7 +7,7 @@ var PREV_YEAR_FILE_BLAMES_FILE = "./tmp/%s_file_blames_prev_year.json"
 var CURR_YEAR_FILE_LIST_FILE = "./tmp/%s_file_list_curr_year.json"
 var CURR_YEAR_FILE_BLAMES_FILE = "./tmp/%s_file_blames_curr_year.json"
 var MERGE_COMMITS_FILE_TEMPLATE = "./tmp/%s_merge_commits.json"
-var DIRECT_PUSH_ON_MASTER_COMMITS_FILE_TEMPLATE = "./tmp/direct_push_on_master_commits_%s.json"
+var DIRECT_PUSH_ON_MASTER_COMMITS_FILE_TEMPLATE = "./tmp/%s_direct_push_on_master_commits.json"
 var DEFAULT_CONFIG_FILE = "./config.json"
 
 const PREV_YEAR = 2023
