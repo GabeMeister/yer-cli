@@ -31,7 +31,7 @@ func getDirectPushesOnMasterChartData(recap analyzer.Recap) helpers.BarChartData
 		return barChartData.Data[i].Y > barChartData.Data[j].Y
 	})
 
-	barChartData.Data = utils.TruncateSlice(barChartData.Data, 20)
+	barChartData.Data = utils.Truncate(barChartData.Data, 20)
 
 	return barChartData
 }

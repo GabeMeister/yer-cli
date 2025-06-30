@@ -60,7 +60,14 @@ type Recap struct {
 	TotalLinesOfCodeInRepoByAuthor       map[string]int               `json:"total_lines_of_code_in_repo_by_author"`
 }
 
-func GetRepoRecap() (Recap, error) {
+type MultiRepoRecap struct {
+	Version      string   `json:"version"`
+	Name         string   `json:"name"`
+	DateAnalyzed string   `json:"date_analyzed"`
+	AllAuthors   []string `json:"all_authors"`
+}
+
+func GetRepoRecapFromTmpDir() (Recap, error) {
 	if !HasRecapBeenRan() {
 		return Recap{}, os.ErrNotExist
 	}
@@ -89,6 +96,21 @@ func GetRepoRecap() (Recap, error) {
 	var repoRecap Recap
 
 	json.Unmarshal(data, &repoRecap)
+
+	return repoRecap, nil
+}
+
+func (r *RepoConfig) GetRepoRecap() (Recap, error) {
+	data, err := os.ReadFile(r.GetRecapFilePath())
+	if err != nil {
+		return Recap{}, err
+	}
+	var repoRecap Recap
+
+	err = json.Unmarshal(data, &repoRecap)
+	if err != nil {
+		return Recap{}, err
+	}
 
 	return repoRecap, nil
 }

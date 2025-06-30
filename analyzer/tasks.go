@@ -43,10 +43,13 @@ Press enter to continue...`)
 			gatherMetrics(&r)
 			config.updateDuplicateAuthors(&r)
 		}
-		calculateRecap(&r)
+		r.calculateRecap()
 	}
 
 	err := config.CalculateMultiRepoRecap()
+	if err != nil {
+		panic(err)
+	}
 
 	return err == nil
 }
@@ -137,7 +140,7 @@ func gatherMetrics(r *RepoConfig) {
 	}
 }
 
-func calculateRecap(r *RepoConfig) {
+func (r *RepoConfig) calculateRecap() {
 	s := GetSpinner()
 
 	fmt.Println()
@@ -255,7 +258,7 @@ func calculateRecap(r *RepoConfig) {
 		TotalLinesOfCodeInRepoByAuthor:       totalLinesOfCodeInRepoByAuthor,
 	}
 
-	repoRecapFile := r.GetRecapFile()
+	repoRecapFile := r.GetRecapFilePath()
 	SaveDataToFile(repoRecap, repoRecapFile)
 
 	s.Stop()

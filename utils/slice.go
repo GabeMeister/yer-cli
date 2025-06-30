@@ -59,10 +59,24 @@ func Reduce[T any, U any](slice []T, initial U, reducer func(U, T) U) U {
 	return accumulator
 }
 
-func TruncateSlice[T any](slice []T, length int) []T {
+func Truncate[T any](slice []T, length int) []T {
 	if len(slice) > length {
 		return slice[:length]
 	} else {
 		return slice
 	}
+}
+
+func Unique[T comparable](s []T) []T {
+	uniqueSlice := make([]T, 0, len(s))
+	seen := make(map[T]bool)
+
+	for _, item := range s {
+		if !seen[item] {
+			uniqueSlice = append(uniqueSlice, item)
+			seen[item] = true
+		}
+	}
+
+	return uniqueSlice
 }

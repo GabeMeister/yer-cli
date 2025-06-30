@@ -1,7 +1,9 @@
 package analyzer
 
 import (
+	"errors"
 	"fmt"
+	"os"
 	"path/filepath"
 )
 
@@ -51,8 +53,15 @@ func (r *RepoConfig) GetCurrYearFileBlamesFile() string {
 	return fmt.Sprintf(CURR_YEAR_FILE_BLAMES_FILE, filepath.Base(r.Path))
 }
 
-func (r *RepoConfig) GetRecapFile() string {
+func (r *RepoConfig) GetRecapFilePath() string {
 	return fmt.Sprintf(RECAP_FILE_TEMPLATE, filepath.Base(r.Path))
+}
+
+func (r *RepoConfig) HasRecapFile() bool {
+	filePath := r.GetRecapFilePath()
+	_, fileErr := os.Stat(filePath)
+
+	return !errors.Is(fileErr, os.ErrNotExist)
 }
 
 func (r *RepoConfig) GetName() string {
