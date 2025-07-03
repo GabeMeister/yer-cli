@@ -53,6 +53,58 @@ func InitConfig(options ConfigFileOptions) ConfigFile {
 	return config
 }
 
+func DoesConfigExist(path string) bool {
+	data, err := os.ReadFile(path)
+
+	if err == nil && len(data) > 0 {
+		config := MustGetConfig(path)
+		if config.Name != "" {
+			return true
+		}
+	}
+
+	return false
+}
+
+func MustGetConfig(path string) ConfigFile {
+	bytes, err := os.ReadFile(path)
+	if err != nil {
+		panic(err)
+	}
+
+	var data ConfigFile
+	jsonErr := json.Unmarshal(bytes, &data)
+	if jsonErr != nil {
+		panic(jsonErr)
+	}
+
+	return data
+}
+
+func RemoveRepoFromConfig(c ConfigFile, repoId int) ConfigFile {
+	repoIdx := c.GetRepoIndex(repoId)
+	c.Repos = append(c.Repos[:repoIdx], c.Repos[repoIdx+1:]...)
+
+	return c
+}
+
+func MustGetRepoConfig(config ConfigFile, repoId int) RepoConfig {
+	var repo RepoConfig
+	for _, r := range config.Repos {
+
+		if r.Id == repoId {
+			repo = r
+			break
+		}
+	}
+
+	if repo.Id == 0 {
+		panic("Could not find correct repo to patch in config file")
+	}
+
+	return repo
+}
+
 func (c *ConfigFile) AddNewRepoConfig() *RepoConfig {
 	// Find the largest id
 	largestId := 1
@@ -78,7 +130,25 @@ func (c *ConfigFile) AddNewRepoConfig() *RepoConfig {
 	return &newRepoConfig
 }
 
-func (c *ConfigFile) CalculateMultiRepoRecap() error {
+func (c *ConfigFile) GetRepoIndex(repoId int) int {
+	index := -1
+
+	for idx, r := range c.Repos {
+
+		if r.Id == repoId {
+			index = idx
+			break
+		}
+	}
+
+	return index
+}
+
+func (c *ConfigFile) Save() {
+	saveDataToFile(c, DEFAULT_CONFIG_FILE)
+}
+
+func (c *ConfigFile) calculateMultiRepoRecap() error {
 	recaps := []Recap{}
 	valid := true
 
@@ -115,7 +185,7 @@ func (c *ConfigFile) CalculateMultiRepoRecap() error {
 		AllAuthors:   utils.Unique(multiAllAuthors),
 	}
 
-	SaveDataToFile(multiRepoRecap, MULTI_REPO_RECAP_FILE_TEMPLATE)
+	saveDataToFile(multiRepoRecap, MULTI_REPO_RECAP_FILE_TEMPLATE)
 
 	return nil
 }
@@ -125,7 +195,7 @@ func (c *ConfigFile) updateDuplicateAuthors(r *RepoConfig) error {
 
 	// Update config, cause we wanna remember this for later
 	c.Repos[repoIdx].DuplicateAuthors = r.DuplicateAuthors
-	SaveDataToFile(c, DEFAULT_CONFIG_FILE)
+	saveDataToFile(c, DEFAULT_CONFIG_FILE)
 
 	// Also want to update the commits.json file, replacing the duplicate git
 	// usernames with the real ones
@@ -135,77 +205,7 @@ func (c *ConfigFile) updateDuplicateAuthors(r *RepoConfig) error {
 		realUsername := c.Repos[repoIdx].getRealAuthorName(commits[i].Author)
 		commits[i].Author = realUsername
 	}
-	SaveDataToFile(commits, r.getCommitsFile())
+	saveDataToFile(commits, r.getCommitsFile())
 
 	return nil
-}
-
-func MustGetConfig(path string) ConfigFile {
-	bytes, err := os.ReadFile(path)
-	if err != nil {
-		panic(err)
-	}
-
-	var data ConfigFile
-	jsonErr := json.Unmarshal(bytes, &data)
-	if jsonErr != nil {
-		panic(jsonErr)
-	}
-
-	return data
-}
-
-func RemoveRepoFromConfig(c ConfigFile, repoId int) ConfigFile {
-	repoIdx := c.GetRepoIndex(repoId)
-	c.Repos = append(c.Repos[:repoIdx], c.Repos[repoIdx+1:]...)
-
-	return c
-}
-
-func (c *ConfigFile) GetRepoIndex(repoId int) int {
-	index := -1
-
-	for idx, r := range c.Repos {
-
-		if r.Id == repoId {
-			index = idx
-			break
-		}
-	}
-
-	return index
-}
-
-func MustGetRepoConfig(config ConfigFile, repoId int) RepoConfig {
-	var repo RepoConfig
-	for _, r := range config.Repos {
-
-		if r.Id == repoId {
-			repo = r
-			break
-		}
-	}
-
-	if repo.Id == 0 {
-		panic("Could not find correct repo to patch in config file")
-	}
-
-	return repo
-}
-
-func (c *ConfigFile) Save() {
-	SaveDataToFile(c, DEFAULT_CONFIG_FILE)
-}
-
-func DoesConfigExist(path string) bool {
-	data, err := os.ReadFile(path)
-
-	if err == nil && len(data) > 0 {
-		config := MustGetConfig(path)
-		if config.Name != "" {
-			return true
-		}
-	}
-
-	return false
 }

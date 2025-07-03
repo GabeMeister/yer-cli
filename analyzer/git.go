@@ -135,7 +135,7 @@ func GetAuthorsFromRepo(dir string, branch string, ignoreAuthors []string) []str
 }
 
 func getCommitsFromGitLogs(r *RepoConfig, mergeCommits bool) []GitCommit {
-	s := GetSpinner()
+	s := getSpinner()
 
 	utils.PrintProgress(s, fmt.Sprintf("Retrieving git logs for %s...", r.getName()))
 
@@ -300,7 +300,7 @@ func isFileChangeLine(line string) bool {
 }
 
 func getFileChangeSummary(r *RepoConfig) map[string][]FileChange {
-	s := GetSpinner()
+	s := getSpinner()
 	utils.PrintProgress(s, fmt.Sprintf("Retrieving line changes for %s...", r.getName()))
 	if !utils.IsDevMode() {
 		s.Start()
@@ -422,7 +422,7 @@ func getRepoFiles(r *RepoConfig, commitOrBranchName string) []string {
 }
 
 func getFileBlameSummary(r *RepoConfig, files []string) []FileBlame {
-	s := GetSpinner()
+	s := getSpinner()
 	fmt.Println()
 	utils.PrintProgress(s, fmt.Sprintf("Analyzing Git blames for %s...", r.getName()))
 

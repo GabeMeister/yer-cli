@@ -8,7 +8,7 @@ import (
 	"github.com/briandowns/spinner"
 )
 
-func SaveDataToFile(data any, path string) {
+func saveDataToFile(data any, path string) {
 	rawData, err := json.MarshalIndent(data, "", "  ")
 	if err != nil {
 		panic(err)
@@ -20,7 +20,7 @@ func SaveDataToFile(data any, path string) {
 	}
 }
 
-func IsFileReadable(path string) bool {
+func isFileReadable(path string) bool {
 	file, err := os.OpenFile(path, os.O_RDONLY, 0)
 	if err != nil {
 		return false
@@ -30,11 +30,11 @@ func IsFileReadable(path string) bool {
 	return true
 }
 
-func GetSpinner() *spinner.Spinner {
+func getSpinner() *spinner.Spinner {
 	return spinner.New(spinner.CharSets[14], 100*time.Millisecond)
 }
 
-func GetNumWorkDaysInCurrYear() int {
+func getNumWorkDaysInCurrYear() int {
 	total := 0
 	firstDayOfYear := time.Date(CURR_YEAR, time.January, 1, 0, 0, 0, 0, time.UTC)
 	currDay := time.Now()

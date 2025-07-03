@@ -26,6 +26,191 @@ type RepoConfig struct {
 	AnalyzeFileBlames     bool                   `json:"analyze_file_blames"`
 }
 
+func (r *RepoConfig) gatherMetrics() {
+	stashRepo(r.Path)
+
+	currYearErr := checkoutRepoToCommitOrBranchName(r.Path, r.MasterBranchName)
+	if currYearErr != nil {
+		fmt.Println("Unable to git checkout repo to the latest commit")
+		panic(currYearErr)
+	}
+
+	// We want the latest changes
+	pullRepo(r.Path)
+
+	commits := getCommitsFromGitLogs(r, false)
+	commitsFileName := r.getCommitsFile()
+	saveDataToFile(commits, commitsFileName)
+
+	mergeCommits := getCommitsFromGitLogs(r, true)
+	mergeCommitsFileName := r.getMergeCommitsFile()
+	saveDataToFile(mergeCommits, mergeCommitsFileName)
+
+	directPushToMasterCommits := getDirectPushToMasterCommitsCurrYear(r)
+	directPushFileName := r.getDirectPushesFile()
+	saveDataToFile(directPushToMasterCommits, directPushFileName)
+
+	// Prev year files (if possible)
+	if r.hasPrevYearCommits() {
+		lastCommitPrevYear := r.getLastCommitPrevYear()
+		fmt.Printf("Analyzing last year's repo for %s...\n", r.getName())
+		prevYearErr := checkoutRepoToCommitOrBranchName(r.Path, lastCommitPrevYear.Commit)
+		if prevYearErr != nil {
+			fmt.Println("Unable to git checkout repo to last year's files")
+			panic(prevYearErr)
+		}
+
+		prevYearFiles := getRepoFiles(r, lastCommitPrevYear.Commit)
+		saveDataToFile(prevYearFiles, r.getPrevYearFileListFile())
+
+		if r.AnalyzeFileBlames {
+			prevYearBlames := getFileBlameSummary(r, prevYearFiles)
+			saveDataToFile(prevYearBlames, r.getPrevYearFileBlamesFile())
+		}
+	}
+
+	// Curr year files
+	fmt.Printf("Analyzing this year's repo for %s...\n", r.getName())
+
+	currYearErr = checkoutRepoToCommitOrBranchName(r.Path, r.MasterBranchName)
+	if currYearErr != nil {
+		fmt.Println("Unable to git checkout repo back to the latest commit")
+		panic(currYearErr)
+	}
+
+	currYearFiles := getRepoFiles(r, r.MasterBranchName)
+	saveDataToFile(currYearFiles, r.getCurrYearFileListFile())
+
+	if r.AnalyzeFileBlames {
+		currYearBlames := getFileBlameSummary(r, currYearFiles)
+		saveDataToFile(currYearBlames, r.getCurrYearFileBlamesFile())
+	}
+}
+
+func (r *RepoConfig) calculateRecap() {
+	s := getSpinner()
+
+	fmt.Println()
+	utils.PrintProgress(s, fmt.Sprintf("Calculating repo stats for %s...", r.getName()))
+
+	if !utils.IsDevMode() {
+		s.Start()
+	}
+
+	isMultiYearRepo := r.getIsMultiYearRepo()
+	numCommitsAllTime := r.getNumCommitsAllTime()
+	numCommitsPrevYear := r.getNumCommitsPrevYear()
+	numCommitsCurrYear := r.getNumCommitsCurrYear()
+	allAuthors := r.getAllAuthorsList()
+	newAuthorCommitsCurrYear := r.getNewAuthorCommitsCurrYear()
+	newAuthorCountCurrYear := len(newAuthorCommitsCurrYear)
+	newAuthorListCurrYear := utils.Map(newAuthorCommitsCurrYear, func(commit GitCommit) string {
+		return commit.Author
+	})
+	authorCommitCountsCurrYear := r.getAuthorCommitCountCurrYear()
+	authorCommitCountsAllTime := r.getAuthorCommitCountAllTime()
+	authorCountCurrYear := r.getAuthorCountCurrYear()
+	authorCountAllTime := r.getAuthorCountAllTime()
+	authorTotalFileChangesPrevYear := r.getAuthorTotalFileChangesPrevYear()
+	authorFileChangesOverTimeCurrYear := r.getAuthorFileChangesOverTimeCurrYear()
+	commitsByMonthCurrYear := r.getCommitsByMonthCurrYear()
+	commitsByWeekDayCurrYear := r.getCommitsByWeekDayCurrYear()
+	commitsByHourCurrYear := r.getCommitsByHourCurrYear()
+	mostSingleDayCommitsByAuthorCurrYear := r.getMostCommitsByAuthorCurrYear()
+	mostInsertionsInCommitCurrYear := r.getMostInsertionsInCommitCurrYear()
+	mostDeletionsInCommitCurrYear := r.getMostDeletionsInCommitCurrYear()
+	largestCommitMessageCurrYear := r.getLargestCommitMessageCurrYear()
+	smallestCommitMessagesCurrYear := r.getSmallestCommitMessagesCurrYear()
+	commitMessageHistogramCurrYear := r.getCommitMessageHistogramCurrYear()
+	directPushesOnMasterByAuthorCurrYear := r.getDirectPushesOnMasterByAuthorCurrYear()
+	mergesToMasterByAuthorCurrYear := r.getMergesToMasterByAuthorCurrYear()
+	mostMergesInOneDayCurrYear := r.getMostMergesInOneDayCurrYear()
+	avgMergesToMasterPerDayCurrYear := r.getAvgMergesToMasterPerDayCurrYear()
+	fileChangesByAuthorCurrYear := r.getFileChangesByAuthorCurrYear()
+	codeInsertionsByAuthorCurrYear := r.getCodeInsertionsByAuthorCurrYear()
+	codeDeletionsByAuthorCurrYear := r.getCodeDeletionsByAuthorCurrYear()
+	fileChangeRatioCurrYear := r.getFileChangeRatio(codeInsertionsByAuthorCurrYear, codeDeletionsByAuthorCurrYear)
+	commonlyChangedFiles := r.getCommonlyChangedFiles()
+	fileCountPrevYear := r.getFileCountPrevYear()
+	fileCountCurrYear := r.getFileCountCurrYear()
+	largestFilesCurrYear := r.getLargestFilesCurrYear()
+	smallestFilesCurrYear := r.getSmallestFilesCurrYear()
+	totalLinesOfCodePrevYear := r.getTotalLinesOfCodePrevYear()
+	totalLinesOfCodeCurrYear := r.getTotalLinesOfCodeCurrYear()
+	totalLinesOfCodeInRepoByAuthor := r.getTotalLinesOfCodeInRepoByAuthor()
+	sizeOfRepoByWeekCurrYear := r.getSizeOfRepoByWeekCurrYear()
+
+	now := time.Now()
+	isoDateString := now.Format(time.RFC3339)
+
+	var fileCountPercentDifference float64
+	if fileCountPrevYear != 0 {
+		fileCountPercentDifference = (float64(fileCountCurrYear) - float64(fileCountPrevYear)) / float64(fileCountPrevYear)
+	}
+	if math.IsNaN(fileCountPercentDifference) {
+		panic("File count percent difference is NaN!")
+	}
+
+	repoRecap := Recap{
+		// Metadata
+		Version:            "0.0.1",
+		Name:               filepath.Base(r.Path),
+		Directory:          r.Path,
+		DateAnalyzed:       isoDateString,
+		IsMultiYearRepo:    isMultiYearRepo,
+		IncludesFileBlames: r.AnalyzeFileBlames,
+
+		// Commits
+		NumCommitsAllTime:               numCommitsAllTime,
+		NumCommitsPrevYear:              numCommitsPrevYear,
+		NumCommitsCurrYear:              numCommitsCurrYear,
+		CommitsByMonthCurrYear:          commitsByMonthCurrYear,
+		CommitsByWeekDayCurrYear:        commitsByWeekDayCurrYear,
+		CommitsByHourCurrYear:           commitsByHourCurrYear,
+		MostInsertionsInCommitCurrYear:  mostInsertionsInCommitCurrYear,
+		MostDeletionsInCommitCurrYear:   mostDeletionsInCommitCurrYear,
+		LargestCommitMessageCurrYear:    largestCommitMessageCurrYear,
+		SmallestCommitMessagesCurrYear:  smallestCommitMessagesCurrYear,
+		CommitMessageHistogramCurrYear:  commitMessageHistogramCurrYear,
+		MostMergesInOneDayCurrYear:      mostMergesInOneDayCurrYear,
+		AvgMergesToMasterPerDayCurrYear: avgMergesToMasterPerDayCurrYear,
+		CommonlyChangedFiles:            commonlyChangedFiles,
+
+		// Files
+		FileCountPrevYear:          fileCountPrevYear,
+		FileCountCurrYear:          fileCountCurrYear,
+		FileCountPercentDifference: fileCountPercentDifference,
+		LargestFilesCurrYear:       largestFilesCurrYear,
+		SmallestFilesCurrYear:      smallestFilesCurrYear,
+		TotalLinesOfCodePrevYear:   totalLinesOfCodePrevYear,
+		TotalLinesOfCodeCurrYear:   totalLinesOfCodeCurrYear,
+		SizeOfRepoByWeekCurrYear:   sizeOfRepoByWeekCurrYear,
+
+		// Team
+		AllAuthors:                           allAuthors,
+		NewAuthorCommitsCurrYear:             newAuthorCommitsCurrYear,
+		NewAuthorCountCurrYear:               newAuthorCountCurrYear,
+		NewAuthorListCurrYear:                newAuthorListCurrYear,
+		AuthorCommitCountsCurrYear:           authorCommitCountsCurrYear,
+		AuthorCommitCountsAllTime:            authorCommitCountsAllTime,
+		AuthorCountCurrYear:                  authorCountCurrYear,
+		AuthorCountAllTime:                   authorCountAllTime,
+		AuthorTotalFileChangesPrevYear:       authorTotalFileChangesPrevYear,
+		AuthorFileChangesOverTimeCurrYear:    authorFileChangesOverTimeCurrYear,
+		MostSingleDayCommitsByAuthorCurrYear: mostSingleDayCommitsByAuthorCurrYear,
+		DirectPushesOnMasterByAuthorCurrYear: directPushesOnMasterByAuthorCurrYear,
+		MergesToMasterByAuthorCurrYear:       mergesToMasterByAuthorCurrYear,
+		FileChangesByAuthorCurrYear:          fileChangesByAuthorCurrYear,
+		FileChangeRatioByAuthorCurrYear:      fileChangeRatioCurrYear,
+		TotalLinesOfCodeInRepoByAuthor:       totalLinesOfCodeInRepoByAuthor,
+	}
+
+	repoRecapFile := r.getRecapFilePath()
+	saveDataToFile(repoRecap, repoRecapFile)
+
+	s.Stop()
+}
+
 /*
  * FILE NAMING
  */
@@ -495,7 +680,7 @@ func (r *RepoConfig) getAvgMergesToMasterPerDayCurrYear() float64 {
 		return 0.0
 	}
 
-	numWorkDays := GetNumWorkDaysInCurrYear()
+	numWorkDays := getNumWorkDaysInCurrYear()
 	final := float64(len(commits)) / float64(numWorkDays)
 
 	if math.IsNaN(final) {
