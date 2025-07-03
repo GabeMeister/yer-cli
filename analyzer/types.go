@@ -1,5 +1,10 @@
 package analyzer
 
+type DuplicateAuthorGroup struct {
+	Real       string   `json:"real"`
+	Duplicates []string `json:"duplicates"`
+}
+
 type FileChange struct {
 	Insertions int    `json:"insertions"`
 	Deletions  int    `json:"deletions"`

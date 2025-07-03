@@ -138,7 +138,7 @@ func DuplicateAuthorForm(props DuplicateAuthorFormProps) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div><label for=\"real-name\">Group above authors as:</label> <input type=\"text\" class=\"text-input w-full\" placeholder=\"Enter name to use\" id=\"real-name\" name=\"real-name\"> ")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div><label for=\"real-name\">Alias the above author(s) as:</label> <input type=\"text\" class=\"text-input w-full\" placeholder=\"Enter name to use\" id=\"real-name\" name=\"real-name\"> ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

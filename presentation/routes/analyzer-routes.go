@@ -20,8 +20,6 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-var InitialAuthors = []string{"Kenny", "Kenny1", "Kenny2", "Isaac Neace", "Gabe Jensen", "ktrotter", "Kaleb Trotter", "Stephen Bremer", "Kenny Kline", "Ezra Youngren", "Isaac", "Steve Bremer"}
-
 func addAnalyzerRoutes(e *echo.Echo) {
 
 	e.GET("/create-recap", func(c echo.Context) error {
@@ -414,12 +412,12 @@ func addAnalyzerRoutes(e *echo.Echo) {
 			return c.HTML(http.StatusOK, content)
 		}
 
-		if len(authorsMarkedAsDuplicate) <= 1 {
+		if len(authorsMarkedAsDuplicate) == 0 {
 			component := ConfigSetupPage.DuplicateAuthorModal(ConfigSetupPage.DuplicateAuthorModalProps{
 				UngroupedAuthors:  ungroupedAuthors,
 				ExistingDupGroups: existingDupGroups,
 				Errors: map[string]string{
-					"author-marked-as-duplicate": "Please select at least 2 authors to group together",
+					"author-marked-as-duplicate": "Please select at least 1 author",
 				},
 			})
 			content := t.Render(t.RenderParams{

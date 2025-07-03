@@ -99,18 +99,3 @@ func GetRepoRecapFromTmpDir() (Recap, error) {
 
 	return repoRecap, nil
 }
-
-func (r *RepoConfig) GetRepoRecap() (Recap, error) {
-	data, err := os.ReadFile(r.GetRecapFilePath())
-	if err != nil {
-		return Recap{}, err
-	}
-	var repoRecap Recap
-
-	err = json.Unmarshal(data, &repoRecap)
-	if err != nil {
-		return Recap{}, err
-	}
-
-	return repoRecap, nil
-}

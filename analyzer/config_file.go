@@ -84,11 +84,11 @@ func (c *ConfigFile) CalculateMultiRepoRecap() error {
 
 	// Verify that all recap files exist, according to what's in the config
 	for _, r := range c.Repos {
-		if !r.HasRecapFile() {
+		if !r.hasRecapFile() {
 			valid = false
 			break
 		} else {
-			recap, err := r.GetRepoRecap()
+			recap, err := r.getRepoRecap()
 			if err != nil {
 				return err
 			}
@@ -132,10 +132,10 @@ func (c *ConfigFile) updateDuplicateAuthors(r *RepoConfig) error {
 	commits := r.getGitCommits()
 
 	for i := range commits {
-		realUsername := c.Repos[repoIdx].GetRealAuthorName(commits[i].Author)
+		realUsername := c.Repos[repoIdx].getRealAuthorName(commits[i].Author)
 		commits[i].Author = realUsername
 	}
-	SaveDataToFile(commits, r.GetCommitsFile())
+	SaveDataToFile(commits, r.getCommitsFile())
 
 	return nil
 }
