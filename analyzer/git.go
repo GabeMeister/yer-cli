@@ -36,21 +36,6 @@ func IsValidGitRepo(dir string) bool {
 	return true
 }
 
-func HasRecapBeenRan() bool {
-	files, err := os.ReadDir("tmp")
-	if err != nil {
-		return false
-	}
-
-	for _, file := range files {
-		if !file.IsDir() && strings.HasSuffix(file.Name(), "_recap.json") {
-			return true
-		}
-	}
-
-	return false
-}
-
 func GetMasterBranchName(dir string) string {
 	masterBranchCmd := exec.Command("git", "branch", "-r")
 	masterBranchCmd.Dir = dir
@@ -91,16 +76,6 @@ func GetFileExtensionsInRepo(dir string) []string {
 	}
 
 	return fileExtensions
-}
-
-func GetDuplicateAuthorList(repo RepoConfig) []string {
-	duplicateAuthors := []string{}
-
-	for _, dupGroup := range repo.DuplicateAuthors {
-		duplicateAuthors = append(duplicateAuthors, dupGroup.Duplicates...)
-	}
-
-	return duplicateAuthors
 }
 
 func GetAuthorsFromRepo(dir string, branch string, ignoreAuthors []string) []string {

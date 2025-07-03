@@ -105,7 +105,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 
 		var ungroupedAuthors []string
 		if repo.Path != "" && repo.MasterBranchName != "" {
-			duplicateAuthors := analyzer.GetDuplicateAuthorList(repo)
+			duplicateAuthors := repo.GetDuplicateAuthorList()
 			ungroupedAuthors = analyzer.GetAuthorsFromRepo(
 				repo.Path,
 				repo.MasterBranchName,

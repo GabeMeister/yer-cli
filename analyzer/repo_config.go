@@ -737,6 +737,16 @@ func (r *RepoConfig) getCodeDeletionsByAuthorCurrYear() map[string]int {
  * TEAM STATS
  */
 
+func (repo *RepoConfig) GetDuplicateAuthorList() []string {
+	duplicateAuthors := []string{}
+
+	for _, dupGroup := range repo.DuplicateAuthors {
+		duplicateAuthors = append(duplicateAuthors, dupGroup.Duplicates...)
+	}
+
+	return duplicateAuthors
+}
+
 func (r *RepoConfig) getRealAuthorName(authorName string) string {
 	for _, dupGroup := range r.DuplicateAuthors {
 		for _, dup := range dupGroup.Duplicates {
