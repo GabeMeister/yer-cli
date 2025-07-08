@@ -1,10 +1,8 @@
 package analyzer
 
 import (
-	"GabeMeister/yer-cli/utils"
 	"encoding/json"
 	"os"
-	"time"
 )
 
 type ConfigFileOptions struct {
@@ -146,48 +144,6 @@ func (c *ConfigFile) GetRepoIndex(repoId int) int {
 
 func (c *ConfigFile) Save() {
 	saveDataToFile(c, DEFAULT_CONFIG_FILE)
-}
-
-func (c *ConfigFile) calculateMultiRepoRecap() error {
-	recaps := []Recap{}
-	valid := true
-
-	// Verify that all recap files exist, according to what's in the config
-	for _, r := range c.Repos {
-		if !r.hasRecapFile() {
-			valid = false
-			break
-		} else {
-			recap, err := r.getRepoRecap()
-			if err != nil {
-				return err
-			}
-
-			recaps = append(recaps, recap)
-		}
-	}
-
-	if !valid {
-		return os.ErrInvalid
-	}
-
-	now := time.Now()
-	isoDateString := now.Format(time.RFC3339)
-	multiAllAuthors := []string{}
-	for _, recap := range recaps {
-		multiAllAuthors = append(multiAllAuthors, recap.AllAuthors...)
-	}
-
-	// Combine stats
-	multiRepoRecap := MultiRepoRecap{
-		DateAnalyzed: isoDateString,
-		Name:         c.Name,
-		AllAuthors:   utils.Unique(multiAllAuthors),
-	}
-
-	saveDataToFile(multiRepoRecap, MULTI_REPO_RECAP_FILE_TEMPLATE)
-
-	return nil
 }
 
 func (c *ConfigFile) updateDuplicateAuthors(r *RepoConfig) error {

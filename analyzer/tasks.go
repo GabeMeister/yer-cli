@@ -39,10 +39,10 @@ Press enter to continue...`)
 			r.gatherMetrics()
 			config.updateDuplicateAuthors(&r)
 		}
-		r.calculateRecap()
+		calculateRepoRecap(&r)
 	}
 
-	err := config.calculateMultiRepoRecap()
+	err := calculateMultiRepoRecap(&config)
 	if err != nil {
 		panic(err)
 	}

@@ -1,7 +1,7 @@
 package analyzer
 
 var RECAP_FILE_TEMPLATE = "./tmp/%s_recap.json"
-var MULTI_REPO_RECAP_FILE_TEMPLATE = "./tmp/multi_repo_recap.json"
+var MULTI_REPO_RECAP_FILE = "./tmp/multi_repo_recap.json"
 var COMMITS_FILE_TEMPLATE = "./tmp/%s_commits.json"
 var PREV_YEAR_FILE_LIST_FILE = "./tmp/%s_file_list_prev_year.json"
 var PREV_YEAR_FILE_BLAMES_FILE = "./tmp/%s_file_blames_prev_year.json"
