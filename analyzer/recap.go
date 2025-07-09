@@ -65,12 +65,17 @@ type Recap struct {
 }
 
 type MultiRepoRecap struct {
-	Version      string   `json:"version"`
-	Name         string   `json:"name"`
-	DateAnalyzed string   `json:"date_analyzed"`
-	RepoNames    []string `json:"repo_names"`
-	AllAuthors   []string `json:"all_authors"`
+	Version      string          `json:"version"`
+	Name         string          `json:"name"`
+	DateAnalyzed string          `json:"date_analyzed"`
+	RepoNames    []string        `json:"repo_names"`
+	AllAuthors   []string        `json:"all_authors"`
+	NewAuthors   NewAuthorByRepo `json:"new_authors"`
 }
+
+type Repo string
+type AuthorList []string
+type NewAuthorByRepo map[Repo]AuthorList
 
 func GetRepoRecapFromTmpDir() (Recap, error) {
 	if !HasRecapBeenRan() {
@@ -266,6 +271,7 @@ func calculateMultiRepoRecap(c *ConfigFile) error {
 	// Combine all metrics from the separate recaps
 	repoNames := getRepoNames(recaps)
 	allAuthors := getAuthorList(recaps)
+	newAuthors := getNewAuthorsList(recaps)
 
 	// Combine stats
 	multiRepoRecap := MultiRepoRecap{
@@ -273,6 +279,7 @@ func calculateMultiRepoRecap(c *ConfigFile) error {
 		Name:         c.Name,
 		RepoNames:    repoNames,
 		AllAuthors:   allAuthors,
+		NewAuthors:   newAuthors,
 	}
 
 	saveDataToFile(multiRepoRecap, MULTI_REPO_RECAP_FILE)
@@ -300,4 +307,13 @@ func getAuthorList(recaps []Recap) []string {
 	}
 
 	return utils.Unique(allAuthors)
+}
+
+func getNewAuthorsList(recaps []Recap) NewAuthorByRepo {
+	newAuthors := make(NewAuthorByRepo)
+	for _, recap := range recaps {
+		newAuthors[Repo(recap.Name)] = recap.NewAuthorListCurrYear
+	}
+
+	return newAuthors
 }
