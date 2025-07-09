@@ -68,6 +68,7 @@ type MultiRepoRecap struct {
 	Version      string   `json:"version"`
 	Name         string   `json:"name"`
 	DateAnalyzed string   `json:"date_analyzed"`
+	RepoNames    []string `json:"repo_names"`
 	AllAuthors   []string `json:"all_authors"`
 }
 
@@ -263,12 +264,14 @@ func calculateMultiRepoRecap(c *ConfigFile) error {
 	now := time.Now()
 
 	// Combine all metrics from the separate recaps
+	repoNames := getRepoNames(recaps)
 	allAuthors := getAuthorList(recaps)
 
 	// Combine stats
 	multiRepoRecap := MultiRepoRecap{
 		DateAnalyzed: now.Format(time.RFC3339),
 		Name:         c.Name,
+		RepoNames:    repoNames,
 		AllAuthors:   allAuthors,
 	}
 
@@ -280,6 +283,15 @@ func calculateMultiRepoRecap(c *ConfigFile) error {
 /*
  * MULTI REPO METRICS
  */
+
+func getRepoNames(recaps []Recap) []string {
+	repoNames := []string{}
+	for _, recap := range recaps {
+		repoNames = append(repoNames, recap.Name)
+	}
+
+	return repoNames
+}
 
 func getAuthorList(recaps []Recap) []string {
 	allAuthors := []string{}
