@@ -71,13 +71,21 @@ type MultiRepoRecap struct {
 	RepoNames                []string `json:"repo_names"`
 	ActiveAuthorsCountByRepo map[Repo]int
 	FileCountByRepoCurrYear  map[Repo]int
-	TotalLinesOfCodeByRepo   map[Repo]int
+	TotalLinesOfCodeByRepo   map[Repo]YearComparison
 }
 
 type Repo string
 type Author string
 type AuthorList []string
 type NewAuthorByRepo map[Repo]AuthorList
+type Year string
+
+const (
+	PREV Year = "prev"
+	CURR Year = "curr"
+)
+
+type YearComparison map[Year]int
 
 func GetRepoRecapFromTmpDir() (Recap, error) {
 	if !HasRecapBeenRan() {
@@ -324,11 +332,14 @@ func getFileCountByRepoCurrYear(recaps []Recap) map[Repo]int {
 	return fileCountMap
 }
 
-func getTotalLinesOfCodeByRepo(recaps []Recap) map[Repo]int {
-	fileCountMap := make(map[Repo]int)
+func getTotalLinesOfCodeByRepo(recaps []Recap) map[Repo]YearComparison {
+	fileCountMap := make(map[Repo]YearComparison)
 
 	for _, recap := range recaps {
-		fileCountMap[Repo(recap.Name)] = recap.TotalLinesOfCodeCurrYear
+		fileCountMap[Repo(recap.Name)] = YearComparison{
+			PREV: recap.TotalLinesOfCodePrevYear,
+			CURR: recap.TotalLinesOfCodeCurrYear,
+		}
 	}
 
 	return fileCountMap
