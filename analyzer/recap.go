@@ -36,14 +36,14 @@ type Recap struct {
 	CommonlyChangedFiles            []FileChangeCount              `json:"commonly_changed_files"`
 
 	// Files
-	FileCountPrevYear          int                 `json:"file_count_prev_year"`
-	FileCountCurrYear          int                 `json:"file_count_curr_year"`
-	FileCountPercentDifference float64             `json:"file_count_percent_difference"`
-	LargestFilesCurrYear       []FileSize          `json:"largest_files_curr_year"`
-	SmallestFilesCurrYear      []FileSize          `json:"smallest_files_curr_year"`
-	TotalLinesOfCodePrevYear   int                 `json:"total_lines_of_code_prev_year"`
-	TotalLinesOfCodeCurrYear   int                 `json:"total_lines_of_code_curr_year"`
-	SizeOfRepoByWeekCurrYear   []RepoSizeTimeStamp `json:"size_of_repo_by_week_curr_year"`
+	FileCountPrevYear          int        `json:"file_count_prev_year"`
+	FileCountCurrYear          int        `json:"file_count_curr_year"`
+	FileCountPercentDifference float64    `json:"file_count_percent_difference"`
+	LargestFilesCurrYear       []FileSize `json:"largest_files_curr_year"`
+	SmallestFilesCurrYear      []FileSize `json:"smallest_files_curr_year"`
+	TotalLinesOfCodePrevYear   int        `json:"total_lines_of_code_prev_year"`
+	TotalLinesOfCodeCurrYear   int        `json:"total_lines_of_code_curr_year"`
+	SizeOfRepoByWeekCurrYear   []int      `json:"size_of_repo_by_week_curr_year"`
 
 	// Team
 	AllAuthors                           []string                     `json:"all_authors"`
@@ -53,6 +53,7 @@ type Recap struct {
 	AuthorCommitCountsCurrYear           map[string]int               `json:"author_commit_counts_curr_year"`
 	AuthorCommitCountsAllTime            map[string]int               `json:"author_commit_counts_all_time"`
 	AuthorCountCurrYear                  int                          `json:"author_count_curr_year"`
+	AuthorCountPrevYear                  int                          `json:"author_count_prev_year"`
 	AuthorCountAllTime                   int                          `json:"author_count_all_time"`
 	AuthorTotalFileChangesPrevYear       map[string]int               `json:"author_total_file_changes_prev_year"`
 	AuthorFileChangesOverTimeCurrYear    TotalFileChangeCount         `json:"author_file_changes_over_time_curr_year"`
@@ -65,13 +66,14 @@ type Recap struct {
 }
 
 type MultiRepoRecap struct {
-	Version                  string   `json:"version"`
-	Name                     string   `json:"name"`
-	DateAnalyzed             string   `json:"date_analyzed"`
-	RepoNames                []string `json:"repo_names"`
-	ActiveAuthorsCountByRepo map[Repo]int
-	FileCountByRepoCurrYear  map[Repo]int
-	TotalLinesOfCodeByRepo   map[Repo]YearComparison
+	Version                  string                  `json:"version"`
+	Name                     string                  `json:"name"`
+	DateAnalyzed             string                  `json:"date_analyzed"`
+	RepoNames                []string                `json:"repo_names"`
+	ActiveAuthorsCountByRepo map[Repo]YearComparison `json:"active_authors_count_by_repo"`
+	FileCountByRepo          map[Repo]YearComparison `json:"file_count_by_repo"`
+	TotalLinesOfCodeByRepo   map[Repo]YearComparison `json:"total_lines_of_code_by_repo"`
+	SizeOfRepoWeeklyByRepo   map[Repo][]int          `json:"size_of_repo_weekly_by_repo"`
 }
 
 type Repo string
@@ -143,6 +145,7 @@ func calculateRepoRecap(r *RepoConfig) {
 	authorCommitCountsCurrYear := r.getAuthorCommitCountCurrYear()
 	authorCommitCountsAllTime := r.getAuthorCommitCountAllTime()
 	authorCountCurrYear := r.getAuthorCountCurrYear()
+	authorCountPrevYear := r.getAuthorCountPrevYear()
 	authorCountAllTime := r.getAuthorCountAllTime()
 	authorTotalFileChangesPrevYear := r.getAuthorTotalFileChangesPrevYear()
 	authorFileChangesOverTimeCurrYear := r.getAuthorFileChangesOverTimeCurrYear()
@@ -227,6 +230,7 @@ func calculateRepoRecap(r *RepoConfig) {
 		AuthorCommitCountsCurrYear:           authorCommitCountsCurrYear,
 		AuthorCommitCountsAllTime:            authorCommitCountsAllTime,
 		AuthorCountCurrYear:                  authorCountCurrYear,
+		AuthorCountPrevYear:                  authorCountPrevYear,
 		AuthorCountAllTime:                   authorCountAllTime,
 		AuthorTotalFileChangesPrevYear:       authorTotalFileChangesPrevYear,
 		AuthorFileChangesOverTimeCurrYear:    authorFileChangesOverTimeCurrYear,
@@ -281,8 +285,9 @@ func calculateMultiRepoRecap(c *ConfigFile) error {
 	// Combine all metrics from the separate recaps
 	repoNames := getRepoNames(recaps)
 	activeAuthorsCountByRepo := getActiveAuthorsCountByRepo(recaps)
-	fileCountByRepoCurrYear := getFileCountByRepoCurrYear(recaps)
+	fileCountByRepoCurrYear := getFileCountByRepo(recaps)
 	totalLinesOfCodeByRepo := getTotalLinesOfCodeByRepo(recaps)
+	sizeOfRepoWeeklyByRepo := getSizeOfRepoWeeklyByRepo(recaps)
 
 	// Combine stats
 	multiRepoRecap := MultiRepoRecap{
@@ -290,8 +295,9 @@ func calculateMultiRepoRecap(c *ConfigFile) error {
 		Name:                     c.Name,
 		RepoNames:                repoNames,
 		ActiveAuthorsCountByRepo: activeAuthorsCountByRepo,
-		FileCountByRepoCurrYear:  fileCountByRepoCurrYear,
+		FileCountByRepo:          fileCountByRepoCurrYear,
 		TotalLinesOfCodeByRepo:   totalLinesOfCodeByRepo,
+		SizeOfRepoWeeklyByRepo:   sizeOfRepoWeeklyByRepo,
 	}
 
 	saveDataToFile(multiRepoRecap, MULTI_REPO_RECAP_FILE)
@@ -312,35 +318,53 @@ func getRepoNames(recaps []Recap) []string {
 	return repoNames
 }
 
-func getActiveAuthorsCountByRepo(recaps []Recap) map[Repo]int {
-	activeAuthorsMap := make(map[Repo]int)
+func getActiveAuthorsCountByRepo(recaps []Recap) map[Repo]YearComparison {
+	activeAuthorsMap := make(map[Repo]YearComparison)
 
 	for _, recap := range recaps {
-		activeAuthorsMap[Repo(recap.Name)] = recap.AuthorCountCurrYear
+		activeAuthorsMap[Repo(recap.Name)] = YearComparison{
+			PREV: recap.AuthorCountPrevYear,
+			CURR: recap.AuthorCountCurrYear,
+		}
 	}
 
 	return activeAuthorsMap
+
 }
 
-func getFileCountByRepoCurrYear(recaps []Recap) map[Repo]int {
-	fileCountMap := make(map[Repo]int)
-
-	for _, recap := range recaps {
-		fileCountMap[Repo(recap.Name)] = recap.FileCountCurrYear
-	}
-
-	return fileCountMap
-}
-
-func getTotalLinesOfCodeByRepo(recaps []Recap) map[Repo]YearComparison {
+func getFileCountByRepo(recaps []Recap) map[Repo]YearComparison {
 	fileCountMap := make(map[Repo]YearComparison)
 
 	for _, recap := range recaps {
 		fileCountMap[Repo(recap.Name)] = YearComparison{
+			PREV: recap.FileCountPrevYear,
+			CURR: recap.FileCountCurrYear,
+		}
+	}
+
+	return fileCountMap
+
+}
+
+func getTotalLinesOfCodeByRepo(recaps []Recap) map[Repo]YearComparison {
+	totalLinesMap := make(map[Repo]YearComparison)
+
+	for _, recap := range recaps {
+		totalLinesMap[Repo(recap.Name)] = YearComparison{
 			PREV: recap.TotalLinesOfCodePrevYear,
 			CURR: recap.TotalLinesOfCodeCurrYear,
 		}
 	}
 
-	return fileCountMap
+	return totalLinesMap
+}
+
+func getSizeOfRepoWeeklyByRepo(recaps []Recap) map[Repo][]int {
+	sizeOfRepoMap := make(map[Repo][]int)
+
+	for _, recap := range recaps {
+		sizeOfRepoMap[Repo(recap.Name)] = recap.SizeOfRepoByWeekCurrYear
+	}
+
+	return sizeOfRepoMap
 }

@@ -728,6 +728,12 @@ func (r *RepoConfig) getAuthorCountCurrYear() int {
 	return len(authors)
 }
 
+func (r *RepoConfig) getAuthorCountPrevYear() int {
+	authors := r.getAuthorCommitCountPrevYear()
+
+	return len(authors)
+}
+
 func (r *RepoConfig) getAuthorCountAllTime() int {
 	authors := r.getAuthorCommitCountAllTime()
 
@@ -1236,7 +1242,7 @@ func (r *RepoConfig) getTotalLinesOfCodeCurrYear() int {
 	return total
 }
 
-func (r *RepoConfig) getSizeOfRepoByWeekCurrYear() []RepoSizeTimeStamp {
+func (r *RepoConfig) getSizeOfRepoByWeekCurrYear() []int {
 	commits := r.getCurrYearGitCommits()
 	weeks := utils.GetWeeksOfYear()
 
@@ -1254,7 +1260,7 @@ func (r *RepoConfig) getSizeOfRepoByWeekCurrYear() []RepoSizeTimeStamp {
 
 	totalLinesOfCodePrevYear := r.getTotalLinesOfCodePrevYear()
 	runningTotal := totalLinesOfCodePrevYear
-	final := []RepoSizeTimeStamp{}
+	final := []int{}
 
 	for week := 1; week <= 52; week++ {
 		weekCommits := weekCommitsMap[week]
@@ -1267,10 +1273,7 @@ func (r *RepoConfig) getSizeOfRepoByWeekCurrYear() []RepoSizeTimeStamp {
 
 		}
 
-		final = append(final, RepoSizeTimeStamp{
-			WeekNumber: week,
-			LineCount:  runningTotal,
-		})
+		final = append(final, runningTotal)
 	}
 
 	return final

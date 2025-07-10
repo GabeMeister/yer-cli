@@ -72,10 +72,10 @@ var WEEK_TO_MONTH = map[int]string{
 func getRepoSizeChartData(recap analyzer.Recap) helpers.BarChartData {
 	barChartData := helpers.BarChartData{Data: []helpers.DataPoint{}, XAxisLabel: "Month", YAxisLabel: "↑ Line Count"}
 
-	for _, week := range recap.SizeOfRepoByWeekCurrYear {
+	for idx, size := range recap.SizeOfRepoByWeekCurrYear {
 		barChartData.Data = append(barChartData.Data, helpers.DataPoint{
-			X: WEEK_TO_MONTH[week.WeekNumber],
-			Y: week.LineCount,
+			X: WEEK_TO_MONTH[idx+1],
+			Y: size,
 		})
 	}
 
