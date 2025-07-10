@@ -65,15 +65,16 @@ type Recap struct {
 }
 
 type MultiRepoRecap struct {
-	Version      string          `json:"version"`
-	Name         string          `json:"name"`
-	DateAnalyzed string          `json:"date_analyzed"`
-	RepoNames    []string        `json:"repo_names"`
-	AllAuthors   []string        `json:"all_authors"`
-	NewAuthors   NewAuthorByRepo `json:"new_authors"`
+	Version                  string   `json:"version"`
+	Name                     string   `json:"name"`
+	DateAnalyzed             string   `json:"date_analyzed"`
+	RepoNames                []string `json:"repo_names"`
+	ActiveAuthorsCountByRepo map[Repo]int
+	FileCountByRepoCurrYear  map[Repo]int
 }
 
 type Repo string
+type Author string
 type AuthorList []string
 type NewAuthorByRepo map[Repo]AuthorList
 
@@ -270,16 +271,16 @@ func calculateMultiRepoRecap(c *ConfigFile) error {
 
 	// Combine all metrics from the separate recaps
 	repoNames := getRepoNames(recaps)
-	allAuthors := getAuthorList(recaps)
-	newAuthors := getNewAuthorsList(recaps)
+	activeAuthorsCountByRepo := getActiveAuthorsCountByRepo(recaps)
+	fileCountByRepoCurrYear := getFileCountByRepoCurrYear(recaps)
 
 	// Combine stats
 	multiRepoRecap := MultiRepoRecap{
-		DateAnalyzed: now.Format(time.RFC3339),
-		Name:         c.Name,
-		RepoNames:    repoNames,
-		AllAuthors:   allAuthors,
-		NewAuthors:   newAuthors,
+		DateAnalyzed:             now.Format(time.RFC3339),
+		Name:                     c.Name,
+		RepoNames:                repoNames,
+		ActiveAuthorsCountByRepo: activeAuthorsCountByRepo,
+		FileCountByRepoCurrYear:  fileCountByRepoCurrYear,
 	}
 
 	saveDataToFile(multiRepoRecap, MULTI_REPO_RECAP_FILE)
@@ -300,20 +301,22 @@ func getRepoNames(recaps []Recap) []string {
 	return repoNames
 }
 
-func getAuthorList(recaps []Recap) []string {
-	allAuthors := []string{}
+func getActiveAuthorsCountByRepo(recaps []Recap) map[Repo]int {
+	activeAuthorsMap := make(map[Repo]int)
+
 	for _, recap := range recaps {
-		allAuthors = append(allAuthors, recap.AllAuthors...)
+		activeAuthorsMap[Repo(recap.Name)] = recap.AuthorCountCurrYear
 	}
 
-	return utils.Unique(allAuthors)
+	return activeAuthorsMap
 }
 
-func getNewAuthorsList(recaps []Recap) NewAuthorByRepo {
-	newAuthors := make(NewAuthorByRepo)
+func getFileCountByRepoCurrYear(recaps []Recap) map[Repo]int {
+	fileCountMap := make(map[Repo]int)
+
 	for _, recap := range recaps {
-		newAuthors[Repo(recap.Name)] = recap.NewAuthorListCurrYear
+		fileCountMap[Repo(recap.Name)] = recap.FileCountCurrYear
 	}
 
-	return newAuthors
+	return fileCountMap
 }
