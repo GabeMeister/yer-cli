@@ -71,6 +71,7 @@ type MultiRepoRecap struct {
 	RepoNames                []string `json:"repo_names"`
 	ActiveAuthorsCountByRepo map[Repo]int
 	FileCountByRepoCurrYear  map[Repo]int
+	TotalLinesOfCodeByRepo   map[Repo]int
 }
 
 type Repo string
@@ -273,6 +274,7 @@ func calculateMultiRepoRecap(c *ConfigFile) error {
 	repoNames := getRepoNames(recaps)
 	activeAuthorsCountByRepo := getActiveAuthorsCountByRepo(recaps)
 	fileCountByRepoCurrYear := getFileCountByRepoCurrYear(recaps)
+	totalLinesOfCodeByRepo := getTotalLinesOfCodeByRepo(recaps)
 
 	// Combine stats
 	multiRepoRecap := MultiRepoRecap{
@@ -281,6 +283,7 @@ func calculateMultiRepoRecap(c *ConfigFile) error {
 		RepoNames:                repoNames,
 		ActiveAuthorsCountByRepo: activeAuthorsCountByRepo,
 		FileCountByRepoCurrYear:  fileCountByRepoCurrYear,
+		TotalLinesOfCodeByRepo:   totalLinesOfCodeByRepo,
 	}
 
 	saveDataToFile(multiRepoRecap, MULTI_REPO_RECAP_FILE)
@@ -316,6 +319,16 @@ func getFileCountByRepoCurrYear(recaps []Recap) map[Repo]int {
 
 	for _, recap := range recaps {
 		fileCountMap[Repo(recap.Name)] = recap.FileCountCurrYear
+	}
+
+	return fileCountMap
+}
+
+func getTotalLinesOfCodeByRepo(recaps []Recap) map[Repo]int {
+	fileCountMap := make(map[Repo]int)
+
+	for _, recap := range recaps {
+		fileCountMap[Repo(recap.Name)] = recap.TotalLinesOfCodeCurrYear
 	}
 
 	return fileCountMap
