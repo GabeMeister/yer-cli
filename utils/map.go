@@ -1,7 +1,7 @@
 package utils
 
-func MapKeysToSlice(m map[string]bool) []string {
-	final := []string{}
+func MapKeysToSlice[T comparable](m map[T]bool) []T {
+	final := []T{}
 	for key := range m {
 		final = append(final, key)
 	}

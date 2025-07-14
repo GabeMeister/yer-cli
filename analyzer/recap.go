@@ -51,6 +51,7 @@ type Recap struct {
 	NewAuthorCountCurrYear               int                          `json:"new_author_count_curr_year"`
 	NewAuthorListCurrYear                []string                     `json:"new_author_list_curr_year"`
 	AuthorCommitCountsCurrYear           map[string]int               `json:"author_commit_counts_curr_year"`
+	AuthorCommitCountsPrevYear           map[string]int               `json:"author_commit_counts_prev_year"`
 	AuthorCommitCountsAllTime            map[string]int               `json:"author_commit_counts_all_time"`
 	AuthorCountCurrYear                  int                          `json:"author_count_curr_year"`
 	AuthorCountPrevYear                  int                          `json:"author_count_prev_year"`
@@ -66,14 +67,16 @@ type Recap struct {
 }
 
 type MultiRepoRecap struct {
-	Version                  string                  `json:"version"`
-	Name                     string                  `json:"name"`
-	DateAnalyzed             string                  `json:"date_analyzed"`
-	RepoNames                []string                `json:"repo_names"`
-	ActiveAuthorsCountByRepo map[Repo]YearComparison `json:"active_authors_count_by_repo"`
-	FileCountByRepo          map[Repo]YearComparison `json:"file_count_by_repo"`
-	TotalLinesOfCodeByRepo   map[Repo]YearComparison `json:"total_lines_of_code_by_repo"`
-	SizeOfRepoWeeklyByRepo   map[Repo][]int          `json:"size_of_repo_weekly_by_repo"`
+	Version                  string                    `json:"version"`
+	Name                     string                    `json:"name"`
+	DateAnalyzed             string                    `json:"date_analyzed"`
+	RepoNames                []string                  `json:"repo_names"`
+	ActiveAuthorsCountByRepo map[Repo]YearComparison   `json:"active_authors_count_by_repo"`
+	FileCountByRepo          map[Repo]YearComparison   `json:"file_count_by_repo"`
+	TotalLinesOfCodeByRepo   map[Repo]YearComparison   `json:"total_lines_of_code_by_repo"`
+	SizeOfRepoWeeklyByRepo   map[Repo][]int            `json:"size_of_repo_weekly_by_repo"`
+	CommitsMadeByRepo        map[Repo]YearComparison   `json:"commits_made_by_repo"`
+	CommitsMadeByAuthor      map[Author]YearComparison `json:"commits_made_by_author"`
 }
 
 type Repo string
@@ -143,6 +146,7 @@ func calculateRepoRecap(r *RepoConfig) {
 		return commit.Author
 	})
 	authorCommitCountsCurrYear := r.getAuthorCommitCountCurrYear()
+	authorCommitCountsPrevYear := r.getAuthorCommitCountPrevYear()
 	authorCommitCountsAllTime := r.getAuthorCommitCountAllTime()
 	authorCountCurrYear := r.getAuthorCountCurrYear()
 	authorCountPrevYear := r.getAuthorCountPrevYear()
@@ -228,6 +232,7 @@ func calculateRepoRecap(r *RepoConfig) {
 		NewAuthorCountCurrYear:               newAuthorCountCurrYear,
 		NewAuthorListCurrYear:                newAuthorListCurrYear,
 		AuthorCommitCountsCurrYear:           authorCommitCountsCurrYear,
+		AuthorCommitCountsPrevYear:           authorCommitCountsPrevYear,
 		AuthorCommitCountsAllTime:            authorCommitCountsAllTime,
 		AuthorCountCurrYear:                  authorCountCurrYear,
 		AuthorCountPrevYear:                  authorCountPrevYear,
@@ -288,6 +293,8 @@ func calculateMultiRepoRecap(c *ConfigFile) error {
 	fileCountByRepoCurrYear := getFileCountByRepo(recaps)
 	totalLinesOfCodeByRepo := getTotalLinesOfCodeByRepo(recaps)
 	sizeOfRepoWeeklyByRepo := getSizeOfRepoWeeklyByRepo(recaps)
+	commitsMadeByRepo := getCommitsMadeByRepo(recaps)
+	commitsMadeByAuthor := getCommitsMadeByAuthor(recaps)
 
 	// Combine stats
 	multiRepoRecap := MultiRepoRecap{
@@ -298,6 +305,8 @@ func calculateMultiRepoRecap(c *ConfigFile) error {
 		FileCountByRepo:          fileCountByRepoCurrYear,
 		TotalLinesOfCodeByRepo:   totalLinesOfCodeByRepo,
 		SizeOfRepoWeeklyByRepo:   sizeOfRepoWeeklyByRepo,
+		CommitsMadeByRepo:        commitsMadeByRepo,
+		CommitsMadeByAuthor:      commitsMadeByAuthor,
 	}
 
 	saveDataToFile(multiRepoRecap, MULTI_REPO_RECAP_FILE)
@@ -367,4 +376,56 @@ func getSizeOfRepoWeeklyByRepo(recaps []Recap) map[Repo][]int {
 	}
 
 	return sizeOfRepoMap
+}
+
+func getCommitsMadeByRepo(recaps []Recap) map[Repo]YearComparison {
+	commitsMap := make(map[Repo]YearComparison)
+
+	for _, recap := range recaps {
+		commitsMap[Repo(recap.Name)] = YearComparison{
+			PREV: recap.NumCommitsPrevYear,
+			CURR: recap.NumCommitsCurrYear,
+		}
+	}
+
+	return commitsMap
+}
+
+func getAuthorsFromRecaps(recaps []Recap) []Author {
+	authorMap := make(map[Author]bool)
+
+	for _, r := range recaps {
+		for _, author := range r.AllAuthors {
+			authorMap[Author(author)] = true
+
+		}
+	}
+
+	return utils.MapKeysToSlice(authorMap)
+}
+
+func getCommitsMadeByAuthor(recaps []Recap) map[Author]YearComparison {
+	commitsMap := make(map[Author]YearComparison)
+
+	// Get list of all authors
+	allAuthors := getAuthorsFromRecaps(recaps)
+
+	for _, author := range allAuthors {
+		commitsMap[author] = YearComparison{
+			PREV: 0,
+			CURR: 0,
+		}
+	}
+
+	for _, recap := range recaps {
+		for author, commits := range recap.AuthorCommitCountsPrevYear {
+			commitsMap[Author(author)][PREV] += commits
+		}
+
+		for author, commits := range recap.AuthorCommitCountsCurrYear {
+			commitsMap[Author(author)][CURR] += commits
+		}
+	}
+
+	return commitsMap
 }
