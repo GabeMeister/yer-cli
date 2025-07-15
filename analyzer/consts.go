@@ -11,8 +11,8 @@ var MERGE_COMMITS_FILE_TEMPLATE = "./tmp/%s_merge_commits.json"
 var DIRECT_PUSH_ON_MASTER_COMMITS_FILE_TEMPLATE = "./tmp/%s_direct_push_on_master_commits.json"
 var DEFAULT_CONFIG_FILE = "./config.json"
 
-const PREV_YEAR = 2023
-const CURR_YEAR = 2024
+const PREV_YEAR = 2024
+const CURR_YEAR = 2025
 
 var MONTHS = [...]string{
 	"January",

@@ -33,6 +33,9 @@ type Recap struct {
 	CommitMessageHistogramCurrYear  []CommitMessageLengthFrequency `json:"commit_message_histogram_curr_year"`
 	MostMergesInOneDayCurrYear      MostMergesInOneDay             `json:"most_merges_in_one_day_curr_year"`
 	AvgMergesToMasterPerDayCurrYear float64                        `json:"avg_merges_to_master_per_day_curr_year"`
+	MergesToMasterCurrYear          int                            `json:"merges_to_master_curr_year"`
+	MergesToMasterPrevYear          int                            `json:"merges_to_master_prev_year"`
+	MergesToMasterAllTime           int                            `json:"merges_to_master_all_time"`
 	CommonlyChangedFiles            []FileChangeCount              `json:"commonly_changed_files"`
 
 	// Files
@@ -67,16 +70,23 @@ type Recap struct {
 }
 
 type MultiRepoRecap struct {
-	Version                  string                    `json:"version"`
-	Name                     string                    `json:"name"`
-	DateAnalyzed             string                    `json:"date_analyzed"`
-	RepoNames                []string                  `json:"repo_names"`
-	ActiveAuthorsCountByRepo map[Repo]YearComparison   `json:"active_authors_count_by_repo"`
-	FileCountByRepo          map[Repo]YearComparison   `json:"file_count_by_repo"`
-	TotalLinesOfCodeByRepo   map[Repo]YearComparison   `json:"total_lines_of_code_by_repo"`
-	SizeOfRepoWeeklyByRepo   map[Repo][]int            `json:"size_of_repo_weekly_by_repo"`
-	CommitsMadeByRepo        map[Repo]YearComparison   `json:"commits_made_by_repo"`
-	CommitsMadeByAuthor      map[Author]YearComparison `json:"commits_made_by_author"`
+	Version                     string                     `json:"version"`
+	Name                        string                     `json:"name"`
+	DateAnalyzed                string                     `json:"date_analyzed"`
+	RepoNames                   []string                   `json:"repo_names"`
+	ActiveAuthorsCountByRepo    map[Repo]YearComparison    `json:"active_authors_count_by_repo"`
+	FileCountByRepo             map[Repo]YearComparison    `json:"file_count_by_repo"`
+	TotalLinesOfCodeByRepo      map[Repo]YearComparison    `json:"total_lines_of_code_by_repo"`
+	SizeOfRepoWeeklyByRepo      map[Repo][]int             `json:"size_of_repo_weekly_by_repo"`
+	CommitsMadeByRepo           map[Repo]YearComparison    `json:"commits_made_by_repo"`
+	CommitsMadeByAuthor         map[Author]*YearComparison `json:"commits_made_by_author"`
+	LinesOfCodeOwnedByAuthor    map[Author]int             `json:"lines_of_code_owned_by_author"`
+	AggregateCommitsByMonth     []int                      `json:"aggregate_commits_by_month"`
+	AggregateCommitsByWeekDay   []int                      `json:"aggregate_commits_by_week_day"`
+	AggregateCommitsByHour      []int                      `json:"aggregate_commits_by_hour"`
+	AvgMergesPerDayByRepo       map[Repo]float64           `json:"avg_merges_per_day_by_repo"`
+	MergesToMasterByRepo        map[Repo]YearComparison    `json:"merges_to_master_by_repo"`
+	MergesToMasterAllTimeByRepo map[Repo]int               `json:"merges_to_master_all_time_by_repo"`
 }
 
 type Repo string
@@ -90,7 +100,10 @@ const (
 	CURR Year = "curr"
 )
 
-type YearComparison map[Year]int
+type YearComparison struct {
+	Prev int `json:"prev"`
+	Curr int `json:"curr"`
+}
 
 func GetRepoRecapFromTmpDir() (Recap, error) {
 	if !HasRecapBeenRan() {
@@ -166,6 +179,9 @@ func calculateRepoRecap(r *RepoConfig) {
 	mergesToMasterByAuthorCurrYear := r.getMergesToMasterByAuthorCurrYear()
 	mostMergesInOneDayCurrYear := r.getMostMergesInOneDayCurrYear()
 	avgMergesToMasterPerDayCurrYear := r.getAvgMergesToMasterPerDayCurrYear()
+	mergesToMasterPrevYear := r.getMergesToMasterPrevYear()
+	mergesToMasterCurrYear := r.getMergesToMasterCurrYear()
+	mergesToMasterAllTime := r.getMergesToMasterAllTime()
 	fileChangesByAuthorCurrYear := r.getFileChangesByAuthorCurrYear()
 	codeInsertionsByAuthorCurrYear := r.getCodeInsertionsByAuthorCurrYear()
 	codeDeletionsByAuthorCurrYear := r.getCodeDeletionsByAuthorCurrYear()
@@ -214,6 +230,9 @@ func calculateRepoRecap(r *RepoConfig) {
 		CommitMessageHistogramCurrYear:  commitMessageHistogramCurrYear,
 		MostMergesInOneDayCurrYear:      mostMergesInOneDayCurrYear,
 		AvgMergesToMasterPerDayCurrYear: avgMergesToMasterPerDayCurrYear,
+		MergesToMasterPrevYear:          mergesToMasterPrevYear,
+		MergesToMasterCurrYear:          mergesToMasterCurrYear,
+		MergesToMasterAllTime:           mergesToMasterAllTime,
 		CommonlyChangedFiles:            commonlyChangedFiles,
 
 		// Files
@@ -295,18 +314,32 @@ func calculateMultiRepoRecap(c *ConfigFile) error {
 	sizeOfRepoWeeklyByRepo := getSizeOfRepoWeeklyByRepo(recaps)
 	commitsMadeByRepo := getCommitsMadeByRepo(recaps)
 	commitsMadeByAuthor := getCommitsMadeByAuthor(recaps)
+	linesOfCodeOwnedByAuthor := getLinesOfCodeOwnedByAuthor(recaps)
+	aggregateCommitsByMonth := getAggregateCommitsByMonth(recaps)
+	aggregateCommitsByWeekDay := getAggregateCommitsByWeekDay(recaps)
+	aggregateCommitsByHour := getAggregateCommitsByHour(recaps)
+	avgMergesPerDayByRepo := getAvgMergesPerDayByRepo(recaps)
+	mergesToMasterByRepo := getMergesToMasterByRepo(recaps)
+	mergesToMasterAllTimeByRepo := getMergesToMasterAllTimeByRepo(recaps)
 
 	// Combine stats
 	multiRepoRecap := MultiRepoRecap{
-		DateAnalyzed:             now.Format(time.RFC3339),
-		Name:                     c.Name,
-		RepoNames:                repoNames,
-		ActiveAuthorsCountByRepo: activeAuthorsCountByRepo,
-		FileCountByRepo:          fileCountByRepoCurrYear,
-		TotalLinesOfCodeByRepo:   totalLinesOfCodeByRepo,
-		SizeOfRepoWeeklyByRepo:   sizeOfRepoWeeklyByRepo,
-		CommitsMadeByRepo:        commitsMadeByRepo,
-		CommitsMadeByAuthor:      commitsMadeByAuthor,
+		DateAnalyzed:                now.Format(time.RFC3339),
+		Name:                        c.Name,
+		RepoNames:                   repoNames,
+		ActiveAuthorsCountByRepo:    activeAuthorsCountByRepo,
+		FileCountByRepo:             fileCountByRepoCurrYear,
+		TotalLinesOfCodeByRepo:      totalLinesOfCodeByRepo,
+		SizeOfRepoWeeklyByRepo:      sizeOfRepoWeeklyByRepo,
+		CommitsMadeByRepo:           commitsMadeByRepo,
+		CommitsMadeByAuthor:         commitsMadeByAuthor,
+		LinesOfCodeOwnedByAuthor:    linesOfCodeOwnedByAuthor,
+		AggregateCommitsByMonth:     aggregateCommitsByMonth,
+		AggregateCommitsByWeekDay:   aggregateCommitsByWeekDay,
+		AggregateCommitsByHour:      aggregateCommitsByHour,
+		AvgMergesPerDayByRepo:       avgMergesPerDayByRepo,
+		MergesToMasterByRepo:        mergesToMasterByRepo,
+		MergesToMasterAllTimeByRepo: mergesToMasterAllTimeByRepo,
 	}
 
 	saveDataToFile(multiRepoRecap, MULTI_REPO_RECAP_FILE)
@@ -332,8 +365,8 @@ func getActiveAuthorsCountByRepo(recaps []Recap) map[Repo]YearComparison {
 
 	for _, recap := range recaps {
 		activeAuthorsMap[Repo(recap.Name)] = YearComparison{
-			PREV: recap.AuthorCountPrevYear,
-			CURR: recap.AuthorCountCurrYear,
+			Prev: recap.AuthorCountPrevYear,
+			Curr: recap.AuthorCountCurrYear,
 		}
 	}
 
@@ -346,8 +379,8 @@ func getFileCountByRepo(recaps []Recap) map[Repo]YearComparison {
 
 	for _, recap := range recaps {
 		fileCountMap[Repo(recap.Name)] = YearComparison{
-			PREV: recap.FileCountPrevYear,
-			CURR: recap.FileCountCurrYear,
+			Prev: recap.FileCountPrevYear,
+			Curr: recap.FileCountCurrYear,
 		}
 	}
 
@@ -360,8 +393,8 @@ func getTotalLinesOfCodeByRepo(recaps []Recap) map[Repo]YearComparison {
 
 	for _, recap := range recaps {
 		totalLinesMap[Repo(recap.Name)] = YearComparison{
-			PREV: recap.TotalLinesOfCodePrevYear,
-			CURR: recap.TotalLinesOfCodeCurrYear,
+			Prev: recap.TotalLinesOfCodePrevYear,
+			Curr: recap.TotalLinesOfCodeCurrYear,
 		}
 	}
 
@@ -383,8 +416,8 @@ func getCommitsMadeByRepo(recaps []Recap) map[Repo]YearComparison {
 
 	for _, recap := range recaps {
 		commitsMap[Repo(recap.Name)] = YearComparison{
-			PREV: recap.NumCommitsPrevYear,
-			CURR: recap.NumCommitsCurrYear,
+			Prev: recap.NumCommitsPrevYear,
+			Curr: recap.NumCommitsCurrYear,
 		}
 	}
 
@@ -404,28 +437,116 @@ func getAuthorsFromRecaps(recaps []Recap) []Author {
 	return utils.MapKeysToSlice(authorMap)
 }
 
-func getCommitsMadeByAuthor(recaps []Recap) map[Author]YearComparison {
-	commitsMap := make(map[Author]YearComparison)
+func getCommitsMadeByAuthor(recaps []Recap) map[Author]*YearComparison {
+	commitsMap := make(map[Author]*YearComparison)
 
 	// Get list of all authors
 	allAuthors := getAuthorsFromRecaps(recaps)
 
 	for _, author := range allAuthors {
-		commitsMap[author] = YearComparison{
-			PREV: 0,
-			CURR: 0,
+		commitsMap[author] = &YearComparison{
+			Prev: 0,
+			Curr: 0,
 		}
 	}
 
 	for _, recap := range recaps {
 		for author, commits := range recap.AuthorCommitCountsPrevYear {
-			commitsMap[Author(author)][PREV] += commits
+			commitsMap[Author(author)].Prev += commits
 		}
 
 		for author, commits := range recap.AuthorCommitCountsCurrYear {
-			commitsMap[Author(author)][CURR] += commits
+			commitsMap[Author(author)].Curr += commits
 		}
 	}
 
 	return commitsMap
+}
+
+func getLinesOfCodeOwnedByAuthor(recaps []Recap) map[Author]int {
+	linesOfCodeMap := make(map[Author]int)
+
+	// Get list of all authors
+	allAuthors := getAuthorsFromRecaps(recaps)
+
+	for _, author := range allAuthors {
+		linesOfCodeMap[author] = 0
+	}
+
+	for _, recap := range recaps {
+		for author, lineCount := range recap.TotalLinesOfCodeInRepoByAuthor {
+			linesOfCodeMap[Author(author)] += lineCount
+		}
+	}
+
+	return linesOfCodeMap
+}
+
+func getAggregateCommitsByMonth(recaps []Recap) []int {
+	commits := []int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+
+	for _, recap := range recaps {
+		for idx, commitMonth := range recap.CommitsByMonthCurrYear {
+			commits[idx] += commitMonth.Commits
+		}
+	}
+
+	return commits
+}
+
+func getAggregateCommitsByWeekDay(recaps []Recap) []int {
+	commits := []int{0, 0, 0, 0, 0, 0, 0}
+
+	for _, recap := range recaps {
+		for idx, commitMonth := range recap.CommitsByWeekDayCurrYear {
+			commits[idx] += commitMonth.Commits
+		}
+	}
+
+	return commits
+}
+
+func getAggregateCommitsByHour(recaps []Recap) []int {
+	commits := []int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+
+	for _, recap := range recaps {
+		for idx, commitMonth := range recap.CommitsByHourCurrYear {
+			commits[idx] += commitMonth.Commits
+		}
+	}
+
+	return commits
+}
+
+func getAvgMergesPerDayByRepo(recaps []Recap) map[Repo]float64 {
+	mergesMap := make(map[Repo]float64)
+
+	for _, recap := range recaps {
+		mergesMap[Repo(recap.Name)] = recap.AvgMergesToMasterPerDayCurrYear
+	}
+
+	return mergesMap
+}
+
+func getMergesToMasterByRepo(recaps []Recap) map[Repo]YearComparison {
+	mergesMap := make(map[Repo]YearComparison)
+
+	for _, recap := range recaps {
+		mergesMap[Repo(recap.Name)] = YearComparison{
+			Prev: recap.MergesToMasterPrevYear,
+			Curr: recap.MergesToMasterCurrYear,
+		}
+	}
+
+	return mergesMap
+}
+
+func getMergesToMasterAllTimeByRepo(recaps []Recap) map[Repo]int {
+	mergesMap := make(map[Repo]int)
+
+	for _, recap := range recaps {
+		mergesMap[Repo(recap.Name)] = recap.MergesToMasterAllTime
+	}
+
+	return mergesMap
 }

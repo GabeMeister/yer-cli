@@ -249,6 +249,19 @@ func (r *RepoConfig) getCurrYearMergeGitCommits() []GitCommit {
 	return final
 }
 
+func (r *RepoConfig) getPrevYearMergeGitCommits() []GitCommit {
+	commits := r.getMergeGitCommits()
+
+	final := []GitCommit{}
+	for _, commit := range commits {
+		if utils.IsDateStrInYear(commit.Date, PREV_YEAR) {
+			final = append(final, commit)
+		}
+	}
+
+	return final
+}
+
 func (r *RepoConfig) getCurrYearDirectPushOnMasterCommits() []GitCommit {
 	commits := r.getDirectPushOnMasterCommits()
 
@@ -550,6 +563,16 @@ func (r *RepoConfig) getMostMergesInOneDayCurrYear() MostMergesInOneDay {
 	return mostMergesInOneDay
 }
 
+func (r *RepoConfig) getMergesToMasterCurrYear() int {
+	commits := r.getCurrYearMergeGitCommits()
+	return len(commits)
+}
+
+func (r *RepoConfig) getMergesToMasterPrevYear() int {
+	commits := r.getPrevYearMergeGitCommits()
+	return len(commits)
+}
+
 func (r *RepoConfig) getAvgMergesToMasterPerDayCurrYear() float64 {
 	commits := r.getCurrYearMergeGitCommits()
 	if len(commits) == 0 {
@@ -564,6 +587,11 @@ func (r *RepoConfig) getAvgMergesToMasterPerDayCurrYear() float64 {
 	}
 
 	return final
+}
+
+func (r *RepoConfig) getMergesToMasterAllTime() int {
+	commits := r.getMergeGitCommits()
+	return len(commits)
 }
 
 func (r *RepoConfig) getFileChangesByAuthorCurrYear() map[string]int {
@@ -690,24 +718,13 @@ func (r *RepoConfig) getAuthorCommitCountPrevYear() map[string]int {
 	for _, commit := range commits {
 		commitYear := utils.GetYearFromDateStr(commit.Date)
 
-		if commitYear < CURR_YEAR {
+		if commitYear == PREV_YEAR {
 			userName := commit.Author
 			authors[userName] += 1
 		}
 	}
 
 	return authors
-}
-
-func (r *RepoConfig) getAllUsernames() []string {
-	authors := r.getAuthorCommitCountAllTime()
-
-	usernames := []string{}
-	for username := range authors {
-		usernames = append(usernames, username)
-	}
-
-	return usernames
 }
 
 func (r *RepoConfig) getAuthorCommitCountAllTime() map[string]int {
@@ -802,13 +819,7 @@ func (r *RepoConfig) getAuthorCommitsOverTimeCurrYear() []TotalCommitCount {
 func (r *RepoConfig) getAllAuthorsList() []string {
 	allAuthorsMap := make(map[string]bool)
 
-	if r.hasPrevYearCommits() {
-		for _, commit := range r.getPrevYearGitCommits() {
-			allAuthorsMap[commit.Author] = true
-		}
-	}
-
-	for _, commit := range r.getCurrYearGitCommits() {
+	for _, commit := range r.getGitCommits() {
 		allAuthorsMap[commit.Author] = true
 	}
 
