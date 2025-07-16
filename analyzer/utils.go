@@ -3,25 +3,15 @@ package analyzer
 import (
 	"encoding/json"
 	"os"
-	"strings"
 	"time"
 
 	"github.com/briandowns/spinner"
 )
 
 func HasRecapBeenRan() bool {
-	files, err := os.ReadDir("tmp")
-	if err != nil {
-		return false
-	}
+	_, err := os.ReadFile("tmp/multi_repo_recap.json")
 
-	for _, file := range files {
-		if !file.IsDir() && strings.HasSuffix(file.Name(), "_recap.json") {
-			return true
-		}
-	}
-
-	return false
+	return err == nil
 }
 
 func saveDataToFile(data any, path string) {

@@ -16,7 +16,21 @@ import (
 func printHelp() {
 	fmt.Println("Year End Recap CLI")
 	fmt.Println()
-	flag.PrintDefaults()
+	customUsage()
+}
+
+func customUsage() {
+	fmt.Fprintf(os.Stderr, "Usage: %s [options]\n", os.Args[0])
+
+	// Define custom order
+	order := []string{"s", "a", "v"}
+
+	for _, name := range order {
+		f := flag.Lookup(name)
+		if f != nil {
+			fmt.Fprintf(os.Stderr, "  -%s:   %s\n", f.Name, f.Usage)
+		}
+	}
 }
 
 func runTest() {
@@ -26,17 +40,18 @@ func main() {
 	godotenv.Load()
 
 	var help = flag.Bool("h", false, "Print help menu")
-	var setupConfig = flag.Bool("s", false, "Setup a new Year End Recap configuration")
-	var analyzeRepo = flag.Bool("a", false, "Analyze repo(s) to gather highly amusing Git stats")
-	var view = flag.Bool("v", false, "View your highly amusing Git stats")
+	var setupConfig = flag.Bool("s", false, "(Step 1) Setup a new Year End Recap configuration")
+	var analyzeRepo = flag.Bool("a", false, "(Step 2) Analyze your Git repo(s) to gather highly amusing Git stats")
+	var view = flag.Bool("v", false, "(Step 3) View your highly amusing Git stats")
 
 	var test *bool
 	var calculateOnly *bool
 	if utils.IsDevMode() {
 		test = flag.Bool("t", false, "Run test")
-		calculateOnly = flag.Bool("c", false, "Just run calculations while analyzing, and skip gathering metrics")
+		calculateOnly = flag.Bool("c", false, "Just run calculations while analyzing, and skip gathering metrics step")
 	}
 
+	flag.Usage = customUsage
 	flag.Parse()
 
 	err := os.Mkdir("tmp", 0755)
