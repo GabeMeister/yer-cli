@@ -7,7 +7,13 @@ import (
 	"slices"
 )
 
-var TABLE_OF_CONTENTS = []string{
+var MULTI_REPO_TABLE_OF_CONTENTS = []string{
+	"/",
+	"/active-authors",
+	"/end",
+}
+
+var SINGLE_REPO_TABLE_OF_CONTENTS = []string{
 	"/",
 	"/new-author-count-curr-year/title",
 	"/new-author-count-curr-year",
@@ -88,9 +94,13 @@ var TABLE_OF_CONTENTS = []string{
 	"/end",
 }
 
-func GetTableOfContents(recap analyzer.Recap) []string {
+func GetMultiRepoTableOfContents(multiRepoRecap analyzer.MultiRepoRecap) []string {
+	return MULTI_REPO_TABLE_OF_CONTENTS
+}
+
+func GetSingleRepoTableOfContents(recap analyzer.Recap) []string {
 	if recap.IncludesFileBlames {
-		return TABLE_OF_CONTENTS
+		return SINGLE_REPO_TABLE_OF_CONTENTS
 	} else {
 		pagesRequiringFileBlames := []string{
 			"/total-lines-of-code-in-repo-by-author/title",
@@ -113,7 +123,7 @@ func GetTableOfContents(recap analyzer.Recap) []string {
 			"/author-file-changes-over-time-curr-year",
 		}
 
-		return utils.Filter(TABLE_OF_CONTENTS, func(s string) bool {
+		return utils.Filter(SINGLE_REPO_TABLE_OF_CONTENTS, func(s string) bool {
 			return !slices.Contains(pagesRequiringFileBlames, s)
 		})
 	}
@@ -137,27 +147,17 @@ func GetSingleYearRepoTableOfContents(recap analyzer.Recap) []string {
 
 	// Single year repos can't involve anything with the previous year. But a lot
 	// of slides are still relevant, so we just filter the irrelevant pages
-	return utils.Filter(GetTableOfContents(recap), func(s string) bool {
+	return utils.Filter(GetSingleRepoTableOfContents(recap), func(s string) bool {
 		return !slices.Contains(pagesRequiringMultipleYears, s)
 	})
 }
 
-func GetNextButtonLink(currUrl string, recap analyzer.Recap) string {
-	if recap.IsMultiYearRepo {
-		tableOfContents := GetTableOfContents(recap)
-		currPageIdx := utils.FindIndex(tableOfContents, func(page string) bool {
-			return page == currUrl
-		})
-		final := tableOfContents[getNextIdx(currPageIdx, len(tableOfContents))]
-
-		return final
-	} else {
-		tableOfContents := GetSingleYearRepoTableOfContents(recap)
-		currPageIdx := utils.FindIndex(tableOfContents, func(page string) bool {
-			return page == currUrl
-		})
-		return tableOfContents[getNextIdx(currPageIdx, len(tableOfContents))]
-	}
+func GetNextButtonLink(currUrl string, recap analyzer.MultiRepoRecap) string {
+	tableOfContents := GetMultiRepoTableOfContents(recap)
+	currPageIdx := utils.FindIndex(tableOfContents, func(page string) bool {
+		return page == currUrl
+	})
+	return tableOfContents[getNextIdx(currPageIdx, len(tableOfContents))]
 }
 
 func getNextIdx(idx int, length int) int {
@@ -322,6 +322,26 @@ func GetTitleSlideData(page string, recap analyzer.Recap) TitleSlideData {
 	case "avg-merges-per-day-to-master-curr-year":
 		data.Title = "Average Merges Per Day"
 		data.Description = fmt.Sprintf("The average number of merges the team did per day in %d.", analyzer.CURR_YEAR)
+
+	default:
+		panic(fmt.Sprintf("Unrecognized page for title slide: %s", page))
+	}
+
+	return data
+}
+
+func GetMultiRepoTitleSlideData(page string, recap analyzer.Recap) TitleSlideData {
+	nextBtnUrl := GetNextButtonLink(fmt.Sprintf("/%s/title", page), recap)
+	data := TitleSlideData{
+		Title:       "",
+		Description: "",
+		NextBtnUrl:  nextBtnUrl,
+	}
+
+	switch page {
+	case "active-authors":
+		data.Title = "Active Authors"
+		data.Description = "The amount of unique authors that contributed to your repos."
 
 	default:
 		panic(fmt.Sprintf("Unrecognized page for title slide: %s", page))

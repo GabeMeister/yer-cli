@@ -7,7 +7,6 @@ import (
 	"math"
 	"os"
 	"path/filepath"
-	"strings"
 	"time"
 )
 
@@ -105,33 +104,18 @@ type YearComparison struct {
 	Curr int `json:"curr"`
 }
 
-func GetRepoRecapFromTmpDir() (Recap, error) {
+func GetMultiRepoRecapFromTmpDir() (MultiRepoRecap, error) {
 	if !HasRecapBeenRan() {
-		return Recap{}, os.ErrNotExist
+		return MultiRepoRecap{}, os.ErrNotExist
 	}
 
-	files, err := os.ReadDir("tmp")
-	if err != nil {
-		fmt.Println("Unable to read tmp directory to get repo recap", err)
-		os.Exit(1)
-	}
+	filePath := "./tmp/multi_repo_recap.json"
 
-	var recapFile string
-
-	for _, file := range files {
-		if !file.IsDir() && strings.HasSuffix(file.Name(), "_recap.json") {
-			recapFile = file.Name()
-		}
-	}
-
-	// Set to temporary recap files
-	// recapFile = "demo-stack_recap.json"
-
-	data, err := os.ReadFile(fmt.Sprintf("./tmp/%s", recapFile))
+	data, err := os.ReadFile(filePath)
 	if err != nil {
 		panic(err)
 	}
-	var repoRecap Recap
+	var repoRecap MultiRepoRecap
 
 	json.Unmarshal(data, &repoRecap)
 

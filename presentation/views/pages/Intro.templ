@@ -16,14 +16,14 @@ func formatRecapDate(isoString string) string {
 	return dateStr
 }
 
-templ Intro(recap analyzer.Recap) {
+templ Intro(multiRepoRecap analyzer.MultiRepoRecap) {
 	@components.Slide() {
 		<div class="flex flex-col justify-center items-center min-h-screen">
-			<div class="text-8xl font-bold text-yellow-300">{ recap.Name }</div>
+			<div class="text-8xl font-bold text-yellow-300">{ multiRepoRecap.Name }</div>
 			@components.HelpText() {
-				<span>Analyzed on { formatRecapDate(recap.DateAnalyzed) }</span>
+				<span>Analyzed on { formatRecapDate(multiRepoRecap.DateAnalyzed) }</span>
 			}
-			@components.NextButton(helpers.GetNextButtonLink("/", recap))
+			@components.NextButton(helpers.GetNextButtonLink("/", multiRepoRecap))
 		</div>
 	}
 }
