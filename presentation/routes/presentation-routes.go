@@ -12,14 +12,14 @@ import (
 )
 
 func addPresentationRoutes(e *echo.Echo) {
-	recap, _ := analyzer.GetMultiRepoRecapFromTmpDir()
+	multiRepoRecap, _ := analyzer.GetMultiRepoRecapFromTmpDir()
 
 	e.GET("/", func(c echo.Context) error {
 		if !analyzer.HasRecapBeenRan() {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := pages.Intro(recap)
+		component := pages.Intro(multiRepoRecap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -35,7 +35,7 @@ func addPresentationRoutes(e *echo.Echo) {
 
 		page := c.Param("page")
 
-		titleSlideData := helpers.GetTitleSlideData(page, recap)
+		titleSlideData := helpers.GetMultiRepoTitleSlideData(page, multiRepoRecap)
 		component := pages.Title(pages.TitleParams{
 			Title:       titleSlideData.Title,
 			Description: titleSlideData.Description,
@@ -54,12 +54,7 @@ func addPresentationRoutes(e *echo.Echo) {
 			return t.RenderRepoNotFound(c)
 		}
 
-		titleSlideData := helpers.GetTitleSlideData(page, recap)
-		component := pages.Title(pages.TitleParams{
-			Title:       titleSlideData.Title,
-			Description: titleSlideData.Description,
-			NextBtnUrl:  titleSlideData.NextBtnUrl,
-		})
+		component := pages.ActiveAuthors()
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,
@@ -710,17 +705,17 @@ func addPresentationRoutes(e *echo.Echo) {
 	// 	)
 	// })
 
-	// e.GET("/end", func(c echo.Context) error {
-	// 	if !analyzer.HasRecapBeenRan() {
-	// 		return t.RenderRepoNotFound(c)
-	// 	}
+	e.GET("/end", func(c echo.Context) error {
+		if !analyzer.HasRecapBeenRan() {
+			return t.RenderRepoNotFound(c)
+		}
 
-	// 	component := pages.TheEnd()
-	// 	content := t.Render(t.RenderParams{
-	// 		C:         c,
-	// 		Component: component,
-	// 	})
+		component := pages.TheEnd()
+		content := t.Render(t.RenderParams{
+			C:         c,
+			Component: component,
+		})
 
-	// 	return c.HTML(http.StatusOK, content)
-	// })
+		return c.HTML(http.StatusOK, content)
+	})
 }

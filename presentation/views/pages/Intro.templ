@@ -23,7 +23,7 @@ templ Intro(multiRepoRecap analyzer.MultiRepoRecap) {
 			@components.HelpText() {
 				<span>Analyzed on { formatRecapDate(multiRepoRecap.DateAnalyzed) }</span>
 			}
-			@components.NextButton(helpers.GetNextButtonLink("/", multiRepoRecap))
+			@components.NextButton(helpers.GetMultiRepoNextButtonLink("/", multiRepoRecap))
 		</div>
 	}
 }

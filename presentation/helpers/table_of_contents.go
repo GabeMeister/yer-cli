@@ -9,6 +9,7 @@ import (
 
 var MULTI_REPO_TABLE_OF_CONTENTS = []string{
 	"/",
+	"/active-authors/title",
 	"/active-authors",
 	"/end",
 }
@@ -152,8 +153,17 @@ func GetSingleYearRepoTableOfContents(recap analyzer.Recap) []string {
 	})
 }
 
-func GetNextButtonLink(currUrl string, recap analyzer.MultiRepoRecap) string {
-	tableOfContents := GetMultiRepoTableOfContents(recap)
+func GetMultiRepoNextButtonLink(currUrl string, multiRepoRecap analyzer.MultiRepoRecap) string {
+	tableOfContents := GetMultiRepoTableOfContents(multiRepoRecap)
+	currPageIdx := utils.FindIndex(tableOfContents, func(page string) bool {
+		return page == currUrl
+	})
+	return tableOfContents[getNextIdx(currPageIdx, len(tableOfContents))]
+
+}
+
+func GetNextButtonLink(currUrl string, recap analyzer.Recap) string {
+	tableOfContents := GetSingleRepoTableOfContents(recap)
 	currPageIdx := utils.FindIndex(tableOfContents, func(page string) bool {
 		return page == currUrl
 	})
@@ -330,8 +340,8 @@ func GetTitleSlideData(page string, recap analyzer.Recap) TitleSlideData {
 	return data
 }
 
-func GetMultiRepoTitleSlideData(page string, recap analyzer.Recap) TitleSlideData {
-	nextBtnUrl := GetNextButtonLink(fmt.Sprintf("/%s/title", page), recap)
+func GetMultiRepoTitleSlideData(page string, recap analyzer.MultiRepoRecap) TitleSlideData {
+	nextBtnUrl := GetMultiRepoNextButtonLink(fmt.Sprintf("/%s/title", page), recap)
 	data := TitleSlideData{
 		Title:       "",
 		Description: "",
@@ -344,7 +354,7 @@ func GetMultiRepoTitleSlideData(page string, recap analyzer.Recap) TitleSlideDat
 		data.Description = "The amount of unique authors that contributed to your repos."
 
 	default:
-		panic(fmt.Sprintf("Unrecognized page for title slide: %s", page))
+		panic(fmt.Sprintf("Unrecognized page for multi repo recap title slide: %s", page))
 	}
 
 	return data

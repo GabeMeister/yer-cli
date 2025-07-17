@@ -109,7 +109,7 @@ func Intro(multiRepoRecap analyzer.MultiRepoRecap) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = components.NextButton(helpers.GetNextButtonLink("/", multiRepoRecap)).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = components.NextButton(helpers.GetMultiRepoNextButtonLink("/", multiRepoRecap)).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
