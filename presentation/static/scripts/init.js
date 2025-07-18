@@ -5,7 +5,7 @@ import { paintRacingBarChart } from "./racing-bar-chart.js";
 // HELPER FUNCTIONS
 //
 
-function handlePaintingBarCharts(elem) {
+function handlePaintingBarCharts(evt) {
   const barChartElem = document.getElementById("container");
   const racingBarChartElem = document.getElementById(
     "racing-bar-chart-container"
@@ -19,7 +19,10 @@ function handlePaintingBarCharts(elem) {
   }
 }
 
-function handleChartJS(elem) {
+function handleChartJS(evt) {
+  console.log("\n\n***** elem *****\n", evt.currentTarget, "\n\n");
+  const dataz = evt.dataset.chartJsData;
+  console.log("\n\n***** dataz *****\n", dataz, "\n\n");
   const ctx = document.getElementById("chart-js-canvas");
   if (ctx) {
     new Chart(ctx, {
