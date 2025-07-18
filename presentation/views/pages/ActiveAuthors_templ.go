@@ -8,9 +8,12 @@ package pages
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import "GabeMeister/yer-cli/presentation/views/components"
+import (
+	"GabeMeister/yer-cli/analyzer"
+	"GabeMeister/yer-cli/presentation/views/components"
+)
 
-func ActiveAuthors() templ.Component {
+func ActiveAuthors(multiRepoRecap analyzer.MultiRepoRecap) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -43,7 +46,7 @@ func ActiveAuthors() templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"flex flex-col items-center\"><div class=\"mt-2 text-7xl font-bold text-yellow-300 max-w-screen text-wrap flex items-center justify-center text-center px-16 leading-tight\t\">Active Authors</div></div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"w-2/3 h-3/4\"><canvas id=\"chart-js-canvas\"></canvas></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
