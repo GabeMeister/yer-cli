@@ -11,6 +11,8 @@ var MULTI_REPO_TABLE_OF_CONTENTS = []string{
 	"/",
 	"/active-authors/title",
 	"/active-authors",
+	"/file-count-by-repo/title",
+	"/file-count-by-repo",
 	"/end",
 }
 
@@ -352,6 +354,9 @@ func GetMultiRepoTitleSlideData(page string, recap analyzer.MultiRepoRecap) Titl
 	case "active-authors":
 		data.Title = "Active Authors"
 		data.Description = "The amount of unique authors that contributed to your repos."
+	case "file-count-by-repo":
+		data.Title = "File Count by Repo"
+		data.Description = "The unique file count of your repos."
 
 	default:
 		panic(fmt.Sprintf("Unrecognized page for multi repo recap title slide: %s", page))

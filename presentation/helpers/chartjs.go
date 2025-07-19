@@ -1,21 +1,49 @@
 package helpers
 
-func GetGroupedBarChartData(datasetNames []string, values [][]int) map[string]interface{} {
+import (
+	"GabeMeister/yer-cli/analyzer"
+	"sort"
+)
+
+type YearComparisonChartData struct {
+	Dataset    map[string]analyzer.YearComparison
+	YAxisLabel string
+}
+
+func GetYearComparisonChartData(data YearComparisonChartData) map[string]interface{} {
+	repos := []string{}
+	prevYearData := []int{}
+	currYearData := []int{}
+
+	for repo := range data.Dataset {
+		repos = append(repos, repo)
+	}
+
+	sort.Slice(repos, func(i, j int) bool {
+		return data.Dataset[repos[i]].Curr > data.Dataset[repos[j]].Curr
+	})
+
+	for _, repo := range repos {
+		item := data.Dataset[repo]
+		prevYearData = append(prevYearData, item.Prev)
+		currYearData = append(currYearData, item.Curr)
+	}
+
 	return map[string]interface{}{
 		"type": "bar",
 		"data": map[string]interface{}{
-			"labels": []string{"rb-frontend", "rb-backend", "demo-stack", "rb-docker"},
+			"labels": repos,
 			"datasets": []map[string]interface{}{
 				{
 					"label":           "2024",
-					"data":            []int{12, 19, 8, 15},
+					"data":            prevYearData,
 					"backgroundColor": "rgba(54, 162, 235, 0.5)",
 					"borderColor":     "rgba(54, 162, 235, 1)",
 					"borderWidth":     1,
 				},
 				{
 					"label":           "2025",
-					"data":            []int{8, 14, 12, 18},
+					"data":            currYearData,
 					"backgroundColor": "rgba(255, 99, 132, 0.5)",
 					"borderColor":     "rgba(255, 99, 132, 1)",
 					"borderWidth":     1,
@@ -29,12 +57,12 @@ func GetGroupedBarChartData(datasetNames []string, values [][]int) map[string]in
 					"beginAtZero": true,
 					"title": map[string]interface{}{
 						"display": true,
-						"text":    "Lines of Code",
+						"text":    data.YAxisLabel,
 					},
 				},
 			},
 			"barPercentage":      1.0,
-			"categoryPercentage": 0.2,
+			"categoryPercentage": 0.3,
 		},
 	}
 }

@@ -1,0 +1,31 @@
+package pages
+
+import (
+	"GabeMeister/yer-cli/analyzer"
+	"GabeMeister/yer-cli/presentation/helpers"
+	"GabeMeister/yer-cli/presentation/views/components"
+)
+
+func getFileCountByRepoChartData(multiRepoRecap analyzer.MultiRepoRecap) helpers.YearComparisonChartData {
+	result := helpers.YearComparisonChartData{
+		YAxisLabel: "File Count",
+		Dataset:    make(map[string]analyzer.YearComparison),
+	}
+	for repo, val := range multiRepoRecap.FileCountByRepo {
+		result.Dataset[string(repo)] = val
+	}
+
+	return result
+}
+
+templ FileCountByRepo(multiRepoRecap analyzer.MultiRepoRecap) {
+	@components.Slide() {
+		<div
+			class="w-2/3 h-3/4"
+			data-grouped-bar-chart-data={ helpers.Json(helpers.GetYearComparisonChartData(getFileCountByRepoChartData(multiRepoRecap))) }
+		>
+			<canvas id="grouped-bar-chart-canvas"></canvas>
+		</div>
+		@components.NextButton(helpers.GetMultiRepoNextButtonLink("/file-count-by-repo", multiRepoRecap))
+	}
+}

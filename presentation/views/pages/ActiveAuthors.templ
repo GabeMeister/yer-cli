@@ -6,10 +6,26 @@ import (
 	"GabeMeister/yer-cli/presentation/views/components"
 )
 
+func getActiveAuthorChartData(multiRepoRecap analyzer.MultiRepoRecap) helpers.YearComparisonChartData {
+	result := helpers.YearComparisonChartData{
+		YAxisLabel: "Active Authors",
+		Dataset:    make(map[string]analyzer.YearComparison),
+	}
+	for repo, val := range multiRepoRecap.ActiveAuthorsCountByRepo {
+		result.Dataset[string(repo)] = val
+	}
+
+	return result
+}
+
 templ ActiveAuthors(multiRepoRecap analyzer.MultiRepoRecap) {
 	@components.Slide() {
-		<div class="w-2/3 h-3/4" data-chart-js-data={ helpers.Json(helpers.GetGroupedBarChartData([]string{}, [][]int{})) }>
-			<canvas id="chart-js-canvas"></canvas>
+		<div
+			class="w-2/3 h-3/4"
+			data-grouped-bar-chart-data={ helpers.Json(helpers.GetYearComparisonChartData(getActiveAuthorChartData(multiRepoRecap))) }
+		>
+			<canvas id="grouped-bar-chart-canvas"></canvas>
 		</div>
+		@components.NextButton(helpers.GetMultiRepoNextButtonLink("/active-authors", multiRepoRecap))
 	}
 }
