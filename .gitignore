@@ -8,3 +8,5 @@ configs/
 .configs-backup/
 .env
 yer-cli
+.clj-kondo/
+.lsp/
