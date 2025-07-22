@@ -1,0 +1,35 @@
+package pages
+
+import (
+	"GabeMeister/yer-cli/analyzer"
+	"GabeMeister/yer-cli/presentation/helpers"
+	"GabeMeister/yer-cli/presentation/views/components"
+)
+
+func getTotalLinesOfCodePerWeekByRepoChartData(multiRepoRecap analyzer.MultiRepoRecap) map[string]interface{} {
+	chartData := helpers.LineChartData{
+		XAxisLabels: helpers.GetYearWeekNumbers(),
+		YAxisLabel:  "Lines of Code in Repo",
+	}
+
+	for repo, weeklyData := range multiRepoRecap.SizeOfRepoWeeklyByRepo {
+		chartData.Datasets = append(chartData.Datasets, helpers.LineChartDataset{
+			Name:    string(repo),
+			Dataset: weeklyData,
+		})
+	}
+
+	return helpers.GetLineChartData(chartData)
+}
+
+templ TotalLinesOfCodePerWeekByRepo(multiRepoRecap analyzer.MultiRepoRecap) {
+	@components.Slide() {
+		<div
+			class="w-2/3 h-3/4"
+			data-line-chart-data={ helpers.Json(getTotalLinesOfCodePerWeekByRepoChartData(multiRepoRecap)) }
+		>
+			<canvas id="line-chart-canvas"></canvas>
+		</div>
+		@components.NextButton(helpers.GetMultiRepoNextButtonLink("/total-lines-of-code-per-week-by-repo", multiRepoRecap))
+	}
+}

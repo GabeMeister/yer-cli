@@ -2,12 +2,36 @@ package helpers
 
 import (
 	"GabeMeister/yer-cli/analyzer"
+	"fmt"
 	"sort"
+	"strconv"
 )
 
 type YearComparisonChartData struct {
 	Dataset    map[string]analyzer.YearComparison
 	YAxisLabel string
+}
+
+type LineChartDataset struct {
+	Name    string
+	Dataset []int
+}
+
+type LineChartData struct {
+	Datasets    []LineChartDataset
+	XAxisLabels []string
+	YAxisLabel  string
+}
+
+type JSObject map[string]interface{}
+
+func GetYearWeekNumbers() []string {
+	nums := []string{}
+	for i := 1; i <= 52; i++ {
+		nums = append(nums, strconv.Itoa(i))
+	}
+
+	return nums
 }
 
 func GetYearComparisonChartData(data YearComparisonChartData) map[string]interface{} {
@@ -67,18 +91,74 @@ func GetYearComparisonChartData(data YearComparisonChartData) map[string]interfa
 	}
 }
 
-// options: {
-//   responsive: true,
-//   scales: {
-//     y: {
-//       beginAtZero: true,
-//       title: {
-//         display: true,
-//         text: "Lines of Code",
-//       },
-//     },
-//   },
-//   barPercentage: 1.0,
-//   categoryPercentage: 0.2,
-// },
-// }
+var COLORS = []string{
+	"rgb(255, 99, 132)",  // Red
+	"rgb(54, 162, 235)",  // Blue
+	"rgb(255, 205, 86)",  // Yellow
+	"rgb(75, 192, 192)",  // Teal
+	"rgb(153, 102, 255)", // Purple
+	"rgb(255, 159, 64)",  // Orange
+	"rgb(199, 199, 199)", // Grey
+	"rgb(83, 102, 255)",  // Indigo
+	"rgb(255, 99, 255)",  // Magenta
+	"rgb(99, 255, 132)",  // Green
+	"rgb(255, 192, 203)", // Pink
+	"rgb(173, 216, 230)", // Light Blue
+	"rgb(144, 238, 144)", // Light Green
+	"rgb(255, 218, 185)", // Peach
+	"rgb(221, 160, 221)", // Plum
+	"rgb(255, 228, 181)", // Moccasin
+	"rgb(176, 196, 222)", // Light Steel Blue
+	"rgb(255, 182, 193)", // Light Pink
+	"rgb(152, 251, 152)", // Pale Green
+	"rgb(255, 160, 122)", // Light Salmon
+}
+
+func GetLineChartData(data LineChartData) map[string]interface{} {
+	if len(data.XAxisLabels) != len(data.Datasets[0].Dataset) {
+		panic(fmt.Sprintf("Incorrect input for line chart data! %+v", data))
+	}
+
+	datasets := []JSObject{}
+	for i, item := range data.Datasets {
+		datasets = append(datasets, JSObject{
+			"label":       item.Name,
+			"data":        item.Dataset,
+			"fill":        false,
+			"borderColor": COLORS[i],
+			"tension":     0.1,
+		})
+	}
+
+	return map[string]interface{}{
+		"type": "line",
+		"data": map[string]interface{}{
+			"labels":   data.XAxisLabels,
+			"datasets": datasets,
+		},
+		"options": map[string]interface{}{
+			"responsive": true,
+			"scales": map[string]interface{}{
+				"y": map[string]interface{}{
+					"beginAtZero": true,
+					"title": map[string]interface{}{
+						"display": true,
+						"text":    "Y Axis Label",
+					},
+					"ticks": map[string]interface{}{
+						"color": "white",
+					},
+				},
+				"x": map[string]interface{}{
+					"title": map[string]interface{}{
+						"display": true,
+						"text":    "X Axis Label",
+					},
+					"ticks": map[string]interface{}{
+						"color": "white",
+					},
+				},
+			},
+		},
+	}
+}

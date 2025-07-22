@@ -34,6 +34,19 @@ function handleGroupedBarCharts(evt) {
   }
 }
 
+function handleLineCharts(evt) {
+  const elem = evt.detail.elt;
+  const dataElem = elem.querySelector("[data-line-chart-data]");
+
+  if (dataElem) {
+    const jsonStr = dataElem.getAttribute("data-line-chart-data");
+    const chartData = JSON.parse(jsonStr);
+    const canvasElem = elem.querySelector("#line-chart-canvas");
+
+    new Chart(canvasElem, chartData);
+  }
+}
+
 //
 // HTMX LOAD
 //
@@ -42,6 +55,7 @@ document.body.addEventListener("htmx:load", (evt) => {
   handleBarCharts(evt);
   handleRacingBarCharts(evt);
   handleGroupedBarCharts(evt);
+  handleLineCharts(evt);
 });
 
 //
