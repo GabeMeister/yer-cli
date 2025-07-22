@@ -8,8 +8,9 @@ import (
 
 func getTotalLinesOfCodePerWeekByRepoChartData(multiRepoRecap analyzer.MultiRepoRecap) map[string]interface{} {
 	chartData := helpers.LineChartData{
-		XAxisLabels: helpers.GetYearWeekNumbers(),
-		YAxisLabel:  "Lines of Code in Repo",
+		XAxisTickLabels: helpers.GetYearWeekNumbers(),
+		XAxisLabel:      "Week Number",
+		YAxisLabel:      "Lines of Code in Repo",
 	}
 
 	for repo, weeklyData := range multiRepoRecap.SizeOfRepoWeeklyByRepo {
@@ -24,6 +25,9 @@ func getTotalLinesOfCodePerWeekByRepoChartData(multiRepoRecap analyzer.MultiRepo
 
 templ TotalLinesOfCodePerWeekByRepo(multiRepoRecap analyzer.MultiRepoRecap) {
 	@components.Slide() {
+		@components.Title() {
+			Total Lines of Code per Week by Repo
+		}
 		<div
 			class="w-2/3 h-3/4"
 			data-line-chart-data={ helpers.Json(getTotalLinesOfCodePerWeekByRepoChartData(multiRepoRecap)) }

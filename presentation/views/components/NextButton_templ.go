@@ -42,7 +42,7 @@ func NextButton(href string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-push-url=\"true\" hx-target=\"body\" type=\"button\" id=\"next-btn\" hx-trigger=\"click, keydown[key==&#39;ArrowRight&#39;] from:body\" class=\"cursor-pointer mt-12 text-lg text-blue-100 transition duration-800 bg-gray-600 hover:bg-gray-700 border-2 border-solid border-gray-100 rounded-md px-4 py-1\"><span>Next</span> <i class=\"ml-1 fa-solid fa-arrow-right\"></i></button>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-push-url=\"true\" hx-target=\"body\" type=\"button\" id=\"next-btn\" hx-trigger=\"click, keydown[key==&#39;ArrowRight&#39;] from:body\" class=\"absolute bottom-10 cursor-pointer mt-12 text-lg text-blue-100 transition duration-800 bg-gray-600 hover:bg-gray-700 border-2 border-solid border-gray-100 rounded-md px-4 py-1\"><span>Next</span> <i class=\"ml-1 fa-solid fa-arrow-right\"></i></button>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

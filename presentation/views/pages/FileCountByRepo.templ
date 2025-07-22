@@ -20,8 +20,11 @@ func getFileCountByRepoChartData(multiRepoRecap analyzer.MultiRepoRecap) helpers
 
 templ FileCountByRepo(multiRepoRecap analyzer.MultiRepoRecap) {
 	@components.Slide() {
+		@components.Title() {
+			File Count by Repo	
+		}
 		<div
-			class="w-2/3 h-3/4"
+			class="w-3/4 h-3/4"
 			data-grouped-bar-chart-data={ helpers.Json(helpers.GetYearComparisonChartData(getFileCountByRepoChartData(multiRepoRecap))) }
 		>
 			<canvas id="grouped-bar-chart-canvas"></canvas>

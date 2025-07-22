@@ -20,6 +20,9 @@ func getTotalLinesOfCodeByRepoChartData(multiRepoRecap analyzer.MultiRepoRecap) 
 
 templ TotalLinesOfCodeByRepo(multiRepoRecap analyzer.MultiRepoRecap) {
 	@components.Slide() {
+		@components.Title() {
+			Total Lines of Code by Repo
+		}
 		<div
 			class="w-2/3 h-3/4"
 			data-grouped-bar-chart-data={ helpers.Json(helpers.GetYearComparisonChartData(getTotalLinesOfCodeByRepoChartData(multiRepoRecap))) }

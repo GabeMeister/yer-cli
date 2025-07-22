@@ -20,6 +20,9 @@ func getActiveAuthorChartData(multiRepoRecap analyzer.MultiRepoRecap) helpers.Ye
 
 templ ActiveAuthors(multiRepoRecap analyzer.MultiRepoRecap) {
 	@components.Slide() {
+		@components.Title() {
+			Active Authors
+		}
 		<div
 			class="w-2/3 h-3/4"
 			data-grouped-bar-chart-data={ helpers.Json(helpers.GetYearComparisonChartData(getActiveAuthorChartData(multiRepoRecap))) }

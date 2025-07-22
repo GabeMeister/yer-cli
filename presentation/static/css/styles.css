@@ -624,6 +624,14 @@ video {
   bottom: 0.25rem;
 }
 
+.bottom-10 {
+  bottom: 2.5rem;
+}
+
+.bottom-2 {
+  bottom: 0.5rem;
+}
+
 .left-0 {
   left: 0px;
 }
@@ -1534,6 +1542,11 @@ video {
   padding-bottom: 1rem;
 }
 
+.py-6 {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
 .py-8 {
   padding-top: 2rem;
   padding-bottom: 2rem;
@@ -1545,6 +1558,10 @@ video {
 
 .pb-6 {
   padding-bottom: 1.5rem;
+}
+
+.pt-24 {
+  padding-top: 6rem;
 }
 
 .pt-32 {

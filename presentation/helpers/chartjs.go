@@ -18,9 +18,10 @@ type LineChartDataset struct {
 }
 
 type LineChartData struct {
-	Datasets    []LineChartDataset
-	XAxisLabels []string
-	YAxisLabel  string
+	Datasets        []LineChartDataset
+	XAxisTickLabels []string
+	YAxisLabel      string
+	XAxisLabel      string
 }
 
 type JSObject map[string]interface{}
@@ -82,6 +83,22 @@ func GetYearComparisonChartData(data YearComparisonChartData) map[string]interfa
 					"title": map[string]interface{}{
 						"display": true,
 						"text":    data.YAxisLabel,
+						"color":   "white",
+					},
+					"ticks": map[string]interface{}{
+						"color": "white",
+					},
+				},
+				"x": map[string]interface{}{
+					"ticks": map[string]interface{}{
+						"color": "white",
+					},
+				},
+			},
+			"plugins": map[string]interface{}{
+				"legend": map[string]interface{}{
+					"labels": map[string]interface{}{
+						"color": "white",
 					},
 				},
 			},
@@ -115,7 +132,7 @@ var COLORS = []string{
 }
 
 func GetLineChartData(data LineChartData) map[string]interface{} {
-	if len(data.XAxisLabels) != len(data.Datasets[0].Dataset) {
+	if len(data.XAxisTickLabels) != len(data.Datasets[0].Dataset) {
 		panic(fmt.Sprintf("Incorrect input for line chart data! %+v", data))
 	}
 
@@ -133,7 +150,7 @@ func GetLineChartData(data LineChartData) map[string]interface{} {
 	return map[string]interface{}{
 		"type": "line",
 		"data": map[string]interface{}{
-			"labels":   data.XAxisLabels,
+			"labels":   data.XAxisTickLabels,
 			"datasets": datasets,
 		},
 		"options": map[string]interface{}{
@@ -143,7 +160,8 @@ func GetLineChartData(data LineChartData) map[string]interface{} {
 					"beginAtZero": true,
 					"title": map[string]interface{}{
 						"display": true,
-						"text":    "Y Axis Label",
+						"text":    data.YAxisLabel,
+						"color":   "white",
 					},
 					"ticks": map[string]interface{}{
 						"color": "white",
@@ -152,9 +170,17 @@ func GetLineChartData(data LineChartData) map[string]interface{} {
 				"x": map[string]interface{}{
 					"title": map[string]interface{}{
 						"display": true,
-						"text":    "X Axis Label",
+						"text":    data.XAxisLabel,
+						"color":   "white",
 					},
 					"ticks": map[string]interface{}{
+						"color": "white",
+					},
+				},
+			},
+			"plugins": map[string]interface{}{
+				"legend": map[string]interface{}{
+					"labels": map[string]interface{}{
 						"color": "white",
 					},
 				},

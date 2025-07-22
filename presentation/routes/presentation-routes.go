@@ -105,6 +105,20 @@ func addPresentationRoutes(e *echo.Echo) {
 		return c.HTML(http.StatusOK, content)
 	})
 
+	e.GET("/commits-made-by-repo", func(c echo.Context) error {
+		if !analyzer.HasRecapBeenRan() {
+			return t.RenderRepoNotFound(c)
+		}
+
+		component := pages.CommitsMadeByRepo(multiRepoRecap)
+		content := t.Render(t.RenderParams{
+			C:         c,
+			Component: component,
+		})
+
+		return c.HTML(http.StatusOK, content)
+	})
+
 	// e.GET("/shortest-commit-message-curr-year/title", func(c echo.Context) error {
 	// 	if !analyzer.HasRecapBeenRan() {
 	// 		return t.RenderRepoNotFound(c)
