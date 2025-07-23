@@ -35,21 +35,21 @@ templ StandardLayout() {
 			//
 			<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
 			//
-			// CUSTOM SCRIPTS
-			// 
-			<script defer type="module" src="/scripts/presentation.js"></script>
-			<script src="/scripts/config-page.js"></script>
-			//
 			// CUSTOM STYLING
 			// 
 			<link rel="stylesheet" href="/css/styles.css"/>
 		</head>
 		<body class="h-screen overflow-y-hidden">
-			<div id="root" class="overflow-y-scroll h-screen">
+			<div id="root" class="h-screen">
 				{ children... }
 			</div>
 			<div id="modal-root"></div>
 			<div id="toast"></div>
+			//
+			// CUSTOM SCRIPTS
+			// 
+			<script defer type="module" src="/scripts/presentation.js"></script>
+			<script src="/scripts/config-page.js"></script>
 		</body>
 	</html>
 }

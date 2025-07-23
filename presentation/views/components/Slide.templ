@@ -1,7 +1,9 @@
 package components
 
 templ Slide() {
-	<div class="flex flex-col items-center min-h-screen min-w-screen bg-gray-800">
-		{ children... }
+	<div class="slide h-screen max-h-screen min-w-screen bg-gray-800  ">
+		<div class="h-5/6 flex flex-col items-center gap-3 xl:gap-12">
+			{ children... }
+		</div>
 	</div>
 }

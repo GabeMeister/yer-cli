@@ -20,8 +20,11 @@ func getCommitsMadeByRepoChartData(multiRepoRecap analyzer.MultiRepoRecap) helpe
 
 templ CommitsMadeByRepo(multiRepoRecap analyzer.MultiRepoRecap) {
 	@components.Slide() {
+		@components.Title() {
+			Commits Made by Repo
+		}
 		<div
-			class="w-2/3 h-3/4"
+			class="w-full max-h-[900px] px-6 flex justify-center"
 			data-grouped-bar-chart-data={ helpers.Json(helpers.GetYearComparisonChartData(getCommitsMadeByRepoChartData(multiRepoRecap))) }
 		>
 			<canvas id="grouped-bar-chart-canvas"></canvas>

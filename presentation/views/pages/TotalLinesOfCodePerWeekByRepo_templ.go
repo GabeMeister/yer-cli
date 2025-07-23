@@ -86,7 +86,7 @@ func TotalLinesOfCodePerWeekByRepo(multiRepoRecap analyzer.MultiRepoRecap) templ
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" <div class=\"w-2/3 h-3/4\" data-line-chart-data=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" <div class=\"w-full max-h-[900px] px-6 flex justify-center\" data-line-chart-data=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

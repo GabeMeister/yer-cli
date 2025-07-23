@@ -184,3 +184,11 @@
 .fade-in.opacity-50 {
   animation: fade-in-animation-opacity-50 0.3s ease-in forwards;
 }
+
+#root {
+  overflow-y: scroll;
+}
+
+#root:has(.slide) {
+  overflow-y: auto;
+}
