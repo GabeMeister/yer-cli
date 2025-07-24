@@ -1,0 +1,41 @@
+package pages
+
+import (
+	"GabeMeister/yer-cli/analyzer"
+	"GabeMeister/yer-cli/presentation/helpers"
+	"GabeMeister/yer-cli/presentation/views/components"
+)
+
+func getCommitsMadeByAuthorChartData(multiRepoRecap analyzer.MultiRepoRecap) helpers.YearComparisonChartData {
+	result := helpers.YearComparisonChartData{
+		YAxisLabel: "Commits Made",
+		Dataset:    make(map[string]analyzer.YearComparison),
+	}
+
+	chartLimit := 12
+
+	for author, val := range multiRepoRecap.CommitsMadeByAuthor {
+		shortAuthor := string(author)
+		if len(shortAuthor) > chartLimit {
+			shortAuthor = shortAuthor[:chartLimit] + "..."
+		}
+		result.Dataset[string(shortAuthor)] = *val
+	}
+
+	return result
+}
+
+templ CommitsMadeByAuthor(multiRepoRecap analyzer.MultiRepoRecap) {
+	@components.Slide() {
+		@components.Title() {
+			Commits Made by Repo
+		}
+		<div
+			class="w-full max-h-[900px] px-6 flex justify-center"
+			data-grouped-bar-chart-data={ helpers.Json(helpers.GetYearComparisonChartData(getCommitsMadeByAuthorChartData(multiRepoRecap))) }
+		>
+			<canvas id="grouped-bar-chart-canvas"></canvas>
+		</div>
+		@components.NextButton(helpers.GetMultiRepoNextButtonLink("/commits-made-by-author", multiRepoRecap))
+	}
+}
