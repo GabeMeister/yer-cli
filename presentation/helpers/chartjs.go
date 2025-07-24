@@ -4,7 +4,6 @@ import (
 	"GabeMeister/yer-cli/analyzer"
 	"fmt"
 	"sort"
-	"strconv"
 )
 
 type YearComparisonChartData struct {
@@ -26,13 +25,29 @@ type LineChartData struct {
 
 type JSObject map[string]interface{}
 
-func GetYearWeekNumbers() []string {
+func GetMonthsThroughYear() []string {
 	nums := []string{}
 	for i := 1; i <= 52; i++ {
-		nums = append(nums, strconv.Itoa(i))
+		nums = append(nums, WeekToMonth(i))
 	}
 
 	return nums
+}
+
+func WeekToMonth(weekNum int) string {
+	months := []string{"Jan", "Feb", "Mar", "Apr", "May", "Jun",
+		"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"}
+
+	// Approximate week to month (4.33 weeks per month on average)
+	monthIndex := (weekNum - 1) / 4
+	if monthIndex > 11 {
+		monthIndex = 11
+	}
+	if monthIndex < 0 {
+		monthIndex = 0
+	}
+
+	return months[monthIndex]
 }
 
 func GetYearComparisonChartData(data YearComparisonChartData) map[string]interface{} {
