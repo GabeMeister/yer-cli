@@ -78,7 +78,7 @@ func CommitsMadeByAuthor(multiRepoRecap analyzer.MultiRepoRecap) templ.Component
 					}()
 				}
 				ctx = templ.InitializeContext(ctx)
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("Commits Made by Repo")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("Commits Made by Author")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}

@@ -11,6 +11,12 @@ type YearComparisonChartData struct {
 	YAxisLabel string
 }
 
+type ChartJSBarChartData struct {
+	Dataset    map[string]int
+	YAxisLabel string
+	XAxisLabel string
+}
+
 type LineChartDataset struct {
 	Name    string
 	Dataset []int
@@ -48,6 +54,70 @@ func WeekToMonth(weekNum int) string {
 	}
 
 	return months[monthIndex]
+}
+
+func GetBarChartData(data ChartJSBarChartData) map[string]interface{} {
+	repos := []string{}
+	currYearData := []int{}
+
+	for repo := range data.Dataset {
+		repos = append(repos, repo)
+	}
+
+	sort.Slice(repos, func(i, j int) bool {
+		return data.Dataset[repos[i]] > data.Dataset[repos[j]]
+	})
+
+	for _, repo := range repos {
+		item := data.Dataset[repo]
+		currYearData = append(currYearData, item)
+	}
+
+	return map[string]interface{}{
+		"type": "bar",
+		"data": map[string]interface{}{
+			"labels": repos,
+			"datasets": []map[string]interface{}{
+				{
+					"label":           "2025",
+					"data":            currYearData,
+					"backgroundColor": "rgba(255, 99, 132, 0.5)",
+					"borderColor":     "rgba(255, 99, 132, 1)",
+					"borderWidth":     1,
+				},
+			},
+		},
+		"options": map[string]interface{}{
+			"responsive": true,
+			"scales": map[string]interface{}{
+				"y": map[string]interface{}{
+					"beginAtZero": true,
+					"title": map[string]interface{}{
+						"display": true,
+						"text":    data.YAxisLabel,
+						"color":   "white",
+					},
+					"ticks": map[string]interface{}{
+						"color": "white",
+					},
+				},
+				"x": map[string]interface{}{
+					"ticks": map[string]interface{}{
+						"color": "white",
+					},
+				},
+			},
+			"plugins": map[string]interface{}{
+				"legend": map[string]interface{}{
+					"labels": map[string]interface{}{
+						"color": "white",
+					},
+				},
+			},
+			"barPercentage":      1.0,
+			"categoryPercentage": 0.5,
+		},
+	}
 }
 
 func GetYearComparisonChartData(data YearComparisonChartData) map[string]interface{} {
