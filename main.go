@@ -46,9 +46,12 @@ func main() {
 
 	var test *bool
 	var calculateOnly *bool
+	prodCalculateOnly := false
 	if utils.IsDevMode() {
 		test = flag.Bool("t", false, "Run test")
 		calculateOnly = flag.Bool("c", false, "Just run calculations while analyzing, and skip gathering metrics step")
+	} else {
+		calculateOnly = &prodCalculateOnly
 	}
 
 	flag.Usage = customUsage
