@@ -81,7 +81,7 @@ func ActiveAuthors(multiRepoRecap analyzer.MultiRepoRecap) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" <div class=\"w-full max-h-[900px] px-6 flex justify-center\" data-grouped-bar-chart-data=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" <div class=\"chart-js-container\" data-grouped-bar-chart-data=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

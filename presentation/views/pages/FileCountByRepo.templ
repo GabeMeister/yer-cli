@@ -24,7 +24,7 @@ templ FileCountByRepo(multiRepoRecap analyzer.MultiRepoRecap) {
 			File Count by Repo	
 		}
 		<div
-			class="w-full max-h-[900px] px-6 flex justify-center"
+			class="chart-js-container"
 			data-grouped-bar-chart-data={ helpers.Json(helpers.GetYearComparisonChartData(getFileCountByRepoChartData(multiRepoRecap))) }
 		>
 			<canvas id="grouped-bar-chart-canvas"></canvas>

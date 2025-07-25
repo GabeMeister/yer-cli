@@ -192,3 +192,7 @@
 #root:has(.slide) {
   overflow-y: auto;
 }
+
+.chart-js-container {
+  @apply flex justify-center relative h-[80vh] w-[80vw];
+}

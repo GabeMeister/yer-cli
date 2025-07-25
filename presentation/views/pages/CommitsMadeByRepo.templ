@@ -24,7 +24,7 @@ templ CommitsMadeByRepo(multiRepoRecap analyzer.MultiRepoRecap) {
 			Commits Made by Repo
 		}
 		<div
-			class="w-full max-h-[900px] px-6 flex justify-center"
+			class="chart-js-container"
 			data-grouped-bar-chart-data={ helpers.Json(helpers.GetYearComparisonChartData(getCommitsMadeByRepoChartData(multiRepoRecap))) }
 		>
 			<canvas id="grouped-bar-chart-canvas"></canvas>

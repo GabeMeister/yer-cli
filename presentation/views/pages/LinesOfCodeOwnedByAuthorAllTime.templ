@@ -29,10 +29,10 @@ func getLinesOfCodeOwnedByAuthorAllTimeData(multiRepoRecap analyzer.MultiRepoRec
 templ LinesOfCodeOwnedByAuthorAllTime(multiRepoRecap analyzer.MultiRepoRecap) {
 	@components.Slide() {
 		@components.Title() {
-			Commits Made by Repo
+			Lines of Code Owned by Author
 		}
 		<div
-			class="w-full max-h-[900px] px-6 flex justify-center"
+			class="chart-js-container"
 			data-grouped-bar-chart-data={ helpers.Json(helpers.GetBarChartData(getLinesOfCodeOwnedByAuthorAllTimeData(multiRepoRecap))) }
 		>
 			<canvas id="grouped-bar-chart-canvas"></canvas>
