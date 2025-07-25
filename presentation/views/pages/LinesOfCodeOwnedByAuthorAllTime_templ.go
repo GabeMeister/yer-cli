@@ -94,9 +94,11 @@ func LinesOfCodeOwnedByAuthorAllTime(multiRepoRecap analyzer.MultiRepoRecap) tem
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var4 string
-			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(helpers.Json(helpers.GetBarChartData(getLinesOfCodeOwnedByAuthorAllTimeData(multiRepoRecap))))
+			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(helpers.Json(helpers.GetBarChartData(getLinesOfCodeOwnedByAuthorAllTimeData(multiRepoRecap), helpers.BarChartOptions{
+				Sort: true,
+			})))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/LinesOfCodeOwnedByAuthorAllTime.templ`, Line: 36, Col: 126}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/LinesOfCodeOwnedByAuthorAllTime.templ`, Line: 38, Col: 6}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {

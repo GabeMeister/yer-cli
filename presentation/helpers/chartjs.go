@@ -31,6 +31,24 @@ type LineChartData struct {
 
 type JSObject map[string]interface{}
 
+func GetMonthsOfYear() []string {
+	return []string{
+		"Jan",
+		"Feb",
+		"Mar",
+		"Apr",
+		"May",
+		"Jun",
+		"Jul",
+		"Aug",
+		"Sep",
+		"Oct",
+		"Nov",
+		"Dec",
+	}
+}
+
+// For each week of the year, get the month abbreviation that the week falls in
 func GetMonthsThroughYear() []string {
 	nums := []string{}
 	for i := 1; i <= 52; i++ {
@@ -56,19 +74,26 @@ func WeekToMonth(weekNum int) string {
 	return months[monthIndex]
 }
 
-func GetBarChartData(data ChartJSBarChartData) map[string]interface{} {
-	repos := []string{}
+type BarChartOptions struct {
+	Sort bool
+}
+
+func GetBarChartData(data ChartJSBarChartData, options BarChartOptions) map[string]interface{} {
+	items := []string{}
 	currYearData := []int{}
 
-	for repo := range data.Dataset {
-		repos = append(repos, repo)
+	// TODO: figure out how to deterministically display data without sorting (whoops)
+	for item := range data.Dataset {
+		items = append(items, item)
 	}
 
-	sort.Slice(repos, func(i, j int) bool {
-		return data.Dataset[repos[i]] > data.Dataset[repos[j]]
-	})
+	if options.Sort {
+		sort.Slice(items, func(i, j int) bool {
+			return data.Dataset[items[i]] > data.Dataset[items[j]]
+		})
+	}
 
-	for _, repo := range repos {
+	for _, repo := range items {
 		item := data.Dataset[repo]
 		currYearData = append(currYearData, item)
 	}
@@ -76,7 +101,7 @@ func GetBarChartData(data ChartJSBarChartData) map[string]interface{} {
 	return map[string]interface{}{
 		"type": "bar",
 		"data": map[string]interface{}{
-			"labels": repos,
+			"labels": items,
 			"datasets": []map[string]interface{}{
 				{
 					"label":           "2025",
