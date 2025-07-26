@@ -133,14 +133,6 @@ templ ConfigSetup(props ConfigSetupProps) {
 						<div
 							class="w-full"
 						>
-							<label for="exclude-authors" class="font-medium">Authors to Exclude from Recap</label>
-							@ConfigSetupPage.ExcludeAuthors(ConfigSetupPage.ExcludeAuthorsProps{
-								Authors: props.ExcludeAuthors,
-							})
-						</div>
-						<div
-							class="w-full"
-						>
 							<input
 								type="checkbox"
 								name="analyze-file-blames"
