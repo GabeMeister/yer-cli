@@ -26,4 +26,4 @@ echo Year End Recap has been installed!
 echo
 echo Run it with:
 echo
-echo ./year-end-recap -a
+echo ./year-end-recap -s

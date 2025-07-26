@@ -8,6 +8,7 @@ import (
 	"math"
 	"os"
 	"path/filepath"
+	"slices"
 	"sort"
 	"strings"
 	"time"
@@ -652,6 +653,12 @@ func (repo *RepoConfig) GetDuplicateAuthorList() []string {
 }
 
 func (r *RepoConfig) getRealAuthorName(authorName string) string {
+	// The quick and dirty way to "anonymize authors" is to just group them under
+	// the name "Other"
+	if slices.Contains(r.ExcludeAuthors, authorName) {
+		return "Other"
+	}
+
 	for _, dupGroup := range r.DuplicateAuthors {
 		for _, dup := range dupGroup.Duplicates {
 			if authorName == dup {
