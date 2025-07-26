@@ -46,7 +46,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 			config := analyzer.MustGetConfig(analyzer.DEFAULT_CONFIG_FILE)
 
 			url := fmt.Sprintf("/add-repo?id=%d", config.Repos[0].Id)
-			c.Redirect(301, url)
+			c.Redirect(307, url)
 
 			return nil
 		}
