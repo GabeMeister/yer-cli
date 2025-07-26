@@ -1,0 +1,34 @@
+package pages
+
+import (
+	"GabeMeister/yer-cli/analyzer"
+	"GabeMeister/yer-cli/presentation/helpers"
+	"GabeMeister/yer-cli/presentation/views/components"
+)
+
+func getMergesToMasterByRepoData(multiRepoRecap analyzer.MultiRepoRecap) helpers.YearComparisonChartData {
+	result := helpers.YearComparisonChartData{
+		YAxisLabel: "Merges",
+		Dataset:    make(map[string]analyzer.YearComparison),
+	}
+	for repo, val := range multiRepoRecap.MergesToMasterByRepo {
+		result.Dataset[string(repo)] = val
+	}
+
+	return result
+}
+
+templ MergesToMasterByRepo(multiRepoRecap analyzer.MultiRepoRecap) {
+	@components.Slide() {
+		@components.Title() {
+			Merges to Master by Repo
+		}
+		<div
+			class="chart-js-container"
+			data-grouped-bar-chart-data={ helpers.Json(helpers.GetYearComparisonChartData(getMergesToMasterByRepoData(multiRepoRecap))) }
+		>
+			<canvas id="grouped-bar-chart-canvas"></canvas>
+		</div>
+		@components.NextButton(helpers.GetMultiRepoNextButtonLink("/merges-to-master-by-repo", multiRepoRecap))
+	}
+}
