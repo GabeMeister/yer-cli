@@ -194,5 +194,5 @@
 }
 
 .chart-js-container {
-  @apply flex justify-center relative h-[80vh] w-[80vw];
+  @apply flex justify-center relative h-[70vh] w-[80vw];
 }

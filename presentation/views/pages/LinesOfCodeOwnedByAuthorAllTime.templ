@@ -10,7 +10,7 @@ func getLinesOfCodeOwnedByAuthorAllTimeData(multiRepoRecap analyzer.MultiRepoRec
 	result := helpers.ChartJSBarChartData{
 		YAxisLabel: "Lines of Code",
 		XAxisLabel: "Author",
-		Dataset:    make(map[string]int),
+		Dataset:    []helpers.BarChartItem{},
 	}
 
 	chartLimit := 12
@@ -20,7 +20,10 @@ func getLinesOfCodeOwnedByAuthorAllTimeData(multiRepoRecap analyzer.MultiRepoRec
 		if len(shortAuthor) > chartLimit {
 			shortAuthor = shortAuthor[:chartLimit] + "..."
 		}
-		result.Dataset[string(shortAuthor)] = val
+		result.Dataset = append(result.Dataset, helpers.BarChartItem{
+			Name:  string(shortAuthor),
+			Value: val,
+		})
 	}
 
 	return result

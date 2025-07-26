@@ -161,6 +161,34 @@ func addPresentationRoutes(e *echo.Echo) {
 		return c.HTML(http.StatusOK, content)
 	})
 
+	e.GET("/aggregate-commits-by-week-day", func(c echo.Context) error {
+		if !analyzer.HasRecapBeenRan() {
+			return t.RenderRepoNotFound(c)
+		}
+
+		component := pages.AggregateCommitsByWeekDay(multiRepoRecap)
+		content := t.Render(t.RenderParams{
+			C:         c,
+			Component: component,
+		})
+
+		return c.HTML(http.StatusOK, content)
+	})
+
+	e.GET("/aggregate-commits-by-hour", func(c echo.Context) error {
+		if !analyzer.HasRecapBeenRan() {
+			return t.RenderRepoNotFound(c)
+		}
+
+		component := pages.AggregateCommitsByHour(multiRepoRecap)
+		content := t.Render(t.RenderParams{
+			C:         c,
+			Component: component,
+		})
+
+		return c.HTML(http.StatusOK, content)
+	})
+
 	// e.GET("/shortest-commit-message-curr-year/title", func(c echo.Context) error {
 	// 	if !analyzer.HasRecapBeenRan() {
 	// 		return t.RenderRepoNotFound(c)

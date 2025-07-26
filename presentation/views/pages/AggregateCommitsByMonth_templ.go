@@ -19,13 +19,16 @@ func getAggregateCommitsByMonthData(multiRepoRecap analyzer.MultiRepoRecap) map[
 	result := helpers.ChartJSBarChartData{
 		YAxisLabel: "Commits",
 		XAxisLabel: "Month",
-		Dataset:    make(map[string]int),
+		Dataset:    []helpers.BarChartItem{},
 	}
 	months := helpers.GetMonthsOfYear()
 
 	for idx, commits := range multiRepoRecap.AggregateCommitsByMonth {
 		month := months[idx]
-		result.Dataset[month] = commits
+		result.Dataset = append(result.Dataset, helpers.BarChartItem{
+			Name:  month,
+			Value: commits,
+		})
 	}
 
 	return helpers.GetBarChartData(result, helpers.BarChartOptions{
@@ -95,7 +98,7 @@ func AggregateCommitsByMonth(multiRepoRecap analyzer.MultiRepoRecap) templ.Compo
 			var templ_7745c5c3_Var4 string
 			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(helpers.Json(getAggregateCommitsByMonthData(multiRepoRecap)))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/AggregateCommitsByMonth.templ`, Line: 35, Col: 93}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/AggregateCommitsByMonth.templ`, Line: 38, Col: 93}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {

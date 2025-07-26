@@ -873,8 +873,8 @@ video {
   height: 500px;
 }
 
-.h-\[80vh\] {
-  height: 80vh;
+.h-\[70vh\] {
+  height: 70vh;
 }
 
 .h-full {
@@ -2331,7 +2331,7 @@ video {
 .chart-js-container {
   position: relative;
   display: flex;
-  height: 80vh;
+  height: 70vh;
   width: 80vw;
   justify-content: center;
 }

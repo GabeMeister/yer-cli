@@ -25,6 +25,10 @@ var MULTI_REPO_TABLE_OF_CONTENTS = []string{
 	"/lines-of-code-owned-by-author-all-time",
 	"/aggregate-commits-by-month/title",
 	"/aggregate-commits-by-month",
+	"/aggregate-commits-by-week-day/title",
+	"/aggregate-commits-by-week-day",
+	"/aggregate-commits-by-hour/title",
+	"/aggregate-commits-by-hour",
 	"/end",
 }
 
@@ -387,6 +391,12 @@ func GetMultiRepoTitleSlideData(page string, recap analyzer.MultiRepoRecap) Titl
 	case "aggregate-commits-by-month":
 		data.Title = "Aggregate Commits by Month"
 		data.Description = "The total commits made in all repos, broken out by month."
+	case "aggregate-commits-by-week-day":
+		data.Title = "Aggregate Commits by Week Day"
+		data.Description = "The total commits made in all repos, broken out by week day."
+	case "aggregate-commits-by-hour":
+		data.Title = "Aggregate Commits by Hour"
+		data.Description = "The total commits made in all repos, broken out by hour."
 
 	default:
 		panic(fmt.Sprintf("Unrecognized page for multi repo recap title slide: %s", page))

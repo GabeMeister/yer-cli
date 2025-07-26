@@ -11,8 +11,13 @@ type YearComparisonChartData struct {
 	YAxisLabel string
 }
 
+type BarChartItem struct {
+	Name  string
+	Value int
+}
+
 type ChartJSBarChartData struct {
-	Dataset    map[string]int
+	Dataset    []BarChartItem
 	YAxisLabel string
 	XAxisLabel string
 }
@@ -48,6 +53,47 @@ func GetMonthsOfYear() []string {
 	}
 }
 
+func GetWeekDays() []string {
+	return []string{
+		"Sun",
+		"Mon",
+		"Tues",
+		"Wed",
+		"Thur",
+		"Fri",
+		"Sat",
+	}
+}
+
+func GetHoursOfDay() []string {
+	return []string{
+		"12am",
+		"1am",
+		"2am",
+		"3am",
+		"4am",
+		"5am",
+		"6am",
+		"7am",
+		"8am",
+		"9am",
+		"10am",
+		"11am",
+		"12pm",
+		"1pm",
+		"2pm",
+		"3pm",
+		"4pm",
+		"5pm",
+		"6pm",
+		"7pm",
+		"8pm",
+		"9pm",
+		"10pm",
+		"11pm",
+	}
+}
+
 // For each week of the year, get the month abbreviation that the week falls in
 func GetMonthsThroughYear() []string {
 	nums := []string{}
@@ -79,33 +125,29 @@ type BarChartOptions struct {
 }
 
 func GetBarChartData(data ChartJSBarChartData, options BarChartOptions) map[string]interface{} {
-	items := []string{}
-	currYearData := []int{}
-
-	// TODO: figure out how to deterministically display data without sorting (whoops)
-	for item := range data.Dataset {
-		items = append(items, item)
-	}
+	dataset := data.Dataset
 
 	if options.Sort {
-		sort.Slice(items, func(i, j int) bool {
-			return data.Dataset[items[i]] > data.Dataset[items[j]]
+		sort.Slice(dataset, func(i int, j int) bool {
+			return dataset[i].Value > dataset[j].Value
 		})
 	}
 
-	for _, repo := range items {
-		item := data.Dataset[repo]
-		currYearData = append(currYearData, item)
+	labels := []string{}
+	values := []int{}
+	for _, item := range dataset {
+		labels = append(labels, item.Name)
+		values = append(values, item.Value)
 	}
 
 	return map[string]interface{}{
 		"type": "bar",
 		"data": map[string]interface{}{
-			"labels": items,
+			"labels": labels,
 			"datasets": []map[string]interface{}{
 				{
 					"label":           "2025",
-					"data":            currYearData,
+					"data":            values,
 					"backgroundColor": "rgba(255, 99, 132, 0.5)",
 					"borderColor":     "rgba(255, 99, 132, 1)",
 					"borderWidth":     1,
