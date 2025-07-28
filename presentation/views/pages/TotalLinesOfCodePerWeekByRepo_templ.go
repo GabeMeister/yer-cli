@@ -76,7 +76,7 @@ func TotalLinesOfCodePerWeekByRepo(multiRepoRecap analyzer.MultiRepoRecap) templ
 					}()
 				}
 				ctx = templ.InitializeContext(ctx)
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("Total Lines of Code per Week by Repo")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("Total Lines of Code per Week")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}

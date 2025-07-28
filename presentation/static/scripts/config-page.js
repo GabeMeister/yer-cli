@@ -11,6 +11,7 @@ function initIncludeFileExtensionsInput() {
         { label: "JavaScript", value: "cjs" },
         { label: "JavaScript", value: "jsx" },
         { label: "JavaScript", value: "javascript" },
+        { label: "JSON", value: "json" },
         { label: "Python", value: "py" },
         { label: "Python", value: "pyw" },
         { label: "Python", value: "pyc" },

@@ -379,8 +379,8 @@ func GetMultiRepoTitleSlideData(page string, recap analyzer.MultiRepoRecap) Titl
 		data.Title = "Total Lines of Code by Repo"
 		data.Description = "The total lines of code in each of your repos."
 	case "total-lines-of-code-per-week-by-repo":
-		data.Title = "Total Lines of Code per Week by Repo"
-		data.Description = "The total lines of code per week throughout the past year, for each repo."
+		data.Title = "Total Lines of Code per Week"
+		data.Description = "The total lines of code per week throughout the past year, combined across all repos."
 	case "commits-made-by-repo":
 		data.Title = "Commits Made by Repo"
 		data.Description = "The total amount of commits made over the past year, split out by repo."
