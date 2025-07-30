@@ -416,6 +416,10 @@ func (r *RepoConfig) getCommitsByHourCurrYear() []CommitHour {
 func (r *RepoConfig) getMostInsertionsInCommitCurrYear() GitCommit {
 	commits := r.getCurrYearGitCommits()
 
+	if len(commits) == 0 {
+		return GitCommit{}
+	}
+
 	mostInsertionsCommit := commits[0]
 	mostInsertionsAmt := 0
 
@@ -436,6 +440,10 @@ func (r *RepoConfig) getMostInsertionsInCommitCurrYear() GitCommit {
 
 func (r *RepoConfig) getMostDeletionsInCommitCurrYear() GitCommit {
 	commits := r.getCurrYearGitCommits()
+
+	if len(commits) == 0 {
+		return GitCommit{}
+	}
 
 	mostDeletionsCommit := commits[0]
 	largestDeletionsAmt := 0
@@ -458,6 +466,10 @@ func (r *RepoConfig) getMostDeletionsInCommitCurrYear() GitCommit {
 func (r *RepoConfig) getLargestCommitMessageCurrYear() GitCommit {
 	commits := r.getCurrYearGitCommits()
 
+	if len(commits) == 0 {
+		return GitCommit{}
+	}
+
 	largestLengthCommit := commits[0]
 
 	for _, commit := range commits {
@@ -471,6 +483,10 @@ func (r *RepoConfig) getLargestCommitMessageCurrYear() GitCommit {
 
 func (r *RepoConfig) getSmallestCommitMessagesCurrYear() []GitCommit {
 	commits := r.getCurrYearGitCommits()
+
+	if len(commits) == 0 {
+		return []GitCommit{}
+	}
 
 	sort.Slice(commits, func(i int, j int) bool {
 		return len(commits[i].Message) < len(commits[j].Message)
@@ -1139,6 +1155,11 @@ func (r *RepoConfig) getFileChangeRatio(insertionsByAuthor map[string]int, delet
 
 func (r *RepoConfig) getCommonlyChangedFiles() []FileChangeCount {
 	commits := r.getCurrYearGitCommits()
+
+	if len(commits) == 0 {
+		return []FileChangeCount{}
+	}
+
 	fileChangeTracker := make(map[string]int)
 
 	for _, commit := range commits {
