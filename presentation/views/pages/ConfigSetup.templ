@@ -34,20 +34,16 @@ templ ConfigSetup(props ConfigSetupProps) {
 				})
 				<ul class="text-gray-500">
 					for _, config := range props.RepoConfigList {
-						<li
-							class="p-3 px-6 flex gap-3 justify-between items-center"
-							id={ fmt.Sprintf("repo-link-%d", config.Id) }
-						>
-							@components.Link(fmt.Sprintf("/add-repo?id=%d", config.Id)) {
+						@components.Link(fmt.Sprintf("/add-repo?id=%d", config.Id)) {
+							<li
+								class={ "hover:bg-gray-100 duration-200 p-3 px-6 flex gap-3 justify-between items-center", templ.KV("bg-gray-200", config.Id == props.Id) }
+								id={ fmt.Sprintf("repo-link-%d", config.Id) }
+							>
 								<span
-									class="flex gap-2 items-center cursor-pointer"
+									class={ "flex gap-2 items-center cursor-pointer", }
 								>
 									<i
-										class={
-											"fa-solid",
-											templ.KV("fa-database", config.Id != props.Id),
-											templ.KV("fa-gears", config.Id == props.Id),
-										}
+										class="fa-solid fa-database"
 									></i>
 									<span
 										class={ templ.KV("font-bold", config.Id == props.Id), templ.KV("italic", config.Path == "") }
@@ -59,17 +55,17 @@ templ ConfigSetup(props ConfigSetupProps) {
 										}
 									</span>
 								</span>
-							}
-							if len(props.RepoConfigList) > 1 {
-								<i
-									class="fa-solid fa-xmark text-red-400 hover:text-red-500 duration-200 cursor-pointer"
-									hx-patch="/repo-config/delete"
-									hx-vals={ fmt.Sprintf("{\"id\":\"%d\"}", config.Id) }
-									hx-swap="outerHTML"
-									hx-target={ fmt.Sprintf("#repo-link-%d", config.Id) }
-								></i>
-							}
-						</li>
+								if len(props.RepoConfigList) > 1 {
+									<i
+										class="fa-solid fa-xmark text-red-400 hover:text-red-500 duration-200 cursor-pointer"
+										hx-patch="/repo-config/delete"
+										hx-vals={ fmt.Sprintf("{\"id\":\"%d\"}", config.Id) }
+										hx-swap="outerHTML"
+										hx-target={ fmt.Sprintf("#repo-link-%d", config.Id) }
+									></i>
+								}
+							</li>
+						}
 					}
 				</ul>
 				@components.Link("/add-repo?new=true") {
