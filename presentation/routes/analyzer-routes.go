@@ -156,7 +156,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		for _, g := range marshaledDupGroups {
 			dupGroups = append(dupGroups, helpers.UnmarshalDuplicateGroup(g))
 		}
-		ungroupedAuthors := formParams["ungrouped-author"]
+		// ungroupedAuthors := formParams["ungrouped-author"]
 
 		config := analyzer.MustGetConfig(analyzer.DEFAULT_CONFIG_FILE)
 		repo := analyzer.MustGetRepoConfig(config, repoId)
@@ -172,33 +172,47 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		repo.AnalyzeFileBlames = analyzeFileBlames
 
 		config.Repos[repoIdx] = repo
-
 		config.Save()
 
-		year := time.Now().Year()
-
-		component := pages.ConfigSetup(pages.ConfigSetupProps{
-			Id:                    repo.Id,
-			RepoConfigList:        config.Repos,
-			RecapName:             config.Name,
-			RepoPath:              repo.Path,
-			Toast:                 "Repo Saved!",
-			Year:                  year,
-			MasterBranch:          masterBranchName,
-			IncludeFileExtensions: helpers.MarshalStrSlice(includeFileExtensions),
-			ExcludeDirs:           helpers.MarshalStrSlice(excludeDirs),
-			ExcludeFiles:          helpers.MarshalStrSlice(excludeFiles),
-			ExcludeAuthors:        helpers.MarshalStrSlice(excludeAuthors),
-			UngroupedAuthors:      ungroupedAuthors,
-			DuplicateAuthorGroups: dupGroups,
-			AnalyzeFileBlames:     analyzeFileBlames,
-		})
-		content := t.Render(t.RenderParams{
-			C:         c,
-			Component: component,
+		// Check for existing "empty" repo, redirect to that one. Otherwise, we just
+		// redirect to create a new repo
+		emptyRepoIdx := utils.FindIndex(config.Repos, func(repo analyzer.RepoConfig) bool {
+			return repo.Path == ""
 		})
 
-		return c.HTML(http.StatusOK, content)
+		if emptyRepoIdx == -1 {
+			c.Response().Header().Set("HX-Redirect", "/add-repo?new=true")
+		} else {
+			repoId := config.Repos[emptyRepoIdx].Id
+			c.Response().Header().Set("HX-Redirect", fmt.Sprintf("/add-repo?id=%d", repoId))
+		}
+
+		return c.NoContent(http.StatusOK)
+
+		// year := time.Now().Year()
+
+		// component := pages.ConfigSetup(pages.ConfigSetupProps{
+		// 	Id:                    repo.Id,
+		// 	RepoConfigList:        config.Repos,
+		// 	RecapName:             config.Name,
+		// 	RepoPath:              repo.Path,
+		// 	Toast:                 "Repo Saved!",
+		// 	Year:                  year,
+		// 	MasterBranch:          masterBranchName,
+		// 	IncludeFileExtensions: helpers.MarshalStrSlice(includeFileExtensions),
+		// 	ExcludeDirs:           helpers.MarshalStrSlice(excludeDirs),
+		// 	ExcludeFiles:          helpers.MarshalStrSlice(excludeFiles),
+		// 	ExcludeAuthors:        helpers.MarshalStrSlice(excludeAuthors),
+		// 	UngroupedAuthors:      ungroupedAuthors,
+		// 	DuplicateAuthorGroups: dupGroups,
+		// 	AnalyzeFileBlames:     analyzeFileBlames,
+		// })
+		// content := t.Render(t.RenderParams{
+		// 	C:         c,
+		// 	Component: component,
+		// })
+
+		// return c.HTML(http.StatusOK, content)
 	})
 
 	e.PATCH("/repo-config/delete", func(c echo.Context) error {
