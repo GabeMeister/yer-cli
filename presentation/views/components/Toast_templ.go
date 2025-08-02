@@ -33,7 +33,7 @@ func Toast(props ToastProps) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"toast\" class=\"toast fixed bottom-1 left-1 text-gray-500 bg-white p-6 rounded-sm mb-3 ml-3 min-w-[250px] shadow-2xl font-semibold\" hx-swap-oob=\"true\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"toast\" class=\"toast fixed bottom-1 left-1 text-xl text-white bg-green-500 p-6 rounded-md mb-3 ml-3 min-w-[300px] shadow-2xl font-bold\" hx-swap-oob=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

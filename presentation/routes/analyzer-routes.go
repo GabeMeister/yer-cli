@@ -182,7 +182,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 			RepoConfigList:        config.Repos,
 			RecapName:             config.Name,
 			RepoPath:              repo.Path,
-			Toast:                 "Saved!",
+			Toast:                 "Repo Saved!",
 			Year:                  year,
 			MasterBranch:          masterBranchName,
 			IncludeFileExtensions: helpers.MarshalStrSlice(includeFileExtensions),
