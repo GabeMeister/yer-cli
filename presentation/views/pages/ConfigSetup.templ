@@ -34,38 +34,38 @@ templ ConfigSetup(props ConfigSetupProps) {
 				})
 				<ul class="text-gray-500">
 					for _, config := range props.RepoConfigList {
-						@components.Link(fmt.Sprintf("/add-repo?id=%d", config.Id)) {
-							<li
-								class={ "hover:bg-gray-100 duration-200 p-3 px-6 flex gap-3 justify-between items-center", templ.KV("bg-gray-200", config.Id == props.Id) }
-								id={ fmt.Sprintf("repo-link-%d", config.Id) }
-							>
-								<span
-									class={ "flex gap-2 items-center cursor-pointer", }
-								>
-									<i
-										class="fa-solid fa-database"
-									></i>
+						<li
+							class={ "hover:bg-gray-100 duration-200 flex gap-3 justify-between items-center", templ.KV("bg-gray-200", config.Id == props.Id) }
+							id={ fmt.Sprintf("repo-link-%d", config.Id) }
+						>
+							<div class="grow">
+								@components.Link(fmt.Sprintf("/add-repo?id=%d", config.Id)) {
 									<span
-										class={ templ.KV("font-bold", config.Id == props.Id), templ.KV("italic", config.Path == "") }
+										class={ "flex gap-3 items-center cursor-pointer p-3 px-6" }
 									>
-										if config.Path != "" {
-											{ filepath.Base(config.Path) }
-										} else {
-											{ "New Repo" }
-										}
+										<i
+											class="fa-solid fa-database"
+										></i>
+										<span
+											class={ templ.KV("font-bold", config.Id == props.Id), templ.KV("italic", config.Path == "") }
+										>
+											if config.Path != "" {
+												{ filepath.Base(config.Path) }
+											} else {
+												{ "New Repo" }
+											}
+										</span>
 									</span>
-								</span>
-								if len(props.RepoConfigList) > 1 {
-									<i
-										class="fa-solid fa-xmark text-red-400 hover:text-red-500 duration-200 cursor-pointer"
-										hx-patch="/repo-config/delete"
-										hx-vals={ fmt.Sprintf("{\"id\":\"%d\"}", config.Id) }
-										hx-swap="outerHTML"
-										hx-target={ fmt.Sprintf("#repo-link-%d", config.Id) }
-									></i>
 								}
-							</li>
-						}
+							</div>
+							if len(props.RepoConfigList) > 1 {
+								<a
+									class="fa-solid fa-xmark text-red-400 hover:text-red-500 duration-200 cursor-pointer pr-6"
+									hx-patch="/repo-config/delete"
+									hx-vals={ fmt.Sprintf("{\"id\":\"%d\"}", config.Id) }
+								></a>
+							}
+						</li>
 					}
 				</ul>
 				@components.Link("/add-repo?new=true") {
