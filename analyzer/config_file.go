@@ -128,6 +128,23 @@ func (c *ConfigFile) AddNewRepoConfig() *RepoConfig {
 	return &newRepoConfig
 }
 
+// For situations where you want to "preserve" an empty repo, pass that in as an
+// arg. Otherwise just pass -1
+func (c *ConfigFile) RemoveEmptyReposAndSave(preserveRepoId int) {
+	repos := []RepoConfig{}
+	for _, repoConfig := range c.Repos {
+		if repoConfig.Path != "" {
+			repos = append(repos, repoConfig)
+		} else if repoConfig.Path == "" && repoConfig.Id == preserveRepoId {
+			// Only keep empty repos if it's the current one the user's looking at
+			repos = append(repos, repoConfig)
+		}
+	}
+
+	c.Repos = repos
+	c.Save()
+}
+
 func (c *ConfigFile) GetRepoIndex(repoId int) int {
 	index := -1
 

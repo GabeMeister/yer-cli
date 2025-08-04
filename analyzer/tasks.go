@@ -34,6 +34,8 @@ Press enter to continue...`)
 		}
 	}
 
+	config.RemoveEmptyReposAndSave(-1)
+
 	for _, r := range config.Repos {
 		if !calculateOnly {
 			r.gatherMetrics()

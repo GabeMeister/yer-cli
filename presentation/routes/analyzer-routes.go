@@ -101,6 +101,9 @@ func addAnalyzerRoutes(e *echo.Echo) {
 			return RenderMessage(c, "Couldn't find correct repo to edit. Please restart setup process by visiting `/create-recap")
 		}
 
+		// Clear any "empty" repos (only if the user isn't actively looking at it)
+		config.RemoveEmptyReposAndSave(id)
+
 		repo := config.Repos[repoIdx]
 
 		var ungroupedAuthors []string
@@ -188,31 +191,6 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		}
 
 		return c.NoContent(http.StatusOK)
-
-		// year := time.Now().Year()
-
-		// component := pages.ConfigSetup(pages.ConfigSetupProps{
-		// 	Id:                    repo.Id,
-		// 	RepoConfigList:        config.Repos,
-		// 	RecapName:             config.Name,
-		// 	RepoPath:              repo.Path,
-		// 	Toast:                 "Repo Saved!",
-		// 	Year:                  year,
-		// 	MasterBranch:          masterBranchName,
-		// 	IncludeFileExtensions: helpers.MarshalStrSlice(includeFileExtensions),
-		// 	ExcludeDirs:           helpers.MarshalStrSlice(excludeDirs),
-		// 	ExcludeFiles:          helpers.MarshalStrSlice(excludeFiles),
-		// 	ExcludeAuthors:        helpers.MarshalStrSlice(excludeAuthors),
-		// 	UngroupedAuthors:      ungroupedAuthors,
-		// 	DuplicateAuthorGroups: dupGroups,
-		// 	AnalyzeFileBlames:     analyzeFileBlames,
-		// })
-		// content := t.Render(t.RenderParams{
-		// 	C:         c,
-		// 	Component: component,
-		// })
-
-		// return c.HTML(http.StatusOK, content)
 	})
 
 	e.PATCH("/repo-config/delete", func(c echo.Context) error {
@@ -542,6 +520,9 @@ func addAnalyzerRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/finish-setup", func(c echo.Context) error {
+		config := analyzer.MustGetConfig(analyzer.DEFAULT_CONFIG_FILE)
+		config.RemoveEmptyReposAndSave(-1)
+
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: pages.FinishSetup(),
