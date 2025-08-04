@@ -22,8 +22,15 @@ fi
 
 chmod +x year-end-recap
 echo
-echo Year End Recap has been installed!
+echo Success! Year End Recap has been installed successfully.
 echo
-echo Run it with:
-echo
-echo ./year-end-recap -s
+
+yellow='\033[1;33m'
+reset='\033[0m'
+
+echo -e "${yellow}┌──────────────────────────────────────┐${reset}"
+echo -e "${yellow}│ To start, run the following command: │${reset}"
+echo -e "${yellow}│                                      │${reset}"
+echo -e "${yellow}│ ./year-end-recap -s                  │${reset}"
+echo -e "${yellow}└──────────────────────────────────────┘${reset}"
+echo 
