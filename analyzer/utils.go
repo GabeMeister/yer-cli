@@ -2,7 +2,11 @@ package analyzer
 
 import (
 	"encoding/json"
+	"errors"
 	"os"
+	"os/exec"
+	"runtime"
+	"strings"
 	"time"
 
 	"github.com/briandowns/spinner"
@@ -56,4 +60,27 @@ func getNumWorkDaysInCurrYear() int {
 	}
 
 	return total
+}
+
+func OpenBrowser(url string) error {
+	if !strings.HasPrefix(url, "http") {
+		return errors.New("must have https at the start of the url")
+	}
+
+	var cmd string
+	var args []string
+
+	switch runtime.GOOS {
+	case "windows":
+		cmd = "cmd"
+		args = []string{"/c", "start", url}
+	case "darwin":
+		cmd = "open"
+		args = []string{url}
+	default: // linux, freebsd, openbsd, netbsd
+		cmd = "xdg-open"
+		args = []string{url}
+	}
+
+	return exec.Command(cmd, args...).Start()
 }
