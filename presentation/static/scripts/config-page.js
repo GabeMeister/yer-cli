@@ -353,26 +353,26 @@ function initExcludeFilesInput() {
   }
 }
 
-function initExcludeAuthorsInput() {
-  const elem = document.querySelector("#exclude-authors");
-  if (!elem.tomselect) {
-    new TomSelect("#exclude-authors", {
-      create: true,
-      persist: false,
-      valueField: "value",
-      searchField: ["label", "value"],
-      onItemAdd: function () {
-        this.setTextboxValue("");
-      },
-    });
-  }
-}
+// function initExcludeAuthorsInput() {
+//   const elem = document.querySelector("#exclude-authors");
+//   if (!elem.tomselect) {
+//     new TomSelect("#exclude-authors", {
+//       create: true,
+//       persist: false,
+//       valueField: "value",
+//       searchField: ["label", "value"],
+//       onItemAdd: function () {
+//         this.setTextboxValue("");
+//       },
+//     });
+//   }
+// }
 
 function initConfigPage() {
   initIncludeFileExtensionsInput();
   initExcludeDirsInput();
   initExcludeFilesInput();
-  initExcludeAuthorsInput();
+  // initExcludeAuthorsInput();
 }
 
 document.addEventListener("htmx:afterSettle", function (evt) {

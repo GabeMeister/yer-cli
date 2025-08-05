@@ -27,7 +27,10 @@ func getCommitsMadeByAuthorChartData(multiRepoRecap analyzer.MultiRepoRecap) hel
 		if len(shortAuthor) > chartLimit {
 			shortAuthor = shortAuthor[:chartLimit] + "..."
 		}
-		result.Dataset[string(shortAuthor)] = *val
+
+		if val.Curr > 0 {
+			result.Dataset[string(shortAuthor)] = *val
+		}
 	}
 
 	return result
@@ -95,7 +98,7 @@ func CommitsMadeByAuthor(multiRepoRecap analyzer.MultiRepoRecap) templ.Component
 			var templ_7745c5c3_Var4 string
 			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(helpers.Json(helpers.GetYearComparisonChartData(getCommitsMadeByAuthorChartData(multiRepoRecap))))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/CommitsMadeByAuthor.templ`, Line: 35, Col: 130}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/CommitsMadeByAuthor.templ`, Line: 38, Col: 130}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {

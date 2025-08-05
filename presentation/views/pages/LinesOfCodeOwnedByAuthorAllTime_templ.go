@@ -28,10 +28,12 @@ func getLinesOfCodeOwnedByAuthorAllTimeData(multiRepoRecap analyzer.MultiRepoRec
 		if len(shortAuthor) > chartLimit {
 			shortAuthor = shortAuthor[:chartLimit] + "..."
 		}
-		result.Dataset = append(result.Dataset, helpers.BarChartItem{
-			Name:  string(shortAuthor),
-			Value: val,
-		})
+		if val > 0 {
+			result.Dataset = append(result.Dataset, helpers.BarChartItem{
+				Name:  string(shortAuthor),
+				Value: val,
+			})
+		}
 	}
 
 	return result
@@ -101,7 +103,7 @@ func LinesOfCodeOwnedByAuthorAllTime(multiRepoRecap analyzer.MultiRepoRecap) tem
 				Sort: true,
 			})))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/LinesOfCodeOwnedByAuthorAllTime.templ`, Line: 41, Col: 6}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/LinesOfCodeOwnedByAuthorAllTime.templ`, Line: 43, Col: 6}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {

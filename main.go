@@ -59,7 +59,7 @@ func main() {
 
 	err := os.Mkdir("tmp", 0755)
 	if err != nil && !errors.Is(err, fs.ErrExist) {
-		panic("Could not create tmp directory. Please run your Year End Recap with the correct permissions.")
+		panic("Could not create tmp directory. Please run your Year End Recap with the correct permissions")
 	}
 
 	if *help {

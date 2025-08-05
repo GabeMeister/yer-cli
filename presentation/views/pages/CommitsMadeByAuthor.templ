@@ -19,7 +19,10 @@ func getCommitsMadeByAuthorChartData(multiRepoRecap analyzer.MultiRepoRecap) hel
 		if len(shortAuthor) > chartLimit {
 			shortAuthor = shortAuthor[:chartLimit] + "..."
 		}
-		result.Dataset[string(shortAuthor)] = *val
+
+		if val.Curr > 0 {
+			result.Dataset[string(shortAuthor)] = *val
+		}
 	}
 
 	return result
