@@ -72,7 +72,7 @@ func main() {
 		if result {
 			fmt.Printf("\nDone! View stats by running the following command:\n\n./year-end-recap -v\n\n")
 		} else {
-			fmt.Println("Failed to analyze repo. Please try again!")
+			fmt.Println("\nPlease run `./year-end-recap -s` to setup your recap configuration, then try analyzing.")
 		}
 	} else if *view {
 		presentation.RunPresentationPage()

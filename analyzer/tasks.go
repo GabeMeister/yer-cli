@@ -109,7 +109,7 @@ func isValidConfig(path string) bool {
 	jsonErr := json.Unmarshal(content, &configData)
 	if jsonErr != nil {
 		// TODO: print instructions on making valid config file
-		fmt.Println("Unable to parse json within config file.")
+		fmt.Println("Unable to parse config file.")
 		return false
 	}
 

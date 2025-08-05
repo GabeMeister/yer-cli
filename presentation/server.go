@@ -3,6 +3,7 @@ package presentation
 import (
 	"GabeMeister/yer-cli/analyzer"
 	"GabeMeister/yer-cli/presentation/routes"
+	"GabeMeister/yer-cli/utils"
 	"embed"
 	"fmt"
 	"time"
@@ -56,7 +57,9 @@ func RunPresentationPage() {
 	// Small delay to ensure server starts
 	time.Sleep(100 * time.Millisecond)
 
-	analyzer.OpenBrowser("http://localhost:4000")
+	if !utils.IsDevMode() {
+		analyzer.OpenBrowser("http://localhost:4000")
+	}
 
 	// Keep main goroutine alive
 	select {}
