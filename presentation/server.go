@@ -47,6 +47,17 @@ func RunPresentationPage() {
 
 	routes.Init(e, static)
 
-	fmt.Println("\nDone! Browse to http://localhost:4000/")
-	e.Logger.Fatal(e.Start(":4000"))
+	fmt.Print("\n", "💻 Opening browser...", "\n\n")
+
+	go func() {
+		e.Logger.Fatal(e.Start(":4000"))
+	}()
+
+	// Small delay to ensure server starts
+	time.Sleep(100 * time.Millisecond)
+
+	analyzer.OpenBrowser("http://localhost:4000")
+
+	// Keep main goroutine alive
+	select {}
 }
