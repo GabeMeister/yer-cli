@@ -86,9 +86,9 @@ func FileCountByRepo(multiRepoRecap analyzer.MultiRepoRecap) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var4 string
-			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(helpers.Json(helpers.GetYearComparisonChartData(getFileCountByRepoChartData(multiRepoRecap))))
+			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(helpers.Json(helpers.GetYearComparisonChartData(getFileCountByRepoChartData(multiRepoRecap), helpers.YearComparisonOptions{})))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/FileCountByRepo.templ`, Line: 28, Col: 126}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/FileCountByRepo.templ`, Line: 28, Col: 159}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {

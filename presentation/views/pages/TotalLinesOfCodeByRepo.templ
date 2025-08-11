@@ -25,7 +25,7 @@ templ TotalLinesOfCodeByRepo(multiRepoRecap analyzer.MultiRepoRecap) {
 		}
 		<div
 			class="chart-js-container"
-			data-grouped-bar-chart-data={ helpers.Json(helpers.GetYearComparisonChartData(getTotalLinesOfCodeByRepoChartData(multiRepoRecap))) }
+			data-grouped-bar-chart-data={ helpers.Json(helpers.GetYearComparisonChartData(getTotalLinesOfCodeByRepoChartData(multiRepoRecap), helpers.YearComparisonOptions{})) }
 		>
 			<canvas id="grouped-bar-chart-canvas"></canvas>
 		</div>

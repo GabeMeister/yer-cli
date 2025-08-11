@@ -25,7 +25,7 @@ templ ActiveAuthors(multiRepoRecap analyzer.MultiRepoRecap) {
 		}
 		<div
 			class="chart-js-container"
-			data-grouped-bar-chart-data={ helpers.Json(helpers.GetYearComparisonChartData(getActiveAuthorChartData(multiRepoRecap))) }
+			data-grouped-bar-chart-data={ helpers.Json(helpers.GetYearComparisonChartData(getActiveAuthorChartData(multiRepoRecap), helpers.YearComparisonOptions{})) }
 		>
 			<canvas id="grouped-bar-chart-canvas"></canvas>
 		</div>

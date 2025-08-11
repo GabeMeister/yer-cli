@@ -187,20 +187,30 @@ func GetBarChartData(data ChartJSBarChartData, options BarChartOptions) map[stri
 	}
 }
 
-func GetYearComparisonChartData(data YearComparisonChartData) map[string]interface{} {
-	repos := []string{}
+type YearComparisonOptions struct {
+	Limit int
+}
+
+func GetYearComparisonChartData(data YearComparisonChartData, options YearComparisonOptions) map[string]interface{} {
+	// Could be repos, authors, etc.
+	buckets := []string{}
+
 	prevYearData := []int{}
 	currYearData := []int{}
 
 	for repo := range data.Dataset {
-		repos = append(repos, repo)
+		buckets = append(buckets, repo)
 	}
 
-	sort.Slice(repos, func(i, j int) bool {
-		return data.Dataset[repos[i]].Curr > data.Dataset[repos[j]].Curr
+	sort.Slice(buckets, func(i, j int) bool {
+		return data.Dataset[buckets[i]].Curr > data.Dataset[buckets[j]].Curr
 	})
 
-	for _, repo := range repos {
+	if options.Limit != 0 && len(data.Dataset) > options.Limit {
+		buckets = buckets[0:options.Limit]
+	}
+
+	for _, repo := range buckets {
 		item := data.Dataset[repo]
 		prevYearData = append(prevYearData, item.Prev)
 		currYearData = append(currYearData, item.Curr)
@@ -209,7 +219,7 @@ func GetYearComparisonChartData(data YearComparisonChartData) map[string]interfa
 	return map[string]interface{}{
 		"type": "bar",
 		"data": map[string]interface{}{
-			"labels": repos,
+			"labels": buckets,
 			"datasets": []map[string]interface{}{
 				{
 					"label":           "2024",

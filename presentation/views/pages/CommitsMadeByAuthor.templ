@@ -12,12 +12,12 @@ func getCommitsMadeByAuthorChartData(multiRepoRecap analyzer.MultiRepoRecap) hel
 		Dataset:    make(map[string]analyzer.YearComparison),
 	}
 
-	chartLimit := 12
+	maxAuthorLength := 12
 
 	for author, val := range multiRepoRecap.CommitsMadeByAuthor {
 		shortAuthor := string(author)
-		if len(shortAuthor) > chartLimit {
-			shortAuthor = shortAuthor[:chartLimit] + "..."
+		if len(shortAuthor) > maxAuthorLength {
+			shortAuthor = shortAuthor[:maxAuthorLength] + "..."
 		}
 
 		if val.Curr > 0 {
@@ -35,7 +35,10 @@ templ CommitsMadeByAuthor(multiRepoRecap analyzer.MultiRepoRecap) {
 		}
 		<div
 			class="chart-js-container"
-			data-grouped-bar-chart-data={ helpers.Json(helpers.GetYearComparisonChartData(getCommitsMadeByAuthorChartData(multiRepoRecap))) }
+			data-grouped-bar-chart-data={ helpers.Json(
+				helpers.GetYearComparisonChartData(getCommitsMadeByAuthorChartData(multiRepoRecap), helpers.YearComparisonOptions{
+					Limit: 20,
+				})) }
 		>
 			<canvas id="grouped-bar-chart-canvas"></canvas>
 		</div>
