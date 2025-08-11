@@ -33,7 +33,11 @@ func RunCreateRecapPage() {
 	// Small delay to ensure server starts
 	time.Sleep(100 * time.Millisecond)
 
-	analyzer.OpenBrowser("http://localhost:4000/create-recap")
+	if !utils.IsDevMode() {
+		analyzer.OpenBrowser("http://localhost:4000/create-recap")
+	} else {
+		fmt.Print("\n\n", "*** Browse to http://localhost:4000/create-recap ***", "\n", "\n\n\n")
+	}
 
 	// Keep main goroutine alive
 	select {}
@@ -59,6 +63,8 @@ func RunPresentationPage() {
 
 	if !utils.IsDevMode() {
 		analyzer.OpenBrowser("http://localhost:4000")
+	} else {
+		fmt.Print("\n\n", "*** Browse to http://localhost:4000 ***", "\n", "\n\n\n")
 	}
 
 	// Keep main goroutine alive

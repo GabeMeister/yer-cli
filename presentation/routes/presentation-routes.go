@@ -49,6 +49,20 @@ func addPresentationRoutes(e *echo.Echo) {
 		return c.HTML(http.StatusOK, content)
 	})
 
+	e.GET("/toc", func(c echo.Context) error {
+		if !analyzer.HasRecapBeenRan() {
+			return t.RenderRepoNotFound(c)
+		}
+
+		component := pages.TableOfContents()
+		content := t.Render(t.RenderParams{
+			C:         c,
+			Component: component,
+		})
+
+		return c.HTML(http.StatusOK, content)
+	})
+
 	e.GET("/active-authors", func(c echo.Context) error {
 		if !analyzer.HasRecapBeenRan() {
 			return t.RenderRepoNotFound(c)
