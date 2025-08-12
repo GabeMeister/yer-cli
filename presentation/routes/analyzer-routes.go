@@ -152,7 +152,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		excludeDirs := helpers.UnmarshalStrSlice(c.FormValue("exclude-dirs"))
 		excludeFiles := helpers.UnmarshalStrSlice(c.FormValue("exclude-files"))
 		excludeAuthors := helpers.UnmarshalStrSlice(c.FormValue("exclude-authors"))
-		analyzeFileBlames := c.FormValue("analyze-file-blames") == "on"
+		analyzeFileBlames := true
 		formParams, _ := c.FormParams()
 		marshaledDupGroups := formParams["dup-group"]
 		dupGroups := []analyzer.DuplicateAuthorGroup{}

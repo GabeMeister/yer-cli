@@ -135,20 +135,6 @@ templ ConfigSetup(props ConfigSetupProps) {
 								DuplicateAuthors: props.DuplicateAuthorGroups,
 							})
 						</div>
-						<div
-							class="w-full"
-						>
-							<input
-								type="checkbox"
-								name="analyze-file-blames"
-								id="analyze-file-blames"
-								checked?={ props.AnalyzeFileBlames }
-							/>
-							<label
-								for="analyze-file-blames"
-								class="font-medium"
-							>Include Advanced File Analysis for this Repo</label>
-						</div>
 						<input type="hidden" name="id" value={ fmt.Sprintf("%d", props.Id) }/>
 						<button
 							class="btn lg w-full"
