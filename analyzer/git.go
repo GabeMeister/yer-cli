@@ -288,7 +288,7 @@ func getFileChangeSummary(r *RepoConfig) map[string][]FileChange {
 		"--no-merges",
 		"--reverse",
 		"--after",
-		fmt.Sprintf("%d-01-01", CURR_YEAR),
+		fmt.Sprintf("%d-12-31", PREV_YEAR),
 		"--numstat")
 	cmd.Dir = path
 

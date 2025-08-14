@@ -8,32 +8,35 @@ package pages
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
+/*
+ * DEPRECATED in favor of FileChangesMadeByAuthor.templ
+ */
+
 import (
 	"GabeMeister/yer-cli/analyzer"
 	helpers "GabeMeister/yer-cli/presentation/helpers"
 	components "GabeMeister/yer-cli/presentation/views/components"
-	"GabeMeister/yer-cli/utils"
-	"fmt"
-	"sort"
+	// "GabeMeister/yer-cli/utils"
 )
 
 func getFileChangesChartData(recap analyzer.Recap) helpers.BarChartData {
-	barChartData := helpers.BarChartData{Data: []helpers.DataPoint{}, XAxisLabel: "Author", YAxisLabel: fmt.Sprintf("↑ Line Changes (%d)", analyzer.CURR_YEAR)}
+	// barChartData := helpers.BarChartData{Data: []helpers.DataPoint{}, XAxisLabel: "Author", YAxisLabel: fmt.Sprintf("↑ Line Changes (%d)", analyzer.CURR_YEAR)}
 
-	for author, fileChanges := range recap.FileChangesByAuthorCurrYear {
-		barChartData.Data = append(barChartData.Data, helpers.DataPoint{
-			X: helpers.Truncate(author),
-			Y: fileChanges,
-		})
-	}
+	// for author, fileChanges := range recap.FileChangesByAuthorCurrYear {
+	// 	barChartData.Data = append(barChartData.Data, helpers.DataPoint{
+	// 		X: helpers.Truncate(author),
+	// 		Y: fileChanges,
+	// 	})
+	// }
 
-	sort.Slice(barChartData.Data, func(i int, j int) bool {
-		return barChartData.Data[i].Y > barChartData.Data[j].Y
-	})
+	// sort.Slice(barChartData.Data, func(i int, j int) bool {
+	// 	return barChartData.Data[i].Y > barChartData.Data[j].Y
+	// })
 
-	barChartData.Data = utils.Truncate(barChartData.Data, 20)
+	// barChartData.Data = utils.Truncate(barChartData.Data, 20)
 
-	return barChartData
+	// return barChartData
+	return helpers.BarChartData{}
 }
 
 func FileChangesByAuthorCurrYear(recap analyzer.Recap) templ.Component {
@@ -76,7 +79,7 @@ func FileChangesByAuthorCurrYear(recap analyzer.Recap) templ.Component {
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(helpers.Json(getFileChangesChartData(recap)))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/FileChangesByAuthorCurrYear.templ`, Line: 33, Col: 79}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/FileChangesByAuthorCurrYear.templ`, Line: 36, Col: 79}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {

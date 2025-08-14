@@ -34,6 +34,17 @@ func customUsage() {
 }
 
 func runTest() {
+	yellow := "\033[1;33m"
+	reset := "\033[0m"
+
+	fmt.Printf("%s┌──────────────────────────────────────┐%s\n", yellow, reset)
+	fmt.Printf("%s│ Done! Now run the following command  │%s\n", yellow, reset)
+	fmt.Printf("%s│ to view your stats:                  │%s\n", yellow, reset)
+	fmt.Printf("%s│                                      │%s\n", yellow, reset)
+	fmt.Printf("%s│ ./year-end-recap -v                  │%s\n", yellow, reset)
+	fmt.Printf("%s└──────────────────────────────────────┘%s\n", yellow, reset)
+	fmt.Println()
+
 }
 
 func main() {
@@ -70,7 +81,17 @@ func main() {
 	} else if *analyzeRepo {
 		result := analyzer.AnalyzeRepos(*calculateOnly)
 		if result {
-			fmt.Printf("\nDone! View stats by running the following command:\n\n./year-end-recap -v\n\n")
+			yellow := "\033[1;33m"
+			reset := "\033[0m"
+
+			fmt.Println()
+			fmt.Printf("%s┌──────────────────────────────────────┐%s\n", yellow, reset)
+			fmt.Printf("%s│ Done! Now run the following command  │%s\n", yellow, reset)
+			fmt.Printf("%s│ to view your stats:                  │%s\n", yellow, reset)
+			fmt.Printf("%s│                                      │%s\n", yellow, reset)
+			fmt.Printf("%s│ ./year-end-recap -v                  │%s\n", yellow, reset)
+			fmt.Printf("%s└──────────────────────────────────────┘%s\n", yellow, reset)
+			fmt.Println()
 		} else {
 			fmt.Println("\nPlease run `./year-end-recap -s` to setup your recap configuration, then try analyzing.")
 		}

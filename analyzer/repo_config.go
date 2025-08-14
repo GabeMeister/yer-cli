@@ -611,19 +611,28 @@ func (r *RepoConfig) getMergesToMasterAllTime() int {
 	return len(commits)
 }
 
-func (r *RepoConfig) getFileChangesByAuthorCurrYear() map[string]int {
-	commits := r.getCurrYearGitCommits()
-
+func (r *RepoConfig) getFileChangesByAuthorCurrYear() map[string]FileChangesSummary {
 	authorInsertionsMap := make(map[string]int)
+	authorDeletionsMap := make(map[string]int)
 
+	commits := r.getCurrYearGitCommits()
 	for _, commit := range commits {
 		for _, change := range commit.FileChanges {
 			authorInsertionsMap[commit.Author] += change.Insertions
-			authorInsertionsMap[commit.Author] += change.Deletions
+			authorDeletionsMap[commit.Author] += change.Deletions
 		}
 	}
 
-	return authorInsertionsMap
+	authorFileChangesMap := make(map[string]FileChangesSummary)
+
+	for author := range authorInsertionsMap {
+		authorFileChangesMap[author] = FileChangesSummary{
+			Insertions: authorInsertionsMap[author],
+			Deletions:  authorDeletionsMap[author],
+		}
+	}
+
+	return authorFileChangesMap
 }
 
 func (r *RepoConfig) getCodeInsertionsByAuthorCurrYear() map[string]int {

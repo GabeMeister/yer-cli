@@ -48,24 +48,24 @@ type Recap struct {
 	SizeOfRepoByWeekCurrYear   []int      `json:"size_of_repo_by_week_curr_year"`
 
 	// Team
-	AllAuthors                           []string                     `json:"all_authors"`
-	NewAuthorCommitsCurrYear             []GitCommit                  `json:"new_author_commits_curr_year"`
-	NewAuthorCountCurrYear               int                          `json:"new_author_count_curr_year"`
-	NewAuthorListCurrYear                []string                     `json:"new_author_list_curr_year"`
-	AuthorCommitCountsCurrYear           map[string]int               `json:"author_commit_counts_curr_year"`
-	AuthorCommitCountsPrevYear           map[string]int               `json:"author_commit_counts_prev_year"`
-	AuthorCommitCountsAllTime            map[string]int               `json:"author_commit_counts_all_time"`
-	AuthorCountCurrYear                  int                          `json:"author_count_curr_year"`
-	AuthorCountPrevYear                  int                          `json:"author_count_prev_year"`
-	AuthorCountAllTime                   int                          `json:"author_count_all_time"`
-	AuthorTotalFileChangesPrevYear       map[string]int               `json:"author_total_file_changes_prev_year"`
-	AuthorFileChangesOverTimeCurrYear    TotalFileChangeCount         `json:"author_file_changes_over_time_curr_year"`
-	MostSingleDayCommitsByAuthorCurrYear MostSingleDayCommitsByAuthor `json:"most_single_day_commits_by_author_curr_year"`
-	DirectPushesOnMasterByAuthorCurrYear map[string]int               `json:"direct_pushes_on_master_by_author_curr_year"`
-	MergesToMasterByAuthorCurrYear       map[string]int               `json:"merges_to_master_by_author_curr_year"`
-	FileChangesByAuthorCurrYear          map[string]int               `json:"file_changes_by_author_curr_year"`
-	FileChangeRatioByAuthorCurrYear      map[string]float64           `json:"file_change_ratio_by_author_curr_year"`
-	TotalLinesOfCodeInRepoByAuthor       map[string]int               `json:"total_lines_of_code_in_repo_by_author"`
+	AllAuthors                           []string                      `json:"all_authors"`
+	NewAuthorCommitsCurrYear             []GitCommit                   `json:"new_author_commits_curr_year"`
+	NewAuthorCountCurrYear               int                           `json:"new_author_count_curr_year"`
+	NewAuthorListCurrYear                []string                      `json:"new_author_list_curr_year"`
+	AuthorCommitCountsCurrYear           map[string]int                `json:"author_commit_counts_curr_year"`
+	AuthorCommitCountsPrevYear           map[string]int                `json:"author_commit_counts_prev_year"`
+	AuthorCommitCountsAllTime            map[string]int                `json:"author_commit_counts_all_time"`
+	AuthorCountCurrYear                  int                           `json:"author_count_curr_year"`
+	AuthorCountPrevYear                  int                           `json:"author_count_prev_year"`
+	AuthorCountAllTime                   int                           `json:"author_count_all_time"`
+	AuthorTotalFileChangesPrevYear       map[string]int                `json:"author_total_file_changes_prev_year"`
+	AuthorFileChangesOverTimeCurrYear    TotalFileChangeCount          `json:"author_file_changes_over_time_curr_year"`
+	MostSingleDayCommitsByAuthorCurrYear MostSingleDayCommitsByAuthor  `json:"most_single_day_commits_by_author_curr_year"`
+	DirectPushesOnMasterByAuthorCurrYear map[string]int                `json:"direct_pushes_on_master_by_author_curr_year"`
+	MergesToMasterByAuthorCurrYear       map[string]int                `json:"merges_to_master_by_author_curr_year"`
+	FileChangesByAuthorCurrYear          map[string]FileChangesSummary `json:"file_changes_by_author_curr_year"`
+	FileChangeRatioByAuthorCurrYear      map[string]float64            `json:"file_change_ratio_by_author_curr_year"`
+	TotalLinesOfCodeInRepoByAuthor       map[string]int                `json:"total_lines_of_code_in_repo_by_author"`
 }
 
 type MultiRepoRecap struct {
@@ -79,6 +79,7 @@ type MultiRepoRecap struct {
 	SizeOfRepoWeeklyByRepo      map[Repo][]int             `json:"size_of_repo_weekly_by_repo"`
 	CommitsMadeByRepo           map[Repo]YearComparison    `json:"commits_made_by_repo"`
 	CommitsMadeByAuthor         map[Author]*YearComparison `json:"commits_made_by_author"`
+	FileChangesMadeByAuthor     []AuthorFileChangesSummary `json:"file_changes_made_by_author"`
 	LinesOfCodeOwnedByAuthor    map[Author]int             `json:"lines_of_code_owned_by_author"`
 	AggregateCommitsByMonth     []int                      `json:"aggregate_commits_by_month"`
 	AggregateCommitsByWeekDay   []int                      `json:"aggregate_commits_by_week_day"`
@@ -102,6 +103,33 @@ const (
 type YearComparison struct {
 	Prev int `json:"prev"`
 	Curr int `json:"curr"`
+}
+
+type FileChangesSummary struct {
+	Insertions int `json:"insertions"`
+	Deletions  int `json:"deletions"`
+}
+
+type AuthorFileChangesSummary struct {
+	Author     Author `json:"author"`
+	Insertions int    `json:"insertions"`
+	Deletions  int    `json:"deletions"`
+}
+
+type BarChartDataset struct {
+	// The thing that the chart key shows
+	Label string
+	// The actual numbers across all the buckets on the X axis
+	Data []int
+	// The "stack" that this dataset belongs to within the bucket. Used to "stack"
+	// related things together within one line. (e.g. for example, code
+	// insertions/deletions displayed on the same bar)
+	Stack string
+}
+
+type StackedBarChartData struct {
+	Buckets  []string
+	Datasets []BarChartDataset
 }
 
 func GetMultiRepoRecapFromTmpDir() (MultiRepoRecap, error) {
@@ -298,6 +326,7 @@ func calculateMultiRepoRecap(c *ConfigFile) error {
 	sizeOfRepoWeeklyByRepo := getSizeOfRepoWeeklyByRepo(recaps)
 	commitsMadeByRepo := getCommitsMadeByRepo(recaps)
 	commitsMadeByAuthor := getCommitsMadeByAuthor(recaps)
+	fileChangesMadeByAuthor := getFileChangesMadeByAuthor(recaps)
 	linesOfCodeOwnedByAuthor := getLinesOfCodeOwnedByAuthor(recaps)
 	aggregateCommitsByMonth := getAggregateCommitsByMonth(recaps)
 	aggregateCommitsByWeekDay := getAggregateCommitsByWeekDay(recaps)
@@ -317,6 +346,7 @@ func calculateMultiRepoRecap(c *ConfigFile) error {
 		SizeOfRepoWeeklyByRepo:      sizeOfRepoWeeklyByRepo,
 		CommitsMadeByRepo:           commitsMadeByRepo,
 		CommitsMadeByAuthor:         commitsMadeByAuthor,
+		FileChangesMadeByAuthor:     fileChangesMadeByAuthor,
 		LinesOfCodeOwnedByAuthor:    linesOfCodeOwnedByAuthor,
 		AggregateCommitsByMonth:     aggregateCommitsByMonth,
 		AggregateCommitsByWeekDay:   aggregateCommitsByWeekDay,
@@ -445,6 +475,32 @@ func getCommitsMadeByAuthor(recaps []Recap) map[Author]*YearComparison {
 	}
 
 	return commitsMap
+}
+
+// Insertions
+
+func getFileChangesMadeByAuthor(recaps []Recap) []AuthorFileChangesSummary {
+	authorInsertionsMap := make(map[Author]int)
+	authorDeletionsMap := make(map[Author]int)
+
+	for _, recap := range recaps {
+		for author, fileChangesSummary := range recap.FileChangesByAuthorCurrYear {
+			authorInsertionsMap[Author(author)] += fileChangesSummary.Insertions
+			authorDeletionsMap[Author(author)] += fileChangesSummary.Deletions
+		}
+	}
+
+	authorFileChangesSummary := []AuthorFileChangesSummary{}
+
+	for author := range authorInsertionsMap {
+		authorFileChangesSummary = append(authorFileChangesSummary, AuthorFileChangesSummary{
+			Author:     author,
+			Insertions: authorInsertionsMap[author],
+			Deletions:  authorDeletionsMap[author],
+		})
+	}
+
+	return authorFileChangesSummary
 }
 
 func getLinesOfCodeOwnedByAuthor(recaps []Recap) map[Author]int {
