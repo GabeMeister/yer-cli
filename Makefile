@@ -31,6 +31,9 @@ live:
 backup:
 	cp ./config.json ./configs/$(filter-out $@,$(MAKECMDGOALS)).json
 
+save:
+	cp ./config.json ./configs/$(filter-out $@,$(MAKECMDGOALS)).json
+
 load:
 	cp ./configs/$(filter-out $@,$(MAKECMDGOALS)).json ./config.json
 

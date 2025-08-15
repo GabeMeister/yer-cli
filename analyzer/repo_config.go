@@ -1056,9 +1056,14 @@ func (r *RepoConfig) filterToOnlyIncludedFiles(fileChanges []FileChange) []FileC
 	filteredFileChanges := utils.Filter(fileChanges, func(c FileChange) bool {
 		fileExt := utils.GetFileExtension(c.FilePath)
 
-		return utils.Includes(r.IncludeFileExtensions, func(ext string) bool {
+		isValidFileExt := utils.Includes(r.IncludeFileExtensions, func(ext string) bool {
 			return fileExt == ext
 		})
+		isExcludedFile := utils.Includes(r.ExcludeFiles, func(filePath string) bool {
+			return c.FilePath == filePath
+		})
+
+		return isValidFileExt && !isExcludedFile
 	})
 
 	return filteredFileChanges
