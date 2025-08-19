@@ -8,9 +8,48 @@ package pages
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import "GabeMeister/yer-cli/presentation/views/components"
+import (
+	"GabeMeister/yer-cli/analyzer"
+	"GabeMeister/yer-cli/presentation/helpers"
+	"GabeMeister/yer-cli/presentation/views/components"
+	"fmt"
+)
 
-func FileChangesMadeByAuthor() templ.Component {
+type FileChangesMadeByAuthorProps struct {
+	data string
+}
+
+func getFileChangesMadeByAuthorChartData(data []analyzer.AuthorFileChangesSummary) helpers.StackedBarChartData {
+	// Put the author names as the "buckets" across the X axis
+	buckets := []string{}
+	insertions := helpers.StackedBarChartDataset{
+		Label:           fmt.Sprintf("Insertions - %d", analyzer.CURR_YEAR),
+		BackgroundColor: "rgb(255, 99, 132)",
+		Stack:           fmt.Sprintf("%d", analyzer.CURR_YEAR),
+	}
+	deletions := helpers.StackedBarChartDataset{
+		Label:           fmt.Sprintf("Deletions - %d", analyzer.CURR_YEAR),
+		BackgroundColor: "rgb(99, 255, 132)",
+		Stack:           fmt.Sprintf("%d", analyzer.CURR_YEAR),
+	}
+
+	for _, d := range data {
+		buckets = append(buckets, string(d.Author))
+
+		insertions.Data = append(insertions.Data, d.Insertions)
+		deletions.Data = append(insertions.Data, d.Deletions)
+	}
+
+	return helpers.StackedBarChartData{
+		Buckets: buckets,
+		Datasets: []helpers.StackedBarChartDataset{
+			insertions,
+			deletions,
+		},
+	}
+}
+
+func FileChangesMadeByAuthor(multiRepoRecap analyzer.MultiRepoRecap) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -43,7 +82,20 @@ func FileChangesMadeByAuthor() templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div>Here it is</div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<pre>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var3 string
+			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(helpers.Json(getFileChangesMadeByAuthorChartData(multiRepoRecap.FileChangesMadeByAuthor)))
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/FileChangesMadeByAuthor.templ`, Line: 46, Col: 98}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</pre>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

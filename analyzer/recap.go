@@ -116,22 +116,6 @@ type AuthorFileChangesSummary struct {
 	Deletions  int    `json:"deletions"`
 }
 
-type BarChartDataset struct {
-	// The thing that the chart key shows
-	Label string
-	// The actual numbers across all the buckets on the X axis
-	Data []int
-	// The "stack" that this dataset belongs to within the bucket. Used to "stack"
-	// related things together within one line. (e.g. for example, code
-	// insertions/deletions displayed on the same bar)
-	Stack string
-}
-
-type StackedBarChartData struct {
-	Buckets  []string
-	Datasets []BarChartDataset
-}
-
 func GetMultiRepoRecapFromTmpDir() (MultiRepoRecap, error) {
 	if !HasRecapBeenRan() {
 		return MultiRepoRecap{}, os.ErrNotExist

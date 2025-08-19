@@ -152,7 +152,7 @@ func addPresentationRoutes(e *echo.Echo) {
 			return t.RenderRepoNotFound(c)
 		}
 
-		component := pages.FileChangesMadeByAuthor()
+		component := pages.FileChangesMadeByAuthor(multiRepoRecap)
 		content := t.Render(t.RenderParams{
 			C:         c,
 			Component: component,

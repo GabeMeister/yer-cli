@@ -1,9 +1,48 @@
 package pages 
 
-import "GabeMeister/yer-cli/presentation/views/components"
+import (
+	"GabeMeister/yer-cli/analyzer"
+	"GabeMeister/yer-cli/presentation/helpers"
+	"GabeMeister/yer-cli/presentation/views/components"
+	"fmt"
+)
 
-templ FileChangesMadeByAuthor() {
+type FileChangesMadeByAuthorProps struct {
+	data string
+}
+
+func getFileChangesMadeByAuthorChartData(data []analyzer.AuthorFileChangesSummary) helpers.StackedBarChartData {
+	// Put the author names as the "buckets" across the X axis
+	buckets := []string{}
+	insertions := helpers.StackedBarChartDataset{
+		Label:           fmt.Sprintf("Insertions - %d", analyzer.CURR_YEAR),
+		BackgroundColor: "rgb(255, 99, 132)",
+		Stack:           fmt.Sprintf("%d", analyzer.CURR_YEAR),
+	}
+	deletions := helpers.StackedBarChartDataset{
+		Label:           fmt.Sprintf("Deletions - %d", analyzer.CURR_YEAR),
+		BackgroundColor: "rgb(99, 255, 132)",
+		Stack:           fmt.Sprintf("%d", analyzer.CURR_YEAR),
+	}
+
+	for _, d := range data {
+		buckets = append(buckets, string(d.Author))
+
+		insertions.Data = append(insertions.Data, d.Insertions)
+		deletions.Data = append(insertions.Data, d.Deletions)
+	}
+
+	return helpers.StackedBarChartData{
+		Buckets: buckets,
+		Datasets: []helpers.StackedBarChartDataset{
+			insertions,
+			deletions,
+		},
+	}
+}
+
+templ FileChangesMadeByAuthor(multiRepoRecap analyzer.MultiRepoRecap) {
 	@components.Slide() {
-		<div>Here it is</div>
+		<pre>{ helpers.Json(getFileChangesMadeByAuthorChartData(multiRepoRecap.FileChangesMadeByAuthor)) }</pre>
 	}
 }

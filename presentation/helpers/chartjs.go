@@ -273,97 +273,75 @@ func GetYearComparisonChartData(data YearComparisonChartData, options YearCompar
 }
 
 type StackedBarChartDataset struct {
-	// The thing that the key shows
+	// The name of the dataset that goes "across" all the buckets
 	Label string
-	// The actual numbers across all the items on the X axis
+	// The actual numbers across all the buckets on the X axis
 	Data []int
-	// The background color
+	// The background color for the bars of this dataset
 	BackgroundColor string
-	// The "stack" that this dataset belongs to within the bucket. (Used to
-	// "stack" related things together within one line)
+	// The "stack" that this dataset belongs to within the bucket. Used to "stack"
+	// related things together within one line. (e.g. for example, code
+	// insertions/deletions displayed on the same bar)
 	Stack string
 }
 
-// func GetStackedBarChartData(datasets []StackedBarChartDataset) map[string]interface{} {
-// 	// Could be repos, authors, etc.
-// 	buckets := []string{}
+type StackedBarChartData struct {
+	Buckets    []string
+	Datasets   []StackedBarChartDataset
+	YAxisLabel string
+}
 
-// 	prevYearData := []int{}
-// 	currYearData := []int{}
+func GetStackedBarChartData(data StackedBarChartData) map[string]interface{} {
+	datasets := []map[string]interface{}{}
+	for _, d := range data.Datasets {
+		datasets = append(datasets, map[string]interface{}{
+			"label":           d.Label,
+			"data":            d.Data,
+			"backgroundColor": "rgba(54, 162, 235, 0.5)",
+			// "borderColor":     "rgba(54, 162, 235, 1)",
+			"borderWidth": 1,
+			"stack":       "Stack 1",
+		})
+	}
 
-// 	for repo := range data.Dataset {
-// 		buckets = append(buckets, repo)
-// 	}
-
-// 	sort.Slice(buckets, func(i, j int) bool {
-// 		return data.Dataset[buckets[i]].Curr > data.Dataset[buckets[j]].Curr
-// 	})
-
-// 	if options.Limit != 0 && len(data.Dataset) > options.Limit {
-// 		buckets = buckets[0:options.Limit]
-// 	}
-
-// 	for _, repo := range buckets {
-// 		item := data.Dataset[repo]
-// 		prevYearData = append(prevYearData, item.Prev)
-// 		currYearData = append(currYearData, item.Curr)
-// 	}
-
-// 	return map[string]interface{}{
-// 		"type": "bar",
-// 		"data": map[string]interface{}{
-// 			"labels": buckets,
-// 			"datasets": []map[string]interface{}{
-// 				{
-// 					"label":           "2024",
-// 					"data":            prevYearData,
-// 					"backgroundColor": "rgba(54, 162, 235, 0.5)",
-// 					"borderColor":     "rgba(54, 162, 235, 1)",
-// 					"borderWidth":     1,
-// 					"stack":           "Stack 1",
-// 				},
-// 				{
-// 					"label":           "2025",
-// 					"data":            currYearData,
-// 					"backgroundColor": "rgba(255, 99, 132, 0.5)",
-// 					"borderColor":     "rgba(255, 99, 132, 1)",
-// 					"borderWidth":     1,
-// 					"stack":           "Stack 0",
-// 				},
-// 			},
-// 		},
-// 		"options": map[string]interface{}{
-// 			"responsive": true,
-// 			"scales": map[string]interface{}{
-// 				"y": map[string]interface{}{
-// 					"beginAtZero": true,
-// 					"title": map[string]interface{}{
-// 						"display": true,
-// 						"text":    data.YAxisLabel,
-// 						"color":   "white",
-// 					},
-// 					"ticks": map[string]interface{}{
-// 						"color": "white",
-// 					},
-// 				},
-// 				"x": map[string]interface{}{
-// 					"ticks": map[string]interface{}{
-// 						"color": "white",
-// 					},
-// 				},
-// 			},
-// 			"plugins": map[string]interface{}{
-// 				"legend": map[string]interface{}{
-// 					"labels": map[string]interface{}{
-// 						"color": "white",
-// 					},
-// 				},
-// 			},
-// 			"barPercentage":      1.0,
-// 			"categoryPercentage": 0.3,
-// 		},
-// 	}
-// }
+	return map[string]interface{}{
+		"type": "bar",
+		"data": map[string]interface{}{
+			"labels":   data.Buckets,
+			"datasets": datasets,
+		},
+		"options": map[string]interface{}{
+			"responsive": true,
+			"scales": map[string]interface{}{
+				"y": map[string]interface{}{
+					"beginAtZero": true,
+					"title": map[string]interface{}{
+						"display": true,
+						"text":    data.YAxisLabel,
+						"color":   "white",
+					},
+					"ticks": map[string]interface{}{
+						"color": "white",
+					},
+				},
+				"x": map[string]interface{}{
+					"ticks": map[string]interface{}{
+						"color": "white",
+					},
+				},
+			},
+			"plugins": map[string]interface{}{
+				"legend": map[string]interface{}{
+					"labels": map[string]interface{}{
+						"color": "white",
+					},
+				},
+			},
+			"barPercentage":      1.0,
+			"categoryPercentage": 0.3,
+		},
+	}
+}
 
 var COLORS = []string{
 	"rgb(255, 99, 132)",  // Red
