@@ -297,10 +297,10 @@ func GetStackedBarChartData(data StackedBarChartData) map[string]interface{} {
 		datasets = append(datasets, map[string]interface{}{
 			"label":           d.Label,
 			"data":            d.Data,
-			"backgroundColor": "rgba(54, 162, 235, 0.5)",
+			"backgroundColor": d.BackgroundColor,
 			// "borderColor":     "rgba(54, 162, 235, 1)",
 			"borderWidth": 1,
-			"stack":       "Stack 1",
+			"stack":       d.Stack,
 		})
 	}
 

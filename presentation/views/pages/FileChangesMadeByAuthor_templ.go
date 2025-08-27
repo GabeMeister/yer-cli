@@ -13,40 +13,50 @@ import (
 	"GabeMeister/yer-cli/presentation/helpers"
 	"GabeMeister/yer-cli/presentation/views/components"
 	"fmt"
+	"slices"
 )
 
 type FileChangesMadeByAuthorProps struct {
 	data string
 }
 
-func getFileChangesMadeByAuthorChartData(data []analyzer.AuthorFileChangesSummary) helpers.StackedBarChartData {
+func getFileChangesMadeByAuthorChartData(data []analyzer.AuthorFileChangesSummary) map[string]interface{} {
 	// Put the author names as the "buckets" across the X axis
 	buckets := []string{}
 	insertions := helpers.StackedBarChartDataset{
-		Label:           fmt.Sprintf("Insertions - %d", analyzer.CURR_YEAR),
-		BackgroundColor: "rgb(255, 99, 132)",
-		Stack:           fmt.Sprintf("%d", analyzer.CURR_YEAR),
-	}
-	deletions := helpers.StackedBarChartDataset{
-		Label:           fmt.Sprintf("Deletions - %d", analyzer.CURR_YEAR),
+		Label:           "Insertions",
 		BackgroundColor: "rgb(99, 255, 132)",
 		Stack:           fmt.Sprintf("%d", analyzer.CURR_YEAR),
 	}
+	deletions := helpers.StackedBarChartDataset{
+		Label:           "Deletions",
+		BackgroundColor: "rgb(255, 99, 132)",
+		Stack:           fmt.Sprintf("%d", analyzer.CURR_YEAR),
+	}
+
+	slices.SortFunc(data, func(a analyzer.AuthorFileChangesSummary, b analyzer.AuthorFileChangesSummary) int {
+		totalA := a.Insertions + a.Deletions
+		totalB := b.Insertions + b.Deletions
+
+		return totalB - totalA
+	})
 
 	for _, d := range data {
 		buckets = append(buckets, string(d.Author))
 
 		insertions.Data = append(insertions.Data, d.Insertions)
-		deletions.Data = append(insertions.Data, d.Deletions)
+		deletions.Data = append(deletions.Data, 0-d.Deletions)
 	}
 
-	return helpers.StackedBarChartData{
+	stackedBarChartData := helpers.StackedBarChartData{
 		Buckets: buckets,
 		Datasets: []helpers.StackedBarChartDataset{
-			insertions,
 			deletions,
+			insertions,
 		},
 	}
+
+	return helpers.GetStackedBarChartData(stackedBarChartData)
 }
 
 func FileChangesMadeByAuthor(multiRepoRecap analyzer.MultiRepoRecap) templ.Component {
@@ -82,20 +92,46 @@ func FileChangesMadeByAuthor(multiRepoRecap analyzer.MultiRepoRecap) templ.Compo
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<pre>")
+			templ_7745c5c3_Var3 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+				templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+				templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+				if !templ_7745c5c3_IsBuffer {
+					defer func() {
+						templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+						if templ_7745c5c3_Err == nil {
+							templ_7745c5c3_Err = templ_7745c5c3_BufErr
+						}
+					}()
+				}
+				ctx = templ.InitializeContext(ctx)
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("File Changes Made by Author")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				return templ_7745c5c3_Err
+			})
+			templ_7745c5c3_Err = components.Title().Render(templ.WithChildren(ctx, templ_7745c5c3_Var3), templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var3 string
-			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(helpers.Json(getFileChangesMadeByAuthorChartData(multiRepoRecap.FileChangesMadeByAuthor)))
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/FileChangesMadeByAuthor.templ`, Line: 46, Col: 98}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" <div class=\"chart-js-container\" data-grouped-bar-chart-data=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</pre>")
+			var templ_7745c5c3_Var4 string
+			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(helpers.Json(getFileChangesMadeByAuthorChartData(multiRepoRecap.FileChangesMadeByAuthor)))
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/FileChangesMadeByAuthor.templ`, Line: 61, Col: 122}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><canvas id=\"grouped-bar-chart-canvas\"></canvas></div>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = components.NextButton(helpers.GetMultiRepoNextButtonLink("/file-changes-made-by-author", multiRepoRecap)).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

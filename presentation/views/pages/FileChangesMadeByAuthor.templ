@@ -5,44 +5,63 @@ import (
 	"GabeMeister/yer-cli/presentation/helpers"
 	"GabeMeister/yer-cli/presentation/views/components"
 	"fmt"
+	"slices"
 )
 
 type FileChangesMadeByAuthorProps struct {
 	data string
 }
 
-func getFileChangesMadeByAuthorChartData(data []analyzer.AuthorFileChangesSummary) helpers.StackedBarChartData {
+func getFileChangesMadeByAuthorChartData(data []analyzer.AuthorFileChangesSummary) map[string]interface{} {
 	// Put the author names as the "buckets" across the X axis
 	buckets := []string{}
 	insertions := helpers.StackedBarChartDataset{
-		Label:           fmt.Sprintf("Insertions - %d", analyzer.CURR_YEAR),
-		BackgroundColor: "rgb(255, 99, 132)",
-		Stack:           fmt.Sprintf("%d", analyzer.CURR_YEAR),
-	}
-	deletions := helpers.StackedBarChartDataset{
-		Label:           fmt.Sprintf("Deletions - %d", analyzer.CURR_YEAR),
+		Label:           "Insertions",
 		BackgroundColor: "rgb(99, 255, 132)",
 		Stack:           fmt.Sprintf("%d", analyzer.CURR_YEAR),
 	}
+	deletions := helpers.StackedBarChartDataset{
+		Label:           "Deletions",
+		BackgroundColor: "rgb(255, 99, 132)",
+		Stack:           fmt.Sprintf("%d", analyzer.CURR_YEAR),
+	}
+
+	slices.SortFunc(data, func(a analyzer.AuthorFileChangesSummary, b analyzer.AuthorFileChangesSummary) int {
+		totalA := a.Insertions + a.Deletions
+		totalB := b.Insertions + b.Deletions
+
+		return totalB - totalA
+	})
 
 	for _, d := range data {
 		buckets = append(buckets, string(d.Author))
 
 		insertions.Data = append(insertions.Data, d.Insertions)
-		deletions.Data = append(insertions.Data, d.Deletions)
+		deletions.Data = append(deletions.Data, 0-d.Deletions)
 	}
 
-	return helpers.StackedBarChartData{
+	stackedBarChartData := helpers.StackedBarChartData{
 		Buckets: buckets,
 		Datasets: []helpers.StackedBarChartDataset{
-			insertions,
 			deletions,
+			insertions,
 		},
 	}
+
+	return helpers.GetStackedBarChartData(stackedBarChartData)
 }
 
 templ FileChangesMadeByAuthor(multiRepoRecap analyzer.MultiRepoRecap) {
 	@components.Slide() {
-		<pre>{ helpers.Json(getFileChangesMadeByAuthorChartData(multiRepoRecap.FileChangesMadeByAuthor)) }</pre>
+		@components.Title() {
+			File Changes Made by Author
+		}
+		<div
+			class="chart-js-container"
+			data-grouped-bar-chart-data={ helpers.Json(getFileChangesMadeByAuthorChartData(multiRepoRecap.FileChangesMadeByAuthor)) }
+		>
+			<canvas id="grouped-bar-chart-canvas"></canvas>
+		</div>
+		@components.NextButton(helpers.GetMultiRepoNextButtonLink("/file-changes-made-by-author", multiRepoRecap))
 	}
 }
