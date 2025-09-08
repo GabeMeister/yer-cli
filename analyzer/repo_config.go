@@ -413,6 +413,84 @@ func (r *RepoConfig) getCommitsByHourCurrYear() []CommitHour {
 	return commitHours
 }
 
+func (r *RepoConfig) getMergeCommitsByMonthCurrYear() []CommitMonth {
+	commits := r.getCurrYearMergeGitCommits()
+
+	monthMap := make(map[string]int)
+
+	for _, commit := range commits {
+		currDate, err := time.Parse("Mon Jan 2 15:04:05 2006 -0700", commit.Date)
+		if err != nil {
+			panic(err)
+		}
+		month := currDate.Month().String()
+		monthMap[month] += 1
+	}
+
+	commitMonths := []CommitMonth{}
+
+	for _, month := range MONTHS {
+		commitMonths = append(commitMonths, CommitMonth{
+			Month:   month,
+			Commits: monthMap[month],
+		})
+	}
+
+	return commitMonths
+}
+
+func (r *RepoConfig) getMergeCommitsByWeekDayCurrYear() []CommitWeekDay {
+	commits := r.getCurrYearMergeGitCommits()
+
+	weekDayMap := make(map[string]int)
+
+	for _, commit := range commits {
+		currDate, err := time.Parse("Mon Jan 2 15:04:05 2006 -0700", commit.Date)
+		if err != nil {
+			panic(err)
+		}
+		weekDay := currDate.Weekday().String()
+		weekDayMap[weekDay] += 1
+	}
+
+	commitWeekDays := []CommitWeekDay{}
+
+	for _, weekDay := range WEEK_DAYS {
+		commitWeekDays = append(commitWeekDays, CommitWeekDay{
+			Day:     weekDay,
+			Commits: weekDayMap[weekDay],
+		})
+	}
+
+	return commitWeekDays
+}
+
+func (r *RepoConfig) getMergeCommitsByHourCurrYear() []CommitHour {
+	commits := r.getCurrYearMergeGitCommits()
+
+	hourMap := make(map[int]int)
+
+	for _, commit := range commits {
+		currDate, err := time.Parse("Mon Jan 2 15:04:05 2006 -0700", commit.Date)
+		if err != nil {
+			panic(err)
+		}
+		hour := currDate.Hour()
+		hourMap[hour] += 1
+	}
+
+	commitHours := []CommitHour{}
+
+	for idx, hour := range HOURS {
+		commitHours = append(commitHours, CommitHour{
+			Hour:    hour,
+			Commits: hourMap[idx],
+		})
+	}
+
+	return commitHours
+}
+
 func (r *RepoConfig) getMostInsertionsInCommitCurrYear() GitCommit {
 	commits := r.getCurrYearGitCommits()
 

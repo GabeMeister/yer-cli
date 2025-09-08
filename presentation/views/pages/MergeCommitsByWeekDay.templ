@@ -7,15 +7,15 @@ import (
 	"GabeMeister/yer-cli/presentation/views/components"
 )
 
-func getAggregateCommitsByWeekDayData(multiRepoRecap analyzer.MultiRepoRecap) map[string]interface{} {
+func getMergeCommitsByWeekDayData(multiRepoRecap analyzer.MultiRepoRecap) map[string]interface{} {
 	result := helpers.ChartJSBarChartData{
-		YAxisLabel: "Commits",
+		YAxisLabel: "Merges",
 		XAxisLabel: "Week Day",
 		Dataset:    []helpers.BarChartItem{},
 	}
 	weekDays := helpers.GetWeekDays()
 
-	for idx, commits := range multiRepoRecap.AggregateCommitsByWeekDay {
+	for idx, commits := range multiRepoRecap.MergeCommitsByWeekDay {
 		weekDay := weekDays[idx]
 		result.Dataset = append(result.Dataset, helpers.BarChartItem{
 			Name:  weekDay,
@@ -28,17 +28,17 @@ func getAggregateCommitsByWeekDayData(multiRepoRecap analyzer.MultiRepoRecap) ma
 	})
 }
 
-templ AggregateCommitsByWeekDay(multiRepoRecap analyzer.MultiRepoRecap) {
+templ MergeCommitsByWeekDay(multiRepoRecap analyzer.MultiRepoRecap) {
 	@components.Slide() {
 		@components.Title() {
-			Aggregate Commits by Week Day 
+			Merges by Week Day 
 		}
 		<div
 			class="chart-js-container"
-			data-grouped-bar-chart-data={ helpers.Json(getAggregateCommitsByWeekDayData(multiRepoRecap)) }
+			data-grouped-bar-chart-data={ helpers.Json(getMergeCommitsByWeekDayData(multiRepoRecap)) }
 		>
 			<canvas id="grouped-bar-chart-canvas"></canvas>
 		</div>
-		@components.NextButton(helpers.GetMultiRepoNextButtonLink("/aggregate-commits-by-week-day", multiRepoRecap))
+		@components.NextButton(helpers.GetMultiRepoNextButtonLink("/merge-commits-by-week-day", multiRepoRecap))
 	}
 }

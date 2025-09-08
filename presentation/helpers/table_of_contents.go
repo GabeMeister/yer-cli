@@ -25,12 +25,12 @@ var MULTI_REPO_TABLE_OF_CONTENTS = []string{
 	"/file-changes-made-by-author",
 	"/lines-of-code-owned-by-author-all-time/title",
 	"/lines-of-code-owned-by-author-all-time",
-	"/aggregate-commits-by-month/title",
-	"/aggregate-commits-by-month",
-	"/aggregate-commits-by-week-day/title",
-	"/aggregate-commits-by-week-day",
-	"/aggregate-commits-by-hour/title",
-	"/aggregate-commits-by-hour",
+	"/merge-commits-by-month/title",
+	"/merge-commits-by-month",
+	"/merge-commits-by-week-day/title",
+	"/merge-commits-by-week-day",
+	"/merge-commits-by-hour/title",
+	"/merge-commits-by-hour",
 	"/merges-to-master-by-repo/title",
 	"/merges-to-master-by-repo",
 	"/end",
@@ -206,162 +206,6 @@ type TitleSlideData struct {
 	NextBtnUrl  string
 }
 
-func GetTitleSlideData(page string, recap analyzer.Recap) TitleSlideData {
-	nextBtnUrl := GetNextButtonLink(fmt.Sprintf("/%s/title", page), recap)
-	data := TitleSlideData{
-		Title:       "",
-		Description: "",
-		NextBtnUrl:  nextBtnUrl,
-	}
-
-	switch page {
-	case "new-author-count-curr-year":
-		data.Title = "New Author Count"
-		data.Description = fmt.Sprintf("New authors in %d who committed to %s.", analyzer.CURR_YEAR, recap.Name)
-
-	case "author-count-curr-year":
-		data.Title = "Total Author Count"
-		data.Description = fmt.Sprintf("Total number of authors who committed to %s in %d.", recap.Name, analyzer.CURR_YEAR)
-
-	case "author-count-all-time":
-		data.Title = "All Time Authors"
-		data.Description = fmt.Sprintf("Total number of authors who committed to %s, since the beginning.", recap.Name)
-
-	case "file-count-prev-year":
-		data.Title = "Previous File Count"
-		data.Description = fmt.Sprintf("Total number of files that existed in %s last year (%d).", recap.Name, analyzer.PREV_YEAR)
-
-	case "file-count-curr-year":
-		data.Title = "Current File Count"
-		data.Description = fmt.Sprintf("Total number of files that exist in %s this year (%d).", recap.Name, analyzer.CURR_YEAR)
-
-	case "third-largest-file":
-		data.Title = "Third Largest File"
-		data.Description = "The third largest file in the repo right now."
-
-	case "second-largest-file":
-		data.Title = "Second Largest File"
-		data.Description = "The second largest file in the repo right now."
-
-	case "largest-file":
-		data.Title = "Largest File"
-		data.Description = "The absolute largest file in the entire repo right now."
-
-	case "total-lines-of-code-prev-year":
-		data.Title = fmt.Sprintf("Total Lines of Code (%d)", analyzer.PREV_YEAR)
-		data.Description = fmt.Sprintf("Total lines of code in the entire repo as of the end of last year (%d).", analyzer.PREV_YEAR)
-
-	case "total-lines-of-code-curr-year":
-		data.Title = fmt.Sprintf("Total Lines of Code (%d)", analyzer.CURR_YEAR)
-		data.Description = fmt.Sprintf("Total lines of code in the entire repo as of this year (%d).", analyzer.CURR_YEAR)
-
-	case "size-of-repo-by-week-curr-year":
-		data.Title = "Weekly Repo Size"
-		data.Description = fmt.Sprintf("Size of Repo by Week (%d)", analyzer.CURR_YEAR)
-
-	case "total-lines-of-code-in-repo-by-author":
-		data.Title = "Total Lines of Code"
-		data.Description = fmt.Sprintf("The total number of lines of code in %s, categorized by author.", recap.Name)
-
-	case "file-changes-by-author-curr-year":
-		data.Title = fmt.Sprintf("Line Changes (%d)", analyzer.CURR_YEAR)
-		data.Description = fmt.Sprintf("The total number of line changes made in %d by author.", analyzer.CURR_YEAR)
-
-	case "file-change-ratio-by-author-curr-year":
-		data.Title = "Line Change Ratios"
-		data.Description = fmt.Sprintf("The ratio of line insertions to deletions by author. A higher number means an author adds in more code to the repo than removes it. (%d)", analyzer.CURR_YEAR)
-
-	case "commonly-changed-files":
-		data.Title = "Commonly Changed Files"
-		data.Description = fmt.Sprintf("The files that seem to be changed the most frequently throughout %d.", analyzer.CURR_YEAR)
-
-	case "num-commits-prev-year":
-		data.Title = fmt.Sprintf("Number of Commits (%d)", analyzer.PREV_YEAR)
-		data.Description = fmt.Sprintf("The total number of commits made by authors last year (%d).", analyzer.PREV_YEAR)
-
-	case "num-commits-curr-year":
-		data.Title = fmt.Sprintf("Number of Commits (%d)", analyzer.CURR_YEAR)
-		data.Description = fmt.Sprintf("The total number of commits made by authors this year (%d).", analyzer.CURR_YEAR)
-
-	case "num-commits-all-time":
-		data.Title = "Number of Commits (All Time)"
-		data.Description = "The total number of commits made by authors, since the very beginning."
-
-	case "author-commits-over-time-curr-year":
-		data.Title = fmt.Sprintf("Commits Over Time (%d)", analyzer.CURR_YEAR)
-		data.Description = fmt.Sprintf("The number of commits made by each author, throughout the duration of %d.", analyzer.CURR_YEAR)
-
-	case "author-file-changes-over-time-curr-year":
-		data.Title = fmt.Sprintf("Line Changes Over Time (%d)", analyzer.CURR_YEAR)
-		data.Description = fmt.Sprintf("The number of line changes made by author, throughout the duration of %d.", analyzer.CURR_YEAR)
-
-	case "author-commit-counts-curr-year":
-		data.Title = fmt.Sprintf("Commit Counts (%d)", analyzer.CURR_YEAR)
-		data.Description = fmt.Sprintf("The number of commits by each author in %d.", analyzer.CURR_YEAR)
-
-	case "author-commit-counts-all-time":
-		data.Title = "Commit Counts (All Time)"
-		data.Description = "The number of commits by each author, since the beginning."
-
-	case "commits-by-weekday-curr-year":
-		data.Title = "Commits by Weekday"
-		data.Description = fmt.Sprintf("Number of commits made each week day, throughout %d.", analyzer.CURR_YEAR)
-
-	case "commits-by-hour-curr-year":
-		data.Title = "Commits by Hour"
-		data.Description = fmt.Sprintf("Number of commits made each hour of the day, throughout %d.", analyzer.CURR_YEAR)
-
-	case "commits-by-month-curr-year":
-		data.Title = "Commits by Month"
-		data.Description = fmt.Sprintf("Number of commits made each month of the year, throughout %d.", analyzer.CURR_YEAR)
-
-	case "most-single-day-commits-by-author-curr-year":
-		data.Title = "Most Single-Day Commits by Author"
-		data.Description = fmt.Sprintf("The most commits made in one day by an author in %d.", analyzer.CURR_YEAR)
-
-	case "most-insertions-in-single-commit-curr-year":
-		data.Title = "Most Code Added in Single Commit"
-		data.Description = fmt.Sprintf("The most massive single code change in %d.", analyzer.CURR_YEAR)
-
-	case "most-deletions-in-single-commit-curr-year":
-		data.Title = "Most Code Removed in Single Commit"
-		data.Description = fmt.Sprintf("The most code nuked from the codebase in a single commit in %d.", analyzer.CURR_YEAR)
-
-	case "largest-commit-message-curr-year":
-		data.Title = "Largest Commit Message"
-		data.Description = fmt.Sprintf("Largest commit message written by an author in %d.", analyzer.CURR_YEAR)
-
-	case "shortest-commit-message-curr-year":
-		data.Title = "Shortest Commit Message"
-		data.Description = fmt.Sprintf("The shortest, low-effort commit messages written in %d.", analyzer.CURR_YEAR)
-
-	case "commit-message-length-histogram-curr-year":
-		data.Title = "Commit Message Lengths"
-		data.Description = fmt.Sprintf("A histogram tracking the frequency of git commit message lengths in %d.", analyzer.CURR_YEAR)
-
-	case "direct-pushes-on-master-by-author-curr-year":
-		data.Title = "Direct Pushes on Master"
-		data.Description = fmt.Sprintf("The number of direct pushes to master, by author, in %d.", analyzer.CURR_YEAR)
-
-	case "merges-to-master-by-author-curr-year":
-		data.Title = "Testing on Merge Requests"
-		data.Description = fmt.Sprintf("The authors who tested and merged code the most in %d.", analyzer.CURR_YEAR)
-
-	case "most-merges-in-one-day-curr-year":
-		data.Title = "Most Merges in One Day"
-		data.Description = fmt.Sprintf("The most amount of merges done in a single day in %d.", analyzer.CURR_YEAR)
-
-	case "avg-merges-per-day-to-master-curr-year":
-		data.Title = "Average Merges Per Day"
-		data.Description = fmt.Sprintf("The average number of merges the team did per day in %d.", analyzer.CURR_YEAR)
-
-	default:
-		panic(fmt.Sprintf("Unrecognized page for title slide: %s", page))
-	}
-
-	return data
-}
-
 func GetMultiRepoTitleSlideData(page string, recap analyzer.MultiRepoRecap) TitleSlideData {
 	nextBtnUrl := GetMultiRepoNextButtonLink(fmt.Sprintf("/%s/title", page), recap)
 	data := TitleSlideData{
@@ -395,15 +239,15 @@ func GetMultiRepoTitleSlideData(page string, recap analyzer.MultiRepoRecap) Titl
 	case "lines-of-code-owned-by-author-all-time":
 		data.Title = "Lines of Code by Author"
 		data.Description = "The total lines of code that each author owns, across all repos."
-	case "aggregate-commits-by-month":
-		data.Title = "Aggregate Commits by Month"
-		data.Description = "The total commits made in all repos, broken out by month."
-	case "aggregate-commits-by-week-day":
-		data.Title = "Aggregate Commits by Week Day"
-		data.Description = "The total commits made in all repos, broken out by week day."
-	case "aggregate-commits-by-hour":
-		data.Title = "Aggregate Commits by Hour"
-		data.Description = "The total commits made in all repos, broken out by hour."
+	case "merge-commits-by-month":
+		data.Title = "Merges by Month"
+		data.Description = "The number of times code was merged across all repos, broken out by month."
+	case "merge-commits-by-week-day":
+		data.Title = "Merges by Week Day"
+		data.Description = "The number of times code was merged across all repos, broken out by week day."
+	case "merge-commits-by-hour":
+		data.Title = "Merges by Hour"
+		data.Description = "The number of times code was merged across all repos, broken out by hour of day."
 	case "merges-to-master-by-repo":
 		data.Title = "Merges to Master by Repo"
 		data.Description = "The total amount of merges into the master branch, broken out by repo."

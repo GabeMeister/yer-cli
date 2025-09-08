@@ -25,6 +25,9 @@ type Recap struct {
 	CommitsByMonthCurrYear          []CommitMonth                  `json:"commits_by_month_curr_year"`
 	CommitsByWeekDayCurrYear        []CommitWeekDay                `json:"commits_by_week_day_curr_year"`
 	CommitsByHourCurrYear           []CommitHour                   `json:"commits_by_hour_curr_year"`
+	MergeCommitsByMonthCurrYear     []CommitMonth                  `json:"merge_commits_by_month_curr_year"`
+	MergeCommitsByWeekDayCurrYear   []CommitWeekDay                `json:"merge_commits_by_week_day_curr_year"`
+	MergeCommitsByHourCurrYear      []CommitHour                   `json:"merge_commits_by_hour_curr_year"`
 	MostInsertionsInCommitCurrYear  GitCommit                      `json:"most_insertions_in_commit_curr_year"`
 	MostDeletionsInCommitCurrYear   GitCommit                      `json:"most_deletions_in_commit__curr_year"`
 	LargestCommitMessageCurrYear    GitCommit                      `json:"largest_commit_message_curr_year"`
@@ -81,9 +84,9 @@ type MultiRepoRecap struct {
 	CommitsMadeByAuthor         map[Author]*YearComparison `json:"commits_made_by_author"`
 	FileChangesMadeByAuthor     []AuthorFileChangesSummary `json:"file_changes_made_by_author"`
 	LinesOfCodeOwnedByAuthor    map[Author]int             `json:"lines_of_code_owned_by_author"`
-	AggregateCommitsByMonth     []int                      `json:"aggregate_commits_by_month"`
-	AggregateCommitsByWeekDay   []int                      `json:"aggregate_commits_by_week_day"`
-	AggregateCommitsByHour      []int                      `json:"aggregate_commits_by_hour"`
+	MergeCommitsByMonth         []int                      `json:"aggregate_commits_by_month"`
+	MergeCommitsByWeekDay       []int                      `json:"aggregate_commits_by_week_day"`
+	MergeCommitsByHour          []int                      `json:"aggregate_commits_by_hour"`
 	AvgMergesPerDayByRepo       map[Repo]float64           `json:"avg_merges_per_day_by_repo"`
 	MergesToMasterByRepo        map[Repo]YearComparison    `json:"merges_to_master_by_repo"`
 	MergesToMasterAllTimeByRepo map[Repo]int               `json:"merges_to_master_all_time_by_repo"`
@@ -165,6 +168,9 @@ func calculateRepoRecap(r *RepoConfig) {
 	commitsByMonthCurrYear := r.getCommitsByMonthCurrYear()
 	commitsByWeekDayCurrYear := r.getCommitsByWeekDayCurrYear()
 	commitsByHourCurrYear := r.getCommitsByHourCurrYear()
+	mergeCommitsByMonthCurrYear := r.getMergeCommitsByMonthCurrYear()
+	mergeCommitsByWeekDayCurrYear := r.getMergeCommitsByWeekDayCurrYear()
+	mergeCommitsByHourCurrYear := r.getMergeCommitsByHourCurrYear()
 	mostSingleDayCommitsByAuthorCurrYear := r.getMostCommitsByAuthorCurrYear()
 	mostInsertionsInCommitCurrYear := r.getMostInsertionsInCommitCurrYear()
 	mostDeletionsInCommitCurrYear := r.getMostDeletionsInCommitCurrYear()
@@ -219,6 +225,9 @@ func calculateRepoRecap(r *RepoConfig) {
 		CommitsByMonthCurrYear:          commitsByMonthCurrYear,
 		CommitsByWeekDayCurrYear:        commitsByWeekDayCurrYear,
 		CommitsByHourCurrYear:           commitsByHourCurrYear,
+		MergeCommitsByMonthCurrYear:     mergeCommitsByMonthCurrYear,
+		MergeCommitsByWeekDayCurrYear:   mergeCommitsByWeekDayCurrYear,
+		MergeCommitsByHourCurrYear:      mergeCommitsByHourCurrYear,
 		MostInsertionsInCommitCurrYear:  mostInsertionsInCommitCurrYear,
 		MostDeletionsInCommitCurrYear:   mostDeletionsInCommitCurrYear,
 		LargestCommitMessageCurrYear:    largestCommitMessageCurrYear,
@@ -312,9 +321,9 @@ func calculateMultiRepoRecap(c *ConfigFile) error {
 	commitsMadeByAuthor := getCommitsMadeByAuthor(recaps)
 	fileChangesMadeByAuthor := getFileChangesMadeByAuthor(recaps)
 	linesOfCodeOwnedByAuthor := getLinesOfCodeOwnedByAuthor(recaps)
-	aggregateCommitsByMonth := getAggregateCommitsByMonth(recaps)
-	aggregateCommitsByWeekDay := getAggregateCommitsByWeekDay(recaps)
-	aggregateCommitsByHour := getAggregateCommitsByHour(recaps)
+	mergeCommitsByMonth := getMergeCommitsByMonth(recaps)
+	mergeCommitsByWeekDay := getMergeCommitsByWeekDay(recaps)
+	mergeCommitsByHour := getMergeCommitsByHour(recaps)
 	avgMergesPerDayByRepo := getAvgMergesPerDayByRepo(recaps)
 	mergesToMasterByRepo := getMergesToMasterByRepo(recaps)
 	mergesToMasterAllTimeByRepo := getMergesToMasterAllTimeByRepo(recaps)
@@ -332,9 +341,9 @@ func calculateMultiRepoRecap(c *ConfigFile) error {
 		CommitsMadeByAuthor:         commitsMadeByAuthor,
 		FileChangesMadeByAuthor:     fileChangesMadeByAuthor,
 		LinesOfCodeOwnedByAuthor:    linesOfCodeOwnedByAuthor,
-		AggregateCommitsByMonth:     aggregateCommitsByMonth,
-		AggregateCommitsByWeekDay:   aggregateCommitsByWeekDay,
-		AggregateCommitsByHour:      aggregateCommitsByHour,
+		MergeCommitsByMonth:         mergeCommitsByMonth,
+		MergeCommitsByWeekDay:       mergeCommitsByWeekDay,
+		MergeCommitsByHour:          mergeCommitsByHour,
 		AvgMergesPerDayByRepo:       avgMergesPerDayByRepo,
 		MergesToMasterByRepo:        mergesToMasterByRepo,
 		MergesToMasterAllTimeByRepo: mergesToMasterAllTimeByRepo,
@@ -506,11 +515,11 @@ func getLinesOfCodeOwnedByAuthor(recaps []Recap) map[Author]int {
 	return linesOfCodeMap
 }
 
-func getAggregateCommitsByMonth(recaps []Recap) []int {
+func getMergeCommitsByMonth(recaps []Recap) []int {
 	commits := []int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 
 	for _, recap := range recaps {
-		for idx, commitMonth := range recap.CommitsByMonthCurrYear {
+		for idx, commitMonth := range recap.MergeCommitsByMonthCurrYear {
 			commits[idx] += commitMonth.Commits
 		}
 	}
@@ -518,11 +527,11 @@ func getAggregateCommitsByMonth(recaps []Recap) []int {
 	return commits
 }
 
-func getAggregateCommitsByWeekDay(recaps []Recap) []int {
+func getMergeCommitsByWeekDay(recaps []Recap) []int {
 	commits := []int{0, 0, 0, 0, 0, 0, 0}
 
 	for _, recap := range recaps {
-		for idx, commitMonth := range recap.CommitsByWeekDayCurrYear {
+		for idx, commitMonth := range recap.MergeCommitsByWeekDayCurrYear {
 			commits[idx] += commitMonth.Commits
 		}
 	}
@@ -530,11 +539,11 @@ func getAggregateCommitsByWeekDay(recaps []Recap) []int {
 	return commits
 }
 
-func getAggregateCommitsByHour(recaps []Recap) []int {
+func getMergeCommitsByHour(recaps []Recap) []int {
 	commits := []int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 
 	for _, recap := range recaps {
-		for idx, commitMonth := range recap.CommitsByHourCurrYear {
+		for idx, commitMonth := range recap.MergeCommitsByHourCurrYear {
 			commits[idx] += commitMonth.Commits
 		}
 	}

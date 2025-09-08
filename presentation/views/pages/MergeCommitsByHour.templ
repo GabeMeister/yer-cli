@@ -6,15 +6,15 @@ import (
 	"GabeMeister/yer-cli/presentation/views/components"
 )
 
-func getAggregateCommitsByHourData(multiRepoRecap analyzer.MultiRepoRecap) map[string]interface{} {
+func getMergeCommitsByHourData(multiRepoRecap analyzer.MultiRepoRecap) map[string]interface{} {
 	result := helpers.ChartJSBarChartData{
-		YAxisLabel: "Commits",
+		YAxisLabel: "Merges",
 		XAxisLabel: "Hour",
 		Dataset:    []helpers.BarChartItem{},
 	}
 	hours := helpers.GetHoursOfDay()
 
-	for idx, commits := range multiRepoRecap.AggregateCommitsByHour {
+	for idx, commits := range multiRepoRecap.MergeCommitsByHour {
 		hour := hours[idx]
 		result.Dataset = append(result.Dataset, helpers.BarChartItem{
 			Name:  hour,
@@ -27,17 +27,17 @@ func getAggregateCommitsByHourData(multiRepoRecap analyzer.MultiRepoRecap) map[s
 	})
 }
 
-templ AggregateCommitsByHour(multiRepoRecap analyzer.MultiRepoRecap) {
+templ MergeCommitsByHour(multiRepoRecap analyzer.MultiRepoRecap) {
 	@components.Slide() {
 		@components.Title() {
-			Aggregate Commits by Hour
+			Merges by Hour
 		}
 		<div
 			class="chart-js-container"
-			data-grouped-bar-chart-data={ helpers.Json(getAggregateCommitsByHourData(multiRepoRecap)) }
+			data-grouped-bar-chart-data={ helpers.Json(getMergeCommitsByHourData(multiRepoRecap)) }
 		>
 			<canvas id="grouped-bar-chart-canvas"></canvas>
 		</div>
-		@components.NextButton(helpers.GetMultiRepoNextButtonLink("/aggregate-commits-by-hour", multiRepoRecap))
+		@components.NextButton(helpers.GetMultiRepoNextButtonLink("/merge-commits-by-hour", multiRepoRecap))
 	}
 }
