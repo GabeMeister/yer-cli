@@ -2,10 +2,7 @@ package routes
 
 import (
 	"GabeMeister/yer-cli/analyzer"
-	"context"
-	"fmt"
 	"net/http"
-	"time"
 
 	helpers "GabeMeister/yer-cli/presentation/helpers"
 	"GabeMeister/yer-cli/presentation/views/pages"
@@ -29,30 +26,6 @@ func addPresentationRoutes(e *echo.Echo) {
 		})
 
 		return c.HTML(http.StatusOK, content)
-	})
-
-	e.GET("/shutdown", func(c echo.Context) error {
-		go func() {
-			ctx, cancel := context.WithTimeout(context.Background(), 10)
-			defer cancel()
-
-			yellow := "\033[1;33m"
-			reset := "\033[0m"
-
-			fmt.Printf("%s┌──────────────────────────────────────┐%s\n", yellow, reset)
-			fmt.Printf("%s│ Great! Now run the following command │%s\n", yellow, reset)
-			fmt.Printf("%s│ to analyze your stats:               │%s\n", yellow, reset)
-			fmt.Printf("%s│                                      │%s\n", yellow, reset)
-			fmt.Printf("%s│ ./year-end-recap -a                  │%s\n", yellow, reset)
-			fmt.Printf("%s└──────────────────────────────────────┘%s\n", yellow, reset)
-			fmt.Println()
-
-			time.Sleep(100 * time.Millisecond)
-			e.Shutdown(ctx)
-		}()
-
-		// TODO: give nice message
-		return c.String(http.StatusOK, "Go run ./year-end-recap -a")
 	})
 
 	e.GET("/:page/title", func(c echo.Context) error {

@@ -3,6 +3,7 @@ package routes
 import (
 	"GabeMeister/yer-cli/analyzer"
 	"GabeMeister/yer-cli/utils"
+	"context"
 	"fmt"
 	"os"
 	"slices"
@@ -522,6 +523,25 @@ func addAnalyzerRoutes(e *echo.Echo) {
 	e.GET("/finish-setup", func(c echo.Context) error {
 		config := analyzer.MustGetConfig(analyzer.DEFAULT_CONFIG_FILE)
 		config.RemoveEmptyReposAndSave(-1)
+
+		go func() {
+			ctx, cancel := context.WithTimeout(context.Background(), 10)
+			defer cancel()
+
+			yellow := "\033[1;33m"
+			reset := "\033[0m"
+
+			fmt.Printf("%s┌──────────────────────────────────────┐%s\n", yellow, reset)
+			fmt.Printf("%s│ Great! Now run the following command │%s\n", yellow, reset)
+			fmt.Printf("%s│ to analyze your stats:               │%s\n", yellow, reset)
+			fmt.Printf("%s│                                      │%s\n", yellow, reset)
+			fmt.Printf("%s│ ./year-end-recap -a                  │%s\n", yellow, reset)
+			fmt.Printf("%s└──────────────────────────────────────┘%s\n", yellow, reset)
+			fmt.Println()
+
+			time.Sleep(100 * time.Millisecond)
+			e.Shutdown(ctx)
+		}()
 
 		content := t.Render(t.RenderParams{
 			C:         c,
