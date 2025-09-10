@@ -9,7 +9,6 @@ import (
 	"fmt"
 	"io/fs"
 	"os"
-	"time"
 
 	"github.com/joho/godotenv"
 )
@@ -35,21 +34,6 @@ func customUsage() {
 }
 
 func runTest() {
-	// date1 := "Tue Apr 16 13:29:31 2024 +0000"
-	// date1 := "Wed Apr 17 01:48:21 2024 -0700"
-	// TODO: adjust as per time zone of current user
-	date1 := "Fri Nov 15 08:18:41 2024 -0800"
-	name, offset := time.Now().Zone()
-	fmt.Print("\n\n", "*** name, offset ***", "\n", name, "|||", offset, "\n\n\n")
-
-	currDate, err := time.Parse("Mon Jan 2 15:04:05 2006 -0700", date1)
-	if err != nil {
-		panic(err)
-	}
-	hour := currDate.Hour()
-
-	fmt.Println(date1, hour)
-
 }
 
 func main() {

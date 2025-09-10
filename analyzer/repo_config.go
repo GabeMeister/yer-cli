@@ -471,13 +471,18 @@ func (r *RepoConfig) getMergeCommitsByHourCurrYear() []CommitHour {
 	hourMap := make(map[int]int)
 
 	for _, commit := range commits {
-		currDate, err := time.Parse("Mon Jan 2 15:04:05 2006 -0700", commit.Date)
+		// Convert into the proper timezone that the user's in
+		name, offset := time.Now().Zone()
+		currentTZ := time.FixedZone(name, offset)
+
+		t, err := time.Parse("Mon Jan 2 15:04:05 2006 -0700", commit.Date)
 		if err != nil {
 			panic(err)
 		}
-		hour := currDate.Hour()
-		hourMap[hour] += 1
-		utils.Pause(commit.Date, hour)
+
+		userTime := t.In(currentTZ)
+		currentTZHour := userTime.Hour()
+		hourMap[currentTZHour] += 1
 	}
 
 	commitHours := []CommitHour{}
