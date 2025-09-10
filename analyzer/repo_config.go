@@ -477,6 +477,7 @@ func (r *RepoConfig) getMergeCommitsByHourCurrYear() []CommitHour {
 		}
 		hour := currDate.Hour()
 		hourMap[hour] += 1
+		utils.Pause(commit.Date, hour)
 	}
 
 	commitHours := []CommitHour{}

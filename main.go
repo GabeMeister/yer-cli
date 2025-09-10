@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"io/fs"
 	"os"
+	"time"
 
 	"github.com/joho/godotenv"
 )
@@ -34,16 +35,20 @@ func customUsage() {
 }
 
 func runTest() {
-	yellow := "\033[1;33m"
-	reset := "\033[0m"
+	// date1 := "Tue Apr 16 13:29:31 2024 +0000"
+	// date1 := "Wed Apr 17 01:48:21 2024 -0700"
+	// TODO: adjust as per time zone of current user
+	date1 := "Fri Nov 15 08:18:41 2024 -0800"
+	name, offset := time.Now().Zone()
+	fmt.Print("\n\n", "*** name, offset ***", "\n", name, "|||", offset, "\n\n\n")
 
-	fmt.Printf("%s┌──────────────────────────────────────┐%s\n", yellow, reset)
-	fmt.Printf("%s│ Done! Now run the following command  │%s\n", yellow, reset)
-	fmt.Printf("%s│ to view your stats:                  │%s\n", yellow, reset)
-	fmt.Printf("%s│                                      │%s\n", yellow, reset)
-	fmt.Printf("%s│ ./year-end-recap -v                  │%s\n", yellow, reset)
-	fmt.Printf("%s└──────────────────────────────────────┘%s\n", yellow, reset)
-	fmt.Println()
+	currDate, err := time.Parse("Mon Jan 2 15:04:05 2006 -0700", date1)
+	if err != nil {
+		panic(err)
+	}
+	hour := currDate.Hour()
+
+	fmt.Println(date1, hour)
 
 }
 
