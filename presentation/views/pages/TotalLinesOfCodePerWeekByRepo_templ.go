@@ -16,7 +16,7 @@ import (
 
 func getTotalLinesOfCodePerWeekByRepoChartData(multiRepoRecap analyzer.MultiRepoRecap) map[string]interface{} {
 	chartData := helpers.LineChartData{
-		XAxisTickLabels: helpers.GetWeeklyMonthDaysForYear(analyzer.CURR_YEAR),
+		XAxisTickLabels: helpers.GetSundaysForYear(analyzer.CURR_YEAR),
 		XAxisLabel:      "Months (by week)",
 		YAxisLabel:      "Lines of Code in Repo",
 	}
