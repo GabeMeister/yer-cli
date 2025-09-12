@@ -4,6 +4,7 @@ import (
 	"GabeMeister/yer-cli/analyzer"
 	"fmt"
 	"sort"
+	"time"
 )
 
 type YearComparisonChartData struct {
@@ -94,30 +95,25 @@ func GetHoursOfDay() []string {
 	}
 }
 
-// For each week of the year, get the month abbreviation that the week falls in
-func GetMonthsThroughYear() []string {
-	nums := []string{}
-	for i := 1; i <= 52; i++ {
-		nums = append(nums, WeekToMonth(i))
-	}
+func getFirstSunday(year int) time.Time {
+	jan1 := time.Date(year, time.January, 1, 0, 0, 0, 0, time.UTC)
+	daysToSunday := (7 - int(jan1.Weekday())) % 7
 
-	return nums
+	return jan1.AddDate(0, 0, daysToSunday)
 }
 
-func WeekToMonth(weekNum int) string {
-	months := []string{"Jan", "Feb", "Mar", "Apr", "May", "Jun",
-		"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"}
+// Get a month-day abbreviation for every Sunday of the year
+func GetSundaysForYear(year int) []string {
+	currDay := getFirstSunday(year)
 
-	// Approximate week to month (4.33 weeks per month on average)
-	monthIndex := (weekNum - 1) / 4
-	if monthIndex > 11 {
-		monthIndex = 11
-	}
-	if monthIndex < 0 {
-		monthIndex = 0
+	monthDays := []string{}
+	for i := 1; i <= 52; i++ {
+		monthDayAbbr := currDay.Format("Jan 2")
+		monthDays = append(monthDays, monthDayAbbr)
+		currDay = currDay.Add(7 * 24 * time.Hour)
 	}
 
-	return months[monthIndex]
+	return monthDays
 }
 
 type BarChartOptions struct {

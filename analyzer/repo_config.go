@@ -1386,6 +1386,17 @@ func (r *RepoConfig) getSizeOfRepoByWeekCurrYear() []int {
 		date := utils.GetDateFromISOString(commit.Date)
 		_, week := date.ISOWeek()
 
+		// We want to display weeks starting on Sundays, so if a year doesn't fall
+		// cleanly on a Sunday we just bucket those first few days together with the
+		// first week of the year that has a Sunday. (for example, if Jan 1 was a
+		// Wednesday, bucket any commits done from Jan 1-4 into the week starting on
+		// Jan 5
+		if date.Month() == time.January && week >= 52 {
+			week = 1
+		} else if date.Month() == time.December && (week == 53 || week == 1) {
+			week = 52
+		}
+
 		weekCommitsMap[week] = append(weekCommitsMap[week], commit)
 	}
 

@@ -5,18 +5,18 @@ package pages
 
 //lint:file-ignore SA4006 This context is only used if a nested component is present.
 
-import "github.com/a-h/templ"
-import templruntime "github.com/a-h/templ/runtime"
-
 import (
 	"GabeMeister/yer-cli/analyzer"
 	"GabeMeister/yer-cli/presentation/helpers"
 	"GabeMeister/yer-cli/presentation/views/components"
+
+	"github.com/a-h/templ"
+	templruntime "github.com/a-h/templ/runtime"
 )
 
 func getTotalLinesOfCodePerWeekByRepoChartData(multiRepoRecap analyzer.MultiRepoRecap) map[string]interface{} {
 	chartData := helpers.LineChartData{
-		XAxisTickLabels: helpers.GetMonthsThroughYear(),
+		XAxisTickLabels: helpers.GetSundaysForYear(analyzer.CURR_YEAR),
 		XAxisLabel:      "Months (by week)",
 		YAxisLabel:      "Lines of Code in Repo",
 	}
