@@ -57,14 +57,14 @@ func RepoPath(props RepoPathProps) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("><label for=\"repo-path\" class=\"font-medium\">Repo File Path</label><div class=\"flex gap-3 items-center w-full\"><button class=\"btn w-40\" type=\"button\" hx-get=\"/dir-list-modal\" hx-target=\"#modal-root\" hx-swap=\"outerHTML\" hx-vals=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("><label for=\"repo-path\" class=\"font-medium\">Repo File Path</label><div class=\"flex gap-3 items-center w-full\"><button class=\"btn w-44\" type=\"button\" hx-get=\"/dir-list-modal\" hx-target=\"#modal-root\" hx-swap=\"outerHTML\" hx-vals=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(utils.MustJSONStringify(map[string]string{"base-dir": props.RepoPath}))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/ConfigSetupPage/RepoPath.templ`, Line: 40, Col: 84}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/ConfigSetupPage/RepoPath.templ`, Line: 42, Col: 84}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -97,7 +97,7 @@ func RepoPath(props RepoPathProps) templ.Component {
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(props.RepoPath)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/ConfigSetupPage/RepoPath.templ`, Line: 58, Col: 27}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/ConfigSetupPage/RepoPath.templ`, Line: 60, Col: 27}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {

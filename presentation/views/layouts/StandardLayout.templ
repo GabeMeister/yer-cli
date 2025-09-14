@@ -1,5 +1,7 @@
 package layouts
 
+import "GabeMeister/yer-cli/presentation/views/components"
+
 templ StandardLayout() {
 	<!DOCTYPE html>
 	<html lang="en">
@@ -40,8 +42,13 @@ templ StandardLayout() {
 			<link rel="stylesheet" href="/css/styles.css"/>
 		</head>
 		<body class="h-screen overflow-y-hidden">
-			<div id="root" class="h-screen">
-				{ children... }
+			<div class="h-screen">
+				<div id="root" class="hidden md:block">
+					{ children... }
+				</div>
+				<div class="block md:hidden">
+					@components.NoMobile()
+				</div>
 			</div>
 			<div id="modal-root"></div>
 			<div id="toast"></div>
