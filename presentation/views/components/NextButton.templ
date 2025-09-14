@@ -1,16 +1,36 @@
 package components
 
+import (
+	"GabeMeister/yer-cli/presentation/helpers"
+	"fmt"
+)
+
+func getSlideNumber(href string) string {
+	for idx, pathname := range helpers.MULTI_REPO_TABLE_OF_CONTENTS {
+		if pathname == href {
+			// Since the href is for the NEXT slide, we want to show the previous
+			// slide's number and so we just return the idx directly and don't add 1
+			return fmt.Sprintf("%d", idx)
+		}
+	}
+
+	return ""
+}
+
 templ NextButton(href string) {
-	<button
-		hx-get={ href }
-		hx-push-url="true"
-		hx-target="body"
-		type="button"
-		id="next-btn"
-		hx-trigger="click, keydown[key=='ArrowRight'] from:body"
-		class="absolute bottom-6 cursor-pointer text-lg text-blue-100 transition duration-800 bg-gray-600 hover:bg-gray-700 border-2 border-solid border-gray-100 rounded-md px-4 py-1"
-	>
-		<span>Next</span>
-		<i class="ml-1 fa-solid fa-arrow-right"></i>
-	</button>
+	<div class="flex items-center gap-4 absolute bottom-6 text-white">
+		<div class="">Slide { getSlideNumber(href) } / 25</div>
+		<button
+			hx-get={ href }
+			hx-push-url="true"
+			hx-target="#root"
+			type="button"
+			id="next-btn"
+			hx-trigger="click, keydown[key=='ArrowRight'] from:body"
+			class="cursor-pointer text-lg  transition duration-800 bg-gray-600 hover:bg-gray-700 border-2 border-solid border-gray-100 rounded-md px-4 py-1"
+		>
+			<span>Next</span>
+			<i class="ml-1 fa-solid fa-arrow-right"></i>
+		</button>
+	</div>
 }

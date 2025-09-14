@@ -8,6 +8,23 @@ package components
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
+import (
+	"GabeMeister/yer-cli/presentation/helpers"
+	"fmt"
+)
+
+func getSlideNumber(href string) string {
+	for idx, pathname := range helpers.MULTI_REPO_TABLE_OF_CONTENTS {
+		if pathname == href {
+			// Since the href is for the NEXT slide, we want to show the previous
+			// slide's number and so we just return the idx directly and don't add 1
+			return fmt.Sprintf("%d", idx)
+		}
+	}
+
+	return ""
+}
+
 func NextButton(href string) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
@@ -29,20 +46,33 @@ func NextButton(href string) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<button hx-get=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"flex items-center gap-4 absolute bottom-6 text-white\"><div class=\"\">Slide ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
-		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(href)
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(getSlideNumber(href))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/NextButton.templ`, Line: 5, Col: 15}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/NextButton.templ`, Line: 22, Col: 44}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-push-url=\"true\" hx-target=\"body\" type=\"button\" id=\"next-btn\" hx-trigger=\"click, keydown[key==&#39;ArrowRight&#39;] from:body\" class=\"absolute bottom-6 cursor-pointer text-lg text-blue-100 transition duration-800 bg-gray-600 hover:bg-gray-700 border-2 border-solid border-gray-100 rounded-md px-4 py-1\"><span>Next</span> <i class=\"ml-1 fa-solid fa-arrow-right\"></i></button>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" / 25</div><button hx-get=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var3 string
+		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(href)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/NextButton.templ`, Line: 24, Col: 16}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-push-url=\"true\" hx-target=\"#root\" type=\"button\" id=\"next-btn\" hx-trigger=\"click, keydown[key==&#39;ArrowRight&#39;] from:body\" class=\"cursor-pointer text-lg  transition duration-800 bg-gray-600 hover:bg-gray-700 border-2 border-solid border-gray-100 rounded-md px-4 py-1\"><span>Next</span> <i class=\"ml-1 fa-solid fa-arrow-right\"></i></button></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

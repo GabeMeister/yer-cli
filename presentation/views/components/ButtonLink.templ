@@ -6,7 +6,7 @@ templ ButtonLink(href string) {
 	<button
 		hx-get={ href }
 		hx-push-url="true"
-		hx-target="body"
+		hx-target="#root"
 		type="button"
 		id={ fmt.Sprintf("button-link-%s", href) }
 		hx-trigger="click, keydown[key=='ArrowRight'] from:body"
