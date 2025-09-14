@@ -53,4 +53,9 @@ func addResourceRoutes(e *echo.Echo, static embed.FS) {
 		data, _ := static.ReadFile(fmt.Sprintf("static/scripts/%s", c.Param("name")))
 		return c.Blob(200, "text/javascript", data)
 	})
+
+	e.GET("/webfonts/:name", func(c echo.Context) error {
+		data, _ := static.ReadFile(fmt.Sprintf("static/webfonts/%s", c.Param("name")))
+		return c.Blob(200, "font/woff2", data)
+	})
 }

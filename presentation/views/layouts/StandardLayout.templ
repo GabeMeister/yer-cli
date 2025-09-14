@@ -22,7 +22,8 @@ templ StandardLayout() {
 			//
 			// FONT AWESOME
 			// 
-			<script defer src="https://kit.fontawesome.com/e00224d8d7.js" crossorigin="anonymous"></script>
+			// <script defer src="https://kit.fontawesome.com/e00224d8d7.js" crossorigin="anonymous"></script>
+			<link rel="stylesheet" href="/css/all.min.css"/>
 			//
 			// TOM SELECT
 			// 
@@ -35,14 +36,14 @@ templ StandardLayout() {
 			//
 			// JQUERY
 			//
-			<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+			<script src="/scripts/jquery.min.js"></script>
 			//
 			// CUSTOM STYLING
 			// 
 			<link rel="stylesheet" href="/css/styles.css"/>
 		</head>
 		<body class="h-screen overflow-y-hidden">
-			<div class="h-screen">
+			<div class="h-screen overflow-y-scroll">
 				<div id="root" class="hidden md:block">
 					{ children... }
 				</div>
