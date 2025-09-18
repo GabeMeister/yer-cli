@@ -14,6 +14,7 @@ import (
 	"GabeMeister/yer-cli/presentation/helpers"
 	"GabeMeister/yer-cli/presentation/views/components"
 	"GabeMeister/yer-cli/presentation/views/components/ConfigSetupPage"
+	"GabeMeister/yer-cli/presentation/views/components/errormessages"
 	"GabeMeister/yer-cli/presentation/views/pages"
 	t "GabeMeister/yer-cli/presentation/views/template"
 	"net/http"
@@ -99,7 +100,16 @@ func addAnalyzerRoutes(e *echo.Echo) {
 
 		repoIdx := config.GetRepoIndex(id)
 		if repoIdx == -1 {
-			return RenderMessage(c, "Couldn't find correct repo to edit. Please restart setup process by visiting `/create-recap")
+			component := errormessages.RepoNotFoundError(errormessages.RepoNotFoundErrorProps{
+				RepoId:   id,
+				RepoList: config.Repos,
+			})
+			content := t.Render(t.RenderParams{
+				C:         c,
+				Component: component,
+			})
+
+			return c.HTML(http.StatusOK, content)
 		}
 
 		// Clear any "empty" repos (only if the user isn't actively looking at it)

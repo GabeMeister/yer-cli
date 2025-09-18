@@ -5,6 +5,7 @@ templ Link(href string) {
 		hx-get={ href }
 		hx-push-url="true"
 		hx-target="#root"
+		hx-swap="innerHTML"
 		class="text-blue-400 hover:text-blue-500 duration-200 text-lg cursor-pointer"
 	>
 		{ children... }

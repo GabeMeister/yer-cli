@@ -66,7 +66,7 @@ func ConfigSetup(props ConfigSetupProps) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"config-setup\" class=\"flex flex-row gap-2 min-h-screen w-screen\"><div class=\"w-72 bg-white-200\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"config-setup\" class=\"flex flex-row gap-2 min-h-screen\"><div class=\"w-72 bg-white\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -106,7 +106,7 @@ func ConfigSetup(props ConfigSetupProps) templ.Component {
 				var templ_7745c5c3_Var5 string
 				templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("repo-link-%d", config.Id))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/ConfigSetup.templ`, Line: 39, Col: 50}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/ConfigSetup.templ`, Line: 42, Col: 50}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 				if templ_7745c5c3_Err != nil {
@@ -176,7 +176,7 @@ func ConfigSetup(props ConfigSetupProps) templ.Component {
 						var templ_7745c5c3_Var11 string
 						templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(filepath.Base(config.Path))
 						if templ_7745c5c3_Err != nil {
-							return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/ConfigSetup.templ`, Line: 53, Col: 40}
+							return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/ConfigSetup.templ`, Line: 56, Col: 40}
 						}
 						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
 						if templ_7745c5c3_Err != nil {
@@ -186,7 +186,7 @@ func ConfigSetup(props ConfigSetupProps) templ.Component {
 						var templ_7745c5c3_Var12 string
 						templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.JoinStringErrs("New Repo")
 						if templ_7745c5c3_Err != nil {
-							return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/ConfigSetup.templ`, Line: 55, Col: 24}
+							return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/ConfigSetup.templ`, Line: 58, Col: 24}
 						}
 						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var12))
 						if templ_7745c5c3_Err != nil {
@@ -215,7 +215,7 @@ func ConfigSetup(props ConfigSetupProps) templ.Component {
 					var templ_7745c5c3_Var13 string
 					templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("{\"id\":\"%d\"}", config.Id))
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/ConfigSetup.templ`, Line: 65, Col: 60}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/ConfigSetup.templ`, Line: 68, Col: 60}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
 					if templ_7745c5c3_Err != nil {
@@ -257,7 +257,7 @@ func ConfigSetup(props ConfigSetupProps) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"bg-gray-800 flex flex-col gap-12 justify-center items-center min-h-screen py-32 grow\"><div class=\"bg-white w-1/3 min-w-[480px] lg:max-w-[750px] p-6 rounded-md\"><form hx-patch=\"/config-file\" class=\"flex flex-col items-start gap-6\"><div class=\"flex justify-center w-full\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"flex flex-col gap-12 justify-center items-center min-h-screen py-32 grow\"><div class=\"bg-white text-black w-1/3 min-w-[480px] lg:max-w-[750px] p-6 rounded-md\"><form hx-patch=\"/config-file\" class=\"flex flex-col items-start gap-6\"><div class=\"flex justify-center w-full\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -340,7 +340,7 @@ func ConfigSetup(props ConfigSetupProps) templ.Component {
 			var templ_7745c5c3_Var15 string
 			templ_7745c5c3_Var15, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%d", props.Id))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/ConfigSetup.templ`, Line: 138, Col: 72}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/ConfigSetup.templ`, Line: 136, Col: 72}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var15))
 			if templ_7745c5c3_Err != nil {

@@ -1,0 +1,31 @@
+package errormessages
+
+import (
+	"GabeMeister/yer-cli/analyzer"
+	"fmt"
+)
+
+type RepoNotFoundErrorProps struct {
+	RepoId   int
+	RepoList []analyzer.RepoConfig
+}
+
+templ RepoNotFoundError(props RepoNotFoundErrorProps) {
+	<div class="p-6 md:p-24 flex flex-col gap-6">
+		<h1 class="h1">
+			Whoops! Could not find the right repo to edit. Please restart the config setup process by running 
+			<pre class="text-blue-400">./year-end-recap -s</pre>
+		</h1>
+		<div>
+			Repo id: { fmt.Sprintf("%d", props.RepoId) }
+		</div>
+		<div>
+			Repos:
+			<ul>
+				for _, r := range props.RepoList {
+					<div>{ r.Path } (id={ fmt.Sprintf("%d",  r.Id) })</div>
+				}
+			</ul>
+		</div>
+	</div>
+}

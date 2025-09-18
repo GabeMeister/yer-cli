@@ -2323,14 +2323,6 @@ video {
   animation: fade-in-animation-opacity-50 0.3s ease-in forwards;
 }
 
-#root {
-  overflow-y: scroll;
-}
-
-#root:has(.slide) {
-  overflow-y: auto;
-}
-
 .chart-js-container {
   position: relative;
   display: flex;
@@ -2396,6 +2388,10 @@ video {
 
   .md\:hidden {
     display: none;
+  }
+
+  .md\:p-24 {
+    padding: 6rem;
   }
 }
 

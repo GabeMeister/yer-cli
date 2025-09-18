@@ -27,8 +27,11 @@ type ConfigSetupProps struct {
 
 templ ConfigSetup(props ConfigSetupProps) {
 	@components.Page() {
-		<div id="config-setup" class="flex flex-row gap-2 min-h-screen w-screen">
-			<div class="w-72 bg-white-200">
+		<div id="config-setup" class="flex flex-row gap-2 min-h-screen">
+			/*
+			 * SIDE BAR
+			 */
+			<div class="w-72 bg-white">
 				@ConfigSetupPage.RecapNameDisplay(ConfigSetupPage.RecapNameTextboxProps{
 					RecapName: props.RecapName,
 				})
@@ -76,17 +79,12 @@ templ ConfigSetup(props ConfigSetupProps) {
 						Add Repo
 					</div>
 				}
-				// @components.Link("/edit-duplicate-authors") {
-				// 	<div class="flex items-center justify-center gap-2 p-3">
-				// 		<i
-				// 			class="fa-solid fa-pencil cursor-pointer"
-				// 		></i>
-				// 		<span>Group Duplicate Authors</span>
-				// 	</div>
-				// }
 			</div>
-			<div class="bg-gray-800 flex flex-col gap-12 justify-center items-center min-h-screen py-32 grow">
-				<div class="bg-white w-1/3 min-w-[480px] lg:max-w-[750px] p-6 rounded-md">
+			/*
+			 * CONTENT 
+			 */
+			<div class="flex flex-col gap-12 justify-center items-center min-h-screen py-32 grow">
+				<div class="bg-white text-black w-1/3 min-w-[480px] lg:max-w-[750px] p-6 rounded-md">
 					<form
 						hx-patch="/config-file"
 						class="flex flex-col items-start gap-6"

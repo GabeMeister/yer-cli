@@ -42,14 +42,12 @@ templ StandardLayout() {
 			// 
 			<link rel="stylesheet" href="/css/styles.css"/>
 		</head>
-		<body class="h-screen overflow-y-hidden">
-			<div class="h-screen overflow-y-scroll">
-				<div id="root" class="hidden md:block">
-					{ children... }
-				</div>
-				<div class="block md:hidden">
-					@components.NoMobile()
-				</div>
+		<body class="h-screen">
+			<div id="root" class="h-screen overflow-y-scroll hidden md:block">
+				{ children... }
+			</div>
+			<div class="h-screen block md:hidden">
+				@components.NoMobile()
 			</div>
 			<div id="modal-root"></div>
 			<div id="toast"></div>

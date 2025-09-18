@@ -1,9 +1,7 @@
 package components 
 
-type ErrorMessageProps struct {
-	Msg string
-}
-
-templ ErrorMessage(props ErrorMessageProps) {
-	<div class="p-6 text-xl">{ props.Msg }</div>
+templ ErrorMessage() {
+	<div class="p-6 text-xl text-black">
+		{ children... }
+	</div>
 }

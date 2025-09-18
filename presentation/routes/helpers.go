@@ -10,20 +10,16 @@ import (
 
 func RenderErrorMessage(c echo.Context, err error) error {
 	content := template.Render(template.RenderParams{
-		C: c,
-		Component: components.ErrorMessage(components.ErrorMessageProps{
-			Msg: err.Error(),
-		}),
+		C:         c,
+		Component: components.ErrorMessage(),
 	})
 	return c.HTML(http.StatusOK, content)
 }
 
 func RenderMessage(c echo.Context, msg string) error {
 	content := template.Render(template.RenderParams{
-		C: c,
-		Component: components.ErrorMessage(components.ErrorMessageProps{
-			Msg: msg,
-		}),
+		C:         c,
+		Component: components.ErrorMessage(),
 	})
 	return c.HTML(http.StatusOK, content)
 }

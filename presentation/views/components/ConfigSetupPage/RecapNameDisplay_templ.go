@@ -48,7 +48,7 @@ func RecapNameDisplay(props RecapNameTextboxProps) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-target=\"#recap-name-display\" hx-swap=\"outerHTML\"></i><h1 class=\"h1\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-target=\"#recap-name-display\" hx-swap=\"outerHTML\"></i><h1 class=\"h1 text-black\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
