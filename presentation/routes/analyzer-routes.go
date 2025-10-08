@@ -83,16 +83,6 @@ func addAnalyzerRoutes(e *echo.Echo) {
 			return nil
 		}
 
-		newParam := c.QueryParam("new")
-
-		if newParam == "true" {
-			newRepo := config.AddNewRepoConfig()
-			config.Save()
-
-			c.Redirect(301, fmt.Sprintf("/add-repo?id=%d", newRepo.Id))
-			return nil
-		}
-
 		id, err := helpers.GetIntQueryParam(c, "id")
 		if err != nil {
 			return RenderErrorMessage(c, err)
@@ -151,7 +141,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		return c.HTML(http.StatusOK, content)
 	})
 
-	e.PATCH("/config-file", func(c echo.Context) error {
+	e.PATCH("/config-setup", func(c echo.Context) error {
 		repoIdParam := c.FormValue("id")
 		repoId, err := strconv.Atoi(repoIdParam)
 		if err != nil {
@@ -194,12 +184,16 @@ func addAnalyzerRoutes(e *echo.Echo) {
 			return repo.Path == ""
 		})
 
+		emptyRepoId := -1
 		if emptyRepoIdx == -1 {
-			c.Response().Header().Set("HX-Redirect", "/add-repo?new=true")
+			newRepo := config.AddNewRepoConfig()
+			config.Save()
+			emptyRepoId = newRepo.Id
 		} else {
-			repoId := config.Repos[emptyRepoIdx].Id
-			c.Response().Header().Set("HX-Redirect", fmt.Sprintf("/add-repo?id=%d", repoId))
+			emptyRepoId = config.Repos[emptyRepoIdx].Id
 		}
+
+		c.Response().Header().Set("HX-Redirect", fmt.Sprintf("/add-repo?id=%d", emptyRepoId))
 
 		return c.NoContent(http.StatusOK)
 	})

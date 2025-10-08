@@ -257,7 +257,7 @@ func ConfigSetup(props ConfigSetupProps) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"flex flex-col gap-12 justify-center items-center min-h-screen py-32 grow\"><div class=\"bg-white text-black w-1/3 min-w-[480px] lg:max-w-[750px] p-6 rounded-md\"><form hx-patch=\"/config-file\" class=\"flex flex-col items-start gap-6\"><div class=\"flex justify-center w-full\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"flex flex-col gap-12 justify-center items-center min-h-screen py-32 grow\"><div class=\"bg-white text-black w-1/3 min-w-[480px] lg:max-w-[750px] p-6 rounded-md\"><form hx-patch=\"/config-setup\" class=\"flex flex-col items-start gap-6\"><div class=\"flex justify-center w-full\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
