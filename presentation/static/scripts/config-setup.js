@@ -368,16 +368,34 @@ function initExcludeFilesInput() {
 //   }
 // }
 
-function initConfigPage() {
+function handleDirList(evt) {
+  const requestPath = evt?.detail?.pathInfo?.requestPath;
+
+  if (requestPath) {
+    const url = new URL(requestPath, window.location.origin);
+
+    const requestsToFocusInput = ["/dir-list", "/dir-list-modal"];
+    if (requestsToFocusInput.includes(url.pathname)) {
+      // setTimeout is to wait for the modal animation
+      setTimeout(() => {
+        const el = document.querySelector("#search-term");
+        el.focus();
+      }, 25);
+    }
+  }
+}
+
+function initConfigPage(evt) {
   initIncludeFileExtensionsInput();
   initExcludeDirsInput();
   initExcludeFilesInput();
   // initExcludeAuthorsInput();
+  handleDirList(evt);
 }
 
 document.addEventListener("htmx:afterSettle", function (evt) {
   if (window.location.pathname === "/add-repo") {
-    initConfigPage();
+    initConfigPage(evt);
   }
 });
 

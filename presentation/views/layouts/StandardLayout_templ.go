@@ -47,7 +47,7 @@ func StandardLayout() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div id=\"modal-root\"></div><div id=\"toast\"></div><script defer type=\"module\" src=\"/scripts/presentation.js\"></script><script src=\"/scripts/config-page.js\"></script></body></html>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div id=\"modal-root\"></div><div id=\"toast\"></div><script defer type=\"module\" src=\"/scripts/presentation.js\"></script><script src=\"/scripts/config-setup.js\"></script></body></html>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
