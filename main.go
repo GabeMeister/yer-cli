@@ -9,6 +9,10 @@ import (
 	"fmt"
 	"io/fs"
 	"os"
+	"os/exec"
+	"strings"
+	"sync"
+	"time"
 
 	"github.com/joho/godotenv"
 )
@@ -34,6 +38,61 @@ func customUsage() {
 }
 
 func runTest() {
+	start := time.Now()
+
+	repoPath := "/home/gabe/dev/rb-frontend"
+	// Get all tracked files
+	cmd := exec.Command("git", "ls-files")
+	cmd.Dir = repoPath
+	output, _ := cmd.Output()
+	allFiles := strings.Split(strings.TrimSpace(string(output)), "\n")
+	files := []string{}
+	for _, file := range allFiles {
+		if strings.HasSuffix(file, ".ts") {
+			files = append(files, file)
+		}
+	}
+
+	var wg sync.WaitGroup
+	sem := make(chan struct{}, 10) // limit concurrent blames
+	var mu sync.Mutex              // mutex to protect the counter
+	var totalLines int64           // shared counter
+
+	for _, file := range files {
+		wg.Add(1)
+		go func(f string) {
+			defer wg.Done()
+			sem <- struct{}{}
+			defer func() { <-sem }()
+
+			cmd := exec.Command("git", "blame", f)
+			cmd.Dir = repoPath
+			output, _ := cmd.Output()
+			text := string(output)
+			length := len(strings.Split(text, "\n"))
+
+			fmt.Printf("%s | %d lines\n", file, length)
+
+			// Add to the overall number of lines (thread-safe)
+			mu.Lock()
+			totalLines += int64(length)
+			mu.Unlock()
+		}(file)
+
+		// // Synchronous way
+		// cmd := exec.Command("git", "blame", file)
+		// cmd.Dir = repoPath
+		// output, _ := cmd.Output()
+		// text := string(output)
+		// length := len(strings.Split(text, "\n"))
+		// fmt.Printf("%d lines | %s \n", length, file)
+		// totalLines += int64(length)
+
+	}
+	wg.Wait()
+
+	fmt.Printf("Total lines: %d\n", totalLines)
+	fmt.Printf("Time taken: %f sec\n", time.Since(start).Seconds())
 }
 
 func main() {
