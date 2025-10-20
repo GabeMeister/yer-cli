@@ -33,6 +33,11 @@ func getFileChangesMadeByAuthorChartData(data []analyzer.AuthorFileChangesSummar
 		return totalB - totalA
 	})
 
+	// Limit to the top 25
+	if len(data) > 25 {
+		data = data[:25]
+	}
+
 	for _, d := range data {
 		buckets = append(buckets, string(d.Author))
 

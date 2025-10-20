@@ -41,6 +41,11 @@ func getFileChangesMadeByAuthorChartData(data []analyzer.AuthorFileChangesSummar
 		return totalB - totalA
 	})
 
+	// Limit to the top 25
+	if len(data) > 25 {
+		data = data[:25]
+	}
+
 	for _, d := range data {
 		buckets = append(buckets, string(d.Author))
 
@@ -121,7 +126,7 @@ func FileChangesMadeByAuthor(multiRepoRecap analyzer.MultiRepoRecap) templ.Compo
 			var templ_7745c5c3_Var4 string
 			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(helpers.Json(getFileChangesMadeByAuthorChartData(multiRepoRecap.FileChangesMadeByAuthor)))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/FileChangesMadeByAuthor.templ`, Line: 61, Col: 122}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/FileChangesMadeByAuthor.templ`, Line: 66, Col: 122}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {

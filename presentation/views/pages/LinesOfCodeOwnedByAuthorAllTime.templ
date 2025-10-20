@@ -40,6 +40,7 @@ templ LinesOfCodeOwnedByAuthorAllTime(multiRepoRecap analyzer.MultiRepoRecap) {
 			class="chart-js-container"
 			data-grouped-bar-chart-data={ helpers.Json(helpers.GetBarChartData(getLinesOfCodeOwnedByAuthorAllTimeData(multiRepoRecap), helpers.BarChartOptions{ 
 				Sort: true,
+				Limit: 25,
 			})) }
 		>
 			<canvas id="grouped-bar-chart-canvas"></canvas>

@@ -117,7 +117,8 @@ func GetSundaysForYear(year int) []string {
 }
 
 type BarChartOptions struct {
-	Sort bool
+	Sort  bool
+	Limit int
 }
 
 func GetBarChartData(data ChartJSBarChartData, options BarChartOptions) map[string]interface{} {
@@ -127,6 +128,10 @@ func GetBarChartData(data ChartJSBarChartData, options BarChartOptions) map[stri
 		sort.Slice(dataset, func(i int, j int) bool {
 			return dataset[i].Value > dataset[j].Value
 		})
+	}
+
+	if options.Limit > 0 && len(dataset) > options.Limit {
+		dataset = dataset[:options.Limit]
 	}
 
 	labels := []string{}

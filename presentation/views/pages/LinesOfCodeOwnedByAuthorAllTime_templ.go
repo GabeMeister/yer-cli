@@ -100,10 +100,11 @@ func LinesOfCodeOwnedByAuthorAllTime(multiRepoRecap analyzer.MultiRepoRecap) tem
 			}
 			var templ_7745c5c3_Var4 string
 			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(helpers.Json(helpers.GetBarChartData(getLinesOfCodeOwnedByAuthorAllTimeData(multiRepoRecap), helpers.BarChartOptions{
-				Sort: true,
+				Sort:  true,
+				Limit: 25,
 			})))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/LinesOfCodeOwnedByAuthorAllTime.templ`, Line: 43, Col: 6}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/LinesOfCodeOwnedByAuthorAllTime.templ`, Line: 44, Col: 6}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {
