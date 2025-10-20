@@ -13,6 +13,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"sync"
 )
 
 func IsValidGitRepo(dir string) bool {
@@ -407,46 +408,62 @@ func getFileBlameSummary(r *RepoConfig, files []string) []FileBlame {
 
 	fileBlames := []FileBlame{}
 	totalFiles := len(files)
+	var wg sync.WaitGroup
+	// We want to limit concurrent blames to 10. On repos with large commit
+	// histories, this'll keep the CPU plenty busy
+	sem := make(chan struct{}, 10)
+	var mu sync.Mutex
 
 	for idx, file := range files {
-		utils.PrintProgress(s, fmt.Sprintf("Processing file %d/%d. (currently on %s)...", idx+1, totalFiles, file))
-		args := []string{
-			"git",
-			"blame",
-			file,
-			"--line-porcelain",
-		}
+		wg.Add(1)
 
-		cmd := exec.Command(args[0], args[1:]...)
-		cmd.Dir = r.Path
+		go func(i int, f string) {
+			defer wg.Done()
+			sem <- struct{}{}
+			defer func() { <-sem }()
 
-		rawOutput, err := cmd.Output()
-		if err != nil {
-			panic(err)
-		}
+			utils.PrintProgress(s, fmt.Sprintf("Processing file %d/%d (%s)...", idx+1, totalFiles, file))
+			args := []string{
+				"git",
+				"blame",
+				file,
+				"--line-porcelain",
+			}
 
-		output := string(rawOutput)
-		lines := strings.Split(output, "\n")
-		lines = utils.Filter(lines, func(line string) bool {
-			return strings.HasPrefix(line, "author ")
-		})
-		authors := utils.Map(lines, func(line string) string {
-			authorName := strings.ReplaceAll(line, "author ", "")
+			cmd := exec.Command(args[0], args[1:]...)
+			cmd.Dir = r.Path
 
-			return r.getRealAuthorName(authorName)
-		})
+			rawOutput, err := cmd.Output()
+			if err != nil {
+				panic(err)
+			}
 
-		authorLineCountMap := make(map[string]int)
-		for _, author := range authors {
-			authorLineCountMap[author] += 1
-		}
+			output := string(rawOutput)
+			lines := strings.Split(output, "\n")
+			lines = utils.Filter(lines, func(line string) bool {
+				return strings.HasPrefix(line, "author ")
+			})
+			authors := utils.Map(lines, func(line string) string {
+				authorName := strings.ReplaceAll(line, "author ", "")
 
-		fileBlames = append(fileBlames, FileBlame{
-			File:      file,
-			LineCount: len(authors),
-			GitBlame:  authorLineCountMap,
-		})
+				return r.getRealAuthorName(authorName)
+			})
+
+			authorLineCountMap := make(map[string]int)
+			for _, author := range authors {
+				authorLineCountMap[author] += 1
+			}
+
+			mu.Lock()
+			fileBlames = append(fileBlames, FileBlame{
+				File:      file,
+				LineCount: len(authors),
+				GitBlame:  authorLineCountMap,
+			})
+			mu.Unlock()
+		}(idx, file)
 	}
+	wg.Wait()
 
 	s.Stop()
 
