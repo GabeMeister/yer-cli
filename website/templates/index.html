@@ -6,45 +6,214 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/x-icon" href="https://fly.storage.tigris.dev/year-end-recap-storage/favicon.ico">
   <style>
-    .bg-gray-800 {
-      background-color: #1f2937;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
-    .white-text {
+    body {
+      background-color: #1a1a1a;
+      color: white;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      padding: 3rem 2rem;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+      font-weight: 600;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 0;
+      margin-bottom: 0;
+    }
+
+    .tab {
+      padding: 1rem 2rem;
+      background-color: #3a3a3a;
+      border: none;
+      color: #999;
+      cursor: pointer;
+      font-size: 1.125rem;
+      border-radius: 0.5rem 0.5rem 0 0;
+      transition: all 0.2s;
+      font-weight: 500;
+    }
+
+    .tab:hover {
       color: white;
     }
 
-    .flex {
+    .tab.active {
+      background-color: #60a5fa;
+      color: white;
+    }
+
+    .tab-content {
+      display: none;
+      background-color: #2a2a2a;
+      border: 2px solid #60a5fa;
+      border-radius: 0 0.5rem 0.5rem 0.5rem;
+      padding: 2rem;
+      position: relative;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .command-container {
       display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
-    .flex-col {
-      flex-direction: column;
+    pre {
+      font-family: 'Courier New', monospace;
+      font-size: 1.25rem;
+      color: white;
+      margin: 0;
     }
 
-    .justify-center {
+    .dollar-sign {
+      color: #888;
+      margin-right: 1rem;
+    }
+
+    .copy-button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.5rem;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+      display: flex;
+      align-items: center;
       justify-content: center;
     }
 
-    .items-center {
-      align-items: center;
+    .copy-button:hover {
+      opacity: 1;
     }
 
-    .p-6 {
-      padding: 1.5rem;
+    .copy-icon {
+      width: 24px;
+      height: 24px;
+      stroke: white;
+      fill: none;
+      stroke-width: 2;
+      transition: opacity 0.2s;
     }
 
-    .text-xl {
+    .copy-icon.hidden {
+      display: none;
+    }
+
+    .check-icon {
+      width: 24px;
+      height: 24px;
+      stroke: #10b981;
+      fill: none;
+      stroke-width: 2;
+      display: none;
+    }
+
+    .check-icon.visible {
+      display: block;
+    }
+
+    .coming-soon {
+      color: #888;
+      font-size: 1.25rem;
+    }
+
+    .link-button {
+      padding: 1rem 2rem;
+      background-color: transparent;
+      border: none;
+      color: #999;
+      cursor: pointer;
       font-size: 1.125rem;
-      line-height: 1.75rem;
+      text-decoration: none;
+      display: inline-block;
+      transition: color 0.2s;
+    }
+
+    .link-button:hover {
+      color: white;
     }
   </style>
   <title>Year End Recap</title>
 </head>
 
-<body class="bg-gray-800 white-text flex flex-col justify-center items-center p-6">
-  <h1>Install Year End Recap:</h1>
-  <pre class="text-xl">curl -fsSL https://yearendrecap.com/install | bash</pre>
+<body>
+  <div class="container">
+    <h1>Install Year End Recap</h1>
+
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('linux')">Linux & macOS</button>
+      <button class="tab" onclick="switchTab('windows')">Windows</button>
+      <a href="/install" class="link-button">View install script</a>
+    </div>
+
+    <div id="linux-content" class="tab-content active">
+      <div class="command-container">
+        <pre><span class="dollar-sign">$</span>curl -fsSL https://yearendrecap.com/install | bash</pre>
+        <button class="copy-button" onclick="copyCommand(this, 'curl -fsSL https://yearendrecap.com/install | bash')" aria-label="Copy to clipboard">
+          <svg class="copy-icon" viewBox="0 0 24 24">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <svg class="check-icon" viewBox="0 0 24 24">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div id="windows-content" class="tab-content">
+      <p class="coming-soon">Coming soon!</p>
+    </div>
+  </div>
+
+  <script>
+    function switchTab(tab) {
+      // Update tab buttons
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      event.target.classList.add('active');
+
+      // Update tab content
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      document.getElementById(tab + '-content').classList.add('active');
+    }
+
+    function copyCommand(button, command) {
+      navigator.clipboard.writeText(command).then(() => {
+        const copyIcon = button.querySelector('.copy-icon');
+        const checkIcon = button.querySelector('.check-icon');
+
+        // Hide copy icon, show check icon
+        copyIcon.classList.add('hidden');
+        checkIcon.classList.add('visible');
+
+        // Reset after 1.5 seconds
+        setTimeout(() => {
+          copyIcon.classList.remove('hidden');
+          checkIcon.classList.remove('visible');
+        }, 1500);
+      }).catch(err => {
+        console.error('Failed to copy: ', err);
+      });
+    }
+  </script>
 </body>
 
 </html>
