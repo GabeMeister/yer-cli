@@ -239,6 +239,12 @@ func addAnalyzerRoutes(e *echo.Echo) {
 	e.GET("/dir-list", func(c echo.Context) error {
 		baseDir := c.FormValue("dir")
 		if baseDir == "" {
+			// The situation where they were searching and just hit enter to select
+			// the first directory in the list
+			baseDir = c.FormValue("first_dir")
+		}
+
+		if baseDir == "" {
 			panic("Using PATCH /dir-list wrong: need to include base dir")
 		}
 

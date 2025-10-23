@@ -10,6 +10,14 @@ type DirectoryListProps struct {
 	Dirs    []string
 }
 
+func getFirstDir(dirs []string) string {
+	if len(dirs) > 0 {
+		return dirs[0]
+	} else {
+		return ""
+	}
+}
+
 func getDirUrl(rootDir string, dir string) string {
 	fullDirPath := path.Join(rootDir, dir)
 
@@ -31,5 +39,13 @@ templ DirectoryList(props DirectoryListProps) {
 				</div>
 			}
 		</div>
+		if len(props.Dirs) > 0 {
+			<input
+				type="hidden"
+				name="first_dir"
+				value={ path.Join(props.BaseDir, props.Dirs[0]) }
+				form="dir-list-form-elem"
+			/>
+		}
 	</div>
 }

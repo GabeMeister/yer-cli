@@ -38,7 +38,7 @@ func DirectoryListForm(props DirectoryListFormProps) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"dir-list-form\" class=\"flex flex-col gap-6\"><form hx-post=\"/repo-path\" hx-target=\"#dir-list-form\" hx-swap=\"outerHTML\" class=\"flex flex-col gap-6\"><div class=\"flex flex-col gap-2 w-full\"><label for=\"search-term\">Filter Directories:</label> <input type=\"text\" id=\"search-term\" value=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"dir-list-form\" class=\"flex flex-col gap-6\"><div class=\"flex flex-col gap-2 w-full\"><label for=\"search-term\">Filter Directories:</label><form id=\"dir-list-form-elem\" hx-get=\"/dir-list\" hx-target=\"#dir-list-form\" hx-swap=\"outerHTML\"><input type=\"text\" id=\"search-term\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -51,7 +51,7 @@ func DirectoryListForm(props DirectoryListFormProps) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" placeholder=\"Directory Name\" class=\"text-input w-full font-normal\" name=\"search-term\" hx-get=\"/filtered-dir-contents\" hx-include=\"#base-dir\" hx-trigger=\"input changed delay:500ms, keyup[key==&#39;Enter&#39;]\" hx-target=\"#dir-list\" hx-swap=\"outerHTML\"></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" placeholder=\"Directory Name\" class=\"text-input w-full font-normal\" name=\"search-term\" hx-get=\"/filtered-dir-contents\" hx-include=\"#base-dir\" hx-trigger=\"input changed delay:500ms\" hx-target=\"#dir-list\" hx-swap=\"outerHTML\"></form></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -69,7 +69,7 @@ func DirectoryListForm(props DirectoryListFormProps) templ.Component {
 		var templ_7745c5c3_Var3 string
 		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(props.BaseDir)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/ConfigSetupPage/DirectoryListForm.templ`, Line: 42, Col: 82}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/ConfigSetupPage/DirectoryListForm.templ`, Line: 43, Col: 81}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
@@ -92,13 +92,13 @@ func DirectoryListForm(props DirectoryListFormProps) templ.Component {
 		var templ_7745c5c3_Var4 string
 		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(props.BaseDir)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/ConfigSetupPage/DirectoryListForm.templ`, Line: 48, Col: 26}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/components/ConfigSetupPage/DirectoryListForm.templ`, Line: 49, Col: 25}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" name=\"base-dir\" id=\"base-dir\"></div><button class=\"btn lg\" type=\"submit\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" name=\"base-dir\" id=\"base-dir\"></div><button class=\"btn lg\" type=\"submit\" hx-post=\"/repo-path\" hx-target=\"#dir-list-form\" hx-swap=\"outerHTML\" hx-include=\"#base-dir\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -116,7 +116,7 @@ func DirectoryListForm(props DirectoryListFormProps) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</button></form></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</button></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

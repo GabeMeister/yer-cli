@@ -11,14 +11,14 @@ type DirectoryListFormProps struct {
 
 templ DirectoryListForm(props DirectoryListFormProps) {
 	<div id="dir-list-form" class="flex flex-col gap-6">
-		<form
-			hx-post="/repo-path"
-			hx-target="#dir-list-form"
-			hx-swap="outerHTML"
-			class="flex flex-col gap-6"
-		>
-			<div class="flex flex-col gap-2 w-full">
-				<label for="search-term">Filter Directories:</label>
+		<div class="flex flex-col gap-2 w-full">
+			<label for="search-term">Filter Directories:</label>
+			<form
+				id="dir-list-form-elem"
+				hx-get="/dir-list"
+				hx-target="#dir-list-form"
+				hx-swap="outerHTML"
+			>
 				<input
 					type="text"
 					id="search-term"
@@ -28,38 +28,42 @@ templ DirectoryListForm(props DirectoryListFormProps) {
 					name="search-term"
 					hx-get="/filtered-dir-contents"
 					hx-include="#base-dir"
-					hx-trigger="input changed delay:500ms, keyup[key=='Enter']"
+					hx-trigger="input changed delay:500ms"
 					hx-target="#dir-list"
 					hx-swap="outerHTML"
 				/>
-			</div>
-			@DirectoryList(DirectoryListProps{
-				BaseDir: props.BaseDir,
-				Dirs:    props.Dirs,
-			})
-			<div class="flex flex-col gap-1">
-				<h1>Current Directory:</h1>
-				<div class="text-md font-normal text-gray-500 overflow-x-auto">{ props.BaseDir }</div>
-				if props.Error != "" {
-					<h1 class="text-red-500">Directory must contain a Git repo</h1>
-				}
-				<input
-					type="hidden"
-					value={ props.BaseDir }
-					name="base-dir"
-					id="base-dir"
-				/>
-			</div>
-			<button
-				class="btn lg"
-				type="submit"
-				if props.Error != "" {
-					disabled
-				}
-			>
-				Select Current Directory
-				@components.LoadingSpinner()
-			</button>
-		</form>
+			</form>
+		</div>
+		@DirectoryList(DirectoryListProps{
+			BaseDir: props.BaseDir,
+			Dirs:    props.Dirs,
+		})
+		<div class="flex flex-col gap-1">
+			<h1>Current Directory:</h1>
+			<div class="text-md font-normal text-gray-500 overflow-x-auto">{ props.BaseDir }</div>
+			if props.Error != "" {
+				<h1 class="text-red-500">Directory must contain a Git repo</h1>
+			}
+			<input
+				type="hidden"
+				value={ props.BaseDir }
+				name="base-dir"
+				id="base-dir"
+			/>
+		</div>
+		<button
+			class="btn lg"
+			type="submit"
+			hx-post="/repo-path"
+			hx-target="#dir-list-form"
+			hx-swap="outerHTML"
+			hx-include="#base-dir"
+			if props.Error != "" {
+				disabled
+			}
+		>
+			Select Current Directory
+			@components.LoadingSpinner()
+		</button>
 	</div>
 }
