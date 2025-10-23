@@ -298,7 +298,9 @@ function initIncludeFileExtensionsInput() {
         { label: "JScript", value: "jse" },
         { label: "Yaml", value: "yml" },
         { label: "Yaml", value: "yaml" },
+        { label: "Toml", value: "toml" },
         { label: "Markdown", value: "md" },
+        { label: "XML", value: "xml" },
       ],
       render: {
         option: function (data, escape) {
