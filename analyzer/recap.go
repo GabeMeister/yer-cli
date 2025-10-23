@@ -41,14 +41,16 @@ type Recap struct {
 	CommonlyChangedFiles            []FileChangeCount              `json:"commonly_changed_files"`
 
 	// Files
-	FileCountPrevYear          int        `json:"file_count_prev_year"`
-	FileCountCurrYear          int        `json:"file_count_curr_year"`
-	FileCountPercentDifference float64    `json:"file_count_percent_difference"`
-	LargestFilesCurrYear       []FileSize `json:"largest_files_curr_year"`
-	SmallestFilesCurrYear      []FileSize `json:"smallest_files_curr_year"`
-	TotalLinesOfCodePrevYear   int        `json:"total_lines_of_code_prev_year"`
-	TotalLinesOfCodeCurrYear   int        `json:"total_lines_of_code_curr_year"`
-	SizeOfRepoByWeekCurrYear   []int      `json:"size_of_repo_by_week_curr_year"`
+	FileCountPrevYear                 int              `json:"file_count_prev_year"`
+	FileCountCurrYear                 int              `json:"file_count_curr_year"`
+	FileCountPercentDifference        float64          `json:"file_count_percent_difference"`
+	LargestFilesCurrYear              []FileSize       `json:"largest_files_curr_year"`
+	SmallestFilesCurrYear             []FileSize       `json:"smallest_files_curr_year"`
+	TotalLinesOfCodePrevYear          int              `json:"total_lines_of_code_prev_year"`
+	TotalLinesOfCodeByFileExtPrevYear FileExtLineCount `json:"total_lines_of_code_by_file_ext_prev_year"`
+	TotalLinesOfCodeCurrYear          int              `json:"total_lines_of_code_curr_year"`
+	TotalLinesOfCodeByFileExtCurrYear FileExtLineCount `json:"total_lines_of_code_by_file_ext_curr_year"`
+	SizeOfRepoByWeekCurrYear          []int            `json:"size_of_repo_by_week_curr_year"`
 
 	// Team
 	AllAuthors                           []string                      `json:"all_authors"`
@@ -194,7 +196,9 @@ func calculateRepoRecap(r *RepoConfig) {
 	largestFilesCurrYear := r.getLargestFilesCurrYear()
 	smallestFilesCurrYear := r.getSmallestFilesCurrYear()
 	totalLinesOfCodePrevYear := r.getTotalLinesOfCodePrevYear()
+	totalLinesOfCodeByFileExtPrevYear := r.getTotalLinesOfCodeByFileExtPrevYear()
 	totalLinesOfCodeCurrYear := r.getTotalLinesOfCodeCurrYear()
+	totalLinesOfCodeByFileExtCurrYear := r.getTotalLinesOfCodeByFileExtCurrYear()
 	totalLinesOfCodeInRepoByAuthor := r.getTotalLinesOfCodeInRepoByAuthor()
 	sizeOfRepoByWeekCurrYear := r.getSizeOfRepoByWeekCurrYear()
 
@@ -241,14 +245,16 @@ func calculateRepoRecap(r *RepoConfig) {
 		CommonlyChangedFiles:            commonlyChangedFiles,
 
 		// Files
-		FileCountPrevYear:          fileCountPrevYear,
-		FileCountCurrYear:          fileCountCurrYear,
-		FileCountPercentDifference: fileCountPercentDifference,
-		LargestFilesCurrYear:       largestFilesCurrYear,
-		SmallestFilesCurrYear:      smallestFilesCurrYear,
-		TotalLinesOfCodePrevYear:   totalLinesOfCodePrevYear,
-		TotalLinesOfCodeCurrYear:   totalLinesOfCodeCurrYear,
-		SizeOfRepoByWeekCurrYear:   sizeOfRepoByWeekCurrYear,
+		FileCountPrevYear:                 fileCountPrevYear,
+		FileCountCurrYear:                 fileCountCurrYear,
+		FileCountPercentDifference:        fileCountPercentDifference,
+		LargestFilesCurrYear:              largestFilesCurrYear,
+		SmallestFilesCurrYear:             smallestFilesCurrYear,
+		TotalLinesOfCodePrevYear:          totalLinesOfCodePrevYear,
+		TotalLinesOfCodeByFileExtPrevYear: totalLinesOfCodeByFileExtPrevYear,
+		TotalLinesOfCodeCurrYear:          totalLinesOfCodeCurrYear,
+		TotalLinesOfCodeByFileExtCurrYear: totalLinesOfCodeByFileExtCurrYear,
+		SizeOfRepoByWeekCurrYear:          sizeOfRepoByWeekCurrYear,
 
 		// Team
 		AllAuthors:                           allAuthors,

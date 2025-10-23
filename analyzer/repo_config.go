@@ -1359,6 +1359,14 @@ func (r *RepoConfig) getTotalLinesOfCodePrevYear() int {
 	return total
 }
 
+func (r *RepoConfig) getTotalLinesOfCodeByFileExtPrevYear() FileExtLineCount {
+	// TODO
+
+	return FileExtLineCount{
+		"tsx": 24,
+	}
+}
+
 func (r *RepoConfig) getTotalLinesOfCodeCurrYear() int {
 	if !r.hasCurrYearFileBlames() {
 		return 0
@@ -1371,6 +1379,14 @@ func (r *RepoConfig) getTotalLinesOfCodeCurrYear() int {
 	}
 
 	return total
+}
+
+func (r *RepoConfig) getTotalLinesOfCodeByFileExtCurrYear() FileExtLineCount {
+	// TODO
+
+	return FileExtLineCount{
+		"tsx": 24,
+	}
 }
 
 func (r *RepoConfig) getSizeOfRepoByWeekCurrYear() []int {

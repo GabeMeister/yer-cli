@@ -56,6 +56,9 @@ type TotalCommitCount struct {
 	Value int    `json:"value"`
 }
 
+type FileExt string
+type FileExtLineCount map[FileExt]int
+
 // Example:
 // {
 //   "2024-01-01|Kenny": 29838,
