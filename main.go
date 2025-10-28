@@ -8,11 +8,9 @@ import (
 	"flag"
 	"fmt"
 	"io/fs"
+	"log"
 	"os"
-	"os/exec"
-	"strings"
-	"sync"
-	"time"
+	"path/filepath"
 
 	"github.com/joho/godotenv"
 )
@@ -38,61 +36,43 @@ func customUsage() {
 }
 
 func runTest() {
-	start := time.Now()
+	filepath.WalkDir("/home/gabe/dev", func(path string, d fs.DirEntry, err error) error {
+		if d.IsDir() {
+			gitDir := filepath.Join(path, ".git")
+			_, gitErr := os.Stat(gitDir)
+			isGitDir := gitErr == nil
+			isNodeModules := d.Name() == "node_modules"
 
-	repoPath := "/home/gabe/dev/rb-frontend"
-	// Get all tracked files
-	cmd := exec.Command("git", "ls-files")
-	cmd.Dir = repoPath
-	output, _ := cmd.Output()
-	allFiles := strings.Split(strings.TrimSpace(string(output)), "\n")
-	files := []string{}
-	for _, file := range allFiles {
-		if strings.HasSuffix(file, ".ts") {
-			files = append(files, file)
+			if isGitDir {
+				fmt.Println(path, d.Name())
+				return fs.SkipDir
+			} else if isNodeModules {
+				return fs.SkipDir
+			} else {
+				// Open the file in append mode (os.O_APPEND), write-only (os.O_WRONLY),
+				// and create it if it doesn't exist (os.O_CREATE).
+				// The 0644 permission grants read/write to owner, read-only to group and others.
+				f, err := os.OpenFile("temp.txt", os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0644)
+				if err != nil {
+					log.Fatalf("failed to open file: %v", err)
+				}
+				defer f.Close() // Ensure the file is closed when the function exits
+
+				// Write the string to the file
+				if _, err := f.WriteString(fmt.Sprintf("%s | %s\n", path, d.Name())); err != nil {
+					log.Fatalf("failed to write to file: %v", err)
+				}
+			}
+
 		}
-	}
 
-	var wg sync.WaitGroup
-	sem := make(chan struct{}, 10) // limit concurrent blames
-	var mu sync.Mutex              // mutex to protect the counter
-	var totalLines int64           // shared counter
+		if err != nil {
+			return err
+		}
 
-	for _, file := range files {
-		wg.Add(1)
-		go func(f string) {
-			defer wg.Done()
-			sem <- struct{}{}
-			defer func() { <-sem }()
+		return nil
+	})
 
-			cmd := exec.Command("git", "blame", f)
-			cmd.Dir = repoPath
-			output, _ := cmd.Output()
-			text := string(output)
-			length := len(strings.Split(text, "\n"))
-
-			fmt.Printf("%s | %d lines\n", file, length)
-
-			// Add to the overall number of lines (thread-safe)
-			mu.Lock()
-			totalLines += int64(length)
-			mu.Unlock()
-		}(file)
-
-		// // Synchronous way
-		// cmd := exec.Command("git", "blame", file)
-		// cmd.Dir = repoPath
-		// output, _ := cmd.Output()
-		// text := string(output)
-		// length := len(strings.Split(text, "\n"))
-		// fmt.Printf("%d lines | %s \n", length, file)
-		// totalLines += int64(length)
-
-	}
-	wg.Wait()
-
-	fmt.Printf("Total lines: %d\n", totalLines)
-	fmt.Printf("Time taken: %f sec\n", time.Since(start).Seconds())
 }
 
 func main() {
@@ -145,7 +125,7 @@ func main() {
 		}
 	} else if *view {
 		presentation.RunPresentationPage()
-	} else if *test {
+	} else if utils.IsDevMode() && *test {
 		runTest()
 	} else {
 		printHelp()
