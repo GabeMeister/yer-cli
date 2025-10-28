@@ -11,3 +11,4 @@ yer-cli
 .clj-kondo/
 .lsp/
 temp.txt
+.claude/
