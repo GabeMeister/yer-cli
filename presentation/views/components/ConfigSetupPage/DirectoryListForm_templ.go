@@ -51,7 +51,7 @@ func DirectoryListForm(props DirectoryListFormProps) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" placeholder=\"Directory Name\" class=\"text-input w-full font-normal\" name=\"search-term\" hx-get=\"/filtered-dir-contents\" hx-include=\"#base-dir\" hx-trigger=\"input changed delay:500ms\" hx-target=\"#dir-list\" hx-swap=\"outerHTML\"></form></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" placeholder=\"Enter directory name and press enter\" class=\"text-input w-full font-normal\" name=\"search-term\" hx-get=\"/filtered-dir-contents\" hx-include=\"#base-dir\" hx-trigger=\"input changed delay:500ms\" hx-target=\"#dir-list\" hx-swap=\"outerHTML\"></form></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

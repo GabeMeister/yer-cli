@@ -29,7 +29,7 @@ func RepoNotFound() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"flex justify-center p-12 bg-gray-800 h-screen pt-32\"><div class=\"text-2xl font-bitter text-white flex flex-col items-center gap-8 w-1/2 text-center\"><div>You have not analyzed your repo(s) yet! Please run:</div><pre class=\"text-yellow-200\">./year-end-recap -h</pre><div>to view instructions on how to setup your Year End Recap.</div></div></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"flex justify-center p-12 bg-gray-800 h-screen pt-32\"><div class=\"text-2xl font-bitter text-white flex flex-col items-center gap-8 w-1/2 text-center\"><div>You have not analyzed your repo(s) yet! Please run:</div><pre class=\"text-yellow-200\">yer -h</pre><div>to view instructions on how to setup your Year End Recap.</div></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

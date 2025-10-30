@@ -1,36 +1,152 @@
-#!/bin/bash 
+#!/bin/bash
+
+mkdir -p $HOME/.yer
 
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-  echo "Linux operating system detected"
-  curl -fsSL https://fly.storage.tigris.dev/year-end-recap-storage/yer_linux_amd64 --output year-end-recap
-elif [[ "$OSTYPE" == "darwin"* ]]; then
-  echo "Mac operating system detected"
-  CPU_ARCH=$(uname -m)
-
-  if [[ "$CPU_ARCH" == "arm64" ]]; then
-    curl -fsSL https://fly.storage.tigris.dev/year-end-recap-storage/yer_darwin_arm64 --output year-end-recap
-  elif [[ "$CPU_ARCH" == "x86_64" ]]; then
-    curl -fsSL https://fly.storage.tigris.dev/year-end-recap-storage/yer_darwin_amd64 --output year-end-recap
-  else
-    echo "Unsupported Mac CPU architecture: $CPU_ARCH"
-    exit 1
-  fi
+    echo "Linux operating system detected"
+    curl -fsSL https://fly.storage.tigris.dev/year-end-recap-storage/yer_linux_amd64 --output ~/.yer/yer
+    elif [[ "$OSTYPE" == "darwin"* ]]; then
+    echo "Mac operating system detected"
+    CPU_ARCH=$(uname -m)
+    
+    if [[ "$CPU_ARCH" == "arm64" ]]; then
+        curl -fsSL https://fly.storage.tigris.dev/year-end-recap-storage/yer_darwin_arm64 --output ~/.yer/yer
+        elif [[ "$CPU_ARCH" == "x86_64" ]]; then
+        curl -fsSL https://fly.storage.tigris.dev/year-end-recap-storage/yer_darwin_amd64 --output ~/.yer/yer
+    else
+        echo "Unsupported Mac CPU architecture: $CPU_ARCH"
+        exit 1
+    fi
 else
-  echo "Unsupported Operating System: $OSTYPE"
-  exit 1
+    echo "Unsupported Operating System: $OSTYPE"
+    exit 1
 fi
 
-chmod +x year-end-recap
-echo
-echo Success! Year End Recap has been installed successfully.
-echo
+chmod +x ~/.yer/yer
 
+# Colors for output
 yellow='\033[1;33m'
+green='\033[0;32m'
+dim='\033[0;2m'
+bold_white='\033[1m'
 reset='\033[0m'
 
+# Helper function to convert absolute paths to tilde notation
+tildify() {
+    if [[ $1 = $HOME/* ]]; then
+        local replacement=\~/
+        echo "${1/$HOME\//$replacement}"
+    else
+        echo "$1"
+    fi
+}
+
+install_dir="$HOME/.yer"
+bin_dir="$install_dir"
+tilde_bin_dir=$(tildify "$bin_dir")
+
+echo
+echo -e "${green}Year End Recap was installed successfully to $(tildify "$HOME/.yer/yer")${reset}"
+echo
+
+# Check if yer is already in PATH
+if command -v yer >/dev/null 2>&1; then
+    echo "Run 'yer --help' to get started"
+    exit 0
+fi
+
+# Configure PATH based on shell type
+refresh_command=''
+
+case $(basename "$SHELL") in
+fish)
+    fish_config="$HOME/.config/fish/config.fish"
+    tilde_fish_config=$(tildify "$fish_config")
+
+    if [[ -w $fish_config ]]; then
+        {
+            echo -e '\n# Year End Recap'
+            echo "set --export PATH $HOME/.yer \$PATH"
+        } >>"$fish_config"
+
+        echo -e "${dim}Added \"$tilde_bin_dir\" to \$PATH in \"$tilde_fish_config\"${reset}"
+        refresh_command="exec $SHELL"
+    else
+        echo "Manually add the directory to $tilde_fish_config (or similar):"
+        echo -e "${bold_white}  set --export PATH $HOME/.yer \$PATH${reset}"
+    fi
+    ;;
+zsh)
+    zsh_config="$HOME/.zshrc"
+    tilde_zsh_config=$(tildify "$zsh_config")
+
+    if [[ -w $zsh_config ]]; then
+        {
+            echo -e '\n# yer'
+            echo "export PATH=\"$HOME/.yer:\$PATH\""
+        } >>"$zsh_config"
+
+        echo -e "${dim}Added \"$tilde_bin_dir\" to \$PATH in \"$tilde_zsh_config\"${reset}"
+        refresh_command="exec $SHELL"
+    else
+        echo "Manually add the directory to $tilde_zsh_config (or similar):"
+        echo -e "${bold_white}  export PATH=\"$HOME/.yer:\$PATH\"${reset}"
+    fi
+    ;;
+bash)
+    bash_configs=(
+        "$HOME/.bash_profile"
+        "$HOME/.bashrc"
+    )
+
+    if [[ ${XDG_CONFIG_HOME:-} ]]; then
+        bash_configs+=(
+            "$XDG_CONFIG_HOME/.bash_profile"
+            "$XDG_CONFIG_HOME/.bashrc"
+            "$XDG_CONFIG_HOME/bash_profile"
+            "$XDG_CONFIG_HOME/bashrc"
+        )
+    fi
+
+    set_manually=true
+    for bash_config in "${bash_configs[@]}"; do
+        tilde_bash_config=$(tildify "$bash_config")
+
+        if [[ -w $bash_config ]]; then
+            {
+                echo -e '\n# yer'
+                echo "export PATH=\"$HOME/.yer:\$PATH\""
+            } >>"$bash_config"
+
+            echo -e "${dim}Added \"$tilde_bin_dir\" to \$PATH in \"$tilde_bash_config\"${reset}"
+            refresh_command="source $bash_config"
+            set_manually=false
+            break
+        fi
+    done
+
+    if [[ $set_manually = true ]]; then
+        echo "Manually add the directory to ~/.bashrc (or similar):"
+        echo -e "${bold_white}  export PATH=\"$HOME/.yer:\$PATH\"${reset}"
+    fi
+    ;;
+*)
+    echo "Manually add the directory to your shell configuration file:"
+    echo -e "${bold_white}  export PATH=\"$HOME/.yer:\$PATH\"${reset}"
+    ;;
+esac
+
+echo
+echo -e "${dim}Restart your terminal with:${reset}"
+echo
+
+if [[ $refresh_command ]]; then
+    echo -e "${bold_white}  $refresh_command${reset}\n"
+fi
+
 echo -e "${yellow}┌──────────────────────────────────────┐${reset}"
-echo -e "${yellow}│ To start, run the following command: │${reset}"
+echo -e "${yellow}│ To begin, run the following command: │${reset}"
 echo -e "${yellow}│                                      │${reset}"
-echo -e "${yellow}│ ./year-end-recap -s                  │${reset}"
+echo -e "${yellow}│ yer -s                               │${reset}"
 echo -e "${yellow}└──────────────────────────────────────┘${reset}"
-echo 
+echo

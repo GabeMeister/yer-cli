@@ -545,7 +545,7 @@ func addAnalyzerRoutes(e *echo.Echo) {
 			fmt.Printf("%s│ Great! Now run the following command │%s\n", yellow, reset)
 			fmt.Printf("%s│ to analyze your stats:               │%s\n", yellow, reset)
 			fmt.Printf("%s│                                      │%s\n", yellow, reset)
-			fmt.Printf("%s│ ./year-end-recap -a                  │%s\n", yellow, reset)
+			fmt.Printf("%s│ yer -a                               │%s\n", yellow, reset)
 			fmt.Printf("%s└──────────────────────────────────────┘%s\n", yellow, reset)
 			fmt.Println()
 

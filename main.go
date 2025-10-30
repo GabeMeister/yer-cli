@@ -15,6 +15,8 @@ import (
 	"github.com/joho/godotenv"
 )
 
+var VERSION = "0.1"
+
 func printHelp() {
 	fmt.Println("Year End Recap CLI")
 	fmt.Println()
@@ -25,7 +27,7 @@ func customUsage() {
 	fmt.Fprintf(os.Stderr, "Usage: %s [options]\n", os.Args[0])
 
 	// Define custom order
-	order := []string{"s", "a", "v"}
+	order := []string{"s", "a", "p", "v", "h"}
 
 	for _, name := range order {
 		f := flag.Lookup(name)
@@ -79,9 +81,10 @@ func main() {
 	godotenv.Load()
 
 	var help = flag.Bool("h", false, "Print help menu")
-	var setupConfig = flag.Bool("s", false, "(Step 1) Setup a new Year End Recap configuration")
-	var analyzeRepo = flag.Bool("a", false, "(Step 2) Analyze your Git repo(s) to gather highly amusing Git stats")
-	var view = flag.Bool("v", false, "(Step 3) View your highly amusing Git stats")
+	var version = flag.Bool("v", false, "Print version")
+	var setupConfig = flag.Bool("s", false, "[Step 1] Setup a new Year End Recap configuration")
+	var analyzeRepo = flag.Bool("a", false, "[Step 2] Analyze your Git repo(s) to gather highly amusing Git stats")
+	var view = flag.Bool("p", false, "[Step 3] View your highly amusing Git stats in a presentation")
 
 	var test *bool
 	var calculateOnly *bool
@@ -103,9 +106,11 @@ func main() {
 
 	if *help {
 		printHelp()
+	} else if *version {
+		fmt.Printf("Year End Recap v%s\n", VERSION)
 	} else if *setupConfig {
 		presentation.RunCreateRecapPage()
-		fmt.Print("\n\nComplete! Now run `./year-end-recap -a` to analyze your repos\n\n")
+		fmt.Print("\n\nComplete! Now run `yer -a` to analyze your repos\n\n")
 	} else if *analyzeRepo {
 		result := analyzer.AnalyzeRepos(*calculateOnly)
 		if result {
@@ -117,11 +122,11 @@ func main() {
 			fmt.Printf("%s│ Done! Now run the following command  │%s\n", yellow, reset)
 			fmt.Printf("%s│ to view your stats:                  │%s\n", yellow, reset)
 			fmt.Printf("%s│                                      │%s\n", yellow, reset)
-			fmt.Printf("%s│ ./year-end-recap -v                  │%s\n", yellow, reset)
+			fmt.Printf("%s│ yer -p                               │%s\n", yellow, reset)
 			fmt.Printf("%s└──────────────────────────────────────┘%s\n", yellow, reset)
 			fmt.Println()
 		} else {
-			fmt.Println("\nPlease run `./year-end-recap -s` to setup your recap configuration, then try analyzing.")
+			fmt.Println("\nPlease run `yer -s` to setup your recap configuration, then try analyzing.")
 		}
 	} else if *view {
 		presentation.RunPresentationPage()

@@ -39,7 +39,7 @@ func RepoNotFoundError(props RepoNotFoundErrorProps) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"p-6 md:p-24 flex flex-col gap-6\"><h1 class=\"h1\">Whoops! Could not find the right repo to edit. Please restart the config setup process by running <pre class=\"text-blue-400\">./year-end-recap -s</pre></h1><div>Repo id: ")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"p-6 md:p-24 flex flex-col gap-6\"><h1 class=\"h1\">Whoops! Could not find the right repo to edit. Please restart the config setup process by running <pre class=\"text-blue-400\">yer -s</pre></h1><div>Repo id: ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

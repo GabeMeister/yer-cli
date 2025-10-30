@@ -4,7 +4,7 @@ tmp_dir = "tmp"
 
 [build]
   args_bin = []
-  bin = "./main -v"
+  bin = "./main -p"
   cmd = "go build -o ./main . && templ generate --notify-proxy"
   delay = 1000
   exclude_dir = ["assets", "tmp", "vendor", "testdata"]
