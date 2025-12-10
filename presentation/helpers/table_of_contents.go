@@ -232,7 +232,7 @@ func GetMultiRepoTitleSlideData(page string, recap analyzer.MultiRepoRecap) Titl
 		data.Description = "The total amount of commits made over the past year, split out by repo."
 	case "commits-made-by-author":
 		data.Title = "Commits Made by Author"
-		data.Description = "The total amount of commits made over the past year, split out by author."
+		data.Description = "The total amount of commits across all repos made over the past year, split out by author."
 	case "file-changes-made-by-author":
 		data.Title = "File Changes by Author"
 		data.Description = "The total amount of insertions/deletions made over the past year, split out by author."
