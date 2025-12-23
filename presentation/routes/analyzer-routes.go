@@ -567,4 +567,8 @@ func addAnalyzerRoutes(e *echo.Echo) {
 		return c.HTML(http.StatusOK, "")
 	})
 
+	e.GET("/commonly-changed-files", func(c echo.Context) error {
+		return c.HTML(http.StatusOK, "<h1>Hey</h1>")
+	})
+
 }

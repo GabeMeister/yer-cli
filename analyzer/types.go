@@ -16,6 +16,12 @@ type FileChangeCount struct {
 	Count int    `json:"count"`
 }
 
+type RepoFileChangeCount struct {
+	Repo  string `json:"repo"`
+	File  string `json:"file"`
+	Count int    `json:"count"`
+}
+
 type GitCommit struct {
 	Commit      string       `json:"commit"`
 	Author      string       `json:"author"`

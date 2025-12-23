@@ -7,6 +7,7 @@ import (
 	"math"
 	"os"
 	"path/filepath"
+	"slices"
 	"time"
 )
 
@@ -82,6 +83,7 @@ type MultiRepoRecap struct {
 	FileCountByRepo             map[Repo]YearComparison    `json:"file_count_by_repo"`
 	TotalLinesOfCodeByRepo      map[Repo]YearComparison    `json:"total_lines_of_code_by_repo"`
 	SizeOfRepoWeeklyByRepo      map[Repo][]int             `json:"size_of_repo_weekly_by_repo"`
+	CommonlyChangedFiles        []RepoFileChangeCount      `json:"commonly_changed_files"`
 	CommitsMadeByRepo           map[Repo]YearComparison    `json:"commits_made_by_repo"`
 	CommitsMadeByAuthor         map[Author]*YearComparison `json:"commits_made_by_author"`
 	FileChangesMadeByAuthor     []AuthorFileChangesSummary `json:"file_changes_made_by_author"`
@@ -96,6 +98,7 @@ type MultiRepoRecap struct {
 
 type Repo string
 type Author string
+type FilePath string
 type AuthorList []string
 type NewAuthorByRepo map[Repo]AuthorList
 type Year string
@@ -323,6 +326,7 @@ func calculateMultiRepoRecap(c *ConfigFile) error {
 	fileCountByRepoCurrYear := getFileCountByRepo(recaps)
 	totalLinesOfCodeByRepo := getTotalLinesOfCodeByRepo(recaps)
 	sizeOfRepoWeeklyByRepo := getSizeOfRepoWeeklyByRepo(recaps)
+	commonlyChangedFiles := getMostCommonlyChangedFiles(recaps)
 	commitsMadeByRepo := getCommitsMadeByRepo(recaps)
 	commitsMadeByAuthor := getCommitsMadeByAuthor(recaps)
 	fileChangesMadeByAuthor := getFileChangesMadeByAuthor(recaps)
@@ -344,6 +348,7 @@ func calculateMultiRepoRecap(c *ConfigFile) error {
 		TotalLinesOfCodeByRepo:      totalLinesOfCodeByRepo,
 		SizeOfRepoWeeklyByRepo:      sizeOfRepoWeeklyByRepo,
 		CommitsMadeByRepo:           commitsMadeByRepo,
+		CommonlyChangedFiles:        commonlyChangedFiles,
 		CommitsMadeByAuthor:         commitsMadeByAuthor,
 		FileChangesMadeByAuthor:     fileChangesMadeByAuthor,
 		LinesOfCodeOwnedByAuthor:    linesOfCodeOwnedByAuthor,
@@ -422,6 +427,38 @@ func getSizeOfRepoWeeklyByRepo(recaps []Recap) map[Repo][]int {
 	}
 
 	return sizeOfRepoMap
+}
+
+func getMostCommonlyChangedFiles(recaps []Recap) []RepoFileChangeCount {
+	// Join together all repo
+	files := []RepoFileChangeCount{}
+	for _, r := range recaps {
+		for _, f := range r.CommonlyChangedFiles {
+			files = append(files, RepoFileChangeCount{
+				Repo:  r.Name,
+				File:  f.File,
+				Count: f.Count,
+			})
+		}
+	}
+
+	slices.SortFunc(files, func(a RepoFileChangeCount, b RepoFileChangeCount) int {
+		if a.Count > b.Count {
+			return -1
+		} else if a.Count < b.Count {
+			return 1
+		} else {
+			return 0
+		}
+	})
+
+	count := 5
+	// Sometimes repos have less than 5 files
+	if len(files) < count {
+		count = len(files)
+	}
+
+	return files[0:count]
 }
 
 func getCommitsMadeByRepo(recaps []Recap) map[Repo]YearComparison {
