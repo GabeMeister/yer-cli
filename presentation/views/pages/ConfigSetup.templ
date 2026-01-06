@@ -71,13 +71,15 @@ templ ConfigSetup(props ConfigSetupProps) {
 						</li>
 					}
 				</ul>
-				@components.Link("/add-repo?new=true") {
-					<div class="flex items-center justify-center gap-2 p-3">
-						<i
-							class="fa-solid fa-plus cursor-pointer"
-						></i>
-						Add Repo
-					</div>
+				if props.RepoPath != "" {
+					@components.Link("/add-repo?new=true") {
+						<div class="flex items-center justify-center gap-2 p-3">
+							<i
+								class="fa-solid fa-plus cursor-pointer"
+							></i>
+							Add Repo
+						</div>
+					}
 				}
 			</div>
 			/*

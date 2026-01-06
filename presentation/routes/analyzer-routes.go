@@ -83,6 +83,15 @@ func addAnalyzerRoutes(e *echo.Echo) {
 			return nil
 		}
 
+		newRepo := c.QueryParam("new")
+		if newRepo == "true" {
+			repoConfig := config.AddNewRepoConfig()
+			config.Save()
+			c.Redirect(302, fmt.Sprintf("/add-repo?id=%d", repoConfig.Id))
+
+			return nil
+		}
+
 		id, err := helpers.GetIntQueryParam(c, "id")
 		if err != nil {
 			return RenderErrorMessage(c, err)
