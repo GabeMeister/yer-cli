@@ -949,7 +949,7 @@ func (r *RepoConfig) getInitialAuthorFileChangeMap() map[string]int {
 
 // Used mainly as initial starting data for author file changes over time
 func (r *RepoConfig) getAuthorTotalFileChangesPrevYear() map[string]int {
-	if !r.gasPrevYearFileBlames() || !r.hasCurrYearFileBlames() {
+	if !r.hasPrevYearFileBlames() || !r.hasCurrYearFileBlames() {
 		return make(map[string]int)
 	}
 
@@ -1185,7 +1185,7 @@ func (r *RepoConfig) getCurrYearFileList() []string {
 
 }
 
-func (r *RepoConfig) gasPrevYearFileBlames() bool {
+func (r *RepoConfig) hasPrevYearFileBlames() bool {
 	_, err := os.ReadFile(r.getPrevYearFileBlamesFile())
 
 	return err == nil
@@ -1346,7 +1346,7 @@ func (r *RepoConfig) getSmallestFilesCurrYear() []FileSize {
 }
 
 func (r *RepoConfig) getTotalLinesOfCodePrevYear() int {
-	if !r.gasPrevYearFileBlames() {
+	if !r.hasPrevYearFileBlames() {
 		return 0
 	}
 
@@ -1360,11 +1360,18 @@ func (r *RepoConfig) getTotalLinesOfCodePrevYear() int {
 }
 
 func (r *RepoConfig) getTotalLinesOfCodeByFileExtPrevYear() FileExtLineCount {
-	// TODO
-
-	return FileExtLineCount{
-		"tsx": 24,
+	if !r.hasPrevYearFileBlames() {
+		return FileExtLineCount{}
 	}
+
+	fileExtLineCount := FileExtLineCount{}
+	fileBlames := r.getPrevYearFileBlames()
+	for _, fileBlame := range fileBlames {
+		ext := strings.ReplaceAll(filepath.Ext(fileBlame.File), ".", "")
+		fileExtLineCount[FileExt(ext)] += fileBlame.LineCount
+	}
+
+	return fileExtLineCount
 }
 
 func (r *RepoConfig) getTotalLinesOfCodeCurrYear() int {
@@ -1382,11 +1389,18 @@ func (r *RepoConfig) getTotalLinesOfCodeCurrYear() int {
 }
 
 func (r *RepoConfig) getTotalLinesOfCodeByFileExtCurrYear() FileExtLineCount {
-	// TODO
-
-	return FileExtLineCount{
-		"tsx": 24,
+	if !r.hasCurrYearFileBlames() {
+		return FileExtLineCount{}
 	}
+
+	fileExtLineCount := FileExtLineCount{}
+	fileBlames := r.getCurrYearFileBlames()
+	for _, fileBlame := range fileBlames {
+		ext := strings.ReplaceAll(filepath.Ext(fileBlame.File), ".", "")
+		fileExtLineCount[FileExt(ext)] += fileBlame.LineCount
+	}
+
+	return fileExtLineCount
 }
 
 func (r *RepoConfig) getSizeOfRepoByWeekCurrYear() []int {
