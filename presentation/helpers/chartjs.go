@@ -156,7 +156,8 @@ func GetBarChartData(data ChartJSBarChartData, options BarChartOptions) map[stri
 			},
 		},
 		"options": map[string]interface{}{
-			"responsive": true,
+			"responsive":          true,
+			"maintainAspectRatio": false,
 			"scales": map[string]interface{}{
 				"y": map[string]interface{}{
 					"beginAtZero": true,
@@ -241,7 +242,8 @@ func GetYearComparisonChartData(data YearComparisonChartData, options YearCompar
 			},
 		},
 		"options": map[string]interface{}{
-			"responsive": true,
+			"responsive":          true,
+			"maintainAspectRatio": false,
 			"scales": map[string]interface{}{
 				"y": map[string]interface{}{
 					"beginAtZero": true,
@@ -312,7 +314,8 @@ func GetStackedBarChartData(data StackedBarChartData) map[string]interface{} {
 			"datasets": datasets,
 		},
 		"options": map[string]interface{}{
-			"responsive": true,
+			"responsive":          true,
+			"maintainAspectRatio": false,
 			"scales": map[string]interface{}{
 				"y": map[string]interface{}{
 					"beginAtZero": true,
@@ -390,7 +393,8 @@ func GetLineChartData(data LineChartData) map[string]interface{} {
 			"datasets": datasets,
 		},
 		"options": map[string]interface{}{
-			"responsive": true,
+			"responsive":          true,
+			"maintainAspectRatio": false,
 			"scales": map[string]interface{}{
 				"y": map[string]interface{}{
 					"beginAtZero": true,
