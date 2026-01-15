@@ -6,29 +6,29 @@ import (
 	"GabeMeister/yer-cli/presentation/views/components"
 )
 
-// func getTotalLinesOfCodeByRepoChartData(multiRepoRecap analyzer.MultiRepoRecap) helpers.YearComparisonChartData {
-// 	result := helpers.YearComparisonChartData{
-// 		YAxisLabel: "Lines of Code",
-// 		Dataset:    make(map[string]analyzer.YearComparison),
-// 	}
-// 	for repo, val := range multiRepoRecap.TotalLinesOfCodeByRepo {
-// 		// result.Dataset[string(repo)] = val
-// 		result.Dataset[string(repo)] =
-// 	}
+func getTotalLinesOfCodeByRepoChartData(multiRepoRecap analyzer.MultiRepoRecap) helpers.YearComparisonChartData {
+	result := helpers.YearComparisonChartData{
+		YAxisLabel: "Lines of Code",
+		Dataset:    make(map[string]analyzer.YearComparison),
+	}
+	for repo, val := range multiRepoRecap.TotalLinesOfCodeByRepo {
+		result.Dataset[string(repo)] = val
+	}
 
-// 	return result
-// }
+	return result
+}
+
 templ TotalLinesOfCodeByRepo(multiRepoRecap analyzer.MultiRepoRecap) {
 	@components.Slide() {
 		@components.Title() {
 			Total Lines of Code by Repo
 		}
-		// <div
-		// 	class="chart-js-container"
-		// 	data-grouped-bar-chart-data={ helpers.Json(helpers.GetYearComparisonChartData(getTotalLinesOfCodeByRepoChartData(multiRepoRecap), helpers.YearComparisonOptions{})) }
-		// >
-		// 	<canvas id="grouped-bar-chart-canvas"></canvas>
-		// </div>
+		<div
+			class="chart-js-container"
+			data-grouped-bar-chart-data={ helpers.Json(helpers.GetYearComparisonChartData(getTotalLinesOfCodeByRepoChartData(multiRepoRecap), helpers.YearComparisonOptions{})) }
+		>
+			<canvas id="grouped-bar-chart-canvas"></canvas>
+		</div>
 		@components.NextButton(helpers.GetMultiRepoNextButtonLink("/total-lines-of-code-by-repo", multiRepoRecap))
 	}
 }

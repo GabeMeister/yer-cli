@@ -75,25 +75,25 @@ type Recap struct {
 }
 
 type MultiRepoRecap struct {
-	Version                     string                             `json:"version"`
-	Name                        string                             `json:"name"`
-	DateAnalyzed                string                             `json:"date_analyzed"`
-	RepoNames                   []string                           `json:"repo_names"`
-	ActiveAuthorsCountByRepo    map[Repo]YearComparison            `json:"active_authors_count_by_repo"`
-	FileCountByRepo             map[Repo]YearComparison            `json:"file_count_by_repo"`
-	TotalLinesOfCodeByRepo      map[Repo]LinesOfCodeYearComparison `json:"total_lines_of_code_by_repo"`
-	SizeOfRepoWeeklyByRepo      map[Repo][]int                     `json:"size_of_repo_weekly_by_repo"`
-	CommonlyChangedFiles        []RepoFileChangeCount              `json:"commonly_changed_files"`
-	CommitsMadeByRepo           map[Repo]YearComparison            `json:"commits_made_by_repo"`
-	CommitsMadeByAuthor         map[Author]*YearComparison         `json:"commits_made_by_author"`
-	FileChangesMadeByAuthor     []AuthorFileChangesSummary         `json:"file_changes_made_by_author"`
-	LinesOfCodeOwnedByAuthor    map[Author]int                     `json:"lines_of_code_owned_by_author"`
-	MergeCommitsByMonth         []int                              `json:"aggregate_commits_by_month"`
-	MergeCommitsByWeekDay       []int                              `json:"aggregate_commits_by_week_day"`
-	MergeCommitsByHour          []int                              `json:"aggregate_commits_by_hour"`
-	AvgMergesPerDayByRepo       map[Repo]float64                   `json:"avg_merges_per_day_by_repo"`
-	MergesToMasterByRepo        map[Repo]YearComparison            `json:"merges_to_master_by_repo"`
-	MergesToMasterAllTimeByRepo map[Repo]int                       `json:"merges_to_master_all_time_by_repo"`
+	Version                     string                     `json:"version"`
+	Name                        string                     `json:"name"`
+	DateAnalyzed                string                     `json:"date_analyzed"`
+	RepoNames                   []string                   `json:"repo_names"`
+	ActiveAuthorsCountByRepo    map[Repo]YearComparison    `json:"active_authors_count_by_repo"`
+	FileCountByRepo             map[Repo]YearComparison    `json:"file_count_by_repo"`
+	TotalLinesOfCodeByRepo      map[Repo]YearComparison    `json:"total_lines_of_code_by_repo"`
+	SizeOfRepoWeeklyByRepo      map[Repo][]int             `json:"size_of_repo_weekly_by_repo"`
+	CommonlyChangedFiles        []RepoFileChangeCount      `json:"commonly_changed_files"`
+	CommitsMadeByRepo           map[Repo]YearComparison    `json:"commits_made_by_repo"`
+	CommitsMadeByAuthor         map[Author]*YearComparison `json:"commits_made_by_author"`
+	FileChangesMadeByAuthor     []AuthorFileChangesSummary `json:"file_changes_made_by_author"`
+	LinesOfCodeOwnedByAuthor    map[Author]int             `json:"lines_of_code_owned_by_author"`
+	MergeCommitsByMonth         []int                      `json:"aggregate_commits_by_month"`
+	MergeCommitsByWeekDay       []int                      `json:"aggregate_commits_by_week_day"`
+	MergeCommitsByHour          []int                      `json:"aggregate_commits_by_hour"`
+	AvgMergesPerDayByRepo       map[Repo]float64           `json:"avg_merges_per_day_by_repo"`
+	MergesToMasterByRepo        map[Repo]YearComparison    `json:"merges_to_master_by_repo"`
+	MergesToMasterAllTimeByRepo map[Repo]int               `json:"merges_to_master_all_time_by_repo"`
 }
 
 type Repo string
@@ -411,13 +411,13 @@ func getFileCountByRepo(recaps []Recap) map[Repo]YearComparison {
 
 }
 
-func getTotalLinesOfCodeByRepo(recaps []Recap) map[Repo]LinesOfCodeYearComparison {
-	totalLinesMap := make(map[Repo]LinesOfCodeYearComparison)
+func getTotalLinesOfCodeByRepo(recaps []Recap) map[Repo]YearComparison {
+	totalLinesMap := make(map[Repo]YearComparison)
 
 	for _, recap := range recaps {
-		totalLinesMap[Repo(recap.Name)] = LinesOfCodeYearComparison{
-			Prev: recap.TotalLinesOfCodeByFileExtPrevYear,
-			Curr: recap.TotalLinesOfCodeByFileExtCurrYear,
+		totalLinesMap[Repo(recap.Name)] = YearComparison{
+			Prev: recap.TotalLinesOfCodePrevYear,
+			Curr: recap.TotalLinesOfCodeCurrYear,
 		}
 	}
 

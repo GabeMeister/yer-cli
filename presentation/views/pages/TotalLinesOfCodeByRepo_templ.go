@@ -14,18 +14,18 @@ import (
 	"GabeMeister/yer-cli/presentation/views/components"
 )
 
-// func getTotalLinesOfCodeByRepoChartData(multiRepoRecap analyzer.MultiRepoRecap) helpers.YearComparisonChartData {
-// 	result := helpers.YearComparisonChartData{
-// 		YAxisLabel: "Lines of Code",
-// 		Dataset:    make(map[string]analyzer.YearComparison),
-// 	}
-// 	for repo, val := range multiRepoRecap.TotalLinesOfCodeByRepo {
-// 		// result.Dataset[string(repo)] = val
-// 		result.Dataset[string(repo)] =
-// 	}
+func getTotalLinesOfCodeByRepoChartData(multiRepoRecap analyzer.MultiRepoRecap) helpers.YearComparisonChartData {
+	result := helpers.YearComparisonChartData{
+		YAxisLabel: "Lines of Code",
+		Dataset:    make(map[string]analyzer.YearComparison),
+	}
+	for repo, val := range multiRepoRecap.TotalLinesOfCodeByRepo {
+		result.Dataset[string(repo)] = val
+	}
 
-//		return result
-//	}
+	return result
+}
+
 func TotalLinesOfCodeByRepo(multiRepoRecap analyzer.MultiRepoRecap) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
@@ -81,7 +81,20 @@ func TotalLinesOfCodeByRepo(multiRepoRecap analyzer.MultiRepoRecap) templ.Compon
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("       ")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" <div class=\"chart-js-container\" data-grouped-bar-chart-data=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var4 string
+			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(helpers.Json(helpers.GetYearComparisonChartData(getTotalLinesOfCodeByRepoChartData(multiRepoRecap), helpers.YearComparisonOptions{})))
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `presentation/views/pages/TotalLinesOfCodeByRepo.templ`, Line: 28, Col: 166}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><canvas id=\"grouped-bar-chart-canvas\"></canvas></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
