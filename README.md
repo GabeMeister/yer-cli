@@ -1,6 +1,6 @@
 # Year End Recap
 
-Recap the year with _highly_ amusing Git stats.
+Recap your team's year with _highly_ amusing stats.
 
 ### How to Install
 
