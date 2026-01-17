@@ -751,10 +751,10 @@ func (r *RepoConfig) getCodeDeletionsByAuthorCurrYear() map[string]int {
  * TEAM STATS
  */
 
-func (repo *RepoConfig) GetDuplicateAuthorList() []string {
+func (r *RepoConfig) GetDuplicateAuthorList() []string {
 	duplicateAuthors := []string{}
 
-	for _, dupGroup := range repo.DuplicateAuthors {
+	for _, dupGroup := range r.DuplicateAuthors {
 		duplicateAuthors = append(duplicateAuthors, dupGroup.Duplicates...)
 	}
 
@@ -1113,6 +1113,23 @@ func (r *RepoConfig) getMostCommitsByAuthorCurrYear() MostSingleDayCommitsByAuth
 	}
 
 	return mostCommitsAuthor
+}
+
+func (r *RepoConfig) getLargestCommitCurrYear() GitCommit {
+	currYearCommits := r.getCurrYearGitCommits()
+	largestCommit := currYearCommits[0]
+	largestChanges := getNumChangesInGitCommit(largestCommit)
+
+	for _, commit := range currYearCommits {
+		numChanges := getNumChangesInGitCommit(commit)
+
+		if numChanges > largestChanges {
+			largestChanges = numChanges
+			largestCommit = commit
+		}
+	}
+
+	return largestCommit
 }
 
 func (r *RepoConfig) getTotalLinesOfCodeInRepoByAuthor() map[string]int {

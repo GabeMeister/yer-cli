@@ -84,3 +84,13 @@ func OpenBrowser(url string) error {
 
 	return exec.Command(cmd, args...).Start()
 }
+
+func getNumChangesInGitCommit(commit GitCommit) int {
+	numChanges := 0
+	for _, change := range commit.FileChanges {
+		numChanges += change.Insertions
+		numChanges += change.Deletions
+	}
+
+	return numChanges
+}

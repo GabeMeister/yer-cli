@@ -31,6 +31,7 @@ type Recap struct {
 	MergeCommitsByHourCurrYear      []CommitHour                   `json:"merge_commits_by_hour_curr_year"`
 	MostInsertionsInCommitCurrYear  GitCommit                      `json:"most_insertions_in_commit_curr_year"`
 	MostDeletionsInCommitCurrYear   GitCommit                      `json:"most_deletions_in_commit__curr_year"`
+	LargestCommitCurrYear           GitCommit                      `json:"largest_commit_curr_year"`
 	LargestCommitMessageCurrYear    GitCommit                      `json:"largest_commit_message_curr_year"`
 	SmallestCommitMessagesCurrYear  []GitCommit                    `json:"smallest_commit_messages_curr_year"`
 	CommitMessageHistogramCurrYear  []CommitMessageLengthFrequency `json:"commit_message_histogram_curr_year"`
@@ -86,6 +87,7 @@ type MultiRepoRecap struct {
 	CommonlyChangedFiles        []RepoFileChangeCount      `json:"commonly_changed_files"`
 	CommitsMadeByRepo           map[Repo]YearComparison    `json:"commits_made_by_repo"`
 	CommitsMadeByAuthor         map[Author]*YearComparison `json:"commits_made_by_author"`
+	LargestCommit               GitCommit                  `json:"largest_commit"`
 	FileChangesMadeByAuthor     []AuthorFileChangesSummary `json:"file_changes_made_by_author"`
 	LinesOfCodeOwnedByAuthor    map[Author]int             `json:"lines_of_code_owned_by_author"`
 	MergeCommitsByMonth         []int                      `json:"aggregate_commits_by_month"`
@@ -182,6 +184,7 @@ func calculateRepoRecap(r *RepoConfig) {
 	mergeCommitsByWeekDayCurrYear := r.getMergeCommitsByWeekDayCurrYear()
 	mergeCommitsByHourCurrYear := r.getMergeCommitsByHourCurrYear()
 	mostSingleDayCommitsByAuthorCurrYear := r.getMostCommitsByAuthorCurrYear()
+	largestCommitCurrYear := r.getLargestCommitCurrYear()
 	mostInsertionsInCommitCurrYear := r.getMostInsertionsInCommitCurrYear()
 	mostDeletionsInCommitCurrYear := r.getMostDeletionsInCommitCurrYear()
 	largestCommitMessageCurrYear := r.getLargestCommitMessageCurrYear()
@@ -237,6 +240,7 @@ func calculateRepoRecap(r *RepoConfig) {
 		CommitsByMonthCurrYear:          commitsByMonthCurrYear,
 		CommitsByWeekDayCurrYear:        commitsByWeekDayCurrYear,
 		CommitsByHourCurrYear:           commitsByHourCurrYear,
+		LargestCommitCurrYear:           largestCommitCurrYear,
 		MergeCommitsByMonthCurrYear:     mergeCommitsByMonthCurrYear,
 		MergeCommitsByWeekDayCurrYear:   mergeCommitsByWeekDayCurrYear,
 		MergeCommitsByHourCurrYear:      mergeCommitsByHourCurrYear,
@@ -334,6 +338,7 @@ func calculateMultiRepoRecap(c *ConfigFile) error {
 	commonlyChangedFiles := getMostCommonlyChangedFiles(recaps)
 	commitsMadeByRepo := getCommitsMadeByRepo(recaps)
 	commitsMadeByAuthor := getCommitsMadeByAuthor(recaps)
+	largestCommit := getLargestCommitCurrYear(recaps)
 	fileChangesMadeByAuthor := getFileChangesMadeByAuthor(recaps)
 	linesOfCodeOwnedByAuthor := getLinesOfCodeOwnedByAuthor(recaps)
 	mergeCommitsByMonth := getMergeCommitsByMonth(recaps)
@@ -355,6 +360,7 @@ func calculateMultiRepoRecap(c *ConfigFile) error {
 		CommitsMadeByRepo:           commitsMadeByRepo,
 		CommonlyChangedFiles:        commonlyChangedFiles,
 		CommitsMadeByAuthor:         commitsMadeByAuthor,
+		LargestCommit:               largestCommit,
 		FileChangesMadeByAuthor:     fileChangesMadeByAuthor,
 		LinesOfCodeOwnedByAuthor:    linesOfCodeOwnedByAuthor,
 		MergeCommitsByMonth:         mergeCommitsByMonth,
@@ -516,6 +522,22 @@ func getCommitsMadeByAuthor(recaps []Recap) map[Author]*YearComparison {
 	}
 
 	return commitsMap
+}
+
+func getLargestCommitCurrYear(recaps []Recap) GitCommit {
+	largestCommit := recaps[0].LargestCommitCurrYear
+	largestChangeAmt := getNumChangesInGitCommit(largestCommit)
+
+	for _, recap := range recaps {
+		changeAmt := getNumChangesInGitCommit(recap.LargestCommitCurrYear)
+
+		if changeAmt > largestChangeAmt {
+			largestCommit = recap.LargestCommitCurrYear
+			largestChangeAmt = changeAmt
+		}
+	}
+
+	return largestCommit
 }
 
 // Insertions
